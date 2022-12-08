@@ -1,22 +1,22 @@
 {
-  "name": "webpack-userscript-template",
-  "description": "Build your UserScript with webpack",
+  "name": "stash-checker",
+  "description": "Add checkmarks to scenes/performers present in your stash",
   "version": "0.0.1",
   "author": {
-    "name": "Trim21",
-    "email": "trim21me@gmail.com"
+    "name": "timo95",
+    "email": "24251362+timo95@users.noreply.github.com"
   },
   "scripts": {
     "format": "prettier -w ./",
     "analize": "cross-env npm_config_report=true npm run build",
     "build": "webpack --config config/webpack.config.prod.cjs",
-    "dev": "webpack --config config/webpack.config.dev.cjs",
+    "dev": "webpack serve --config config/webpack.config.dev.cjs",
     "prepare": "husky install",
     "lint-staged": "lint-staged"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/trim21/webpack-userscript-template"
+    "url": "https://github.com/timo95/stash-checker"
   },
   "private": true,
   "dependencies": {
@@ -47,6 +47,7 @@
     "webpack": "^5.75.0",
     "webpack-bundle-analyzer": "^4.7.0",
     "webpack-cli": "^5.0.0",
+    "webpack-dev-server": "^4.11.1",
     "webpack-livereload-plugin": "^3.0.2",
     "webpack-merge": "^5.8.0",
     "webpack-sources": "^3.2.3"

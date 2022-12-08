@@ -1,14 +1,16 @@
 const path = require("path");
+const webpack = require("webpack");
 const { merge } = require("webpack-merge");
-const LiveReloadPlugin = require("webpack-livereload-plugin");
 const UserScriptMetaDataPlugin = require("userscript-metadata-webpack-plugin");
 
 const metadata = require("./metadata.cjs");
 const webpackConfig = require("./webpack.config.base.cjs");
 
 metadata.require.push(
-  "file://" + path.resolve(__dirname, "../dist/index.debug.js")
+  //"file://" + path.resolve(__dirname, "../dist/index.debug.js")
+  "http://localhost:8080/index.debug.js"
 );
+metadata.connect.push("*");
 
 const cfg = merge(webpackConfig, {
   mode: "development",
@@ -18,23 +20,30 @@ const cfg = merge(webpackConfig, {
   },
   entry: {
     debug: webpackConfig.entry,
-    "dev.user": path.resolve(__dirname, "./empty.cjs"),
+    "dev.user": path.resolve(__dirname, "empty.cjs"),
   },
   output: {
     filename: "index.[name].js",
     path: path.resolve(__dirname, "../dist"),
   },
   devtool: "eval-source-map",
-  watch: true,
+  devServer: {
+    port: 8080,
+    hot: false,
+    client: false,
+    devMiddleware: {
+      writeToDisk: true,
+    },
+  },
   watchOptions: {
     ignored: /node_modules/,
   },
   plugins: [
-    new LiveReloadPlugin({
-      delay: 500,
-    }),
     new UserScriptMetaDataPlugin({
       metadata,
+    }),
+    new webpack.DefinePlugin({
+      LOCALHOST_URL: JSON.stringify("http://localhost:8080/index.debug.js"),
     }),
   ],
 });
