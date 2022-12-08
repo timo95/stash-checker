@@ -1,17 +1,23 @@
 // ==UserScript==
-// @name        webpack-userscript-template
-// @name:cn     中文名
-// @name:en     english name
-// @namespace   https://trim21.me/
-// @version     0.0.1
-// @author      Trim21 <trim21me@gmail.com>
-// @source      https://github.com/trim21/webpack-userscript-template
-// @match       *://www.example.com/
-// @match       *://example.com/*
-// @require     https://cdn.jsdelivr.net/npm/jquery@^3.6.1/dist/jquery.min.js
-// @grant       GM.xmlHttpRequest
-// @connect     httpbin.org
-// @run-at      document-end
+// @name          Stash Checker
+// @name:en       Stash Checker
+// @description   Add checkmarks to scenes/performers present in your stash
+// @version       0.0.1
+// @author        timo95 <24251362+timo95@users.noreply.github.com>
+// @source        https://github.com/timo95/stash-checker
+// @match         *://oreno3d.com/*
+// @match         *://www.animecharactersdatabase.com/*
+// @match         *://www.iafd.com/*
+// @match         *://www.minnano-av.com/*
+// @match         *://xslist.org/*
+// @match         *://www.javlibrary.com/*
+// @require       https://cdn.jsdelivr.net/npm/jquery@^3.6.1/dist/jquery.min.js
+// @grant         GM.xmlHttpRequest
+// @grant         GM.getValue
+// @grant         GM.setValue
+// @connect       stash.tiemada.de
+// @connect       stash.rock-5b.lan
+// @run-at        document-end
 // ==/UserScript==
 
 /******/ (() => { // webpackBootstrap
@@ -33,7 +39,7 @@
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "body {\n  background-color: yellow;\n  z-index: 20;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerPopup {\n  z-index: 999 !important;\n  position: absolute !important;\n  text-align: left !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -545,106 +551,209 @@ var update = injectStylesIntoStyleTag_default()(main/* default */.Z, options);
 
        /* harmony default export */ const style_main = (main/* default */.Z && main/* default.locals */.Z.locals ? main/* default.locals */.Z.locals : undefined);
 
-;// CONCATENATED MODULE: ./node_modules/@trim21/gm-fetch/dist/index.mjs
-function parseRawHeaders(h) {
-    const s = h.trim();
-    if (!s) {
-        return new Headers();
-    }
-    const array = s.split("\r\n").map((value) => {
-        let s = value.split(":");
-        return [s[0].trim(), s[1].trim()];
-    });
-    return new Headers(array);
-}
-function parseGMResponse(res) {
-    const r = new Response(res.response, {
-        statusText: res.statusText,
-        status: res.status,
-        headers: parseRawHeaders(res.responseHeaders),
-    });
-    Object.defineProperty(r, "url", {
-        value: res.finalUrl,
-    });
-    return r;
-}
-
-async function GM_fetch(input, init) {
-    const request = new Request(input, init);
-    let data;
-    if (init?.body) {
-        data = await request.text();
-    }
-    return await XHR(request, data);
-}
-function XHR(request, data) {
-    return new Promise((resolve, reject) => {
-        if (request.signal && request.signal.aborted) {
-            return reject(new DOMException("Aborted", "AbortError"));
-        }
-        GM.xmlHttpRequest({
-            url: request.url,
-            method: gmXHRMethod(request.method.toUpperCase()),
-            headers: toGmHeaders(request.headers),
-            data: data,
-            responseType: "blob",
-            onload(res) {
-                resolve(parseGMResponse(res));
-            },
-            onabort() {
-                reject(new DOMException("Aborted", "AbortError"));
-            },
-            ontimeout() {
-                reject(new TypeError("Network request failed, timeout"));
-            },
-            onerror(err) {
-                reject(new TypeError("Failed to fetch: " + err.finalUrl));
-            },
-        });
-    });
-}
-const httpMethods = ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "TRACE", "OPTIONS", "CONNECT"];
-// a ts type helper to narrow type
-function includes(array, element) {
-    return array.includes(element);
-}
-function gmXHRMethod(method) {
-    if (includes(httpMethods, method)) {
-        return method;
-    }
-    throw new Error(`unsupported http method ${method}`);
-}
-function toGmHeaders(h) {
-    if (!h) {
-        return undefined;
-    }
-    const t = {};
-    h.forEach((value, key) => {
-        t[value] = key;
-    });
-    return t;
-}
-
-
-//# sourceMappingURL=index.mjs.map
-
 ;// CONCATENATED MODULE: ./src/index.ts
 
-//checkout homepage https://github.com/Trim21/gm-fetch for @trim21/gm-fetch
-
-async function src_main() {
-    console.log("script start");
-    // cross domain requests
-    console.log(`uuid: ${await fetchExample()}`);
-}
-async function fetchExample() {
-    const res = await GM_fetch("https://httpbin.org/uuid");
-    const data = await res.json();
-    return data.uuid;
-}
-src_main().catch((e) => {
-    console.log(e);
+let stash = "http://stash.rock-5b.lan"; //"https://stash.tiemada.de"
+let apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0aW1vIiwiaWF0IjoxNjQxOTIyNzE1LCJzdWIiOiJBUElLZXkifQ.K29zkH-0KDg1VNf-r-A71pIsBvBubRjjMUHUEkUSmHU";
+let handle;
+let popup = document.createElement("div");
+popup.style.display = "none";
+popup.classList.add("stashCheckerPopup");
+popup.addEventListener("mouseover", function () {
+    window.clearTimeout(handle);
 });
+popup.addEventListener("mouseout", function () {
+    handle = window.setTimeout(function () {
+        popup.style.display = "none";
+    }, 500);
+});
+document.body.append(popup);
+function request(url, onload, type) {
+    url = encodeURIComponent(url);
+    let query = "";
+    let access = (d) => d;
+    switch (type) {
+        case "scene":
+            query = `{findScenes(scene_filter:{url:{value:"${url}",modifier:EQUALS}}){scenes{title,path}}}`;
+            access = (d) => d.findScenes.scenes;
+            break;
+        case "performer":
+            query = `{findPerformers(performer_filter:{url:{value:"${url}",modifier:EQUALS}}){performers{name}}}`;
+            access = (d) => d.findPerformers.performers;
+            break;
+        default:
+    }
+    GM.xmlHttpRequest({
+        method: "GET",
+        url: `${stash}/graphql?query=${query}`,
+        headers: {
+            "Content-Type": "application/json",
+            ApiKey: apiKey,
+        },
+        onload: function (response) {
+            try {
+                let data = access(JSON.parse(response.responseText).data);
+                onload(data);
+            }
+            catch (e) {
+                console.log("Failed to parse response: " + response.responseText);
+                console.log("Exception: " + e);
+            }
+        },
+    });
+}
+/**
+ * recursive (dfs) first non empty text node child, undefined if none available
+ */
+function firstTextChild(node) {
+    if (node.nodeType === document.TEXT_NODE &&
+        node.textContent.match(/^\s*$/) === null) {
+        return node;
+    }
+    else {
+        return Array.from(node.childNodes)
+            .map(firstTextChild)
+            .find((n) => n);
+    }
+}
+/**
+ * Prepends depending on the data the checkmark or cross to the selected element.
+ * Also populates popup window.
+ *
+ * @param element
+ * @param data
+ * @param color
+ */
+function prefixSymbol(element, data, color) {
+    let span = document.createElement("span");
+    let count = data.length;
+    let info = "";
+    if (count === 1) {
+        span.innerText = "✓ ";
+        info += "URL in Stash:\n\n";
+        span.style.color = color(data[0]);
+    }
+    else if (count === 0) {
+        span.innerText = "✗ ";
+        span.style.color = "red";
+        info += "URL not in Stash";
+    }
+    else {
+        span.innerText = "! ";
+        span.style.color = "orange";
+        console.log(data);
+        info += "URL has multiple matches:\n\n";
+    }
+    info += data
+        .map((e) => [
+        [e.title, `Title: ${e.title}`],
+        [e.path, `URL: ${e.path}`],
+        [e.name, `Name: ${e.name}`],
+    ]
+        .filter((e) => e[0])
+        .map((e) => e[1])
+        .join("\n"))
+        .join("\n\n");
+    span.addEventListener("mouseover", function () {
+        window.clearTimeout(handle);
+        let pos = span.getBoundingClientRect();
+        popup.innerText = info;
+        popup.style.display = "";
+        popup.style.top = `${(pos.top -
+            popup.clientHeight +
+            window.scrollY).toFixed(0)}px`;
+        popup.style.left = `${(pos.left +
+            pos.width / 2 -
+            popup.clientWidth / 2 +
+            window.scrollX).toFixed(0)}px`;
+    });
+    span.addEventListener("mouseout", function () {
+        handle = window.setTimeout(function () {
+            popup.style.display = "none";
+        }, 500);
+    });
+    // prepend before first text because css selectors cannot select text nodes directly
+    // it works with cases were non text elements (images) are inside of the selected element
+    firstTextChild(element)?.before(span);
+}
+/**
+ * the selected element should be [a child of] the link that will be compared with stash urls
+ * the first text inside of the selected element will be prepended with the symbol
+ */
+function links(selector, type, { prepareUrl = (url) => url, color = () => "green", } = {}) {
+    document.querySelectorAll(selector).forEach((element) => {
+        let url = prepareUrl(decodeURI(element.closest("a").href));
+        console.log(url);
+        request(url, (data) => prefixSymbol(element, data, color), type);
+    });
+}
+function current(selector, type, { prepareUrl = (url) => url, color = () => "green", } = {}) {
+    let url = prepareUrl(decodeURI(window.location.href));
+    console.log(url);
+    let element = document.querySelector(selector);
+    if (element) {
+        request(url, (data) => prefixSymbol(element, data, color), type);
+    }
+}
+(function () {
+    "use strict";
+    switch (window.location.host) {
+        case "oreno3d.com":
+            current("h1.video-h1", "scene", {
+                color: (d) => (d.path.endsWith("_Source.mp4") ? "green" : "blue"),
+            });
+            links("a h2.box-h2", "scene", {
+                color: (d) => (d.path.endsWith("_Source.mp4") ? "green" : "blue"),
+            });
+            break;
+        case "xslist.org":
+            current("span[itemprop='name']", "performer");
+            links("a[href*='/model/']", "performer");
+            break;
+        case "www.animecharactersdatabase.com":
+            links("a[href*='characters.php']:not([href*='_']):not([href*='series'])", "performer");
+            break;
+        case "www.iafd.com":
+            {
+                let prepareUrl = (url) => {
+                    // Links on iafd have many variants. Normalize to using "-" and "https"
+                    let s = url.split("/");
+                    s.push(s.pop().replaceAll("_", "-"));
+                    return s.join("/").replace(/^http:/, "https:");
+                };
+                if (window.location.pathname.startsWith("/person.rme/perfid=")) {
+                    current("h1", "performer", { prepareUrl: prepareUrl });
+                }
+                else if (window.location.pathname.startsWith("/title.rme/title=")) {
+                    current("h1", "scene", { prepareUrl: prepareUrl });
+                }
+                links("a[href*='/person.rme/perfid=']", "performer", {
+                    prepareUrl: prepareUrl,
+                });
+                links("a[href*='/title.rme/title=']", "scene", {
+                    prepareUrl: prepareUrl,
+                });
+            }
+            break;
+        case "www.javlibrary.com":
+            links("a[href*='/?v=jav']", "scene");
+            break;
+        case "www.minnano-av.com":
+            if (new RegExp("actress\\d{1,6}").test(window.location.pathname)) {
+                current("h1", "performer", { prepareUrl: (url) => url.split("?")[0] });
+            }
+            links("a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", "performer", { prepareUrl: (url) => url.split("?")[0] });
+            break;
+        default:
+    }
+    // TODO: other websites (iwara, kemono, coomer), stashDB
+    // TODO: studio code when it is available in stash
+    // TODO: pop up information: rating, favorite, length, file information, link to stash
+    // TODO: graphical configuration: https://stackoverflow.com/questions/14594346/create-a-config-or-options-page-for-a-greasemonkey-script
+    // TODO: using GM_setValue()
+    // TODO: IDE? typescript? GitHub?
+    // TODO: batch multiple link requests together?
+})();
 
 })();
 
