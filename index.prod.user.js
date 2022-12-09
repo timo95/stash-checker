@@ -795,7 +795,9 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
                     currentSite: true,
                 });
             }
-            check("performer", "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", { prepareUrl: (url) => url.split("?")[0] });
+            check("performer", "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
+                prepareUrl: (url) => url.split("?")[0],
+            });
             break;
         default:
     }
