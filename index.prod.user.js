@@ -568,19 +568,23 @@ popup.addEventListener("mouseout", function () {
     }, 500);
 });
 document.body.append(popup);
-function request(url, onload, type) {
-    url = encodeURIComponent(url);
+function request(queryString, onload, type) {
     let query = "";
     let access = (d) => d;
     switch (type) {
-        case "scene":
-            query = `{findScenes(scene_filter:{url:{value:"${url}",modifier:EQUALS}}){scenes{title,path}}}`;
+        case "sceneUrl":
+            queryString = encodeURIComponent(queryString);
+            query = `{findScenes(scene_filter:{url:{value:"${queryString}",modifier:EQUALS}}){scenes{title,code,path}}}`;
             access = (d) => d.findScenes.scenes;
             break;
-        case "performer":
-            query = `{findPerformers(performer_filter:{url:{value:"${url}",modifier:EQUALS}}){performers{name}}}`;
+        case "performerUrl":
+            queryString = encodeURIComponent(queryString);
+            query = `{findPerformers(performer_filter:{url:{value:"${queryString}",modifier:EQUALS}}){performers{name}}}`;
             access = (d) => d.findPerformers.performers;
             break;
+        case "sceneCode":
+            query = `{findScenes(scene_filter:{code:{value:"${queryString}",modifier:EQUALS}}){scenes{title,code,path}}}`;
+            access = (d) => d.findScenes.scenes;
         default:
     }
     GM.xmlHttpRequest({
@@ -647,6 +651,7 @@ function prefixSymbol(element, data, color) {
     info += data
         .map((e) => [
         [e.title, `Title: ${e.title}`],
+        [e.code, `Code: ${e.code}`],
         [e.path, `URL: ${e.path}`],
         [e.name, `Name: ${e.name}`],
     ]
@@ -676,42 +681,73 @@ function prefixSymbol(element, data, color) {
     // it works with cases were non text elements (images) are inside of the selected element
     firstTextChild(element)?.before(span);
 }
+function checkElement(type, element, { checkUrl = true, prepareUrl = (url) => url, urlSelector, codeSelector, color = () => "green", }) {
+    if (checkUrl) {
+        let url = urlSelector(element);
+        url = prepareUrl(url);
+        if (url) {
+            console.log(url);
+            request(url, (data) => prefixSymbol(element, data, color), type + "Url");
+        }
+        else {
+            console.log("No URL for entry found");
+        }
+    }
+    if (codeSelector) {
+        let code = codeSelector(element);
+        if (code) {
+            console.log(code);
+            request(code, (data) => prefixSymbol(element, data, color), type + "Code");
+        }
+        else {
+            console.log("No Code for entry found");
+        }
+    }
+    // TODO: merge multiple symbols
+    // a: check existing checkmarks and OR (is resilient to multiple check() calls on the same(!) element)
+    // b: return data promise for url and code -> OR(data)
+}
 /**
+ * queries for each selected element
+ *
  * the selected element should be [a child of] the link that will be compared with stash urls
  * the first text inside of the selected element will be prepended with the symbol
  */
-function links(selector, type, { prepareUrl = (url) => url, color = () => "green", } = {}) {
-    document.querySelectorAll(selector).forEach((element) => {
-        let url = prepareUrl(decodeURI(element.closest("a").href));
-        console.log(url);
-        request(url, (data) => prefixSymbol(element, data, color), type);
-    });
-}
-function current(selector, type, { prepareUrl = (url) => url, color = () => "green", } = {}) {
-    let url = prepareUrl(decodeURI(window.location.href));
-    console.log(url);
-    let element = document.querySelector(selector);
-    if (element) {
-        request(url, (data) => prefixSymbol(element, data, color), type);
+function check(type, elementSelector, { currentSite = false, ...checkConfig } = {}) {
+    if (currentSite) {
+        let element = document.querySelector(elementSelector);
+        if (element) {
+            // url of current site
+            checkConfig.urlSelector ?? (checkConfig.urlSelector = () => decodeURI(window.location.href));
+            checkElement(type, element, checkConfig);
+        }
+    }
+    else {
+        // multiple entries with url nearest to element
+        document.querySelectorAll(elementSelector).forEach((element) => {
+            // url nearest to selected element traversing towards the root (children are ignored)
+            checkConfig.urlSelector ?? (checkConfig.urlSelector = (e) => decodeURI(e.closest("a").href));
+            checkElement(type, element, checkConfig);
+        });
     }
 }
 (function () {
-    "use strict";
     switch (window.location.host) {
         case "oreno3d.com":
-            current("h1.video-h1", "scene", {
+            check("scene", "h1.video-h1", {
                 color: (d) => (d.path.endsWith("_Source.mp4") ? "green" : "blue"),
+                currentSite: true,
             });
-            links("a h2.box-h2", "scene", {
+            check("scene", "a h2.box-h2", {
                 color: (d) => (d.path.endsWith("_Source.mp4") ? "green" : "blue"),
             });
             break;
         case "xslist.org":
-            current("span[itemprop='name']", "performer");
-            links("a[href*='/model/']", "performer");
+            check("performer", "span[itemprop='name']", { currentSite: true });
+            check("performer", "a[href*='/model/']");
             break;
         case "www.animecharactersdatabase.com":
-            links("a[href*='characters.php']:not([href*='_']):not([href*='series'])", "performer");
+            check("performer", "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
             break;
         case "www.iafd.com":
             {
@@ -722,36 +758,53 @@ function current(selector, type, { prepareUrl = (url) => url, color = () => "gre
                     return s.join("/").replace(/^http:/, "https:");
                 };
                 if (window.location.pathname.startsWith("/person.rme/perfid=")) {
-                    current("h1", "performer", { prepareUrl: prepareUrl });
+                    check("performer", "h1", {
+                        prepareUrl: prepareUrl,
+                        currentSite: true,
+                    });
                 }
                 else if (window.location.pathname.startsWith("/title.rme/title=")) {
-                    current("h1", "scene", { prepareUrl: prepareUrl });
+                    check("scene", "h1", { prepareUrl: prepareUrl, currentSite: true });
                 }
-                links("a[href*='/person.rme/perfid=']", "performer", {
+                check("performer", "a[href*='/person.rme/perfid=']", {
                     prepareUrl: prepareUrl,
                 });
-                links("a[href*='/title.rme/title=']", "scene", {
+                check("scene", "a[href*='/title.rme/title=']", {
                     prepareUrl: prepareUrl,
                 });
             }
             break;
         case "www.javlibrary.com":
-            links("a[href*='/?v=jav']", "scene");
+            // generic links
+            check("scene", "a[href*='?v=jav']", {
+                prepareUrl: (url) => url.replace("videocomments.php", "").replace(/&.*$/, ""),
+                codeSelector: (e) => e.querySelector("div.id")?.textContent?.trim(),
+            });
+            // code for video page, review
+            check("scene", "div[id='video_title'] a[href*='?v=jav']", {
+                checkUrl: false,
+                codeSelector: (_) => document
+                    .querySelector("table[id='video_jacket_info'] table:first-child td.text")
+                    .textContent.trim(),
+            });
             break;
         case "www.minnano-av.com":
             if (new RegExp("actress\\d{1,6}").test(window.location.pathname)) {
-                current("h1", "performer", { prepareUrl: (url) => url.split("?")[0] });
+                check("performer", "h1", {
+                    prepareUrl: (url) => url.split("?")[0],
+                    currentSite: true,
+                });
             }
-            links("a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", "performer", { prepareUrl: (url) => url.split("?")[0] });
+            check("performer", "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", { prepareUrl: (url) => url.split("?")[0] });
             break;
         default:
     }
     // TODO: other websites (iwara, kemono, coomer), stashDB
-    // TODO: studio code when it is available in stash
+    // TODO: studio code
     // TODO: pop up information: rating, favorite, length, file information, link to stash
     // TODO: graphical configuration: https://stackoverflow.com/questions/14594346/create-a-config-or-options-page-for-a-greasemonkey-script
     // TODO: using GM_setValue()
-    // TODO: IDE? typescript? GitHub?
+    // TODO: GitHub actions -> gist
     // TODO: batch multiple link requests together?
 })();
 
