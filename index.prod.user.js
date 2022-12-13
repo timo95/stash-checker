@@ -551,10 +551,7 @@ var update = injectStylesIntoStyleTag_default()(main/* default */.Z, options);
 
        /* harmony default export */ const style_main = (main/* default */.Z && main/* default.locals */.Z.locals ? main/* default.locals */.Z.locals : undefined);
 
-;// CONCATENATED MODULE: ./src/index.ts
-
-let stash = "http://stash.rock-5b.lan"; //"https://stash.tiemada.de"
-let apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0aW1vIiwiaWF0IjoxNjQxOTIyNzE1LCJzdWIiOiJBUElLZXkifQ.K29zkH-0KDg1VNf-r-A71pIsBvBubRjjMUHUEkUSmHU";
+;// CONCATENATED MODULE: ./src/symbol.ts
 let handle;
 let popup = document.createElement("div");
 popup.style.display = "none";
@@ -568,44 +565,6 @@ popup.addEventListener("mouseout", function () {
     }, 500);
 });
 document.body.append(popup);
-function request(queryString, onload, type) {
-    let query = "";
-    let access = (d) => d;
-    switch (type) {
-        case "sceneUrl":
-            queryString = encodeURIComponent(queryString);
-            query = `{findScenes(scene_filter:{url:{value:"${queryString}",modifier:EQUALS}}){scenes{title,code,path}}}`;
-            access = (d) => d.findScenes.scenes;
-            break;
-        case "performerUrl":
-            queryString = encodeURIComponent(queryString);
-            query = `{findPerformers(performer_filter:{url:{value:"${queryString}",modifier:EQUALS}}){performers{name}}}`;
-            access = (d) => d.findPerformers.performers;
-            break;
-        case "sceneCode":
-            query = `{findScenes(scene_filter:{code:{value:"${queryString}",modifier:EQUALS}}){scenes{title,code,path}}}`;
-            access = (d) => d.findScenes.scenes;
-        default:
-    }
-    GM.xmlHttpRequest({
-        method: "GET",
-        url: `${stash}/graphql?query=${query}`,
-        headers: {
-            "Content-Type": "application/json",
-            ApiKey: apiKey,
-        },
-        onload: function (response) {
-            try {
-                let data = access(JSON.parse(response.responseText).data);
-                onload(data);
-            }
-            catch (e) {
-                console.log("Failed to parse response: " + response.responseText);
-                console.log("Exception: " + e);
-            }
-        },
-    });
-}
 /**
  * recursive (dfs) first non empty text node child, undefined if none available
  */
@@ -652,7 +611,10 @@ function prefixSymbol(element, data, color) {
         .map((e) => [
         [e.title, `Title: ${e.title}`],
         [e.code, `Code: ${e.code}`],
-        [e.path, `URL: ${e.path}`],
+        [
+            e.files,
+            `Files:\n${e.files.map((f) => `Path: ${f.path}`).join("\n")}`,
+        ],
         [e.name, `Name: ${e.name}`],
     ]
         .filter((e) => e[0])
@@ -680,6 +642,50 @@ function prefixSymbol(element, data, color) {
     // prepend before first text because css selectors cannot select text nodes directly
     // it works with cases were non text elements (images) are inside of the selected element
     firstTextChild(element)?.before(span);
+}
+
+;// CONCATENATED MODULE: ./src/index.ts
+
+
+let stash = "http://stash.rock-5b.lan"; //"https://stash.tiemada.de"
+let apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0aW1vIiwiaWF0IjoxNjQxOTIyNzE1LCJzdWIiOiJBUElLZXkifQ.K29zkH-0KDg1VNf-r-A71pIsBvBubRjjMUHUEkUSmHU";
+function request(queryString, onload, type) {
+    let query = "";
+    let access = (d) => d;
+    switch (type) {
+        case "sceneUrl":
+            queryString = encodeURIComponent(queryString);
+            query = `{findScenes(scene_filter:{url:{value:"${queryString}",modifier:EQUALS}}){scenes{title,code,files{path}}}}`;
+            access = (d) => d.findScenes.scenes;
+            break;
+        case "performerUrl":
+            queryString = encodeURIComponent(queryString);
+            query = `{findPerformers(performer_filter:{url:{value:"${queryString}",modifier:EQUALS}}){performers{name}}}`;
+            access = (d) => d.findPerformers.performers;
+            break;
+        case "sceneCode":
+            query = `{findScenes(scene_filter:{code:{value:"${queryString}",modifier:EQUALS}}){scenes{title,code,files{path}}}}`;
+            access = (d) => d.findScenes.scenes;
+        default:
+    }
+    GM.xmlHttpRequest({
+        method: "GET",
+        url: `${stash}/graphql?query=${query}`,
+        headers: {
+            "Content-Type": "application/json",
+            ApiKey: apiKey,
+        },
+        onload: function (response) {
+            try {
+                let data = access(JSON.parse(response.responseText).data);
+                onload(data);
+            }
+            catch (e) {
+                console.log("Failed to parse response: " + response.responseText);
+                console.log("Exception: " + e);
+            }
+        },
+    });
 }
 function checkElement(type, element, { checkUrl = true, prepareUrl = (url) => url, urlSelector, codeSelector, color = () => "green", }) {
     if (checkUrl) {
@@ -735,11 +741,15 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
     switch (window.location.host) {
         case "oreno3d.com":
             check("scene", "h1.video-h1", {
-                color: (d) => (d.path.endsWith("_Source.mp4") ? "green" : "blue"),
+                color: (d) => d.files.some((f) => f.path.endsWith("_Source.mp4"))
+                    ? "green"
+                    : "blue",
                 currentSite: true,
             });
             check("scene", "a h2.box-h2", {
-                color: (d) => (d.path.endsWith("_Source.mp4") ? "green" : "blue"),
+                color: (d) => d.files.some((f) => f.path.endsWith("_Source.mp4"))
+                    ? "green"
+                    : "blue",
             });
             break;
         case "xslist.org":
@@ -749,31 +759,30 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
         case "www.animecharactersdatabase.com":
             check("performer", "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
             break;
-        case "www.iafd.com":
-            {
-                let prepareUrl = (url) => {
-                    // Links on iafd have many variants. Normalize to using "-" and "https"
-                    let s = url.split("/");
-                    s.push(s.pop().replaceAll("_", "-"));
-                    return s.join("/").replace(/^http:/, "https:");
-                };
-                if (window.location.pathname.startsWith("/person.rme/perfid=")) {
-                    check("performer", "h1", {
-                        prepareUrl: prepareUrl,
-                        currentSite: true,
-                    });
-                }
-                else if (window.location.pathname.startsWith("/title.rme/title=")) {
-                    check("scene", "h1", { prepareUrl: prepareUrl, currentSite: true });
-                }
-                check("performer", "a[href*='/person.rme/perfid=']", {
+        case "www.iafd.com": {
+            let prepareUrl = (url) => {
+                // Links on iafd have many variants. Normalize to using "-" and "https"
+                let s = url.split("/");
+                s.push(s.pop().replaceAll("_", "-"));
+                return s.join("/").replace(/^http:/, "https:");
+            };
+            if (window.location.pathname.startsWith("/person.rme/perfid=")) {
+                check("performer", "h1", {
                     prepareUrl: prepareUrl,
-                });
-                check("scene", "a[href*='/title.rme/title=']", {
-                    prepareUrl: prepareUrl,
+                    currentSite: true,
                 });
             }
+            else if (window.location.pathname.startsWith("/title.rme/title=")) {
+                check("scene", "h1", { prepareUrl: prepareUrl, currentSite: true });
+            }
+            check("performer", "a[href*='/person.rme/perfid=']", {
+                prepareUrl: prepareUrl,
+            });
+            check("scene", "a[href*='/title.rme/title=']", {
+                prepareUrl: prepareUrl,
+            });
             break;
+        }
         case "www.javlibrary.com":
             // generic links
             check("scene", "a[href*='?v=jav']", {
