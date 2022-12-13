@@ -1,6 +1,5 @@
 const {
   author,
-  dependencies,
   repository,
   version,
   description,
@@ -19,7 +18,6 @@ module.exports = {
   // 'license': 'MIT',
   match: ["*://oreno3d.com/*", "*://www.animecharactersdatabase.com/*", "*://www.iafd.com/*", "*://www.minnano-av.com/*", "*://xslist.org/*", "*://www.javlibrary.com/*"],
   require: [
-    `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,
   ],
   grant: ["GM.xmlHttpRequest", "GM.getValue", "GM.setValue"],
   connect: ["stash.tiemada.de", "stash.rock-5b.lan"],

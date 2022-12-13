@@ -10,7 +10,6 @@ metadata.require.push(
   //"file://" + path.resolve(__dirname, "../dist/index.debug.js")
   "http://localhost:8080/index.debug.js"
 );
-metadata.connect.push("*");
 
 const cfg = merge(webpackConfig, {
   mode: "development",

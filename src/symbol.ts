@@ -29,18 +29,18 @@ function firstTextChild(node: Node): Node {
     }
 }
 
-function getPopupBody(data: any): string {
+function getPopupBody(data: any[]): string {
     let propertyStrings: [string, (v: any) => string][] = [
         ["title", (v: any) => `Title: ${v}`],
         ["name", (v: any) => `Name: ${v}`],
         ["code", (v: any) => `Code: ${v}`],
-        ["files", (v: any) => `Files:\n${v.map((file: any) => `Path: ${file.path}`).join("\n")}`],
+        ["files", (v: any) => `${v.map((file: any) => `Path: ${file.path}`).join("<br>")}`],
     ];
     return ["", ...data.map((entry: any) => propertyStrings
         .filter((e) => entry[e[0]])
         .map((e) => e[1](entry[e[0]]))
-        .join("\n")
-    )].join("\n\n");
+        .join("<br>")
+    )].join("<br><hr>");
 }
 
 function getExistingSpan(element: Element): HTMLSpanElement | null {
@@ -55,7 +55,7 @@ function getExistingSpan(element: Element): HTMLSpanElement | null {
 function mouseoverListener() {
     window.clearTimeout(handle);
     let pos = this.getBoundingClientRect();
-    popup.innerText = this.getAttribute("data-info");
+    popup.innerHTML = this.getAttribute("data-info");
     popup.style.display = "";
     popup.style.top = `${(
         pos.top -
@@ -122,22 +122,21 @@ export function prefixSymbol(
     span.setAttribute("data-data", JSON.stringify(data))
     let count = data.length;
     let info = "";
-    if (count === 1) {
-        span.innerText = "✓ ";
-        info += "URL in Stash:";
-        span.style.color = color(data[0]);
-    } else if (count === 0) {
-        span.innerText = "✗ ";
+    if (count === 0) {
+        span.textContent = "✗ ";
         span.style.color = "red";
-        info += "URL not in Stash";
+        info += "Entry not in Stash";
+    } else if (count === 1) {
+        span.textContent = "✓ ";
+        span.style.color = color(data[0]);
+        info += "Entry in Stash";
     } else {
-        span.innerText = "! ";
+        span.textContent = "! ";
         span.style.color = "orange";
-        console.log(data);
-        info += "URL has multiple matches:";
+        info += "Entry has duplicate matches";
     }
 
-    info += `\nQueries: ${queries.join(", ")}`
+    info += `<br>Queries: ${queries.join(", ")}`
     info += getPopupBody(data)
     span.setAttribute("data-info", info)
 

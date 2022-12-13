@@ -3,7 +3,7 @@ import {prefixSymbol} from "./symbol";
 let stash = "http://stash.rock-5b.lan"; //"https://stash.tiemada.de"
 let apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0aW1vIiwiaWF0IjoxNjQxOTIyNzE1LCJzdWIiOiJBUElLZXkifQ.K29zkH-0KDg1VNf-r-A71pIsBvBubRjjMUHUEkUSmHU";
 
-interface CheckConfig {
+interface CheckOptions {
     checkUrl?: boolean;
     urlSelector?: (e: Element) => string;
     prepareUrl?: (url: string) => string;
@@ -63,7 +63,7 @@ function checkElement(
         urlSelector,
         codeSelector,
         color = () => "green",
-    }: CheckConfig
+    }: CheckOptions
 ) {
     if (checkUrl) {
         let url = urlSelector(element);
@@ -84,9 +84,6 @@ function checkElement(
             console.log("No Code for entry found");
         }
     }
-    // TODO: merge multiple symbols
-    // a: check existing checkmarks and OR (is resilient to multiple check() calls on the same(!) element)
-    // b: return data promise for url and code -> OR(data)
 }
 
 /**
@@ -98,7 +95,7 @@ function checkElement(
 export function check(
     type: string,
     elementSelector: string,
-    {currentSite = false, ...checkConfig}: CheckConfig = {}
+    {currentSite = false, ...checkConfig}: CheckOptions = {}
 ) {
     if (currentSite) {
         let element = document.querySelector(elementSelector);
@@ -111,8 +108,7 @@ export function check(
         // multiple entries with url nearest to element
         document.querySelectorAll(elementSelector).forEach((element) => {
             // url nearest to selected element traversing towards the root (children are ignored)
-            checkConfig.urlSelector ??= (e: Element) =>
-                decodeURI(e.closest("a").href);
+            checkConfig.urlSelector ??= (e: Element) => decodeURI(e.closest("a").href);
             checkElement(type, element, checkConfig);
         });
     }
