@@ -11,7 +11,6 @@
 // @match         *://www.minnano-av.com/*
 // @match         *://xslist.org/*
 // @match         *://www.javlibrary.com/*
-// @require       https://cdn.jsdelivr.net/npm/jquery@^3.6.1/dist/jquery.min.js
 // @grant         GM.xmlHttpRequest
 // @grant         GM.getValue
 // @grant         GM.setValue
@@ -569,15 +568,69 @@ document.body.append(popup);
  * recursive (dfs) first non empty text node child, undefined if none available
  */
 function firstTextChild(node) {
-    if (node.nodeType === document.TEXT_NODE &&
+    if (node.nodeType === Node.TEXT_NODE &&
         node.textContent.match(/^\s*$/) === null) {
         return node;
     }
     else {
         return Array.from(node.childNodes)
+            .filter(n => n.nodeType === Node.ELEMENT_NODE ? n.getAttribute("data-type") !== "stash-symbol" : true)
             .map(firstTextChild)
             .find((n) => n);
     }
+}
+function getPopupBody(data) {
+    let propertyStrings = [
+        ["title", (v) => `Title: ${v}`],
+        ["name", (v) => `Name: ${v}`],
+        ["code", (v) => `Code: ${v}`],
+        ["files", (v) => `${v.map((file) => `Path: ${file.path}`).join("<br>")}`],
+    ];
+    return ["", ...data.map((entry) => propertyStrings
+            .filter((e) => entry[e[0]])
+            .map((e) => e[1](entry[e[0]]))
+            .join("<br>"))].join("<br><hr>");
+}
+function getExistingSpan(element) {
+    let e = firstTextChild(element)?.previousSibling;
+    if (e && e.nodeType === Node.ELEMENT_NODE && e.getAttribute("data-type") === "stash-symbol") {
+        return e;
+    }
+    else {
+        return null;
+    }
+}
+function mouseoverListener() {
+    window.clearTimeout(handle);
+    let pos = this.getBoundingClientRect();
+    popup.innerHTML = this.getAttribute("data-info");
+    popup.style.display = "";
+    popup.style.top = `${(pos.top -
+        popup.clientHeight +
+        window.scrollY).toFixed(0)}px`;
+    popup.style.left = `${(pos.left +
+        pos.width / 2 -
+        popup.clientWidth / 2 +
+        window.scrollX).toFixed(0)}px`;
+}
+function mouseoutListener() {
+    handle = window.setTimeout(function () {
+        popup.style.display = "none";
+    }, 500);
+}
+/**
+ * Similar to object.assign(), but also merges the children of the objects.
+ *
+ * @param target
+ * @param source
+ */
+function mergeData(target, source) {
+    let mapTarget = new Map(target.map(e => [e.id, e]));
+    let mapSource = new Map(source.map(e => [e.id, e]));
+    mapSource.forEach((value, key) => {
+        mapTarget.set(key, value);
+    });
+    return Array.from(mapTarget.values());
 }
 /**
  * Prepends depending on the data the checkmark or cross to the selected element.
@@ -585,67 +638,51 @@ function firstTextChild(node) {
  *
  * @param element
  * @param data
+ * @param query
  * @param color
  */
-function prefixSymbol(element, data, color) {
-    let span = document.createElement("span");
-    let count = data.length;
-    let info = "";
-    if (count === 1) {
-        span.innerText = "✓ ";
-        info += "URL in Stash:\n\n";
-        span.style.color = color(data[0]);
-    }
-    else if (count === 0) {
-        span.innerText = "✗ ";
-        span.style.color = "red";
-        info += "URL not in Stash";
+function prefixSymbol(element, data, query, color) {
+    let span = getExistingSpan(element);
+    let queries = [query];
+    if (span) {
+        queries = JSON.parse(span.getAttribute("data-queries")).concat(queries).sort();
+        data = mergeData(JSON.parse(span.getAttribute("data-data")), data);
     }
     else {
-        span.innerText = "! ";
-        span.style.color = "orange";
-        console.log(data);
-        info += "URL has multiple matches:\n\n";
+        span = document.createElement("span");
+        span.setAttribute("data-type", "stash-symbol");
+        span.addEventListener("mouseover", mouseoverListener);
+        span.addEventListener("mouseout", mouseoutListener);
     }
-    info += data
-        .map((e) => [
-        [e.title, `Title: ${e.title}`],
-        [e.code, `Code: ${e.code}`],
-        [
-            e.files,
-            `Files:\n${e.files.map((f) => `Path: ${f.path}`).join("\n")}`,
-        ],
-        [e.name, `Name: ${e.name}`],
-    ]
-        .filter((e) => e[0])
-        .map((e) => e[1])
-        .join("\n"))
-        .join("\n\n");
-    span.addEventListener("mouseover", function () {
-        window.clearTimeout(handle);
-        let pos = span.getBoundingClientRect();
-        popup.innerText = info;
-        popup.style.display = "";
-        popup.style.top = `${(pos.top -
-            popup.clientHeight +
-            window.scrollY).toFixed(0)}px`;
-        popup.style.left = `${(pos.left +
-            pos.width / 2 -
-            popup.clientWidth / 2 +
-            window.scrollX).toFixed(0)}px`;
-    });
-    span.addEventListener("mouseout", function () {
-        handle = window.setTimeout(function () {
-            popup.style.display = "none";
-        }, 500);
-    });
-    // prepend before first text because css selectors cannot select text nodes directly
+    span.setAttribute("data-queries", JSON.stringify(queries));
+    span.setAttribute("data-data", JSON.stringify(data));
+    let count = data.length;
+    let info = "";
+    if (count === 0) {
+        span.textContent = "✗ ";
+        span.style.color = "red";
+        info += "Entry not in Stash";
+    }
+    else if (count === 1) {
+        span.textContent = "✓ ";
+        span.style.color = color(data[0]);
+        info += "Entry in Stash";
+    }
+    else {
+        span.textContent = "! ";
+        span.style.color = "orange";
+        info += "Entry has duplicate matches";
+    }
+    info += `<br>Queries: ${queries.join(", ")}`;
+    info += getPopupBody(data);
+    span.setAttribute("data-info", info);
+    // insert before first text because css selectors cannot select text nodes directly
     // it works with cases were non text elements (images) are inside of the selected element
-    firstTextChild(element)?.before(span);
+    let text = firstTextChild(element);
+    text.parentNode.insertBefore(span, text);
 }
 
-;// CONCATENATED MODULE: ./src/index.ts
-
+;// CONCATENATED MODULE: ./src/check.ts
 
 let stash = "http://stash.rock-5b.lan"; //"https://stash.tiemada.de"
 let apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0aW1vIiwiaWF0IjoxNjQxOTIyNzE1LCJzdWIiOiJBUElLZXkifQ.K29zkH-0KDg1VNf-r-A71pIsBvBubRjjMUHUEkUSmHU";
@@ -655,16 +692,16 @@ function request(queryString, onload, type) {
     switch (type) {
         case "sceneUrl":
             queryString = encodeURIComponent(queryString);
-            query = `{findScenes(scene_filter:{url:{value:"${queryString}",modifier:EQUALS}}){scenes{title,code,files{path}}}}`;
+            query = `{findScenes(scene_filter:{url:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path}}}}`;
             access = (d) => d.findScenes.scenes;
             break;
         case "performerUrl":
             queryString = encodeURIComponent(queryString);
-            query = `{findPerformers(performer_filter:{url:{value:"${queryString}",modifier:EQUALS}}){performers{name}}}`;
+            query = `{findPerformers(performer_filter:{url:{value:"${queryString}",modifier:EQUALS}}){performers{id,name}}}`;
             access = (d) => d.findPerformers.performers;
             break;
         case "sceneCode":
-            query = `{findScenes(scene_filter:{code:{value:"${queryString}",modifier:EQUALS}}){scenes{title,code,files{path}}}}`;
+            query = `{findScenes(scene_filter:{code:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path}}}}`;
             access = (d) => d.findScenes.scenes;
         default:
     }
@@ -693,7 +730,7 @@ function checkElement(type, element, { checkUrl = true, prepareUrl = (url) => ur
         url = prepareUrl(url);
         if (url) {
             console.log(url);
-            request(url, (data) => prefixSymbol(element, data, color), type + "Url");
+            request(url, (data) => prefixSymbol(element, data, "URL", color), type + "Url");
         }
         else {
             console.log("No URL for entry found");
@@ -703,15 +740,12 @@ function checkElement(type, element, { checkUrl = true, prepareUrl = (url) => ur
         let code = codeSelector(element);
         if (code) {
             console.log(code);
-            request(code, (data) => prefixSymbol(element, data, color), type + "Code");
+            request(code, (data) => prefixSymbol(element, data, "Code", color), type + "Code");
         }
         else {
             console.log("No Code for entry found");
         }
     }
-    // TODO: merge multiple symbols
-    // a: check existing checkmarks and OR (is resilient to multiple check() calls on the same(!) element)
-    // b: return data promise for url and code -> OR(data)
 }
 /**
  * queries for each selected element
@@ -737,19 +771,19 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
         });
     }
 }
+
+;// CONCATENATED MODULE: ./src/index.ts
+
+
 (function () {
     switch (window.location.host) {
         case "oreno3d.com":
             check("scene", "h1.video-h1", {
-                color: (d) => d.files.some((f) => f.path.endsWith("_Source.mp4"))
-                    ? "green"
-                    : "blue",
+                color: (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue",
                 currentSite: true,
             });
             check("scene", "a h2.box-h2", {
-                color: (d) => d.files.some((f) => f.path.endsWith("_Source.mp4"))
-                    ? "green"
-                    : "blue",
+                color: (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue",
             });
             break;
         case "xslist.org":
@@ -811,7 +845,6 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
         default:
     }
     // TODO: other websites (iwara, kemono, coomer), stashDB
-    // TODO: studio code
     // TODO: pop up information: rating, favorite, length, file information, link to stash
     // TODO: graphical configuration: https://stackoverflow.com/questions/14594346/create-a-config-or-options-page-for-a-greasemonkey-script
     // TODO: using GM_setValue()
