@@ -1,22 +1,9 @@
 import "./style/main.less";
+import { prefixSymbol } from "./symbol";
 
 let stash = "http://stash.rock-5b.lan"; //"https://stash.tiemada.de"
 let apiKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0aW1vIiwiaWF0IjoxNjQxOTIyNzE1LCJzdWIiOiJBUElLZXkifQ.K29zkH-0KDg1VNf-r-A71pIsBvBubRjjMUHUEkUSmHU";
-
-let handle: number;
-let popup: HTMLDivElement = document.createElement("div");
-popup.style.display = "none";
-popup.classList.add("stashCheckerPopup");
-popup.addEventListener("mouseover", function () {
-  window.clearTimeout(handle);
-});
-popup.addEventListener("mouseout", function () {
-  handle = window.setTimeout(function () {
-    popup.style.display = "none";
-  }, 500);
-});
-document.body.append(popup);
 
 interface CheckConfig {
   checkUrl?: boolean;
@@ -37,7 +24,7 @@ function request(
   switch (type) {
     case "sceneUrl":
       queryString = encodeURIComponent(queryString);
-      query = `{findScenes(scene_filter:{url:{value:"${queryString}",modifier:EQUALS}}){scenes{title,code,path}}}`;
+      query = `{findScenes(scene_filter:{url:{value:"${queryString}",modifier:EQUALS}}){scenes{title,code,files{path}}}}`;
       access = (d) => d.findScenes.scenes;
       break;
     case "performerUrl":
@@ -46,7 +33,7 @@ function request(
       access = (d) => d.findPerformers.performers;
       break;
     case "sceneCode":
-      query = `{findScenes(scene_filter:{code:{value:"${queryString}",modifier:EQUALS}}){scenes{title,code,path}}}`;
+      query = `{findScenes(scene_filter:{code:{value:"${queryString}",modifier:EQUALS}}){scenes{title,code,files{path}}}}`;
       access = (d) => d.findScenes.scenes;
     default:
   }
@@ -67,95 +54,6 @@ function request(
       }
     },
   });
-}
-
-/**
- * recursive (dfs) first non empty text node child, undefined if none available
- */
-function firstTextChild(node: Element): Element {
-  if (
-    node.nodeType === document.TEXT_NODE &&
-    node.textContent.match(/^\s*$/) === null
-  ) {
-    return node;
-  } else {
-    return Array.from(node.childNodes)
-      .map(firstTextChild)
-      .find((n) => n);
-  }
-}
-
-/**
- * Prepends depending on the data the checkmark or cross to the selected element.
- * Also populates popup window.
- *
- * @param element
- * @param data
- * @param color
- */
-function prefixSymbol(
-  element: Element,
-  data: any,
-  color: (data: any) => string
-) {
-  let span = document.createElement("span");
-  let count = data.length;
-  let info = "";
-  if (count === 1) {
-    span.innerText = "✓ ";
-    info += "URL in Stash:\n\n";
-    span.style.color = color(data[0]);
-  } else if (count === 0) {
-    span.innerText = "✗ ";
-    span.style.color = "red";
-    info += "URL not in Stash";
-  } else {
-    span.innerText = "! ";
-    span.style.color = "orange";
-    console.log(data);
-    info += "URL has multiple matches:\n\n";
-  }
-
-  info += data
-    .map((e: any) =>
-      [
-        [e.title, `Title: ${e.title}`],
-        [e.code, `Code: ${e.code}`],
-        [e.path, `URL: ${e.path}`],
-        [e.name, `Name: ${e.name}`],
-      ]
-        .filter((e) => e[0])
-        .map((e) => e[1])
-        .join("\n")
-    )
-    .join("\n\n");
-
-  span.addEventListener("mouseover", function () {
-    window.clearTimeout(handle);
-    let pos = span.getBoundingClientRect();
-    popup.innerText = info;
-    popup.style.display = "";
-    popup.style.top = `${(
-      pos.top -
-      popup.clientHeight +
-      window.scrollY
-    ).toFixed(0)}px`;
-    popup.style.left = `${(
-      pos.left +
-      pos.width / 2 -
-      popup.clientWidth / 2 +
-      window.scrollX
-    ).toFixed(0)}px`;
-  });
-  span.addEventListener("mouseout", function () {
-    handle = window.setTimeout(function () {
-      popup.style.display = "none";
-    }, 500);
-  });
-
-  // prepend before first text because css selectors cannot select text nodes directly
-  // it works with cases were non text elements (images) are inside of the selected element
-  firstTextChild(element)?.before(span);
 }
 
 function checkElement(
@@ -230,11 +128,17 @@ function check(
   switch (window.location.host) {
     case "oreno3d.com":
       check("scene", "h1.video-h1", {
-        color: (d) => (d.path.endsWith("_Source.mp4") ? "green" : "blue"),
+        color: (d) =>
+          d.files.some((f: any) => f.path.endsWith("_Source.mp4"))
+            ? "green"
+            : "blue",
         currentSite: true,
       });
       check("scene", "a h2.box-h2", {
-        color: (d) => (d.path.endsWith("_Source.mp4") ? "green" : "blue"),
+        color: (d) =>
+          d.files.some((f: any) => f.path.endsWith("_Source.mp4"))
+            ? "green"
+            : "blue",
       });
       break;
     case "xslist.org":
@@ -247,30 +151,29 @@ function check(
         "a[href*='characters.php']:not([href*='_']):not([href*='series'])"
       );
       break;
-    case "www.iafd.com":
-      {
-        let prepareUrl = (url: string) => {
-          // Links on iafd have many variants. Normalize to using "-" and "https"
-          let s = url.split("/");
-          s.push(s.pop().replaceAll("_", "-"));
-          return s.join("/").replace(/^http:/, "https:");
-        };
-        if (window.location.pathname.startsWith("/person.rme/perfid=")) {
-          check("performer", "h1", {
-            prepareUrl: prepareUrl,
-            currentSite: true,
-          });
-        } else if (window.location.pathname.startsWith("/title.rme/title=")) {
-          check("scene", "h1", { prepareUrl: prepareUrl, currentSite: true });
-        }
-        check("performer", "a[href*='/person.rme/perfid=']", {
+    case "www.iafd.com": {
+      let prepareUrl = (url: string) => {
+        // Links on iafd have many variants. Normalize to using "-" and "https"
+        let s = url.split("/");
+        s.push(s.pop().replaceAll("_", "-"));
+        return s.join("/").replace(/^http:/, "https:");
+      };
+      if (window.location.pathname.startsWith("/person.rme/perfid=")) {
+        check("performer", "h1", {
           prepareUrl: prepareUrl,
+          currentSite: true,
         });
-        check("scene", "a[href*='/title.rme/title=']", {
-          prepareUrl: prepareUrl,
-        });
+      } else if (window.location.pathname.startsWith("/title.rme/title=")) {
+        check("scene", "h1", { prepareUrl: prepareUrl, currentSite: true });
       }
+      check("performer", "a[href*='/person.rme/perfid=']", {
+        prepareUrl: prepareUrl,
+      });
+      check("scene", "a[href*='/title.rme/title=']", {
+        prepareUrl: prepareUrl,
+      });
       break;
+    }
     case "www.javlibrary.com":
       // generic links
       check("scene", "a[href*='?v=jav']", {
