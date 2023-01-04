@@ -57,17 +57,19 @@ function mouseoverListener() {
     let pos = this.getBoundingClientRect();
     popup.innerHTML = this.getAttribute("data-info");
     popup.style.display = "";
-    popup.style.top = `${(
+    // TODO flip popup to other side (up/down), if not enough space
+    // TODO (top-)margin is ignored for min/max positions -> doesn't matter if ^ is implemented
+    popup.style.top = `${(Math.max(window.scrollY + 10, Math.min(window.innerHeight + window.scrollY - popup.clientHeight - 10,
         pos.top -
         popup.clientHeight +
         window.scrollY
-    ).toFixed(0)}px`;
-    popup.style.left = `${(
+    ))).toFixed(0)}px`;
+    popup.style.left = `${(Math.max(window.scrollX + 10, Math.min(window.innerWidth + window.scrollX - popup.clientWidth - 10,
         pos.left +
         pos.width / 2 -
         popup.clientWidth / 2 +
         window.scrollX
-    ).toFixed(0)}px`;
+    ))).toFixed(0)}px`;
 }
 
 function mouseoutListener() {

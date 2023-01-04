@@ -3,15 +3,25 @@ import {check} from "./check";
 
 (function () {
     switch (window.location.host) {
-        case "oreno3d.com":
-            check("scene", "h1.video-h1", {
-                color: (d) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue",
-                currentSite: true,
-            });
-            check("scene", "a h2.box-h2", {
-                color: (d) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue",
-            });
+        case "www.iwara.tv":
+        case "ecchi.iwara.tv": {
+            let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
+            check("scene", "h1.title", {color: color, currentSite: true});
+            check("scene", "h3.title > a", {color: color});
             break;
+        }
+        case "oreno3d.com": {
+            let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
+            check("scene", "h1.video-h1", {color: color, currentSite: true});
+            check("scene", "a h2.box-h2", {color: color});
+            break;
+        }
+        case "erommdtube.com": {
+            let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
+            check("scene", "h1.show__h1", {color: color, currentSite: true});
+            check("scene", "h2.main__list-title", {color: color});
+            break;
+        }
         case "xslist.org":
             check("performer", "span[itemprop='name']", {currentSite: true});
             check("performer", "a[href*='/model/']");
@@ -27,10 +37,7 @@ import {check} from "./check";
                 return s.join("/").replace(/^http:/, "https:");
             };
             if (window.location.pathname.startsWith("/person.rme/perfid=")) {
-                check("performer", "h1", {
-                    prepareUrl: prepareUrl,
-                    currentSite: true,
-                });
+                check("performer", "h1", {prepareUrl: prepareUrl, currentSite: true});
             } else if (window.location.pathname.startsWith("/title.rme/title=")) {
                 check("scene", "h1", {prepareUrl: prepareUrl, currentSite: true});
             }
@@ -45,8 +52,7 @@ import {check} from "./check";
         case "www.javlibrary.com":
             // generic links
             check("scene", "a[href*='?v=jav']", {
-                prepareUrl: (url) =>
-                    url.replace("videocomments.php", "").replace(/&.*$/, ""),
+                prepareUrl: (url) => url.replace("videocomments.php", "").replace(/&.*$/, ""),
                 codeSelector: (e) => e.querySelector("div.id")?.textContent?.trim(),
             });
             // code for video page, review
@@ -69,9 +75,11 @@ import {check} from "./check";
             });
             break;
         default:
+            console.log("No configuration for website found.")
+            break;
     }
 
-    // TODO: other websites (iwara, kemono, coomer), stashDB
+    // TODO: other websites (kemono, coomer), stashDB
     // TODO: pop up information: rating, favorite, length, file information, link to stash
     // TODO: graphical configuration: https://stackoverflow.com/questions/14594346/create-a-config-or-options-page-for-a-greasemonkey-script
     // TODO: using GM_setValue()

@@ -33,6 +33,7 @@ function request(
         case "sceneCode":
             query = `{findScenes(scene_filter:{code:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path}}}}`;
             access = (d) => d.findScenes.scenes;
+            break;
         default:
     }
     GM.xmlHttpRequest({
@@ -90,7 +91,7 @@ function checkElement(
  * queries for each selected element
  *
  * the selected element should be [a child of] the link that will be compared with stash urls
- * the first text inside of the selected element will be prepended with the symbol
+ * the first text inside the selected element will be prepended with the symbol
  */
 export function check(
     type: string,

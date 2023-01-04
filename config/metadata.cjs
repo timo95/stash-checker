@@ -16,7 +16,17 @@ module.exports = {
   author: author,
   source: repository.url,
   // 'license': 'MIT',
-  match: ["*://oreno3d.com/*", "*://www.animecharactersdatabase.com/*", "*://www.iafd.com/*", "*://www.minnano-av.com/*", "*://xslist.org/*", "*://www.javlibrary.com/*"],
+  match: [
+      "*://www.iwara.tv/*",
+      "*://ecchi.iwara.tv/*",
+      "*://oreno3d.com/*",
+      "*://erommdtube.com/*",
+      "*://www.animecharactersdatabase.com/*",
+      "*://www.iafd.com/*",
+      "*://www.minnano-av.com/*",
+      "*://xslist.org/*",
+      "*://www.javlibrary.com/*"
+  ],
   require: [
   ],
   grant: ["GM.xmlHttpRequest", "GM.getValue", "GM.setValue"],
