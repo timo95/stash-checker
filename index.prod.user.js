@@ -5,7 +5,10 @@
 // @version       0.0.1
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @source        https://github.com/timo95/stash-checker
+// @match         *://www.iwara.tv/*
+// @match         *://ecchi.iwara.tv/*
 // @match         *://oreno3d.com/*
+// @match         *://erommdtube.com/*
 // @match         *://www.animecharactersdatabase.com/*
 // @match         *://www.iafd.com/*
 // @match         *://www.minnano-av.com/*
@@ -38,7 +41,7 @@
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerPopup {\n  z-index: 999 !important;\n  position: absolute !important;\n  text-align: left !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerPopup {\n  z-index: 999 !important;\n  position: absolute !important;\n  text-align: left !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -605,13 +608,15 @@ function mouseoverListener() {
     let pos = this.getBoundingClientRect();
     popup.innerHTML = this.getAttribute("data-info");
     popup.style.display = "";
-    popup.style.top = `${(pos.top -
+    // TODO flip popup to other side (up/down), if not enough space
+    // TODO (top-)margin is ignored for min/max positions -> doesn't matter if ^ is implemented
+    popup.style.top = `${(Math.max(window.scrollY + 10, Math.min(window.innerHeight + window.scrollY - popup.clientHeight - 10, pos.top -
         popup.clientHeight +
-        window.scrollY).toFixed(0)}px`;
-    popup.style.left = `${(pos.left +
+        window.scrollY))).toFixed(0)}px`;
+    popup.style.left = `${(Math.max(window.scrollX + 10, Math.min(window.innerWidth + window.scrollX - popup.clientWidth - 10, pos.left +
         pos.width / 2 -
         popup.clientWidth / 2 +
-        window.scrollX).toFixed(0)}px`;
+        window.scrollX))).toFixed(0)}px`;
 }
 function mouseoutListener() {
     handle = window.setTimeout(function () {
@@ -703,6 +708,7 @@ function request(queryString, onload, type) {
         case "sceneCode":
             query = `{findScenes(scene_filter:{code:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path}}}}`;
             access = (d) => d.findScenes.scenes;
+            break;
         default:
     }
     GM.xmlHttpRequest({
@@ -751,7 +757,7 @@ function checkElement(type, element, { checkUrl = true, prepareUrl = (url) => ur
  * queries for each selected element
  *
  * the selected element should be [a child of] the link that will be compared with stash urls
- * the first text inside of the selected element will be prepended with the symbol
+ * the first text inside the selected element will be prepended with the symbol
  */
 function check(type, elementSelector, { currentSite = false, ...checkConfig } = {}) {
     if (currentSite) {
@@ -777,15 +783,25 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
 
 (function () {
     switch (window.location.host) {
-        case "oreno3d.com":
-            check("scene", "h1.video-h1", {
-                color: (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue",
-                currentSite: true,
-            });
-            check("scene", "a h2.box-h2", {
-                color: (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue",
-            });
+        case "www.iwara.tv":
+        case "ecchi.iwara.tv": {
+            let color = (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue";
+            check("scene", "h1.title", { color: color, currentSite: true });
+            check("scene", "h3.title > a", { color: color });
             break;
+        }
+        case "oreno3d.com": {
+            let color = (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue";
+            check("scene", "h1.video-h1", { color: color, currentSite: true });
+            check("scene", "a h2.box-h2", { color: color });
+            break;
+        }
+        case "erommdtube.com": {
+            let color = (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue";
+            check("scene", "h1.show__h1", { color: color, currentSite: true });
+            check("scene", "h2.main__list-title", { color: color });
+            break;
+        }
         case "xslist.org":
             check("performer", "span[itemprop='name']", { currentSite: true });
             check("performer", "a[href*='/model/']");
@@ -801,10 +817,7 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
                 return s.join("/").replace(/^http:/, "https:");
             };
             if (window.location.pathname.startsWith("/person.rme/perfid=")) {
-                check("performer", "h1", {
-                    prepareUrl: prepareUrl,
-                    currentSite: true,
-                });
+                check("performer", "h1", { prepareUrl: prepareUrl, currentSite: true });
             }
             else if (window.location.pathname.startsWith("/title.rme/title=")) {
                 check("scene", "h1", { prepareUrl: prepareUrl, currentSite: true });
@@ -843,8 +856,10 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
             });
             break;
         default:
+            console.log("No configuration for website found.");
+            break;
     }
-    // TODO: other websites (iwara, kemono, coomer), stashDB
+    // TODO: other websites (kemono, coomer), stashDB
     // TODO: pop up information: rating, favorite, length, file information, link to stash
     // TODO: graphical configuration: https://stackoverflow.com/questions/14594346/create-a-config-or-options-page-for-a-greasemonkey-script
     // TODO: using GM_setValue()
