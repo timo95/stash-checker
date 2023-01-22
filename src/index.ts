@@ -22,6 +22,15 @@ import {check} from "./check";
             check("scene", "h2.main__list-title", {color: color});
             break;
         }
+        case "adultanime.dbsearch.net":
+            if (document.querySelector("article > section[id='info-table']") !== null) {
+                check("scene", "div[id='main-inner'] > article > h2", {
+                    currentSite: true,
+                    codeSelector: (_) => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
+                });
+            }
+            check("scene", "div[class='item-info'] > h4 > a, div[class='item-info'] > h5 > a");
+            break;
         case "xslist.org":
             check("performer", "span[itemprop='name']", {currentSite: true});
             check("performer", "a[href*='/model/']");

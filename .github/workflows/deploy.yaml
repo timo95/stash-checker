@@ -27,6 +27,7 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
           gist_id: 562b9363d491e3ee281cb46944445fcd
+          gist_file_name: stash-checker.user.js
           gist_description: Checks if a Scene/Performer is present in Stash
           file_path: dist/index.prod.user.js
           file_type: text
