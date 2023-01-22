@@ -25,7 +25,7 @@ jobs:
       - name: Deploy
         uses: exuanbo/actions-deploy-gist@v1
         with:
-          token: ${{ secrets.stash-checker }}
+          token: ${{ secrets.TOKEN }}
           gist_id: 562b9363d491e3ee281cb46944445fcd
           gist_description: Checks if a Scene/Performer is present in Stash
           file_path: dist/index.prod.user.js
