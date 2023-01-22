@@ -2,9 +2,8 @@
 // @name          Stash Checker
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers present in your stash
-// @version       0.0.1
+// @version       0.1.4
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
-// @source        https://github.com/timo95/stash-checker
 // @match         *://www.iwara.tv/*
 // @match         *://ecchi.iwara.tv/*
 // @match         *://oreno3d.com/*
@@ -14,6 +13,7 @@
 // @match         *://www.minnano-av.com/*
 // @match         *://xslist.org/*
 // @match         *://www.javlibrary.com/*
+// @match         *://adultanime.dbsearch.net/*
 // @grant         GM.xmlHttpRequest
 // @grant         GM.getValue
 // @grant         GM.setValue
@@ -41,7 +41,7 @@
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerPopup {\n  z-index: 999 !important;\n  position: absolute !important;\n  text-align: left !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerPopup {\n  z-index: 999 !important;\n  position: absolute !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -802,6 +802,15 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
             check("scene", "h2.main__list-title", { color: color });
             break;
         }
+        case "adultanime.dbsearch.net":
+            if (document.querySelector("article > section[id='info-table']") !== null) {
+                check("scene", "div[id='main-inner'] > article > h2", {
+                    currentSite: true,
+                    codeSelector: (_) => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
+                });
+            }
+            check("scene", "div[class='item-info'] > h4 > a, div[class='item-info'] > h5 > a");
+            break;
         case "xslist.org":
             check("performer", "span[itemprop='name']", { currentSite: true });
             check("performer", "a[href*='/model/']");
