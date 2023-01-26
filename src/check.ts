@@ -1,7 +1,5 @@
 import {prefixSymbol} from "./symbol";
-
-let stash = "http://stash.rock-5b.lan"; //"https://stash.tiemada.de"
-let apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0aW1vIiwiaWF0IjoxNjQxOTIyNzE1LCJzdWIiOiJBUElLZXkifQ.K29zkH-0KDg1VNf-r-A71pIsBvBubRjjMUHUEkUSmHU";
+import {getStashData} from "./stashData";
 
 interface CheckOptions {
     checkUrl?: boolean;
@@ -12,7 +10,10 @@ interface CheckOptions {
     currentSite?: boolean;
 }
 
-function request(
+// Ask for stash url/key on load
+let promise = getStashData()
+
+async function request(
     queryString: string,
     onload: (data: any[]) => any,
     type: string
@@ -36,9 +37,10 @@ function request(
             break;
         default:
     }
+    let [stashUrl, apiKey] = await promise  // Wait for stash data popup if it is not stored
     GM.xmlHttpRequest({
         method: "GET",
-        url: `${stash}/graphql?query=${query}`,
+        url: `${stashUrl}/graphql?query=${query}`,
         headers: {
             "Content-Type": "application/json",
             ApiKey: apiKey,
@@ -55,7 +57,7 @@ function request(
     });
 }
 
-function checkElement(
+async function checkElement(
     type: string,
     element: Element,
     {
@@ -71,7 +73,7 @@ function checkElement(
         url = prepareUrl(url);
         if (url) {
             console.log(url);
-            request(url, (data) => prefixSymbol(element, data, "URL", color), type + "Url");
+            request(url, (data: any) => prefixSymbol(element, data, "URL", color), type + "Url");
         } else {
             console.log("No URL for entry found");
         }
@@ -80,7 +82,7 @@ function checkElement(
         let code = codeSelector(element);
         if (code) {
             console.log(code);
-            request(code, (data) => prefixSymbol(element, data, "Code", color), type + "Code");
+            request(code, (data: any) => prefixSymbol(element, data, "Code", color), type + "Code");
         } else {
             console.log("No Code for entry found");
         }

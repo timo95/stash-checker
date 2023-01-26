@@ -28,7 +28,7 @@ module.exports = {
         "*://adultanime.dbsearch.net/*"
     ],
     require: [],
-    grant: ["GM.xmlHttpRequest", "GM.getValue", "GM.setValue"],
+    grant: ["GM.xmlHttpRequest", "GM.getValue", "GM.setValue", "GM.registerMenuCommand"],
     connect: ["stash.tiemada.de", "stash.rock-5b.lan"],
     "run-at": "document-end",
 };
