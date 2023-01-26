@@ -2,7 +2,7 @@
 // @name          Stash Checker
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers present in your stash
-// @version       0.2.0
+// @version       0.2.1
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @match         *://www.iwara.tv/*
 // @match         *://ecchi.iwara.tv/*
@@ -18,8 +18,6 @@
 // @grant         GM.getValue
 // @grant         GM.setValue
 // @grant         GM.registerMenuCommand
-// @connect       stash.tiemada.de
-// @connect       stash.rock-5b.lan
 // @run-at        document-end
 // ==/UserScript==
 
@@ -909,8 +907,6 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
     }
     // TODO: other websites (kemono, coomer), stashDB
     // TODO: pop up information: rating, favorite, length, file information, link to stash
-    // TODO: graphical configuration: https://stackoverflow.com/questions/14594346/create-a-config-or-options-page-for-a-greasemonkey-script
-    // TODO: using GM_setValue()
     // TODO: batch multiple link requests together?
 })();
 
