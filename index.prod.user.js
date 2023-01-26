@@ -2,7 +2,7 @@
 // @name          Stash Checker
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers present in your stash
-// @version       0.1.4
+// @version       0.2.0
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @match         *://www.iwara.tv/*
 // @match         *://ecchi.iwara.tv/*
@@ -17,6 +17,7 @@
 // @grant         GM.xmlHttpRequest
 // @grant         GM.getValue
 // @grant         GM.setValue
+// @grant         GM.registerMenuCommand
 // @connect       stash.tiemada.de
 // @connect       stash.rock-5b.lan
 // @run-at        document-end
@@ -687,11 +688,48 @@ function prefixSymbol(element, data, query, color) {
     text.parentNode.insertBefore(span, text);
 }
 
+;// CONCATENATED MODULE: ./src/stashData.ts
+// Register menu items
+GM.registerMenuCommand("Set Stash Url", setStashUrl, "u");
+GM.registerMenuCommand("Set API key", setApiKey, "k");
+async function setStashUrl() {
+    let stashUrl = await GM.getValue("stashUrl", undefined);
+    stashUrl = prompt("Stash URL:", stashUrl ?? "https://localhost:9999")?.trim()?.replace("\/$", "");
+    if (stashUrl !== undefined) {
+        await GM.setValue("stashUrl", stashUrl);
+    }
+}
+async function setApiKey() {
+    let apiKey = await GM.getValue("apiKey", undefined);
+    apiKey = prompt("API Key:", apiKey ?? "")?.trim()?.replace("\/$", "");
+    if (apiKey !== undefined) {
+        await GM.setValue("apiKey", apiKey);
+    }
+}
+async function getStashData() {
+    let stashUrl = await GM.getValue("stashUrl", undefined);
+    let apiKey = await GM.getValue("apiKey", undefined);
+    if (stashUrl === undefined) {
+        stashUrl = prompt("Stash URL:", "https://localhost:9999")?.trim()?.replace("\/$", "");
+        if (stashUrl !== undefined) {
+            await GM.setValue("stashUrl", stashUrl);
+        }
+    }
+    if (apiKey === undefined) {
+        apiKey = prompt("API Key:")?.trim()?.replace("\/$", "");
+        if (apiKey !== undefined) {
+            await GM.setValue("apiKey", apiKey);
+        }
+    }
+    return [stashUrl ?? "", apiKey ?? ""];
+}
+
 ;// CONCATENATED MODULE: ./src/check.ts
 
-let stash = "http://stash.rock-5b.lan"; //"https://stash.tiemada.de"
-let apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0aW1vIiwiaWF0IjoxNjQxOTIyNzE1LCJzdWIiOiJBUElLZXkifQ.K29zkH-0KDg1VNf-r-A71pIsBvBubRjjMUHUEkUSmHU";
-function request(queryString, onload, type) {
+
+// Ask for stash url/key on load
+let promise = getStashData();
+async function request(queryString, onload, type) {
     let query = "";
     let access = (d) => d;
     switch (type) {
@@ -711,9 +749,10 @@ function request(queryString, onload, type) {
             break;
         default:
     }
+    let [stashUrl, apiKey] = await promise; // Wait for stash data popup if it is not stored
     GM.xmlHttpRequest({
         method: "GET",
-        url: `${stash}/graphql?query=${query}`,
+        url: `${stashUrl}/graphql?query=${query}`,
         headers: {
             "Content-Type": "application/json",
             ApiKey: apiKey,
@@ -730,7 +769,7 @@ function request(queryString, onload, type) {
         },
     });
 }
-function checkElement(type, element, { checkUrl = true, prepareUrl = (url) => url, urlSelector, codeSelector, color = () => "green", }) {
+async function checkElement(type, element, { checkUrl = true, prepareUrl = (url) => url, urlSelector, codeSelector, color = () => "green", }) {
     if (checkUrl) {
         let url = urlSelector(element);
         url = prepareUrl(url);
@@ -872,7 +911,6 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
     // TODO: pop up information: rating, favorite, length, file information, link to stash
     // TODO: graphical configuration: https://stackoverflow.com/questions/14594346/create-a-config-or-options-page-for-a-greasemonkey-script
     // TODO: using GM_setValue()
-    // TODO: GitHub actions -> gist
     // TODO: batch multiple link requests together?
 })();
 
