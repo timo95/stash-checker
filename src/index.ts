@@ -90,7 +90,5 @@ import {check} from "./check";
 
     // TODO: other websites (kemono, coomer), stashDB
     // TODO: pop up information: rating, favorite, length, file information, link to stash
-    // TODO: graphical configuration: https://stackoverflow.com/questions/14594346/create-a-config-or-options-page-for-a-greasemonkey-script
-    // TODO: using GM_setValue()
     // TODO: batch multiple link requests together?
 })();
