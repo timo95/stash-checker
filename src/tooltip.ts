@@ -1,3 +1,5 @@
+import {Target} from "./check";
+
 let handle: number;
 let tooltip: HTMLDivElement = document.createElement("div");
 tooltip.style.display = "none";
@@ -29,8 +31,9 @@ function firstTextChild(node: Node): Node {
     }
 }
 
-function getPopupBody(data: any[]): string {
+function getTooltipBody(target: Target, data: any[], stashUrl: string): string {
     let propertyStrings: [string, (v: any) => string][] = [
+        ["id", (v: any) => `Link: <a target="_blank" href="${stashUrl}/${target}s/${v}">${stashUrl}/${target}s/${v}</a>`],
         ["title", (v: any) => `Title: ${v}`],
         ["name", (v: any) => `Name: ${v}`],
         ["code", (v: any) => `Code: ${v}`],
@@ -99,13 +102,17 @@ function mergeData(target: any[], source: any[]): any[] {
  * Also populates tooltip window.
  *
  * @param element
+ * @param target
  * @param data
+ * @param stashUrl
  * @param queryType
  * @param color
  */
 export function prefixSymbol(
     element: Element,
+    target: Target,
     data: any,
+    stashUrl: string,
     queryType: string,
     color: (data: any[]) => string
 ) {
@@ -139,7 +146,7 @@ export function prefixSymbol(
     }
 
     info += `<br>Queries: ${queries.join(", ")}`
-    info += getPopupBody(data)
+    info += getTooltipBody(target, data, stashUrl)
     span.setAttribute("data-info", info)
 
 

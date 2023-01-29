@@ -1,4 +1,4 @@
-import {prefixSymbol} from "./symbol";
+import {prefixSymbol} from "./tooltip";
 import {getConfig} from "./stashData";
 
 interface CheckOptions {
@@ -12,7 +12,7 @@ interface CheckOptions {
 }
 
 // what the query asks for
-type Target = "scene" | "performer"
+export type Target = "scene" | "performer"
 // what the query uses to filter
 type Type = "url" | "code" | "stash_id"
 
@@ -21,7 +21,7 @@ let configPromise = getConfig()
 
 async function request(
     queryString: string,
-    onload: (data: any[]) => any,
+    onload: (target: Target, data: any[], stashUrl: string) => any,
     target: Target,
     type: Type
 ) {
@@ -56,7 +56,7 @@ async function request(
         onload: function (response) {
             try {
                 let data = access(JSON.parse(response.responseText).data);
-                onload(data);
+                onload(target, data, stashUrl);
             } catch (e) {
                 console.log("Failed to parse response: " + response.responseText);
                 console.log("Exception: " + e);
@@ -82,7 +82,7 @@ async function checkElement(
         url = prepareUrl(url);
         if (url) {
             console.log(url);
-            request(url, (data: any) => prefixSymbol(element, data, "URL", color), target, "url");
+            request(url, (target: Target, data: any, stashUrl: string) => prefixSymbol(element, target, data, stashUrl, "URL", color), target, "url");
         } else {
             console.log("No URL for entry found");
         }
@@ -91,7 +91,7 @@ async function checkElement(
         let code = codeSelector(element);
         if (code) {
             console.log(code);
-            request(code, (data: any) => prefixSymbol(element, data, "Code", color), target, "code");
+            request(code, (target: Target, data: any, stashUrl: string) => prefixSymbol(element, target, data, stashUrl, "Code", color), target, "code");
         } else {
             console.log("No Code for entry found");
         }
@@ -100,7 +100,7 @@ async function checkElement(
         let id = stashIdSelector(element);
         if (id) {
             console.log(id);
-            request(id, (data: any) => prefixSymbol(element, data, "StashId", color), target, "stash_id");
+            request(id, (target: Target, data: any, stashUrl: string) => prefixSymbol(element, target, data, stashUrl, "StashId", color), target, "stash_id");
         } else {
             console.log("No StashId for entry found");
         }

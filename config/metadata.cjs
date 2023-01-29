@@ -24,6 +24,7 @@ module.exports = {
         "*://stashdb.org/*",
         "*://www.animecharactersdatabase.com/*",
         "*://www.iafd.com/*",
+        "*://www.indexxx.com/*",
         "*://www.iwara.tv/*",
         "*://www.javlibrary.com/*",
         "*://www.minnano-av.com/*",
