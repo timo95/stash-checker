@@ -23,7 +23,7 @@ async function setApiKey() {
 }
 
 
-export async function getStashData(): Promise<[string, string]> {
+export async function getConfig(): Promise<[string, string]> {
     let stashUrl = await GM.getValue<string>("stashUrl", undefined);
     let apiKey = await GM.getValue<string>("apiKey", undefined);
 

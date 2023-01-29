@@ -83,12 +83,55 @@ import {check} from "./check";
                 prepareUrl: (url) => url.split("?")[0],
             });
             break;
+        case "stashdb.org":
+            let callback = () => {
+                check("scene", "div.scene-info.card h3", {
+                    currentSite: true,
+                    checkUrl: false,
+                    stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, ""),
+                });
+                check("scene", "a[class|='text'][href*='/scenes/'], div.col > a[href*='/scenes/'], div[class|='col'] > a[href*='/scenes/'], div[class|='col'] > span > a[href*='/scenes/']", {
+                    checkUrl: false,
+                    stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, ""),
+                });
+                check("performer", "div.PerformerInfo div.card-header h3 > span", {
+                    currentSite: true,
+                    checkUrl: false,
+                    stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, ""),
+                });
+                check("performer", "a[href*='/performers/'] span, div[class|='col'] > a[href*='/performers/'], div[class|='col'] > div > a[href*='/performers/']", {
+                    checkUrl: false,
+                    stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, ""),
+                });
+            };
+
+            // Run on each header change
+            let title = document.querySelector("head");
+            let timeout: any = undefined;
+            let observer = new MutationObserver(() => {
+                console.log("Header changed")
+                clearTimeout(timeout);
+                timeout = setTimeout(callback, 500);
+            });
+            observer.observe(title, {childList: true, subtree: true});
+            // And url change
+            let previousUrl = "";
+            observer = new MutationObserver(() => {
+                if (window.location.href !== previousUrl) {
+                    previousUrl = window.location.href;
+                    console.log(`URL changed from ${previousUrl} to ${window.location.href}`);
+                    clearTimeout(timeout);
+                    timeout = setTimeout(callback, 500);
+                }
+            });
+            observer.observe(document, {childList: true, subtree: true});
+            break;
         default:
             console.log("No configuration for website found.")
             break;
     }
 
-    // TODO: other websites (kemono, coomer), stashDB
+    // TODO: other websites: kemono, coomer, OF, indexxx
     // TODO: pop up information: rating, favorite, length, file information, link to stash
     // TODO: batch multiple link requests together?
 })();

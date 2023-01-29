@@ -1,16 +1,16 @@
 let handle: number;
-let popup: HTMLDivElement = document.createElement("div");
-popup.style.display = "none";
-popup.classList.add("stashCheckerPopup");
-popup.addEventListener("mouseover", function () {
+let tooltip: HTMLDivElement = document.createElement("div");
+tooltip.style.display = "none";
+tooltip.classList.add("stashCheckerPopup");
+tooltip.addEventListener("mouseover", function () {
     window.clearTimeout(handle);
 });
-popup.addEventListener("mouseout", function () {
+tooltip.addEventListener("mouseout", function () {
     handle = window.setTimeout(function () {
-        popup.style.display = "none";
+        tooltip.style.display = "none";
     }, 500);
 });
-document.body.append(popup);
+document.body.append(tooltip);
 
 /**
  * recursive (dfs) first non empty text node child, undefined if none available
@@ -55,26 +55,26 @@ function getExistingSpan(element: Element): HTMLSpanElement | null {
 function mouseoverListener() {
     window.clearTimeout(handle);
     let pos = this.getBoundingClientRect();
-    popup.innerHTML = this.getAttribute("data-info");
-    popup.style.display = "";
-    // TODO flip popup to other side (up/down), if not enough space
+    tooltip.innerHTML = this.getAttribute("data-info");
+    tooltip.style.display = "";
+    // TODO flip tooltip to other side (up/down), if not enough space
     // TODO (top-)margin is ignored for min/max positions -> doesn't matter if ^ is implemented
-    popup.style.top = `${(Math.max(window.scrollY + 10, Math.min(window.innerHeight + window.scrollY - popup.clientHeight - 10,
+    tooltip.style.top = `${(Math.max(window.scrollY + 10, Math.min(window.innerHeight + window.scrollY - tooltip.clientHeight - 10,
         pos.top -
-        popup.clientHeight +
+        tooltip.clientHeight +
         window.scrollY
     ))).toFixed(0)}px`;
-    popup.style.left = `${(Math.max(window.scrollX + 10, Math.min(window.innerWidth + window.scrollX - popup.clientWidth - 10,
+    tooltip.style.left = `${(Math.max(window.scrollX + 10, Math.min(window.innerWidth + window.scrollX - tooltip.clientWidth - 10,
         pos.left +
         pos.width / 2 -
-        popup.clientWidth / 2 +
+        tooltip.clientWidth / 2 +
         window.scrollX
     ))).toFixed(0)}px`;
 }
 
 function mouseoutListener() {
     handle = window.setTimeout(function () {
-        popup.style.display = "none";
+        tooltip.style.display = "none";
     }, 500);
 }
 
@@ -96,21 +96,21 @@ function mergeData(target: any[], source: any[]): any[] {
 
 /**
  * Prepends depending on the data the checkmark or cross to the selected element.
- * Also populates popup window.
+ * Also populates tooltip window.
  *
  * @param element
  * @param data
- * @param query
+ * @param queryType
  * @param color
  */
 export function prefixSymbol(
     element: Element,
     data: any,
-    query: string,
+    queryType: string,
     color: (data: any[]) => string
 ) {
     let span = getExistingSpan(element)
-    let queries = [query]
+    let queries = [queryType]
     if (span) {
         queries = JSON.parse(span.getAttribute("data-queries")).concat(queries).sort()
         data = mergeData(JSON.parse(span.getAttribute("data-data")), data)
@@ -144,7 +144,7 @@ export function prefixSymbol(
 
 
     // insert before first text because css selectors cannot select text nodes directly
-    // it works with cases were non text elements (images) are inside of the selected element
+    // it works with cases were non text elements (images) are inside the selected element
     let text = firstTextChild(element)
     text.parentNode.insertBefore(span, text);
 }

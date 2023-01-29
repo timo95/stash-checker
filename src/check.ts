@@ -1,43 +1,51 @@
 import {prefixSymbol} from "./symbol";
-import {getStashData} from "./stashData";
+import {getConfig} from "./stashData";
 
 interface CheckOptions {
     checkUrl?: boolean;
     urlSelector?: (e: Element) => string;
     prepareUrl?: (url: string) => string;
     codeSelector?: (e: Element) => string;
+    stashIdSelector?: (e: Element) => string;
     color?: (data: any) => string;
     currentSite?: boolean;
 }
 
+// what the query asks for
+type Target = "scene" | "performer"
+// what the query uses to filter
+type Type = "url" | "code" | "stash_id"
+
 // Ask for stash url/key on load
-let promise = getStashData()
+let configPromise = getConfig()
 
 async function request(
     queryString: string,
     onload: (data: any[]) => any,
-    type: string
+    target: Target,
+    type: Type
 ) {
     let query = "";
     let access = (d: any) => d;
-    switch (type) {
-        case "sceneUrl":
-            queryString = encodeURIComponent(queryString);
-            query = `{findScenes(scene_filter:{url:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path}}}}`;
+
+    // Build query
+    if (type === "url") {
+        queryString = encodeURIComponent(queryString);
+    }
+    switch (target) {
+        case "scene":
+            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path}}}}`;
             access = (d) => d.findScenes.scenes;
             break;
-        case "performerUrl":
-            queryString = encodeURIComponent(queryString);
-            query = `{findPerformers(performer_filter:{url:{value:"${queryString}",modifier:EQUALS}}){performers{id,name}}}`;
+        case "performer":
+            query = `{findPerformers(performer_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){performers{id,name}}}`;
             access = (d) => d.findPerformers.performers;
-            break;
-        case "sceneCode":
-            query = `{findScenes(scene_filter:{code:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path}}}}`;
-            access = (d) => d.findScenes.scenes;
             break;
         default:
     }
-    let [stashUrl, apiKey] = await promise  // Wait for stash data popup if it is not stored
+
+    // Wait for config popup if it is not stored
+    let [stashUrl, apiKey] = await configPromise
     GM.xmlHttpRequest({
         method: "GET",
         url: `${stashUrl}/graphql?query=${query}`,
@@ -58,13 +66,14 @@ async function request(
 }
 
 async function checkElement(
-    type: string,
+    target: Target,
     element: Element,
     {
         checkUrl = true,
         prepareUrl = (url) => url,
         urlSelector,
         codeSelector,
+        stashIdSelector,
         color = () => "green",
     }: CheckOptions
 ) {
@@ -73,7 +82,7 @@ async function checkElement(
         url = prepareUrl(url);
         if (url) {
             console.log(url);
-            request(url, (data: any) => prefixSymbol(element, data, "URL", color), type + "Url");
+            request(url, (data: any) => prefixSymbol(element, data, "URL", color), target, "url");
         } else {
             console.log("No URL for entry found");
         }
@@ -82,9 +91,18 @@ async function checkElement(
         let code = codeSelector(element);
         if (code) {
             console.log(code);
-            request(code, (data: any) => prefixSymbol(element, data, "Code", color), type + "Code");
+            request(code, (data: any) => prefixSymbol(element, data, "Code", color), target, "code");
         } else {
             console.log("No Code for entry found");
+        }
+    }
+    if (stashIdSelector) {
+        let id = stashIdSelector(element);
+        if (id) {
+            console.log(id);
+            request(id, (data: any) => prefixSymbol(element, data, "StashId", color), target, "stash_id");
+        } else {
+            console.log("No StashId for entry found");
         }
     }
 }
@@ -96,7 +114,7 @@ async function checkElement(
  * the first text inside the selected element will be prepended with the symbol
  */
 export function check(
-    type: string,
+    target: Target,
     elementSelector: string,
     {currentSite = false, ...checkConfig}: CheckOptions = {}
 ) {
@@ -105,14 +123,14 @@ export function check(
         if (element) {
             // url of current site
             checkConfig.urlSelector ??= () => decodeURI(window.location.href);
-            checkElement(type, element, checkConfig);
+            checkElement(target, element, checkConfig);
         }
     } else {
         // multiple entries with url nearest to element
         document.querySelectorAll(elementSelector).forEach((element) => {
             // url nearest to selected element traversing towards the root (children are ignored)
             checkConfig.urlSelector ??= (e: Element) => decodeURI(e.closest("a").href);
-            checkElement(type, element, checkConfig);
+            checkElement(target, element, checkConfig);
         });
     }
 }
