@@ -83,6 +83,10 @@ import {check} from "./check";
                 prepareUrl: (url) => url.split("?")[0],
             });
             break;
+        case "www.indexxx.com":
+            check("performer", "h1[id='model-name']", {currentSite: true})
+            check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span")
+            break;
         case "stashdb.org":
             let callback = () => {
                 check("scene", "div.scene-info.card h3", {
@@ -131,7 +135,7 @@ import {check} from "./check";
             break;
     }
 
-    // TODO: other websites: kemono, coomer, OF, indexxx
-    // TODO: pop up information: rating, favorite, length, file information, link to stash
+    // TODO: other websites: kemono, coomer, OF
+    // TODO: pop up information: rating, favorite, length
     // TODO: batch multiple link requests together?
 })();
