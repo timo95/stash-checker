@@ -2,18 +2,20 @@
 // @name          Stash Checker
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers present in your stash
-// @version       0.2.1
+// @icon          https://docs.stashapp.cc/favicon.ico
+// @version       0.3.0
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
-// @match         *://www.iwara.tv/*
+// @match         *://adultanime.dbsearch.net/*
 // @match         *://ecchi.iwara.tv/*
-// @match         *://oreno3d.com/*
 // @match         *://erommdtube.com/*
+// @match         *://oreno3d.com/*
+// @match         *://stashdb.org/*
 // @match         *://www.animecharactersdatabase.com/*
 // @match         *://www.iafd.com/*
+// @match         *://www.iwara.tv/*
+// @match         *://www.javlibrary.com/*
 // @match         *://www.minnano-av.com/*
 // @match         *://xslist.org/*
-// @match         *://www.javlibrary.com/*
-// @match         *://adultanime.dbsearch.net/*
 // @grant         GM.xmlHttpRequest
 // @grant         GM.getValue
 // @grant         GM.setValue
@@ -40,7 +42,7 @@
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerPopup {\n  z-index: 999 !important;\n  position: absolute !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerPopup {\n  z-index: 999 !important;\n  position: absolute !important;\n  color: black !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -554,18 +556,18 @@ var update = injectStylesIntoStyleTag_default()(main/* default */.Z, options);
 
 ;// CONCATENATED MODULE: ./src/symbol.ts
 let handle;
-let popup = document.createElement("div");
-popup.style.display = "none";
-popup.classList.add("stashCheckerPopup");
-popup.addEventListener("mouseover", function () {
+let tooltip = document.createElement("div");
+tooltip.style.display = "none";
+tooltip.classList.add("stashCheckerPopup");
+tooltip.addEventListener("mouseover", function () {
     window.clearTimeout(handle);
 });
-popup.addEventListener("mouseout", function () {
+tooltip.addEventListener("mouseout", function () {
     handle = window.setTimeout(function () {
-        popup.style.display = "none";
+        tooltip.style.display = "none";
     }, 500);
 });
-document.body.append(popup);
+document.body.append(tooltip);
 /**
  * recursive (dfs) first non empty text node child, undefined if none available
  */
@@ -605,21 +607,21 @@ function getExistingSpan(element) {
 function mouseoverListener() {
     window.clearTimeout(handle);
     let pos = this.getBoundingClientRect();
-    popup.innerHTML = this.getAttribute("data-info");
-    popup.style.display = "";
-    // TODO flip popup to other side (up/down), if not enough space
+    tooltip.innerHTML = this.getAttribute("data-info");
+    tooltip.style.display = "";
+    // TODO flip tooltip to other side (up/down), if not enough space
     // TODO (top-)margin is ignored for min/max positions -> doesn't matter if ^ is implemented
-    popup.style.top = `${(Math.max(window.scrollY + 10, Math.min(window.innerHeight + window.scrollY - popup.clientHeight - 10, pos.top -
-        popup.clientHeight +
+    tooltip.style.top = `${(Math.max(window.scrollY + 10, Math.min(window.innerHeight + window.scrollY - tooltip.clientHeight - 10, pos.top -
+        tooltip.clientHeight +
         window.scrollY))).toFixed(0)}px`;
-    popup.style.left = `${(Math.max(window.scrollX + 10, Math.min(window.innerWidth + window.scrollX - popup.clientWidth - 10, pos.left +
+    tooltip.style.left = `${(Math.max(window.scrollX + 10, Math.min(window.innerWidth + window.scrollX - tooltip.clientWidth - 10, pos.left +
         pos.width / 2 -
-        popup.clientWidth / 2 +
+        tooltip.clientWidth / 2 +
         window.scrollX))).toFixed(0)}px`;
 }
 function mouseoutListener() {
     handle = window.setTimeout(function () {
-        popup.style.display = "none";
+        tooltip.style.display = "none";
     }, 500);
 }
 /**
@@ -638,16 +640,16 @@ function mergeData(target, source) {
 }
 /**
  * Prepends depending on the data the checkmark or cross to the selected element.
- * Also populates popup window.
+ * Also populates tooltip window.
  *
  * @param element
  * @param data
- * @param query
+ * @param queryType
  * @param color
  */
-function prefixSymbol(element, data, query, color) {
+function prefixSymbol(element, data, queryType, color) {
     let span = getExistingSpan(element);
-    let queries = [query];
+    let queries = [queryType];
     if (span) {
         queries = JSON.parse(span.getAttribute("data-queries")).concat(queries).sort();
         data = mergeData(JSON.parse(span.getAttribute("data-data")), data);
@@ -681,7 +683,7 @@ function prefixSymbol(element, data, query, color) {
     info += getPopupBody(data);
     span.setAttribute("data-info", info);
     // insert before first text because css selectors cannot select text nodes directly
-    // it works with cases were non text elements (images) are inside of the selected element
+    // it works with cases were non text elements (images) are inside the selected element
     let text = firstTextChild(element);
     text.parentNode.insertBefore(span, text);
 }
@@ -704,7 +706,7 @@ async function setApiKey() {
         await GM.setValue("apiKey", apiKey);
     }
 }
-async function getStashData() {
+async function getConfig() {
     let stashUrl = await GM.getValue("stashUrl", undefined);
     let apiKey = await GM.getValue("apiKey", undefined);
     if (stashUrl === undefined) {
@@ -726,28 +728,27 @@ async function getStashData() {
 
 
 // Ask for stash url/key on load
-let promise = getStashData();
-async function request(queryString, onload, type) {
+let configPromise = getConfig();
+async function request(queryString, onload, target, type) {
     let query = "";
     let access = (d) => d;
-    switch (type) {
-        case "sceneUrl":
-            queryString = encodeURIComponent(queryString);
-            query = `{findScenes(scene_filter:{url:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path}}}}`;
+    // Build query
+    if (type === "url") {
+        queryString = encodeURIComponent(queryString);
+    }
+    switch (target) {
+        case "scene":
+            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path}}}}`;
             access = (d) => d.findScenes.scenes;
             break;
-        case "performerUrl":
-            queryString = encodeURIComponent(queryString);
-            query = `{findPerformers(performer_filter:{url:{value:"${queryString}",modifier:EQUALS}}){performers{id,name}}}`;
+        case "performer":
+            query = `{findPerformers(performer_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){performers{id,name}}}`;
             access = (d) => d.findPerformers.performers;
-            break;
-        case "sceneCode":
-            query = `{findScenes(scene_filter:{code:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path}}}}`;
-            access = (d) => d.findScenes.scenes;
             break;
         default:
     }
-    let [stashUrl, apiKey] = await promise; // Wait for stash data popup if it is not stored
+    // Wait for config popup if it is not stored
+    let [stashUrl, apiKey] = await configPromise;
     GM.xmlHttpRequest({
         method: "GET",
         url: `${stashUrl}/graphql?query=${query}`,
@@ -767,13 +768,13 @@ async function request(queryString, onload, type) {
         },
     });
 }
-async function checkElement(type, element, { checkUrl = true, prepareUrl = (url) => url, urlSelector, codeSelector, color = () => "green", }) {
+async function checkElement(target, element, { checkUrl = true, prepareUrl = (url) => url, urlSelector, codeSelector, stashIdSelector, color = () => "green", }) {
     if (checkUrl) {
         let url = urlSelector(element);
         url = prepareUrl(url);
         if (url) {
             console.log(url);
-            request(url, (data) => prefixSymbol(element, data, "URL", color), type + "Url");
+            request(url, (data) => prefixSymbol(element, data, "URL", color), target, "url");
         }
         else {
             console.log("No URL for entry found");
@@ -783,10 +784,20 @@ async function checkElement(type, element, { checkUrl = true, prepareUrl = (url)
         let code = codeSelector(element);
         if (code) {
             console.log(code);
-            request(code, (data) => prefixSymbol(element, data, "Code", color), type + "Code");
+            request(code, (data) => prefixSymbol(element, data, "Code", color), target, "code");
         }
         else {
             console.log("No Code for entry found");
+        }
+    }
+    if (stashIdSelector) {
+        let id = stashIdSelector(element);
+        if (id) {
+            console.log(id);
+            request(id, (data) => prefixSymbol(element, data, "StashId", color), target, "stash_id");
+        }
+        else {
+            console.log("No StashId for entry found");
         }
     }
 }
@@ -796,13 +807,13 @@ async function checkElement(type, element, { checkUrl = true, prepareUrl = (url)
  * the selected element should be [a child of] the link that will be compared with stash urls
  * the first text inside the selected element will be prepended with the symbol
  */
-function check(type, elementSelector, { currentSite = false, ...checkConfig } = {}) {
+function check(target, elementSelector, { currentSite = false, ...checkConfig } = {}) {
     if (currentSite) {
         let element = document.querySelector(elementSelector);
         if (element) {
             // url of current site
             checkConfig.urlSelector ?? (checkConfig.urlSelector = () => decodeURI(window.location.href));
-            checkElement(type, element, checkConfig);
+            checkElement(target, element, checkConfig);
         }
     }
     else {
@@ -810,7 +821,7 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
         document.querySelectorAll(elementSelector).forEach((element) => {
             // url nearest to selected element traversing towards the root (children are ignored)
             checkConfig.urlSelector ?? (checkConfig.urlSelector = (e) => decodeURI(e.closest("a").href));
-            checkElement(type, element, checkConfig);
+            checkElement(target, element, checkConfig);
         });
     }
 }
@@ -901,11 +912,53 @@ function check(type, elementSelector, { currentSite = false, ...checkConfig } = 
                 prepareUrl: (url) => url.split("?")[0],
             });
             break;
+        case "stashdb.org":
+            let callback = () => {
+                check("scene", "div.scene-info.card h3", {
+                    currentSite: true,
+                    checkUrl: false,
+                    stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, ""),
+                });
+                check("scene", "a[class|='text'][href*='/scenes/'], div.col > a[href*='/scenes/'], div[class|='col'] > a[href*='/scenes/'], div[class|='col'] > span > a[href*='/scenes/']", {
+                    checkUrl: false,
+                    stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, ""),
+                });
+                check("performer", "div.PerformerInfo div.card-header h3 > span", {
+                    currentSite: true,
+                    checkUrl: false,
+                    stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, ""),
+                });
+                check("performer", "a[href*='/performers/'] span, div[class|='col'] > a[href*='/performers/'], div[class|='col'] > div > a[href*='/performers/']", {
+                    checkUrl: false,
+                    stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, ""),
+                });
+            };
+            // Run on each header change
+            let title = document.querySelector("head");
+            let timeout = undefined;
+            let observer = new MutationObserver(() => {
+                console.log("Header changed");
+                clearTimeout(timeout);
+                timeout = setTimeout(callback, 500);
+            });
+            observer.observe(title, { childList: true, subtree: true });
+            // And url change
+            let previousUrl = "";
+            observer = new MutationObserver(() => {
+                if (window.location.href !== previousUrl) {
+                    previousUrl = window.location.href;
+                    console.log(`URL changed from ${previousUrl} to ${window.location.href}`);
+                    clearTimeout(timeout);
+                    timeout = setTimeout(callback, 500);
+                }
+            });
+            observer.observe(document, { childList: true, subtree: true });
+            break;
         default:
             console.log("No configuration for website found.");
             break;
     }
-    // TODO: other websites (kemono, coomer), stashDB
+    // TODO: other websites: kemono, coomer, OF, indexxx
     // TODO: pop up information: rating, favorite, length, file information, link to stash
     // TODO: batch multiple link requests together?
 })();
