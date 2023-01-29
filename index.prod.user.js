@@ -586,11 +586,12 @@ function firstTextChild(node) {
 }
 function getTooltipBody(target, data, stashUrl) {
     let propertyStrings = [
-        ["id", (v) => `Link: <a target="_blank" href="${stashUrl}/${target}s/${v}">${stashUrl}/${target}s/${v}</a>`],
+        ["id", (v) => `<a target="_blank" href="${stashUrl}/${target}s/${v}">${stashUrl}/${target}s/${v}</a>`],
         ["title", (v) => `Title: ${v}`],
         ["name", (v) => `Name: ${v}`],
         ["code", (v) => `Code: ${v}`],
         ["files", (v) => `${v.map((file) => `Path: ${file.path}`).join("<br>")}`],
+        ["queries", (v) => `Matched: ${v.join(", ")}`],
     ];
     return ["", ...data.map((entry) => propertyStrings
             .filter((e) => entry[e[0]])
@@ -636,6 +637,14 @@ function mergeData(target, source) {
     let mapTarget = new Map(target.map(e => [e.id, e]));
     let mapSource = new Map(source.map(e => [e.id, e]));
     mapSource.forEach((value, key) => {
+        if (mapTarget.has(key)) {
+            // merge which queries were successful
+            let set = new Set(value["queries"]);
+            mapTarget.get(key)["queries"].forEach((query) => {
+                set.add(query);
+            });
+            value["queries"] = [...set].sort();
+        }
         mapTarget.set(key, value);
     });
     return Array.from(mapTarget.values());
@@ -653,7 +662,12 @@ function mergeData(target, source) {
  */
 function prefixSymbol(element, target, data, stashUrl, queryType, color) {
     let span = getExistingSpan(element);
+    // All queries tried
     let queries = [queryType];
+    // Query for each found entry
+    data.forEach((entry) => {
+        entry["queries"] = queries;
+    });
     if (span) {
         queries = JSON.parse(span.getAttribute("data-queries")).concat(queries).sort();
         data = mergeData(JSON.parse(span.getAttribute("data-data")), data);
@@ -966,9 +980,12 @@ function check(target, elementSelector, { currentSite = false, ...checkConfig } 
             console.log("No configuration for website found.");
             break;
     }
-    // TODO: other websites: kemono, coomer, OF
-    // TODO: pop up information: rating, favorite, length
-    // TODO: batch multiple link requests together?
+    // TODO: scenes: kemono, coomer, OF
+    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.data18.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
+    // TODO: movies, pictures, galleries
+    // TODO: configuration to not show cross mark if none found
+    // TODO: tooltip information: rating, favorite, length
+    // TODO: batch multiple link requests together? (querySelectorAll -> chunking)
 })();
 
 })();
