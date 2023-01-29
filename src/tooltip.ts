@@ -33,11 +33,12 @@ function firstTextChild(node: Node): Node {
 
 function getTooltipBody(target: Target, data: any[], stashUrl: string): string {
     let propertyStrings: [string, (v: any) => string][] = [
-        ["id", (v: any) => `Link: <a target="_blank" href="${stashUrl}/${target}s/${v}">${stashUrl}/${target}s/${v}</a>`],
+        ["id", (v: any) => `<a target="_blank" href="${stashUrl}/${target}s/${v}">${stashUrl}/${target}s/${v}</a>`],
         ["title", (v: any) => `Title: ${v}`],
         ["name", (v: any) => `Name: ${v}`],
         ["code", (v: any) => `Code: ${v}`],
         ["files", (v: any) => `${v.map((file: any) => `Path: ${file.path}`).join("<br>")}`],
+        ["queries", (v: any) => `Matched: ${v.join(", ")}`],
     ];
     return ["", ...data.map((entry: any) => propertyStrings
         .filter((e) => entry[e[0]])
@@ -91,6 +92,14 @@ function mergeData(target: any[], source: any[]): any[] {
     let mapTarget: Map<string, any> = new Map(target.map(e => [e.id, e]))
     let mapSource: Map<string, any> = new Map(source.map(e => [e.id, e]))
     mapSource.forEach((value, key) => {
+        if (mapTarget.has(key)) {
+            // merge which queries were successful
+            let set = new Set(value["queries"])
+            mapTarget.get(key)["queries"].forEach((query: string) => {
+                set.add(query)
+            })
+            value["queries"] = [...set].sort()
+        }
         mapTarget.set(key, value)
     });
     return Array.from(mapTarget.values());
@@ -117,7 +126,12 @@ export function prefixSymbol(
     color: (data: any[]) => string
 ) {
     let span = getExistingSpan(element)
+    // All queries tried
     let queries = [queryType]
+    // Query for each found entry
+    data.forEach((entry: any) => {
+        entry["queries"] = queries
+    });
     if (span) {
         queries = JSON.parse(span.getAttribute("data-queries")).concat(queries).sort()
         data = mergeData(JSON.parse(span.getAttribute("data-data")), data)

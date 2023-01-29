@@ -135,7 +135,10 @@ import {check} from "./check";
             break;
     }
 
-    // TODO: other websites: kemono, coomer, OF
-    // TODO: pop up information: rating, favorite, length
-    // TODO: batch multiple link requests together?
+    // TODO: scenes: kemono, coomer, OF
+    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.data18.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
+    // TODO: movies, pictures, galleries
+    // TODO: configuration to not show cross mark if none found
+    // TODO: tooltip information: rating, favorite, length
+    // TODO: batch multiple link requests together? (querySelectorAll -> chunking)
 })();
