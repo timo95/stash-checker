@@ -12,6 +12,7 @@
 // @match         *://stashdb.org/*
 // @match         *://www.animecharactersdatabase.com/*
 // @match         *://www.iafd.com/*
+// @match         *://www.indexxx.com/*
 // @match         *://www.iwara.tv/*
 // @match         *://www.javlibrary.com/*
 // @match         *://www.minnano-av.com/*
@@ -554,7 +555,7 @@ var update = injectStylesIntoStyleTag_default()(main/* default */.Z, options);
 
        /* harmony default export */ const style_main = (main/* default */.Z && main/* default.locals */.Z.locals ? main/* default.locals */.Z.locals : undefined);
 
-;// CONCATENATED MODULE: ./src/symbol.ts
+;// CONCATENATED MODULE: ./src/tooltip.ts
 let handle;
 let tooltip = document.createElement("div");
 tooltip.style.display = "none";
@@ -583,8 +584,9 @@ function firstTextChild(node) {
             .find((n) => n);
     }
 }
-function getPopupBody(data) {
+function getTooltipBody(target, data, stashUrl) {
     let propertyStrings = [
+        ["id", (v) => `Link: <a target="_blank" href="${stashUrl}/${target}s/${v}">${stashUrl}/${target}s/${v}</a>`],
         ["title", (v) => `Title: ${v}`],
         ["name", (v) => `Name: ${v}`],
         ["code", (v) => `Code: ${v}`],
@@ -643,11 +645,13 @@ function mergeData(target, source) {
  * Also populates tooltip window.
  *
  * @param element
+ * @param target
  * @param data
+ * @param stashUrl
  * @param queryType
  * @param color
  */
-function prefixSymbol(element, data, queryType, color) {
+function prefixSymbol(element, target, data, stashUrl, queryType, color) {
     let span = getExistingSpan(element);
     let queries = [queryType];
     if (span) {
@@ -680,7 +684,7 @@ function prefixSymbol(element, data, queryType, color) {
         info += "Entry has duplicate matches";
     }
     info += `<br>Queries: ${queries.join(", ")}`;
-    info += getPopupBody(data);
+    info += getTooltipBody(target, data, stashUrl);
     span.setAttribute("data-info", info);
     // insert before first text because css selectors cannot select text nodes directly
     // it works with cases were non text elements (images) are inside the selected element
@@ -759,7 +763,7 @@ async function request(queryString, onload, target, type) {
         onload: function (response) {
             try {
                 let data = access(JSON.parse(response.responseText).data);
-                onload(data);
+                onload(target, data, stashUrl);
             }
             catch (e) {
                 console.log("Failed to parse response: " + response.responseText);
@@ -774,7 +778,7 @@ async function checkElement(target, element, { checkUrl = true, prepareUrl = (ur
         url = prepareUrl(url);
         if (url) {
             console.log(url);
-            request(url, (data) => prefixSymbol(element, data, "URL", color), target, "url");
+            request(url, (target, data, stashUrl) => prefixSymbol(element, target, data, stashUrl, "URL", color), target, "url");
         }
         else {
             console.log("No URL for entry found");
@@ -784,7 +788,7 @@ async function checkElement(target, element, { checkUrl = true, prepareUrl = (ur
         let code = codeSelector(element);
         if (code) {
             console.log(code);
-            request(code, (data) => prefixSymbol(element, data, "Code", color), target, "code");
+            request(code, (target, data, stashUrl) => prefixSymbol(element, target, data, stashUrl, "Code", color), target, "code");
         }
         else {
             console.log("No Code for entry found");
@@ -794,7 +798,7 @@ async function checkElement(target, element, { checkUrl = true, prepareUrl = (ur
         let id = stashIdSelector(element);
         if (id) {
             console.log(id);
-            request(id, (data) => prefixSymbol(element, data, "StashId", color), target, "stash_id");
+            request(id, (target, data, stashUrl) => prefixSymbol(element, target, data, stashUrl, "StashId", color), target, "stash_id");
         }
         else {
             console.log("No StashId for entry found");
@@ -912,6 +916,10 @@ function check(target, elementSelector, { currentSite = false, ...checkConfig } 
                 prepareUrl: (url) => url.split("?")[0],
             });
             break;
+        case "www.indexxx.com":
+            check("performer", "h1[id='model-name']", { currentSite: true });
+            check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span");
+            break;
         case "stashdb.org":
             let callback = () => {
                 check("scene", "div.scene-info.card h3", {
@@ -958,8 +966,8 @@ function check(target, elementSelector, { currentSite = false, ...checkConfig } 
             console.log("No configuration for website found.");
             break;
     }
-    // TODO: other websites: kemono, coomer, OF, indexxx
-    // TODO: pop up information: rating, favorite, length, file information, link to stash
+    // TODO: other websites: kemono, coomer, OF
+    // TODO: pop up information: rating, favorite, length
     // TODO: batch multiple link requests together?
 })();
 
