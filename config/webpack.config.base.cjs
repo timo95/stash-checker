@@ -15,9 +15,6 @@ const webpackConfig = {
         path: path.resolve(__dirname, "../dist"),
     },
     target: "web",
-    externals: {
-        jquery: "$",
-    },
     module: {
         rules: [
             {
