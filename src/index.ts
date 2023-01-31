@@ -87,6 +87,11 @@ import {check} from "./check";
             check("performer", "h1[id='model-name']", {currentSite: true})
             check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span")
             break;
+        case "www.data18.com":
+            check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])")
+            check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])")
+            // TODO: dynamic updates (pages/filters/search)
+            break;
         case "stashdb.org": {
             let callback = () => {
                 check("scene", "div.scene-info.card h3 > span", {
@@ -137,9 +142,8 @@ import {check} from "./check";
     }
 
     // TODO: scenes: kemono, coomer, OF, ThePornDB
-    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.data18.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
+    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
     // TODO: movies, pictures, galleries
     // TODO: config: do not show cross mark if none found, custom symbols, default colors
     // TODO: tooltip information: rating, favorite, length
-    // TODO: batch multiple link requests together? (querySelectorAll -> chunking)
 })();

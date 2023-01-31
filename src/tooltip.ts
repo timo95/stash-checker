@@ -20,12 +20,12 @@ document.body.append(tooltipWindow);
 function firstTextChild(node: Node): Node {
     if (
         node.nodeType === Node.TEXT_NODE &&
-        node.textContent.match(/^\s*$/) === null  // exclude whitespace
+        node.textContent.match(/^[\s<>]*$/) === null  // exclude whitespace
     ) {
         return node;
     } else {
         return Array.from(node.childNodes)
-            .filter(n => !["svg"].includes(n.nodeName.toLowerCase()))  // might need more exceptions
+            .filter(n => !["svg"].includes(n.nodeName.toLowerCase()))  // element tag exceptions
             .map(firstTextChild)
             .find(n => n);  // first truthy
     }
@@ -142,7 +142,7 @@ export function prefixSymbol(
     // Look for existing check spans
     let span = getExistingSpan(element)
     if (span) {
-        // Add to previous queries tried and remove duplicates
+        // Add previous queries tried and remove duplicates
         queries = [...new Set<string>(JSON.parse(span.getAttribute("data-queries"))).add(queryType)].sort()
         data = mergeData(JSON.parse(span.getAttribute("data-data")), data)
     } else {
