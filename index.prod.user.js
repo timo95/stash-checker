@@ -867,6 +867,31 @@ function check(target, elementSelector, { currentSite = false, ...checkConfig } 
 ;// CONCATENATED MODULE: ./src/index.ts
 
 
+function hasType(node, nodeType) {
+    if (node.nodeName.toLowerCase() === nodeType) {
+        return true;
+    }
+    else {
+        return Array.from(node.childNodes).some(n => hasType(n, nodeType));
+    }
+}
+function onAddition(nodeType, callback) {
+    // Run on each type-element addition
+    let body = document.querySelector("body");
+    let timeout = undefined;
+    let observer = new MutationObserver((mutations) => {
+        let newNode = mutations.map(m => Array.from(m.addedNodes).some(n => hasType(n, nodeType.toLowerCase()))).some(n => n);
+        if (newNode) {
+            console.log(`A ${nodeType}-element was added. Rerun queries.`);
+            clearTimeout(timeout);
+            timeout = setTimeout(callback, 200); // arbitrary delay to prevent too many calls
+        }
+        else {
+            console.log("No update.");
+        }
+    });
+    observer.observe(body, { childList: true, subtree: true });
+}
 (function () {
     switch (window.location.host) {
         case "www.iwara.tv":
@@ -954,11 +979,15 @@ function check(target, elementSelector, { currentSite = false, ...checkConfig } 
             check("performer", "h1[id='model-name']", { currentSite: true });
             check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span");
             break;
-        case "www.data18.com":
-            check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])");
-            check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])");
-            // TODO: dynamic updates (pages/filters/search)
+        case "www.data18.com": {
+            let callback = () => {
+                check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])");
+                check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])");
+            };
+            callback(); // initial load is not dynamic
+            onAddition("a", callback);
             break;
+        }
         case "stashdb.org": {
             let callback = () => {
                 check("scene", "div.scene-info.card h3 > span", {
@@ -980,26 +1009,8 @@ function check(target, elementSelector, { currentSite = false, ...checkConfig } 
                     stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
                 });
             };
-            // Run on each header change
-            let title = document.querySelector("head");
-            let timeout = undefined;
-            let observer = new MutationObserver(() => {
-                console.log("Header changed");
-                clearTimeout(timeout);
-                timeout = setTimeout(callback, 500); // arbitrary delay to wait for loading to finish
-            });
-            observer.observe(title, { childList: true, subtree: true });
-            // And url change
-            let previousUrl = "";
-            observer = new MutationObserver(() => {
-                if (window.location.href !== previousUrl) {
-                    previousUrl = window.location.href;
-                    console.log(`URL changed from ${previousUrl} to ${window.location.href}`);
-                    clearTimeout(timeout);
-                    timeout = setTimeout(callback, 500); // arbitrary delay to wait for loading to finish
-                }
-            });
-            observer.observe(document, { childList: true, subtree: true });
+            // TODO: currentSite versions without a link (probably fine)
+            onAddition("a", callback);
             break;
         }
         default:
@@ -1009,6 +1020,7 @@ function check(target, elementSelector, { currentSite = false, ...checkConfig } 
     // TODO: scenes: kemono, coomer, OF, ThePornDB
     // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
     // TODO: movies, pictures, galleries
+    // TODO: make onAddition work with (multiple) css selectors/attributes
     // TODO: config: do not show cross mark if none found, custom symbols, default colors
     // TODO: tooltip information: rating, favorite, length
 })();
