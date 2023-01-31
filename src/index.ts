@@ -156,5 +156,5 @@ function onAddition(nodeType: string, callback: any) {
     // TODO: movies, pictures, galleries
     // TODO: make onAddition work with (multiple) css selectors/attributes
     // TODO: config: do not show cross mark if none found, custom symbols, default colors
-    // TODO: tooltip information: rating, favorite, length
+    // TODO: tooltip information: rating, favorite, resolution
 })();

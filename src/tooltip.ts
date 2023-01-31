@@ -14,6 +14,16 @@ tooltipWindow.addEventListener("mouseout", function () {
 });
 document.body.append(tooltipWindow);
 
+function secondsToReadable(seconds: number) {
+    let h = Math.floor(seconds / 3600)
+    let m = Math.floor(seconds / 60) % 60
+    let s = Math.floor(seconds) % 60
+    return [h, m, s]
+        .map(v => v.toString().padStart(2, "0"))
+        .filter((v, i) => v !== "00" || i > 0)
+        .join(":")
+}
+
 /**
  * recursive (dfs) first non empty text node child, undefined if none available
  */
@@ -46,13 +56,25 @@ function getExistingSpan(element: Element): HTMLSpanElement {
     }
 }
 
+function formatFileData(files: any[]): string {
+    let propertyStrings: [string, (v: any) => string][] = [
+        ["path", (v: any) => `Path: ${v}`],
+        ["duration", (v: any) => `Duration: ${secondsToReadable(v)}`],
+    ];
+    return files.map((file: any) => propertyStrings
+        .filter(e => file[e[0]])
+        .map(e => e[1](file[e[0]]))
+        .join("<br>")
+    ).join("<br>");
+}
+
 function formatEntryData(target: Target, data: any[], stashUrl: string): string {
     let propertyStrings: [string, (v: any) => string][] = [
         ["id", (v: any) => `<a target="_blank" href="${stashUrl}/${target}s/${v}">${stashUrl}/${target}s/${v}</a>`],
         ["title", (v: any) => `Title: ${v}`],
         ["name", (v: any) => `Name: ${v}`],
         ["code", (v: any) => `Code: ${v}`],
-        ["files", (v: any) => `${v.map((file: any) => `Path: ${file.path}`).join("<br>")}`],
+        ["files", (v: any) => formatFileData(v)],
         ["queries", (v: any) => `Matched: ${v.join(", ")}`],
     ];
     return ["", ...data.map((entry: any) => propertyStrings
