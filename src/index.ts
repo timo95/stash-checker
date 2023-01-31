@@ -87,25 +87,25 @@ import {check} from "./check";
             check("performer", "h1[id='model-name']", {currentSite: true})
             check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span")
             break;
-        case "stashdb.org":
+        case "stashdb.org": {
             let callback = () => {
-                check("scene", "div.scene-info.card h3", {
+                check("scene", "div.scene-info.card h3 > span", {
                     currentSite: true,
                     checkUrl: false,
-                    stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, ""),
+                    stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
                 });
-                check("scene", "a[class|='text'][href*='/scenes/'], div.col > a[href*='/scenes/'], div[class|='col'] > a[href*='/scenes/'], div[class|='col'] > span > a[href*='/scenes/']", {
+                check("scene", "a[href*='/scenes/']", {
                     checkUrl: false,
-                    stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, ""),
+                    stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
                 });
                 check("performer", "div.PerformerInfo div.card-header h3 > span", {
                     currentSite: true,
                     checkUrl: false,
-                    stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, ""),
+                    stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
                 });
-                check("performer", "a[href*='/performers/'] span, div[class|='col'] > a[href*='/performers/'], div[class|='col'] > div > a[href*='/performers/']", {
+                check("performer", "a[href*='/performers/']", {
                     checkUrl: false,
-                    stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, ""),
+                    stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
                 });
             };
 
@@ -115,7 +115,7 @@ import {check} from "./check";
             let observer = new MutationObserver(() => {
                 console.log("Header changed")
                 clearTimeout(timeout);
-                timeout = setTimeout(callback, 500);
+                timeout = setTimeout(callback, 500);  // arbitrary delay to wait for loading to finish
             });
             observer.observe(title, {childList: true, subtree: true});
             // And url change
@@ -125,20 +125,21 @@ import {check} from "./check";
                     previousUrl = window.location.href;
                     console.log(`URL changed from ${previousUrl} to ${window.location.href}`);
                     clearTimeout(timeout);
-                    timeout = setTimeout(callback, 500);
+                    timeout = setTimeout(callback, 500);  // arbitrary delay to wait for loading to finish
                 }
             });
             observer.observe(document, {childList: true, subtree: true});
             break;
+        }
         default:
             console.log("No configuration for website found.")
             break;
     }
 
-    // TODO: scenes: kemono, coomer, OF
+    // TODO: scenes: kemono, coomer, OF, ThePornDB
     // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.data18.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
     // TODO: movies, pictures, galleries
-    // TODO: configuration to not show cross mark if none found
+    // TODO: config: do not show cross mark if none found, custom symbols, default colors
     // TODO: tooltip information: rating, favorite, length
     // TODO: batch multiple link requests together? (querySelectorAll -> chunking)
 })();

@@ -1,18 +1,18 @@
 import {Target} from "./check";
 
 let handle: number;
-let tooltip: HTMLDivElement = document.createElement("div");
-tooltip.style.display = "none";
-tooltip.classList.add("stashCheckerPopup");
-tooltip.addEventListener("mouseover", function () {
+let tooltipWindow: HTMLDivElement = document.createElement("div");
+tooltipWindow.style.display = "none";
+tooltipWindow.classList.add("stashCheckerPopup");
+tooltipWindow.addEventListener("mouseover", function () {
     window.clearTimeout(handle);
 });
-tooltip.addEventListener("mouseout", function () {
+tooltipWindow.addEventListener("mouseout", function () {
     handle = window.setTimeout(function () {
-        tooltip.style.display = "none";
+        tooltipWindow.style.display = "none";
     }, 500);
 });
-document.body.append(tooltip);
+document.body.append(tooltipWindow);
 
 /**
  * recursive (dfs) first non empty text node child, undefined if none available
@@ -20,18 +20,33 @@ document.body.append(tooltip);
 function firstTextChild(node: Node): Node {
     if (
         node.nodeType === Node.TEXT_NODE &&
-        node.textContent.match(/^\s*$/) === null
+        node.textContent.match(/^\s*$/) === null  // exclude whitespace
     ) {
         return node;
     } else {
         return Array.from(node.childNodes)
-            .filter(n => n.nodeType === Node.ELEMENT_NODE ? (n as Element).getAttribute("data-type") !== "stash-symbol" : true)
+            .filter(n => !["svg"].includes(n.nodeName.toLowerCase()))  // might need more exceptions
             .map(firstTextChild)
-            .find((n) => n);
+            .find(n => n);  // first truthy
     }
 }
 
-function getTooltipBody(target: Target, data: any[], stashUrl: string): string {
+/**
+ * find existing span recursively, undefined if none available
+ */
+function getExistingSpan(element: Element): HTMLSpanElement {
+    if (element.getAttribute("data-type") === "stash-symbol") {
+        return element as HTMLSpanElement;
+    } else {
+        return Array.from(element.childNodes)
+            .filter(n => n.nodeType === Node.ELEMENT_NODE)
+            .map(n => n as Element)
+            .map(getExistingSpan)
+            .find(n => n);  // first truthy
+    }
+}
+
+function formatEntryData(target: Target, data: any[], stashUrl: string): string {
     let propertyStrings: [string, (v: any) => string][] = [
         ["id", (v: any) => `<a target="_blank" href="${stashUrl}/${target}s/${v}">${stashUrl}/${target}s/${v}</a>`],
         ["title", (v: any) => `Title: ${v}`],
@@ -47,38 +62,31 @@ function getTooltipBody(target: Target, data: any[], stashUrl: string): string {
     )].join("<br><hr>");
 }
 
-function getExistingSpan(element: Element): HTMLSpanElement | null {
-    let e = firstTextChild(element)?.previousSibling
-    if (e && e.nodeType === Node.ELEMENT_NODE && (e as Element).getAttribute("data-type") === "stash-symbol") {
-        return (e as HTMLSpanElement)
-    } else {
-        return null
-    }
-}
-
 function mouseoverListener() {
     window.clearTimeout(handle);
+    let margin = 10
     let pos = this.getBoundingClientRect();
-    tooltip.innerHTML = this.getAttribute("data-info");
-    tooltip.style.display = "";
-    // TODO flip tooltip to other side (up/down), if not enough space
-    // TODO (top-)margin is ignored for min/max positions -> doesn't matter if ^ is implemented
-    tooltip.style.top = `${(Math.max(window.scrollY + 10, Math.min(window.innerHeight + window.scrollY - tooltip.clientHeight - 10,
-        pos.top -
-        tooltip.clientHeight +
-        window.scrollY
-    ))).toFixed(0)}px`;
-    tooltip.style.left = `${(Math.max(window.scrollX + 10, Math.min(window.innerWidth + window.scrollX - tooltip.clientWidth - 10,
-        pos.left +
-        pos.width / 2 -
-        tooltip.clientWidth / 2 +
-        window.scrollX
+    tooltipWindow.innerHTML = this.getAttribute("data-info");
+    tooltipWindow.style.display = "";
+    // show tooltip above or below
+    let north = tooltipWindow.clientHeight + margin < pos.top + window.scrollY
+    if (north) {
+        tooltipWindow.style.top = `${(Math.max(window.scrollY + margin,  // upper border
+            pos.top - tooltipWindow.clientHeight + window.scrollY  // wanted position
+        )).toFixed(0)}px`;
+    } else {
+        tooltipWindow.style.top = `${(Math.min(window.innerHeight + window.scrollY - tooltipWindow.clientHeight - margin,  // lower border
+            pos.top + pos.height + margin + window.scrollY  // wanted position
+        )).toFixed(0)}px`;
+    }
+    tooltipWindow.style.left = `${(Math.max(window.scrollX + margin, Math.min(window.innerWidth + window.scrollX - tooltipWindow.clientWidth - margin,
+        pos.left + pos.width / 2 - tooltipWindow.clientWidth / 2 + window.scrollX  // wanted position
     ))).toFixed(0)}px`;
 }
 
 function mouseoutListener() {
     handle = window.setTimeout(function () {
-        tooltip.style.display = "none";
+        tooltipWindow.style.display = "none";
     }, 500);
 }
 
@@ -125,47 +133,52 @@ export function prefixSymbol(
     queryType: string,
     color: (data: any[]) => string
 ) {
-    let span = getExistingSpan(element)
-    // All queries tried
     let queries = [queryType]
     // Query for each found entry
     data.forEach((entry: any) => {
         entry["queries"] = queries
     });
+
+    // Look for existing check spans
+    let span = getExistingSpan(element)
     if (span) {
-        queries = JSON.parse(span.getAttribute("data-queries")).concat(queries).sort()
+        // Add to previous queries tried and remove duplicates
+        queries = [...new Set<string>(JSON.parse(span.getAttribute("data-queries"))).add(queryType)].sort()
         data = mergeData(JSON.parse(span.getAttribute("data-data")), data)
     } else {
         span = document.createElement("span");
         span.setAttribute("data-type", "stash-symbol")
         span.addEventListener("mouseover", mouseoverListener);
         span.addEventListener("mouseout", mouseoutListener);
+        // insert before first text because css selectors cannot select text nodes directly
+        // it works with cases were non text elements (images) are inside the selected element
+        let text = firstTextChild(element)
+        if (text) {
+            text.parentNode.insertBefore(span, text);
+        } else {
+            return  // abort if no text in span
+        }
     }
     span.setAttribute("data-queries", JSON.stringify(queries))
     span.setAttribute("data-data", JSON.stringify(data))
+
     let count = data.length;
-    let info = "";
+    let tooltip = target.charAt(0).toUpperCase() + target.slice(1);
     if (count === 0) {
         span.textContent = "✗ ";
         span.style.color = "red";
-        info += "Entry not in Stash";
+        tooltip += " not in Stash";
     } else if (count === 1) {
         span.textContent = "✓ ";
         span.style.color = color(data[0]);
-        info += "Entry in Stash";
+        tooltip += " in Stash";
     } else {
         span.textContent = "! ";
         span.style.color = "orange";
-        info += "Entry has duplicate matches";
+        tooltip += " has duplicate matches";
     }
 
-    info += `<br>Queries: ${queries.join(", ")}`
-    info += getTooltipBody(target, data, stashUrl)
-    span.setAttribute("data-info", info)
-
-
-    // insert before first text because css selectors cannot select text nodes directly
-    // it works with cases were non text elements (images) are inside the selected element
-    let text = firstTextChild(element)
-    text.parentNode.insertBefore(span, text);
+    tooltip += `<br>Queries: ${queries.join(", ")}`
+    tooltip += formatEntryData(target, data, stashUrl)
+    span.setAttribute("data-info", tooltip)
 }

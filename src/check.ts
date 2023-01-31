@@ -1,5 +1,5 @@
 import {prefixSymbol} from "./tooltip";
-import {getConfig} from "./stashData";
+import {getConfig} from "./config";
 
 interface CheckOptions {
     checkUrl?: boolean;
@@ -82,7 +82,7 @@ async function checkElement(
         url = prepareUrl(url);
         if (url) {
             console.log(url);
-            request(url, (target: Target, data: any, stashUrl: string) => prefixSymbol(element, target, data, stashUrl, "URL", color), target, "url");
+            await request(url, (target: Target, data: any, stashUrl: string) => prefixSymbol(element, target, data, stashUrl, "URL", color), target, "url");
         } else {
             console.log("No URL for entry found");
         }
@@ -91,7 +91,7 @@ async function checkElement(
         let code = codeSelector(element);
         if (code) {
             console.log(code);
-            request(code, (target: Target, data: any, stashUrl: string) => prefixSymbol(element, target, data, stashUrl, "Code", color), target, "code");
+            await request(code, (target: Target, data: any, stashUrl: string) => prefixSymbol(element, target, data, stashUrl, "Code", color), target, "code");
         } else {
             console.log("No Code for entry found");
         }
@@ -100,7 +100,7 @@ async function checkElement(
         let id = stashIdSelector(element);
         if (id) {
             console.log(id);
-            request(id, (target: Target, data: any, stashUrl: string) => prefixSymbol(element, target, data, stashUrl, "StashId", color), target, "stash_id");
+            await request(id, (target: Target, data: any, stashUrl: string) => prefixSymbol(element, target, data, stashUrl, "StashId", color), target, "stash_id");
         } else {
             console.log("No StashId for entry found");
         }
