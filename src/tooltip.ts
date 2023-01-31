@@ -87,22 +87,22 @@ function formatEntryData(target: Target, data: any[], stashUrl: string): string 
 function mouseoverListener() {
     window.clearTimeout(handle);
     let margin = 10
-    let pos = this.getBoundingClientRect();
+    let symbolPos = this.getBoundingClientRect();
     tooltipWindow.innerHTML = this.getAttribute("data-info");
     tooltipWindow.style.display = "";
     // show tooltip above or below
-    let north = tooltipWindow.clientHeight + margin < pos.top + window.scrollY
+    let north = tooltipWindow.clientHeight + margin < symbolPos.top
     if (north) {
         tooltipWindow.style.top = `${(Math.max(window.scrollY + margin,  // upper border
-            pos.top - tooltipWindow.clientHeight + window.scrollY  // wanted position
+            symbolPos.top - tooltipWindow.clientHeight + window.scrollY  // wanted position
         )).toFixed(0)}px`;
     } else {
         tooltipWindow.style.top = `${(Math.min(window.innerHeight + window.scrollY - tooltipWindow.clientHeight - margin,  // lower border
-            pos.top + pos.height + margin + window.scrollY  // wanted position
+            symbolPos.top + symbolPos.height + margin + window.scrollY  // wanted position
         )).toFixed(0)}px`;
     }
     tooltipWindow.style.left = `${(Math.max(window.scrollX + margin, Math.min(window.innerWidth + window.scrollX - tooltipWindow.clientWidth - margin,
-        pos.left + pos.width / 2 - tooltipWindow.clientWidth / 2 + window.scrollX  // wanted position
+        symbolPos.left + symbolPos.width / 2 - tooltipWindow.clientWidth / 2 + window.scrollX  // wanted position
     ))).toFixed(0)}px`;
 }
 
