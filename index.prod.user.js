@@ -570,6 +570,15 @@ tooltipWindow.addEventListener("mouseout", function () {
     }, 500);
 });
 document.body.append(tooltipWindow);
+function secondsToReadable(seconds) {
+    let h = Math.floor(seconds / 3600);
+    let m = Math.floor(seconds / 60) % 60;
+    let s = Math.floor(seconds) % 60;
+    return [h, m, s]
+        .map(v => v.toString().padStart(2, "0"))
+        .filter((v, i) => v !== "00" || i > 0)
+        .join(":");
+}
 /**
  * recursive (dfs) first non empty text node child, undefined if none available
  */
@@ -601,13 +610,23 @@ function getExistingSpan(element) {
             .find(n => n); // first truthy
     }
 }
+function formatFileData(files) {
+    let propertyStrings = [
+        ["path", (v) => `Path: ${v}`],
+        ["duration", (v) => `Duration: ${secondsToReadable(v)}`],
+    ];
+    return files.map((file) => propertyStrings
+        .filter(e => file[e[0]])
+        .map(e => e[1](file[e[0]]))
+        .join("<br>")).join("<br>");
+}
 function formatEntryData(target, data, stashUrl) {
     let propertyStrings = [
         ["id", (v) => `<a target="_blank" href="${stashUrl}/${target}s/${v}">${stashUrl}/${target}s/${v}</a>`],
         ["title", (v) => `Title: ${v}`],
         ["name", (v) => `Name: ${v}`],
         ["code", (v) => `Code: ${v}`],
-        ["files", (v) => `${v.map((file) => `Path: ${file.path}`).join("<br>")}`],
+        ["files", (v) => formatFileData(v)],
         ["queries", (v) => `Matched: ${v.join(", ")}`],
     ];
     return ["", ...data.map((entry) => propertyStrings
@@ -776,7 +795,7 @@ async function request(queryString, onload, target, type) {
     }
     switch (target) {
         case "scene":
-            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path}}}}`;
+            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path,duration}}}}`;
             access = (d) => d.findScenes.scenes;
             break;
         case "performer":
@@ -1022,7 +1041,7 @@ function onAddition(nodeType, callback) {
     // TODO: movies, pictures, galleries
     // TODO: make onAddition work with (multiple) css selectors/attributes
     // TODO: config: do not show cross mark if none found, custom symbols, default colors
-    // TODO: tooltip information: rating, favorite, length
+    // TODO: tooltip information: rating, favorite, resolution
 })();
 
 })();
