@@ -11,6 +11,7 @@
 // @match         *://oreno3d.com/*
 // @match         *://stashdb.org/*
 // @match         *://www.animecharactersdatabase.com/*
+// @match         *://www.data18.com/*
 // @match         *://www.iafd.com/*
 // @match         *://www.indexxx.com/*
 // @match         *://www.iwara.tv/*
@@ -574,13 +575,13 @@ document.body.append(tooltipWindow);
  */
 function firstTextChild(node) {
     if (node.nodeType === Node.TEXT_NODE &&
-        node.textContent.match(/^\s*$/) === null // exclude whitespace
+        node.textContent.match(/^[\s<>]*$/) === null // exclude whitespace
     ) {
         return node;
     }
     else {
         return Array.from(node.childNodes)
-            .filter(n => !["svg"].includes(n.nodeName.toLowerCase())) // might need more exceptions
+            .filter(n => !["svg"].includes(n.nodeName.toLowerCase())) // element tag exceptions
             .map(firstTextChild)
             .find(n => n); // first truthy
     }
@@ -682,7 +683,7 @@ function prefixSymbol(element, target, data, stashUrl, queryType, color) {
     // Look for existing check spans
     let span = getExistingSpan(element);
     if (span) {
-        // Add to previous queries tried and remove duplicates
+        // Add previous queries tried and remove duplicates
         queries = [...new Set(JSON.parse(span.getAttribute("data-queries"))).add(queryType)].sort();
         data = mergeData(JSON.parse(span.getAttribute("data-data")), data);
     }
@@ -953,6 +954,11 @@ function check(target, elementSelector, { currentSite = false, ...checkConfig } 
             check("performer", "h1[id='model-name']", { currentSite: true });
             check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span");
             break;
+        case "www.data18.com":
+            check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])");
+            check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])");
+            // TODO: dynamic updates (pages/filters/search)
+            break;
         case "stashdb.org": {
             let callback = () => {
                 check("scene", "div.scene-info.card h3 > span", {
@@ -1001,11 +1007,10 @@ function check(target, elementSelector, { currentSite = false, ...checkConfig } 
             break;
     }
     // TODO: scenes: kemono, coomer, OF, ThePornDB
-    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.data18.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
+    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
     // TODO: movies, pictures, galleries
     // TODO: config: do not show cross mark if none found, custom symbols, default colors
     // TODO: tooltip information: rating, favorite, length
-    // TODO: batch multiple link requests together? (querySelectorAll -> chunking)
 })();
 
 })();
