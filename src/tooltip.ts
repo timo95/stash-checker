@@ -3,7 +3,7 @@ import {Target} from "./check";
 let handle: number;
 let tooltipWindow: HTMLDivElement = document.createElement("div");
 tooltipWindow.style.display = "none";
-tooltipWindow.classList.add("stashCheckerPopup");
+tooltipWindow.classList.add("stashCheckerTooltip");
 tooltipWindow.addEventListener("mouseover", function () {
     window.clearTimeout(handle);
 });

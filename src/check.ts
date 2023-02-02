@@ -118,6 +118,8 @@ export function check(
     elementSelector: string,
     {currentSite = false, ...checkConfig}: CheckOptions = {}
 ) {
+    // Exclude direct children of tooltip window (some selectors match the stash link)
+    elementSelector = ":not(.stashCheckerTooltip) > " + elementSelector;
     if (currentSite) {
         let element = document.querySelector(elementSelector);
         if (element) {

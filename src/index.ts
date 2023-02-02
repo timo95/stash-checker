@@ -151,10 +151,10 @@ function onAddition(nodeType: string, callback: any) {
             break;
     }
 
-    // TODO: scenes: kemono, coomer, OF, ThePornDB
+    // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos
     // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
     // TODO: movies, pictures, galleries
     // TODO: make onAddition work with (multiple) css selectors/attributes
-    // TODO: config: do not show cross mark if none found, custom symbols, default colors
+    // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: tooltip information: rating, favorite, resolution
 })();
