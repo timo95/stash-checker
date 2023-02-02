@@ -44,7 +44,7 @@
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerPopup {\n  z-index: 999 !important;\n  position: absolute !important;\n  color: black !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerTooltip {\n  z-index: 999 !important;\n  position: absolute !important;\n  color: black !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -560,7 +560,7 @@ var update = injectStylesIntoStyleTag_default()(main/* default */.Z, options);
 let handle;
 let tooltipWindow = document.createElement("div");
 tooltipWindow.style.display = "none";
-tooltipWindow.classList.add("stashCheckerPopup");
+tooltipWindow.classList.add("stashCheckerTooltip");
 tooltipWindow.addEventListener("mouseover", function () {
     window.clearTimeout(handle);
 });
@@ -865,6 +865,8 @@ async function checkElement(target, element, { checkUrl = true, prepareUrl = (ur
  * the first text inside the selected element will be prepended with the symbol
  */
 function check(target, elementSelector, { currentSite = false, ...checkConfig } = {}) {
+    // Exclude direct children of tooltip window (some selectors match the stash link)
+    elementSelector = ":not(.stashCheckerTooltip) > " + elementSelector;
     if (currentSite) {
         let element = document.querySelector(elementSelector);
         if (element) {
@@ -1036,11 +1038,11 @@ function onAddition(nodeType, callback) {
             console.log("No configuration for website found.");
             break;
     }
-    // TODO: scenes: kemono, coomer, OF, ThePornDB
+    // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos
     // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
     // TODO: movies, pictures, galleries
     // TODO: make onAddition work with (multiple) css selectors/attributes
-    // TODO: config: do not show cross mark if none found, custom symbols, default colors
+    // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: tooltip information: rating, favorite, resolution
 })();
 
