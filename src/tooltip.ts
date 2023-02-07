@@ -93,16 +93,16 @@ function mouseoverListener() {
     // show tooltip above or below
     let north = tooltipWindow.clientHeight + margin < symbolPos.top
     if (north) {
-        tooltipWindow.style.top = `${(Math.max(window.scrollY + margin,  // upper border
-            symbolPos.top - tooltipWindow.clientHeight + window.scrollY  // wanted position
+        tooltipWindow.style.top = `${(Math.max(margin,  // upper border
+            symbolPos.top - tooltipWindow.clientHeight  // wanted position
         )).toFixed(0)}px`;
     } else {
-        tooltipWindow.style.top = `${(Math.min(window.innerHeight + window.scrollY - tooltipWindow.clientHeight - margin,  // lower border
-            symbolPos.top + symbolPos.height + margin + window.scrollY  // wanted position
+        tooltipWindow.style.top = `${(Math.min(window.innerHeight - tooltipWindow.clientHeight - margin,  // lower border
+            symbolPos.top + symbolPos.height + margin  // wanted position
         )).toFixed(0)}px`;
     }
-    tooltipWindow.style.left = `${(Math.max(window.scrollX + margin, Math.min(window.innerWidth + window.scrollX - tooltipWindow.clientWidth - margin,
-        symbolPos.left + symbolPos.width / 2 - tooltipWindow.clientWidth / 2 + window.scrollX  // wanted position
+    tooltipWindow.style.left = `${(Math.max(margin, Math.min(window.innerWidth - tooltipWindow.clientWidth - margin,  // left/right borders
+        symbolPos.left + symbolPos.width / 2 - tooltipWindow.clientWidth / 2  // wanted position
     ))).toFixed(0)}px`;
 }
 
