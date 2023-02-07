@@ -109,8 +109,12 @@ function onAddition(nodeType: string, callback: any) {
             });
             break;
         case "www.indexxx.com":
-            check("performer", "h1[id='model-name']", {currentSite: true})
-            check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span")
+            check("performer", "h1[id='model-name']", {currentSite: true});
+            check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span");
+            break;
+        case "www.thenude.com":
+            check("performer", "span[class='model-name']", {currentSite: true});
+            check("performer", "a[class='model-name']");
             break;
         case "www.data18.com": {
             let callback = () => {
@@ -142,7 +146,7 @@ function onAddition(nodeType: string, callback: any) {
                     stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
                 });
             };
-            // TODO: currentSite versions without a link (probably fine)
+            onAddition("h3", callback);
             onAddition("a", callback);
             break;
         }
@@ -153,8 +157,11 @@ function onAddition(nodeType: string, callback: any) {
 
     // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos
     // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
+    // TODO: Performer names
+    // TODO: match confidence levels (StashId - URL - Code - Name - Title)
     // TODO: movies, pictures, galleries
-    // TODO: make onAddition work with (multiple) css selectors/attributes
+    // TODO: make onAddition work with (multiple OR with global timer) css selectors/attributes
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
-    // TODO: tooltip information: rating, favorite, resolution
+    // TODO: limit color functions to work with configurable colors
+    // TODO: tooltip information: rating, favorite, resolution, codec
 })();

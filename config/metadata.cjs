@@ -29,6 +29,7 @@ module.exports = {
         "*://www.iwara.tv/*",
         "*://www.javlibrary.com/*",
         "*://www.minnano-av.com/*",
+        "*://www.thenude.com/*",
         "*://xslist.org/*",
     ],
     require: [],
