@@ -1,24 +1,29 @@
 import "./style/main.less";
 import {check} from "./check";
 
-function hasType(node: Node, nodeType: string): boolean {
-    if (node.nodeName.toLowerCase() === nodeType) {
-        return true;
-    } else {
-        return Array.from(node.childNodes).some(n => hasType(n, nodeType))
-    }
-}
-
-function onAddition(nodeType: string, callback: any) {
+/**
+ * Run callback when a new object added to the document matches the selector.
+ * Calls callback with a timer after the last addition to prevent unnecessary executions.
+ *
+ * @param selector css selector string
+ * @param callback callback function
+ */
+function onAddition(selector: string, callback: any) {
     // Run on each type-element addition
     let body = document.querySelector("body");
     let timeout: any = undefined;
     let observer = new MutationObserver((mutations) => {
-        let newNode = mutations.map(m => Array.from(m.addedNodes).some(n => hasType(n, nodeType.toLowerCase()))).some(n => n);
+        let newNode = mutations.map(m => Array.from(m.addedNodes)
+            .filter(n => n.nodeType === Node.ELEMENT_NODE)
+            .some(n => (n as Element).querySelector(selector))
+        ).some(n => n);
         if (newNode) {
-            console.log(`A ${nodeType}-element was added. Rerun queries.`);
+            console.log(`"${selector}"-element was added. Start/Update Timer.`);
             clearTimeout(timeout);
-            timeout = setTimeout(callback, 200);  // arbitrary delay to prevent too many calls
+            timeout = setTimeout(_ => {
+                console.log("Run queries.");
+                callback();
+            }, 200);  // arbitrary delay to prevent too many calls
         } else {
             console.log("No update.");
         }
@@ -91,7 +96,7 @@ function onAddition(nodeType: string, callback: any) {
             });
             // code for video page, review
             check("scene", "div[id='video_title'] a[href*='?v=jav']", {
-                checkUrl: false,
+                urlSelector: null,
                 codeSelector: (_) => document
                     .querySelector("table[id='video_jacket_info'] table:first-child td.text")
                     .textContent.trim(),
@@ -112,16 +117,21 @@ function onAddition(nodeType: string, callback: any) {
             check("performer", "h1[id='model-name']", {currentSite: true});
             check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span");
             break;
-        case "www.thenude.com":
-            check("performer", "span[class='model-name']", {currentSite: true});
-            check("performer", "a[class='model-name']");
+        case "www.thenude.com": {
+            check("performer", "span.model-name", {currentSite: true});
+            let callback = () => {
+                check("performer", "a.model-name, a.model-title, a[data-img*='/models/']");
+            }
+            callback();
+            onAddition("a", callback);
             break;
+        }
         case "www.data18.com": {
             let callback = () => {
-                check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])")
-                check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])")
+                check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])");
+                check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])");
             }
-            callback();  // initial load is not dynamic
+            callback();
             onAddition("a", callback);
             break;
         }
@@ -129,24 +139,28 @@ function onAddition(nodeType: string, callback: any) {
             let callback = () => {
                 check("scene", "div.scene-info.card h3 > span", {
                     currentSite: true,
-                    checkUrl: false,
+                    urlSelector: null,
                     stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
-                });
-                check("scene", "a[href*='/scenes/']", {
-                    checkUrl: false,
-                    stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
                 });
                 check("performer", "div.PerformerInfo div.card-header h3 > span", {
                     currentSite: true,
-                    checkUrl: false,
+                    urlSelector: null,
                     stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
-                });
-                check("performer", "a[href*='/performers/']", {
-                    checkUrl: false,
-                    stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
+                    nameSelector: null,
                 });
             };
             onAddition("h3", callback);
+            callback = () => {
+                check("scene", "a[href*='/scenes/']", {
+                    urlSelector: null,
+                    stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
+                });
+                check("performer", "a[href*='/performers/']", {
+                    urlSelector: null,
+                    stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
+                    nameSelector: null,
+                });
+            };
             onAddition("a", callback);
             break;
         }
@@ -155,12 +169,11 @@ function onAddition(nodeType: string, callback: any) {
             break;
     }
 
-    // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos
-    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
-    // TODO: Performer names
+    // TODO: fix: data18 performers overview
+    // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos, nubiles.net
+    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.freeones.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com, nubiles.net
     // TODO: match confidence levels (StashId - URL - Code - Name - Title)
     // TODO: movies, pictures, galleries
-    // TODO: make onAddition work with (multiple OR with global timer) css selectors/attributes
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: limit color functions to work with configurable colors
     // TODO: tooltip information: rating, favorite, resolution, codec

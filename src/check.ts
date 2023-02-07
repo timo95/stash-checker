@@ -1,12 +1,12 @@
-import {prefixSymbol} from "./tooltip";
+import {firstTextChild, prefixSymbol} from "./tooltip";
 import {getConfig} from "./config";
 
 interface CheckOptions {
-    checkUrl?: boolean;
     urlSelector?: (e: Element) => string;
     prepareUrl?: (url: string) => string;
     codeSelector?: (e: Element) => string;
     stashIdSelector?: (e: Element) => string;
+    nameSelector?: (e: Element) => string;
     color?: (data: any) => string;
     currentSite?: boolean;
 }
@@ -14,7 +14,7 @@ interface CheckOptions {
 // what the query asks for
 export type Target = "scene" | "performer"
 // what the query uses to filter
-type Type = "url" | "code" | "stash_id"
+type Type = "url" | "code" | "stash_id" | "name"
 
 // Ask for stash url/key on load
 let configPromise = getConfig()
@@ -69,40 +69,53 @@ async function checkElement(
     target: Target,
     element: Element,
     {
-        checkUrl = true,
-        prepareUrl = (url) => url,
-        urlSelector,
+        prepareUrl = url => url,
+        urlSelector,  // default is set in check()
         codeSelector,
         stashIdSelector,
+        nameSelector = e => firstTextChild(e).textContent.trim(),
         color = () => "green",
     }: CheckOptions
 ) {
-    if (checkUrl) {
+    if (urlSelector && prepareUrl) {
         let url = urlSelector(element);
         url = prepareUrl(url);
         if (url) {
             console.log(url);
-            await request(url, (target: Target, data: any, stashUrl: string) => prefixSymbol(element, target, data, stashUrl, "URL", color), target, "url");
+            await request(url, (...args) => prefixSymbol(element, ...args, "URL", color), target, "url");
         } else {
-            console.log("No URL for entry found");
+            console.log(`No URL for ${target} found.`);
         }
     }
     if (codeSelector) {
         let code = codeSelector(element);
         if (code) {
             console.log(code);
-            await request(code, (target: Target, data: any, stashUrl: string) => prefixSymbol(element, target, data, stashUrl, "Code", color), target, "code");
+            await request(code, (...args) => prefixSymbol(element, ...args, "Code", color), target, "code");
         } else {
-            console.log("No Code for entry found");
+            console.log(`No Code for ${target} found.`);
         }
     }
     if (stashIdSelector) {
         let id = stashIdSelector(element);
         if (id) {
             console.log(id);
-            await request(id, (target: Target, data: any, stashUrl: string) => prefixSymbol(element, target, data, stashUrl, "StashId", color), target, "stash_id");
+            await request(id, (...args) => prefixSymbol(element, ...args, "StashId", color), target, "stash_id");
         } else {
-            console.log("No StashId for entry found");
+            console.log(`No StashId for ${target} found.`);
+        }
+    }
+    if (target === "performer" && nameSelector) {
+        let name = nameSelector(element);
+        // Do not use single names
+        let nameCount = name.split(/\s+/).length
+        if (name && nameCount > 1) {
+            console.log(name);
+            await request(name, (...args) => prefixSymbol(element, ...args, "Name", color), target, "name");
+        } else if (name && nameCount === 1) {
+            console.log(`Ignore single name: ${name}`)
+        } else {
+            console.log(`No Name for ${target} found.`);
         }
     }
 }
@@ -112,6 +125,7 @@ async function checkElement(
  *
  * the selected element should be [a child of] the link that will be compared with stash urls
  * the first text inside the selected element will be prepended with the symbol
+ * Set predefined selectors to "null" to not use them.
  */
 export function check(
     target: Target,
@@ -124,14 +138,14 @@ export function check(
         let element = document.querySelector(elementSelector);
         if (element) {
             // url of current site
-            checkConfig.urlSelector ??= () => decodeURI(window.location.href);
+            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? () => decodeURI(window.location.href) : checkConfig.urlSelector;
             checkElement(target, element, checkConfig);
         }
     } else {
         // multiple entries with url nearest to element
         document.querySelectorAll(elementSelector).forEach((element) => {
             // url nearest to selected element traversing towards the root (children are ignored)
-            checkConfig.urlSelector ??= (e: Element) => decodeURI(e.closest("a").href);
+            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? (e: Element) => decodeURI(e.closest("a").href) : checkConfig.urlSelector;
             checkElement(target, element, checkConfig);
         });
     }

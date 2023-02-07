@@ -27,7 +27,7 @@ function secondsToReadable(seconds: number) {
 /**
  * recursive (dfs) first non empty text node child, undefined if none available
  */
-function firstTextChild(node: Node): Node {
+export function firstTextChild(node: Node): Node {
     if (
         node.nodeType === Node.TEXT_NODE &&
         node.textContent.match(/^[\s<>]*$/) === null  // exclude whitespace
@@ -36,6 +36,7 @@ function firstTextChild(node: Node): Node {
     } else {
         return Array.from(node.childNodes)
             .filter(n => !["svg"].includes(n.nodeName.toLowerCase()))  // element tag exceptions
+            .filter(n => n.nodeType === Node.ELEMENT_NODE ? (n as Element).getAttribute("data-type") !== "stash-symbol" : true)  // exclude checkmark
             .map(firstTextChild)
             .find(n => n);  // first truthy
     }
