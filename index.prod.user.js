@@ -3,7 +3,7 @@
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers present in your stash
 // @icon          https://docs.stashapp.cc/favicon.ico
-// @version       0.3.0
+// @version       0.4.0
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @match         *://adultanime.dbsearch.net/*
 // @match         *://ecchi.iwara.tv/*
@@ -17,6 +17,7 @@
 // @match         *://www.iwara.tv/*
 // @match         *://www.javlibrary.com/*
 // @match         *://www.minnano-av.com/*
+// @match         *://www.thenude.com/*
 // @match         *://xslist.org/*
 // @grant         GM.xmlHttpRequest
 // @grant         GM.getValue
@@ -44,7 +45,7 @@
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerTooltip {\n  z-index: 999 !important;\n  position: absolute !important;\n  color: black !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerTooltip {\n  z-index: 9999 !important;\n  position: fixed !important;\n  color: black !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -591,6 +592,7 @@ function firstTextChild(node) {
     else {
         return Array.from(node.childNodes)
             .filter(n => !["svg"].includes(n.nodeName.toLowerCase())) // element tag exceptions
+            .filter(n => n.nodeType === Node.ELEMENT_NODE ? n.getAttribute("data-type") !== "stash-symbol" : true) // exclude checkmark
             .map(firstTextChild)
             .find(n => n); // first truthy
     }
@@ -643,16 +645,17 @@ function mouseoverListener() {
     // show tooltip above or below
     let north = tooltipWindow.clientHeight + margin < symbolPos.top;
     if (north) {
-        tooltipWindow.style.top = `${(Math.max(window.scrollY + margin, // upper border
-        symbolPos.top - tooltipWindow.clientHeight + window.scrollY // wanted position
+        tooltipWindow.style.top = `${(Math.max(margin, // upper border
+        symbolPos.top - tooltipWindow.clientHeight // wanted position
         )).toFixed(0)}px`;
     }
     else {
-        tooltipWindow.style.top = `${(Math.min(window.innerHeight + window.scrollY - tooltipWindow.clientHeight - margin, // lower border
-        symbolPos.top + symbolPos.height + margin + window.scrollY // wanted position
+        tooltipWindow.style.top = `${(Math.min(window.innerHeight - tooltipWindow.clientHeight - margin, // lower border
+        symbolPos.top + symbolPos.height + margin // wanted position
         )).toFixed(0)}px`;
     }
-    tooltipWindow.style.left = `${(Math.max(window.scrollX + margin, Math.min(window.innerWidth + window.scrollX - tooltipWindow.clientWidth - margin, symbolPos.left + symbolPos.width / 2 - tooltipWindow.clientWidth / 2 + window.scrollX // wanted position
+    tooltipWindow.style.left = `${(Math.max(margin, Math.min(window.innerWidth - tooltipWindow.clientWidth - margin, // left/right borders
+    symbolPos.left + symbolPos.width / 2 - tooltipWindow.clientWidth / 2 // wanted position
     ))).toFixed(0)}px`;
 }
 function mouseoutListener() {
@@ -825,36 +828,52 @@ async function request(queryString, onload, target, type) {
         },
     });
 }
-async function checkElement(target, element, { checkUrl = true, prepareUrl = (url) => url, urlSelector, codeSelector, stashIdSelector, color = () => "green", }) {
-    if (checkUrl) {
+async function checkElement(target, element, { prepareUrl = url => url, urlSelector, // default is set in check()
+codeSelector, stashIdSelector, nameSelector = e => firstTextChild(e).textContent.trim(), color = () => "green", }) {
+    if (urlSelector && prepareUrl) {
         let url = urlSelector(element);
         url = prepareUrl(url);
         if (url) {
             console.log(url);
-            await request(url, (target, data, stashUrl) => prefixSymbol(element, target, data, stashUrl, "URL", color), target, "url");
+            await request(url, (...args) => prefixSymbol(element, ...args, "URL", color), target, "url");
         }
         else {
-            console.log("No URL for entry found");
+            console.log(`No URL for ${target} found.`);
         }
     }
     if (codeSelector) {
         let code = codeSelector(element);
         if (code) {
             console.log(code);
-            await request(code, (target, data, stashUrl) => prefixSymbol(element, target, data, stashUrl, "Code", color), target, "code");
+            await request(code, (...args) => prefixSymbol(element, ...args, "Code", color), target, "code");
         }
         else {
-            console.log("No Code for entry found");
+            console.log(`No Code for ${target} found.`);
         }
     }
     if (stashIdSelector) {
         let id = stashIdSelector(element);
         if (id) {
             console.log(id);
-            await request(id, (target, data, stashUrl) => prefixSymbol(element, target, data, stashUrl, "StashId", color), target, "stash_id");
+            await request(id, (...args) => prefixSymbol(element, ...args, "StashId", color), target, "stash_id");
         }
         else {
-            console.log("No StashId for entry found");
+            console.log(`No StashId for ${target} found.`);
+        }
+    }
+    if (target === "performer" && nameSelector) {
+        let name = nameSelector(element);
+        // Do not use single names
+        let nameCount = name.split(/\s+/).length;
+        if (name && nameCount > 1) {
+            console.log(name);
+            await request(name, (...args) => prefixSymbol(element, ...args, "Name", color), target, "name");
+        }
+        else if (name && nameCount === 1) {
+            console.log(`Ignore single name: ${name}`);
+        }
+        else {
+            console.log(`No Name for ${target} found.`);
         }
     }
 }
@@ -863,6 +882,7 @@ async function checkElement(target, element, { checkUrl = true, prepareUrl = (ur
  *
  * the selected element should be [a child of] the link that will be compared with stash urls
  * the first text inside the selected element will be prepended with the symbol
+ * Set predefined selectors to "null" to not use them.
  */
 function check(target, elementSelector, { currentSite = false, ...checkConfig } = {}) {
     // Exclude direct children of tooltip window (some selectors match the stash link)
@@ -871,7 +891,7 @@ function check(target, elementSelector, { currentSite = false, ...checkConfig } 
         let element = document.querySelector(elementSelector);
         if (element) {
             // url of current site
-            checkConfig.urlSelector ?? (checkConfig.urlSelector = () => decodeURI(window.location.href));
+            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? () => decodeURI(window.location.href) : checkConfig.urlSelector;
             checkElement(target, element, checkConfig);
         }
     }
@@ -879,7 +899,7 @@ function check(target, elementSelector, { currentSite = false, ...checkConfig } 
         // multiple entries with url nearest to element
         document.querySelectorAll(elementSelector).forEach((element) => {
             // url nearest to selected element traversing towards the root (children are ignored)
-            checkConfig.urlSelector ?? (checkConfig.urlSelector = (e) => decodeURI(e.closest("a").href));
+            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? (e) => decodeURI(e.closest("a").href) : checkConfig.urlSelector;
             checkElement(target, element, checkConfig);
         });
     }
@@ -888,24 +908,28 @@ function check(target, elementSelector, { currentSite = false, ...checkConfig } 
 ;// CONCATENATED MODULE: ./src/index.ts
 
 
-function hasType(node, nodeType) {
-    if (node.nodeName.toLowerCase() === nodeType) {
-        return true;
-    }
-    else {
-        return Array.from(node.childNodes).some(n => hasType(n, nodeType));
-    }
-}
-function onAddition(nodeType, callback) {
+/**
+ * Run callback when a new object added to the document matches the selector.
+ * Calls callback with a timer after the last addition to prevent unnecessary executions.
+ *
+ * @param selector css selector string
+ * @param callback callback function
+ */
+function onAddition(selector, callback) {
     // Run on each type-element addition
     let body = document.querySelector("body");
     let timeout = undefined;
     let observer = new MutationObserver((mutations) => {
-        let newNode = mutations.map(m => Array.from(m.addedNodes).some(n => hasType(n, nodeType.toLowerCase()))).some(n => n);
+        let newNode = mutations.map(m => Array.from(m.addedNodes)
+            .filter(n => n.nodeType === Node.ELEMENT_NODE)
+            .some(n => n.querySelector(selector))).some(n => n);
         if (newNode) {
-            console.log(`A ${nodeType}-element was added. Rerun queries.`);
+            console.log(`"${selector}"-element was added. Start/Update Timer.`);
             clearTimeout(timeout);
-            timeout = setTimeout(callback, 200); // arbitrary delay to prevent too many calls
+            timeout = setTimeout(_ => {
+                console.log("Run queries.");
+                callback();
+            }, 200); // arbitrary delay to prevent too many calls
         }
         else {
             console.log("No update.");
@@ -979,7 +1003,7 @@ function onAddition(nodeType, callback) {
             });
             // code for video page, review
             check("scene", "div[id='video_title'] a[href*='?v=jav']", {
-                checkUrl: false,
+                urlSelector: null,
                 codeSelector: (_) => document
                     .querySelector("table[id='video_jacket_info'] table:first-child td.text")
                     .textContent.trim(),
@@ -1000,12 +1024,21 @@ function onAddition(nodeType, callback) {
             check("performer", "h1[id='model-name']", { currentSite: true });
             check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span");
             break;
+        case "www.thenude.com": {
+            check("performer", "span.model-name", { currentSite: true });
+            let callback = () => {
+                check("performer", "a.model-name, a.model-title, a[data-img*='/models/']");
+            };
+            callback();
+            onAddition("a", callback);
+            break;
+        }
         case "www.data18.com": {
             let callback = () => {
                 check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])");
                 check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])");
             };
-            callback(); // initial load is not dynamic
+            callback();
             onAddition("a", callback);
             break;
         }
@@ -1013,24 +1046,28 @@ function onAddition(nodeType, callback) {
             let callback = () => {
                 check("scene", "div.scene-info.card h3 > span", {
                     currentSite: true,
-                    checkUrl: false,
+                    urlSelector: null,
                     stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
-                });
-                check("scene", "a[href*='/scenes/']", {
-                    checkUrl: false,
-                    stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
                 });
                 check("performer", "div.PerformerInfo div.card-header h3 > span", {
                     currentSite: true,
-                    checkUrl: false,
+                    urlSelector: null,
                     stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
-                });
-                check("performer", "a[href*='/performers/']", {
-                    checkUrl: false,
-                    stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
+                    nameSelector: null,
                 });
             };
-            // TODO: currentSite versions without a link (probably fine)
+            onAddition("h3", callback);
+            callback = () => {
+                check("scene", "a[href*='/scenes/']", {
+                    urlSelector: null,
+                    stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
+                });
+                check("performer", "a[href*='/performers/']", {
+                    urlSelector: null,
+                    stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
+                    nameSelector: null,
+                });
+            };
             onAddition("a", callback);
             break;
         }
@@ -1038,12 +1075,14 @@ function onAddition(nodeType, callback) {
             console.log("No configuration for website found.");
             break;
     }
-    // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos
-    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.freeones.com, www.thenude.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com
+    // TODO: fix: data18 performers overview
+    // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos, nubiles.net
+    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.freeones.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com, nubiles.net
+    // TODO: match confidence levels (StashId - URL - Code - Name - Title)
     // TODO: movies, pictures, galleries
-    // TODO: make onAddition work with (multiple) css selectors/attributes
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
-    // TODO: tooltip information: rating, favorite, resolution
+    // TODO: limit color functions to work with configurable colors
+    // TODO: tooltip information: rating, favorite, resolution, codec
 })();
 
 })();
