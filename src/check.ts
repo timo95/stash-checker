@@ -9,6 +9,7 @@ interface CheckOptions {
     nameSelector?: (e: Element) => string;
     color?: (data: any) => string;
     currentSite?: boolean;
+    observe?: boolean;
 }
 
 // what the query asks for
@@ -121,19 +122,47 @@ async function checkElement(
 }
 
 /**
+ * Run callback when a new object added to the document matches the selector.
+ * Calls callback with a timer after the last addition to prevent unnecessary executions.
+ *
+ * @param selector css selector string
+ * @param callback callback function
+ */
+function onAddition(selector: string, callback: any) {
+    // Run on each type-element addition
+    let body = document.querySelector("body");
+    let timeout: any = undefined;
+    let observer = new MutationObserver((mutations) => {
+        let newNode = mutations.map(m => Array.from(m.addedNodes)
+            .filter(n => n.nodeType === Node.ELEMENT_NODE)
+            .some(n => (n as Element).querySelector(selector))
+        ).some(n => n);
+        if (newNode) {
+            console.log(`"${selector}"-element was added. Start/Update Timer.`);
+            clearTimeout(timeout);
+            timeout = setTimeout(_ => {
+                console.log("Run queries.");
+                callback();
+            }, 200);  // arbitrary delay to prevent too many calls
+        } else {
+            console.log("No update.");
+        }
+    });
+    observer.observe(body, {childList: true, subtree: true});
+}
+
+/**
  * queries for each selected element
  *
  * the selected element should be [a child of] the link that will be compared with stash urls
  * the first text inside the selected element will be prepended with the symbol
  * Set predefined selectors to "null" to not use them.
  */
-export function check(
+function checkOnce(
     target: Target,
     elementSelector: string,
     {currentSite = false, ...checkConfig}: CheckOptions = {}
 ) {
-    // Exclude direct children of tooltip window (some selectors match the stash link)
-    elementSelector = ":not(.stashCheckerTooltip) > " + elementSelector;
     if (currentSite) {
         let element = document.querySelector(elementSelector);
         if (element) {
@@ -149,4 +178,26 @@ export function check(
             checkElement(target, element, checkConfig);
         });
     }
+}
+
+/**
+ * queries for each selected element
+ *
+ * the selected element should be [a child of] the link that will be compared with stash urls
+ * the first text inside the selected element will be prepended with the symbol
+ * Set predefined selectors to "null" to not use them.
+ */
+export function check(
+    target: Target,
+    elementSelector: string,
+    {observe = false, ...checkConfig}: CheckOptions = {}
+) {
+    // Exclude direct children of tooltip window (some selectors match the stash link)
+    elementSelector = ":not(.stashCheckerTooltip) > " + elementSelector;
+
+    // Callback on addition of new elements fitting the query
+    if (observe) {
+        onAddition(elementSelector, (_: any) => checkOnce(target, elementSelector, checkConfig))
+    }
+    checkOnce(target, elementSelector, checkConfig)
 }

@@ -1,36 +1,6 @@
 import "./style/main.less";
 import {check} from "./check";
 
-/**
- * Run callback when a new object added to the document matches the selector.
- * Calls callback with a timer after the last addition to prevent unnecessary executions.
- *
- * @param selector css selector string
- * @param callback callback function
- */
-function onAddition(selector: string, callback: any) {
-    // Run on each type-element addition
-    let body = document.querySelector("body");
-    let timeout: any = undefined;
-    let observer = new MutationObserver((mutations) => {
-        let newNode = mutations.map(m => Array.from(m.addedNodes)
-            .filter(n => n.nodeType === Node.ELEMENT_NODE)
-            .some(n => (n as Element).querySelector(selector))
-        ).some(n => n);
-        if (newNode) {
-            console.log(`"${selector}"-element was added. Start/Update Timer.`);
-            clearTimeout(timeout);
-            timeout = setTimeout(_ => {
-                console.log("Run queries.");
-                callback();
-            }, 200);  // arbitrary delay to prevent too many calls
-        } else {
-            console.log("No update.");
-        }
-    });
-    observer.observe(body, {childList: true, subtree: true});
-}
-
 (function () {
     switch (window.location.host) {
         case "www.iwara.tv":
@@ -117,53 +87,45 @@ function onAddition(selector: string, callback: any) {
             check("performer", "h1[id='model-name']", {currentSite: true});
             check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span");
             break;
-        case "www.thenude.com": {
+        case "www.thenude.com":
             check("performer", "span.model-name", {currentSite: true});
-            let callback = () => {
-                check("performer", "a.model-name, a.model-title, a[data-img*='/models/']");
-            }
-            callback();
-            onAddition("a", callback);
+            check("performer", "a.model-name, a.model-title, a[data-img*='/models/']", {observe: true});
             break;
-        }
-        case "www.data18.com": {
-            let callback = () => {
-                check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])");
-                check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])");
-            }
-            callback();
-            onAddition("a", callback);
+        case "www.data18.com":
+            check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", {observe: true});
+            check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])", {observe: true});
             break;
-        }
-        case "stashdb.org": {
-            let callback = () => {
-                check("scene", "div.scene-info.card h3 > span", {
-                    currentSite: true,
-                    urlSelector: null,
-                    stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
-                });
-                check("performer", "div.PerformerInfo div.card-header h3 > span", {
-                    currentSite: true,
-                    urlSelector: null,
-                    stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
-                    nameSelector: null,
-                });
-            };
-            onAddition("h3", callback);
-            callback = () => {
-                check("scene", "a[href*='/scenes/']", {
-                    urlSelector: null,
-                    stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
-                });
-                check("performer", "a[href*='/performers/']", {
-                    urlSelector: null,
-                    stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
-                    nameSelector: null,
-                });
-            };
-            onAddition("a", callback);
+        case "www.babepedia.com":
+            check("performer", "h1#babename", {currentSite: true});
+            check("performer", "a[href*='/babe/']", {observe: true});
             break;
-        }
+        case "stashdb.org":
+            check("scene", "div.scene-info.card h3 > span", {
+                observe: true,
+                currentSite: true,
+                urlSelector: null,
+                stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
+            });
+            check("performer", "div.PerformerInfo div.card-header h3 > span", {
+                observe: true,
+                currentSite: true,
+                urlSelector: null,
+                stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
+                nameSelector: null,
+            });
+
+            check("scene", "a[href*='/scenes/']", {
+                observe: true,
+                urlSelector: null,
+                stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
+            });
+            check("performer", "a[href*='/performers/']", {
+                observe: true,
+                urlSelector: null,
+                stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
+                nameSelector: null,
+            });
+            break;
         default:
             console.log("No configuration for website found.")
             break;

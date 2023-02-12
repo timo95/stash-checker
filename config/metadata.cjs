@@ -23,6 +23,7 @@ module.exports = {
         "*://oreno3d.com/*",
         "*://stashdb.org/*",
         "*://www.animecharactersdatabase.com/*",
+        "*://www.babepedia.com/*",
         "*://www.data18.com/*",
         "*://www.iafd.com/*",
         "*://www.indexxx.com/*",
