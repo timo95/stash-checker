@@ -43,7 +43,12 @@ import {check} from "./check";
             check("performer", "span[itemprop='name']", {currentSite: true});
             check("performer", "a[href*='/model/']");
             break;
+        case "nubilefilms.com":
         case "nubiles.net":
+        case "nubileset.com":
+        case "nubilesunscripted.com":
+        case "nubiles-casting.com":
+        case "nubiles-porn.com":
             check("performer", "a.title[href^='/model/profile/'], a.model[href^='/model/profile/']", {
                 prepareUrl: url => url.split(/[?#]/)[0]
             });
