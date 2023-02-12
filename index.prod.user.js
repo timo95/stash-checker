@@ -10,6 +10,7 @@
 // @match         *://ecchi.iwara.tv/*
 // @match         *://erommdtube.com/*
 // @match         *://kemono.party/*
+// @match         *://metadataapi.net/*
 // @match         *://nubilefilms.com/*
 // @match         *://nubiles.net/*
 // @match         *://nubileset.com/*
@@ -638,6 +639,7 @@ function formatEntryData(target, data, stashUrl) {
         ["title", (v) => `Title: ${v}`],
         ["name", (v) => `Name: ${v}`],
         ["code", (v) => `Code: ${v}`],
+        ["date", (v) => `Date: ${v}`],
         ["files", (v) => formatFileData(v)],
         ["queries", (v) => `Matched: ${v.join(", ")}`],
     ];
@@ -809,7 +811,7 @@ async function request(queryString, onload, target, type) {
     }
     switch (target) {
         case "scene":
-            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path,duration}}}}`;
+            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,date,files{path,duration}}}}`;
             access = (d) => d.findScenes.scenes;
             break;
         case "performer":
@@ -817,8 +819,12 @@ async function request(queryString, onload, target, type) {
             access = (d) => d.findPerformers.performers;
             break;
         case "gallery":
-            query = `{findGalleries(gallery_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){galleries{id,title,files{path}}}}`;
+            query = `{findGalleries(gallery_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){galleries{id,title,date,files{path}}}}`;
             access = (d) => d.findGalleries.galleries;
+            break;
+        case "movie":
+            query = `{findMovies(movie_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){movies{id,name,date}}}`;
+            access = (d) => d.findMovies.movies;
             break;
         default:
     }
@@ -1040,14 +1046,15 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
             else if (window.location.pathname.startsWith("/title.rme/title=")) {
                 check("scene", "h1", { prepareUrl: prepareUrl, currentSite: true });
             }
-            check("performer", "a[href*='/person.rme/perfid=']", {
-                prepareUrl: prepareUrl,
-            });
-            check("scene", "a[href*='/title.rme/title=']", {
-                prepareUrl: prepareUrl,
-            });
+            check("performer", "a[href*='/person.rme/perfid=']", { prepareUrl: prepareUrl });
+            check("scene", "a[href*='/title.rme/title=']", { prepareUrl: prepareUrl });
             break;
         }
+        case "metadataapi.net":
+            check("performer", "a[href^='https://metadataapi.net/performers/']", { observe: true });
+            check("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", { observe: true });
+            check("movie", "a[href^='https://metadataapi.net/movies/']", { observe: true });
+            break;
         case "www.javlibrary.com":
             // generic links
             check("scene", "a[href*='?v=jav']", {
@@ -1108,12 +1115,12 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
                 stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
                 nameSelector: null,
             });
-            check("scene", "a[href*='/scenes/']", {
+            check("scene", "a[href^='/scenes/'], a[href^='https://stashdb.org/scenes/']", {
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
             });
-            check("performer", "a[href*='/performers/']", {
+            check("performer", "a[href^='/performers/'], a[href^='https://stashdb.org/performers/']", {
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
@@ -1125,11 +1132,10 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
             break;
     }
     // TODO: fix: data18 performers overview
-    // TODO: scenes: OF, ThePornDB, PH, XVideos
-    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com
+    // TODO: scenes: OF, PH, XVideos, www.manyvids.com, www.clips4sale.com, pornbox.com
+    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com, pornbox.com
     // TODO: match confidence levels (StashId - URL - Code - Name - Title)
     // TODO: limit observe to rerun only new additions
-    // TODO: movies, pictures
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: limit color functions to work with configurable colors
     // TODO: tooltip information: rating, favorite, resolution, codec
