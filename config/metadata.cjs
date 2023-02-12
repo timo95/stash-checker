@@ -18,8 +18,10 @@ module.exports = {
     // 'license': 'MIT',
     match: [
         "*://adultanime.dbsearch.net/*",
+        "*://coomer.party/*",
         "*://ecchi.iwara.tv/*",
         "*://erommdtube.com/*",
+        "*://kemono.party/*",
         "*://nubiles.net/*",
         "*://oreno3d.com/*",
         "*://stashdb.org/*",

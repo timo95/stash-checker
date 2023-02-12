@@ -22,6 +22,14 @@ import {check} from "./check";
             check("scene", "h2.main__list-title", {color: color});
             break;
         }
+        case "kemono.party":
+            check("scene", "h1.post__title", {currentSite: true});
+            check("scene", ".post-card > a[href*='/post/']");
+            break;
+        case "coomer.party":
+            check("scene", "h1.post__title", {currentSite: true});
+            check("scene", ".post-card h2 > a[href*='/post/']");
+            break;
         case "adultanime.dbsearch.net":
             if (document.querySelector("article > section[id='info-table']") !== null) {
                 check("scene", "div[id='main-inner'] > article > h2", {
@@ -147,7 +155,7 @@ import {check} from "./check";
     }
 
     // TODO: fix: data18 performers overview
-    // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos
+    // TODO: scenes: OF, ThePornDB, PH, XVideos
     // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com
     // TODO: match confidence levels (StashId - URL - Code - Name - Title)
     // TODO: limit observe to rerun only new additions
