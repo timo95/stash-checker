@@ -10,7 +10,12 @@
 // @match         *://ecchi.iwara.tv/*
 // @match         *://erommdtube.com/*
 // @match         *://kemono.party/*
+// @match         *://nubilefilms.com/*
 // @match         *://nubiles.net/*
+// @match         *://nubileset.com/*
+// @match         *://nubilesunscripted.com/*
+// @match         *://nubiles-casting.com/*
+// @match         *://nubiles-porn.com/*
 // @match         *://oreno3d.com/*
 // @match         *://stashdb.org/*
 // @match         *://www.animecharactersdatabase.com/*
@@ -1003,7 +1008,12 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
             check("performer", "span[itemprop='name']", { currentSite: true });
             check("performer", "a[href*='/model/']");
             break;
+        case "nubilefilms.com":
         case "nubiles.net":
+        case "nubileset.com":
+        case "nubilesunscripted.com":
+        case "nubiles-casting.com":
+        case "nubiles-porn.com":
             check("performer", "a.title[href^='/model/profile/'], a.model[href^='/model/profile/']", {
                 prepareUrl: url => url.split(/[?#]/)[0]
             });
