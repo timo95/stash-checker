@@ -22,6 +22,7 @@ module.exports = {
         "*://ecchi.iwara.tv/*",
         "*://erommdtube.com/*",
         "*://kemono.party/*",
+        "*://metadataapi.net/*",
         "*://nubilefilms.com/*",
         "*://nubiles.net/*",
         "*://nubileset.com/*",

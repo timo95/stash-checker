@@ -74,14 +74,15 @@ import {check} from "./check";
             } else if (window.location.pathname.startsWith("/title.rme/title=")) {
                 check("scene", "h1", {prepareUrl: prepareUrl, currentSite: true});
             }
-            check("performer", "a[href*='/person.rme/perfid=']", {
-                prepareUrl: prepareUrl,
-            });
-            check("scene", "a[href*='/title.rme/title=']", {
-                prepareUrl: prepareUrl,
-            });
+            check("performer", "a[href*='/person.rme/perfid=']", {prepareUrl: prepareUrl});
+            check("scene", "a[href*='/title.rme/title=']", {prepareUrl: prepareUrl});
             break;
         }
+        case "metadataapi.net":
+            check("performer", "a[href^='https://metadataapi.net/performers/']", {observe: true});
+            check("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", {observe: true});
+            check("movie", "a[href^='https://metadataapi.net/movies/']", {observe: true});
+            break;
         case "www.javlibrary.com":
             // generic links
             check("scene", "a[href*='?v=jav']", {
@@ -142,12 +143,12 @@ import {check} from "./check";
                 stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
                 nameSelector: null,
             });
-            check("scene", "a[href*='/scenes/']", {
+            check("scene", "a[href^='/scenes/'], a[href^='https://stashdb.org/scenes/']", {
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
             });
-            check("performer", "a[href*='/performers/']", {
+            check("performer", "a[href^='/performers/'], a[href^='https://stashdb.org/performers/']", {
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
@@ -160,11 +161,10 @@ import {check} from "./check";
     }
 
     // TODO: fix: data18 performers overview
-    // TODO: scenes: OF, ThePornDB, PH, XVideos
-    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com
+    // TODO: scenes: OF, PH, XVideos, www.manyvids.com, www.clips4sale.com, pornbox.com
+    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com, pornbox.com
     // TODO: match confidence levels (StashId - URL - Code - Name - Title)
     // TODO: limit observe to rerun only new additions
-    // TODO: movies, pictures
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: limit color functions to work with configurable colors
     // TODO: tooltip information: rating, favorite, resolution, codec

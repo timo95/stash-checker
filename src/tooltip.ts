@@ -75,6 +75,7 @@ function formatEntryData(target: Target, data: any[], stashUrl: string): string 
         ["title", (v: any) => `Title: ${v}`],
         ["name", (v: any) => `Name: ${v}`],
         ["code", (v: any) => `Code: ${v}`],
+        ["date", (v: any) => `Date: ${v}`],
         ["files", (v: any) => formatFileData(v)],
         ["queries", (v: any) => `Matched: ${v.join(", ")}`],
     ];

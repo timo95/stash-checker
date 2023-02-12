@@ -13,7 +13,7 @@ interface CheckOptions {
 }
 
 // what the query asks for
-export type Target = "scene" | "performer" | "gallery"
+export type Target = "scene" | "performer" | "gallery" | "movie"
 // what the query uses to filter
 type Type = "url" | "code" | "stash_id" | "name"
 
@@ -35,7 +35,7 @@ async function request(
     }
     switch (target) {
         case "scene":
-            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,files{path,duration}}}}`;
+            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,date,files{path,duration}}}}`;
             access = (d) => d.findScenes.scenes;
             break;
         case "performer":
@@ -43,8 +43,12 @@ async function request(
             access = (d) => d.findPerformers.performers;
             break;
         case "gallery":
-            query = `{findGalleries(gallery_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){galleries{id,title,files{path}}}}`;
+            query = `{findGalleries(gallery_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){galleries{id,title,date,files{path}}}}`;
             access = (d) => d.findGalleries.galleries;
+            break;
+        case "movie":
+            query = `{findMovies(movie_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){movies{id,name,date}}}`;
+            access = (d) => d.findMovies.movies;
             break;
         default:
     }
