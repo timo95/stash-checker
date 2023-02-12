@@ -20,6 +20,7 @@ module.exports = {
         "*://adultanime.dbsearch.net/*",
         "*://ecchi.iwara.tv/*",
         "*://erommdtube.com/*",
+        "*://nubiles.net/*",
         "*://oreno3d.com/*",
         "*://stashdb.org/*",
         "*://www.animecharactersdatabase.com/*",

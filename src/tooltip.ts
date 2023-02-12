@@ -170,6 +170,7 @@ export function prefixSymbol(
         data = mergeData(JSON.parse(span.getAttribute("data-data")), data)
     } else {
         span = document.createElement("span");
+        span.classList.add("stashCheckerSymbol");
         span.setAttribute("data-type", "stash-symbol")
         span.addEventListener("mouseover", mouseoverListener);
         span.addEventListener("mouseout", mouseoutListener);

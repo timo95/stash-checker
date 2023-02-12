@@ -13,7 +13,7 @@ interface CheckOptions {
 }
 
 // what the query asks for
-export type Target = "scene" | "performer"
+export type Target = "scene" | "performer" | "gallery"
 // what the query uses to filter
 type Type = "url" | "code" | "stash_id" | "name"
 
@@ -41,6 +41,10 @@ async function request(
         case "performer":
             query = `{findPerformers(performer_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){performers{id,name}}}`;
             access = (d) => d.findPerformers.performers;
+            break;
+        case "gallery":
+            query = `{findGalleries(gallery_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){galleries{id,title,files{path}}}}`;
+            access = (d) => d.findGalleries.galleries;
             break;
         default:
     }

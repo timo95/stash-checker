@@ -35,6 +35,17 @@ import {check} from "./check";
             check("performer", "span[itemprop='name']", {currentSite: true});
             check("performer", "a[href*='/model/']");
             break;
+        case "nubiles.net":
+            check("performer", "a.title[href^='/model/profile/'], a.model[href^='/model/profile/']", {
+                prepareUrl: url => url.split(/[?#]/)[0]
+            });
+            check("scene", ".title > a[href^='/video/watch/']", {
+                prepareUrl: url => url.split(/[?#]/)[0]
+            });
+            check("gallery", "a.title[href^='/photo/gallery/']", {
+                prepareUrl: url => url.split(/[?#]/)[0]
+            });
+            break;
         case "www.animecharactersdatabase.com":
             check("performer", "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
             break;
@@ -73,9 +84,9 @@ import {check} from "./check";
             });
             break;
         case "www.minnano-av.com":
-            if (new RegExp("actress\\d{1,6}").test(window.location.pathname)) {
+            if (/actress\d{1,6}/.test(window.location.pathname)) {
                 check("performer", "h1", {
-                    prepareUrl: (url) => url.split("?")[0],
+                    prepareUrl: url => url.split("?")[0],
                     currentSite: true,
                 });
             }
@@ -121,12 +132,12 @@ import {check} from "./check";
             check("scene", "a[href*='/scenes/']", {
                 observe: true,
                 urlSelector: null,
-                stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
+                stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
             });
             check("performer", "a[href*='/performers/']", {
                 observe: true,
                 urlSelector: null,
-                stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
+                stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
                 nameSelector: null,
             });
             break;
@@ -136,11 +147,11 @@ import {check} from "./check";
     }
 
     // TODO: fix: data18 performers overview
-    // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos, nubiles.net
-    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com, nubiles.net
+    // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos
+    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com
     // TODO: match confidence levels (StashId - URL - Code - Name - Title)
     // TODO: limit observe to rerun only new additions
-    // TODO: movies, pictures, galleries
+    // TODO: movies, pictures
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: limit color functions to work with configurable colors
     // TODO: tooltip information: rating, favorite, resolution, codec
