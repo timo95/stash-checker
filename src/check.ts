@@ -74,7 +74,7 @@ async function checkElement(
         urlSelector,  // default is set in check()
         codeSelector,
         stashIdSelector,
-        nameSelector = e => firstTextChild(e).textContent.trim(),
+        nameSelector = e => firstTextChild(e)?.textContent?.trim(),
         color = () => "green",
     }: CheckOptions
 ) {
@@ -109,7 +109,7 @@ async function checkElement(
     if (target === "performer" && nameSelector) {
         let name = nameSelector(element);
         // Do not use single names
-        let nameCount = name.split(/\s+/).length
+        let nameCount = name?.split(/\s+/)?.length
         if (name && nameCount > 1) {
             console.log(name);
             await request(name, (...args) => prefixSymbol(element, ...args, "Name", color), target, "name");

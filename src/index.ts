@@ -99,6 +99,11 @@ import {check} from "./check";
             check("performer", "h1#babename", {currentSite: true});
             check("performer", "a[href*='/babe/']", {observe: true});
             break;
+        case "www.freeones.com":
+            check("performer", "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
+                prepareUrl: url => url.replace(/\/feed$/, "")
+            });
+            break;
         case "stashdb.org":
             check("scene", "div.scene-info.card h3 > span", {
                 observe: true,
@@ -113,7 +118,6 @@ import {check} from "./check";
                 stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
                 nameSelector: null,
             });
-
             check("scene", "a[href*='/scenes/']", {
                 observe: true,
                 urlSelector: null,
@@ -127,14 +131,15 @@ import {check} from "./check";
             });
             break;
         default:
-            console.log("No configuration for website found.")
+            console.log("No configuration for website found.");
             break;
     }
 
     // TODO: fix: data18 performers overview
     // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos, nubiles.net
-    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.freeones.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com, nubiles.net
+    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com, nubiles.net
     // TODO: match confidence levels (StashId - URL - Code - Name - Title)
+    // TODO: limit observe to rerun only new additions
     // TODO: movies, pictures, galleries
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: limit color functions to work with configurable colors
