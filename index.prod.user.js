@@ -8,10 +8,13 @@
 // @match         *://adultanime.dbsearch.net/*
 // @match         *://ecchi.iwara.tv/*
 // @match         *://erommdtube.com/*
+// @match         *://nubiles.net/*
 // @match         *://oreno3d.com/*
 // @match         *://stashdb.org/*
 // @match         *://www.animecharactersdatabase.com/*
+// @match         *://www.babepedia.com/*
 // @match         *://www.data18.com/*
+// @match         *://www.freeones.com/*
 // @match         *://www.iafd.com/*
 // @match         *://www.indexxx.com/*
 // @match         *://www.iwara.tv/*
@@ -45,7 +48,7 @@
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerTooltip {\n  z-index: 9999 !important;\n  position: fixed !important;\n  color: black !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerTooltip {\n  z-index: 9999 !important;\n  position: fixed !important;\n  color: black !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n.stashCheckerSymbol {\n  font-size: inherit !important;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -711,6 +714,7 @@ function prefixSymbol(element, target, data, stashUrl, queryType, color) {
     }
     else {
         span = document.createElement("span");
+        span.classList.add("stashCheckerSymbol");
         span.setAttribute("data-type", "stash-symbol");
         span.addEventListener("mouseover", mouseoverListener);
         span.addEventListener("mouseout", mouseoutListener);
@@ -805,6 +809,10 @@ async function request(queryString, onload, target, type) {
             query = `{findPerformers(performer_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){performers{id,name}}}`;
             access = (d) => d.findPerformers.performers;
             break;
+        case "gallery":
+            query = `{findGalleries(gallery_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){galleries{id,title,files{path}}}}`;
+            access = (d) => d.findGalleries.galleries;
+            break;
         default:
     }
     // Wait for config popup if it is not stored
@@ -829,7 +837,7 @@ async function request(queryString, onload, target, type) {
     });
 }
 async function checkElement(target, element, { prepareUrl = url => url, urlSelector, // default is set in check()
-codeSelector, stashIdSelector, nameSelector = e => firstTextChild(e).textContent.trim(), color = () => "green", }) {
+codeSelector, stashIdSelector, nameSelector = e => firstTextChild(e)?.textContent?.trim(), color = () => "green", }) {
     if (urlSelector && prepareUrl) {
         let url = urlSelector(element);
         url = prepareUrl(url);
@@ -864,7 +872,7 @@ codeSelector, stashIdSelector, nameSelector = e => firstTextChild(e).textContent
     if (target === "performer" && nameSelector) {
         let name = nameSelector(element);
         // Do not use single names
-        let nameCount = name.split(/\s+/).length;
+        let nameCount = name?.split(/\s+/)?.length;
         if (name && nameCount > 1) {
             console.log(name);
             await request(name, (...args) => prefixSymbol(element, ...args, "Name", color), target, "name");
@@ -877,37 +885,6 @@ codeSelector, stashIdSelector, nameSelector = e => firstTextChild(e).textContent
         }
     }
 }
-/**
- * queries for each selected element
- *
- * the selected element should be [a child of] the link that will be compared with stash urls
- * the first text inside the selected element will be prepended with the symbol
- * Set predefined selectors to "null" to not use them.
- */
-function check(target, elementSelector, { currentSite = false, ...checkConfig } = {}) {
-    // Exclude direct children of tooltip window (some selectors match the stash link)
-    elementSelector = ":not(.stashCheckerTooltip) > " + elementSelector;
-    if (currentSite) {
-        let element = document.querySelector(elementSelector);
-        if (element) {
-            // url of current site
-            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? () => decodeURI(window.location.href) : checkConfig.urlSelector;
-            checkElement(target, element, checkConfig);
-        }
-    }
-    else {
-        // multiple entries with url nearest to element
-        document.querySelectorAll(elementSelector).forEach((element) => {
-            // url nearest to selected element traversing towards the root (children are ignored)
-            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? (e) => decodeURI(e.closest("a").href) : checkConfig.urlSelector;
-            checkElement(target, element, checkConfig);
-        });
-    }
-}
-
-;// CONCATENATED MODULE: ./src/index.ts
-
-
 /**
  * Run callback when a new object added to the document matches the selector.
  * Calls callback with a timer after the last addition to prevent unnecessary executions.
@@ -937,6 +914,51 @@ function onAddition(selector, callback) {
     });
     observer.observe(body, { childList: true, subtree: true });
 }
+/**
+ * queries for each selected element
+ *
+ * the selected element should be [a child of] the link that will be compared with stash urls
+ * the first text inside the selected element will be prepended with the symbol
+ * Set predefined selectors to "null" to not use them.
+ */
+function checkOnce(target, elementSelector, { currentSite = false, ...checkConfig } = {}) {
+    if (currentSite) {
+        let element = document.querySelector(elementSelector);
+        if (element) {
+            // url of current site
+            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? () => decodeURI(window.location.href) : checkConfig.urlSelector;
+            checkElement(target, element, checkConfig);
+        }
+    }
+    else {
+        // multiple entries with url nearest to element
+        document.querySelectorAll(elementSelector).forEach((element) => {
+            // url nearest to selected element traversing towards the root (children are ignored)
+            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? (e) => decodeURI(e.closest("a").href) : checkConfig.urlSelector;
+            checkElement(target, element, checkConfig);
+        });
+    }
+}
+/**
+ * queries for each selected element
+ *
+ * the selected element should be [a child of] the link that will be compared with stash urls
+ * the first text inside the selected element will be prepended with the symbol
+ * Set predefined selectors to "null" to not use them.
+ */
+function check(target, elementSelector, { observe = false, ...checkConfig } = {}) {
+    // Exclude direct children of tooltip window (some selectors match the stash link)
+    elementSelector = ":not(.stashCheckerTooltip) > " + elementSelector;
+    // Callback on addition of new elements fitting the query
+    if (observe) {
+        onAddition(elementSelector, (_) => checkOnce(target, elementSelector, checkConfig));
+    }
+    checkOnce(target, elementSelector, checkConfig);
+}
+
+;// CONCATENATED MODULE: ./src/index.ts
+
+
 (function () {
     switch (window.location.host) {
         case "www.iwara.tv":
@@ -970,6 +992,17 @@ function onAddition(selector, callback) {
         case "xslist.org":
             check("performer", "span[itemprop='name']", { currentSite: true });
             check("performer", "a[href*='/model/']");
+            break;
+        case "nubiles.net":
+            check("performer", "a.title[href^='/model/profile/'], a.model[href^='/model/profile/']", {
+                prepareUrl: url => url.split(/[?#]/)[0]
+            });
+            check("scene", ".title > a[href^='/video/watch/']", {
+                prepareUrl: url => url.split(/[?#]/)[0]
+            });
+            check("gallery", "a.title[href^='/photo/gallery/']", {
+                prepareUrl: url => url.split(/[?#]/)[0]
+            });
             break;
         case "www.animecharactersdatabase.com":
             check("performer", "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
@@ -1010,9 +1043,9 @@ function onAddition(selector, callback) {
             });
             break;
         case "www.minnano-av.com":
-            if (new RegExp("actress\\d{1,6}").test(window.location.pathname)) {
+            if (/actress\d{1,6}/.test(window.location.pathname)) {
                 check("performer", "h1", {
-                    prepareUrl: (url) => url.split("?")[0],
+                    prepareUrl: url => url.split("?")[0],
                     currentSite: true,
                 });
             }
@@ -1024,62 +1057,59 @@ function onAddition(selector, callback) {
             check("performer", "h1[id='model-name']", { currentSite: true });
             check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span");
             break;
-        case "www.thenude.com": {
+        case "www.thenude.com":
             check("performer", "span.model-name", { currentSite: true });
-            let callback = () => {
-                check("performer", "a.model-name, a.model-title, a[data-img*='/models/']");
-            };
-            callback();
-            onAddition("a", callback);
+            check("performer", "a.model-name, a.model-title, a[data-img*='/models/']", { observe: true });
             break;
-        }
-        case "www.data18.com": {
-            let callback = () => {
-                check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])");
-                check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])");
-            };
-            callback();
-            onAddition("a", callback);
+        case "www.data18.com":
+            check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", { observe: true });
+            check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])", { observe: true });
             break;
-        }
-        case "stashdb.org": {
-            let callback = () => {
-                check("scene", "div.scene-info.card h3 > span", {
-                    currentSite: true,
-                    urlSelector: null,
-                    stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
-                });
-                check("performer", "div.PerformerInfo div.card-header h3 > span", {
-                    currentSite: true,
-                    urlSelector: null,
-                    stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
-                    nameSelector: null,
-                });
-            };
-            onAddition("h3", callback);
-            callback = () => {
-                check("scene", "a[href*='/scenes/']", {
-                    urlSelector: null,
-                    stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
-                });
-                check("performer", "a[href*='/performers/']", {
-                    urlSelector: null,
-                    stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
-                    nameSelector: null,
-                });
-            };
-            onAddition("a", callback);
+        case "www.babepedia.com":
+            check("performer", "h1#babename", { currentSite: true });
+            check("performer", "a[href*='/babe/']", { observe: true });
             break;
-        }
+        case "www.freeones.com":
+            check("performer", "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
+                prepareUrl: url => url.replace(/\/feed$/, "")
+            });
+            break;
+        case "stashdb.org":
+            check("scene", "div.scene-info.card h3 > span", {
+                observe: true,
+                currentSite: true,
+                urlSelector: null,
+                stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
+            });
+            check("performer", "div.PerformerInfo div.card-header h3 > span", {
+                observe: true,
+                currentSite: true,
+                urlSelector: null,
+                stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
+                nameSelector: null,
+            });
+            check("scene", "a[href*='/scenes/']", {
+                observe: true,
+                urlSelector: null,
+                stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
+            });
+            check("performer", "a[href*='/performers/']", {
+                observe: true,
+                urlSelector: null,
+                stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
+                nameSelector: null,
+            });
+            break;
         default:
             console.log("No configuration for website found.");
             break;
     }
     // TODO: fix: data18 performers overview
-    // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos, nubiles.net
-    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.freeones.com, www.wikidata.org, www.babepedia.com, www.eurobabeindex.com, nubiles.net
+    // TODO: scenes: kemono, coomer, OF, ThePornDB, PH, XVideos
+    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com
     // TODO: match confidence levels (StashId - URL - Code - Name - Title)
-    // TODO: movies, pictures, galleries
+    // TODO: limit observe to rerun only new additions
+    // TODO: movies, pictures
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: limit color functions to work with configurable colors
     // TODO: tooltip information: rating, favorite, resolution, codec
