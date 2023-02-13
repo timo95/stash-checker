@@ -42,6 +42,10 @@ import {check} from "./check";
         case "xslist.org":
             check("performer", "span[itemprop='name']", {currentSite: true});
             check("performer", "a[href*='/model/']");
+            check("scene", "table#movices td > strong", {
+                urlSelector: null,
+                codeSelector: e => e.textContent.trim()
+            });
             break;
         case "nubilefilms.com":
         case "nubiles.net":
@@ -86,15 +90,24 @@ import {check} from "./check";
         case "www.javlibrary.com":
             // generic links
             check("scene", "a[href*='?v=jav']", {
-                prepareUrl: (url) => url.replace("videocomments.php", "").replace(/&.*$/, ""),
-                codeSelector: (e) => e.querySelector("div.id")?.textContent?.trim(),
+                prepareUrl: url => url.replace("videocomments.php", "").replace(/&.*$/, ""),
+                codeSelector: e => e.querySelector("div.id")?.textContent?.trim(),
             });
             // code for video page, review
             check("scene", "div[id='video_title'] a[href*='?v=jav']", {
                 urlSelector: null,
-                codeSelector: (_) => document
-                    .querySelector("table[id='video_jacket_info'] table:first-child td.text")
-                    .textContent.trim(),
+                codeSelector: _ => document.querySelector("table[id='video_jacket_info'] table:first-child td.text").textContent.trim(),
+            });
+            break;
+        case "r18.dev":
+            check("scene","#video-info > #title", {
+                observe: "#dvd-id",
+                currentSite: true,
+                codeSelector: _ => document.querySelector("#dvd-id")?.textContent?.trim(),
+            });
+            check("scene", ".video-label > a[href*='/movies/detail/']", {
+                observe: true,
+                codeSelector: e => e.textContent.trim(),
             });
             break;
         case "www.minnano-av.com":
@@ -105,7 +118,7 @@ import {check} from "./check";
                 });
             }
             check("performer", "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
-                prepareUrl: (url) => url.split("?")[0],
+                prepareUrl: url => url.split("?")[0],
             });
             break;
         case "www.indexxx.com":

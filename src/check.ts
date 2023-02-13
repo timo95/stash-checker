@@ -9,7 +9,7 @@ interface CheckOptions {
     nameSelector?: (e: Element) => string;
     color?: (data: any) => string;
     currentSite?: boolean;
-    observe?: boolean;
+    observe?: boolean | string;
 }
 
 // what the query asks for
@@ -143,10 +143,11 @@ function onAddition(selector: string, callback: any) {
     let observer = new MutationObserver((mutations) => {
         let newNode = mutations.map(m => Array.from(m.addedNodes)
             .filter(n => n.nodeType === Node.ELEMENT_NODE)
-            .some(n => (n as Element).querySelector(selector))
+            .some(n => (n as Element).matches(selector) || (n as Element).querySelector(selector)) ||  // Element or Child match
+            Array.from(m.addedNodes).map(n => n.parentElement).filter(e => e).some(e => e.matches(selector))  // Parent match (if text node was added)
         ).some(n => n);
         if (newNode) {
-            console.log(`"${selector}"-element was added. Start/Update Timer.`);
+            console.log(`"${selector}"-element was added or modified. Start/Update Timer.`);
             clearTimeout(timeout);
             timeout = setTimeout(_ => {
                 console.log("Run queries.");
@@ -205,7 +206,8 @@ export function check(
 
     // Callback on addition of new elements fitting the query
     if (observe) {
-        onAddition(elementSelector, (_: any) => checkOnce(target, elementSelector, checkConfig))
+        let selector = typeof observe === "string" ? observe : elementSelector
+        onAddition(selector, (_: any) => checkOnce(target, elementSelector, checkConfig))
     }
     checkOnce(target, elementSelector, checkConfig)
 }

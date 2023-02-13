@@ -30,6 +30,7 @@ module.exports = {
         "*://nubiles-casting.com/*",
         "*://nubiles-porn.com/*",
         "*://oreno3d.com/*",
+        "*://r18.dev/*",
         "*://stashdb.org/*",
         "*://www.animecharactersdatabase.com/*",
         "*://www.babepedia.com/*",
