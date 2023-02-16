@@ -1,34 +1,35 @@
 import "./style/main.less";
 import {check} from "./check";
+import {firstTextChild} from "./tooltip";
 
 (function () {
     switch (window.location.host) {
         case "www.iwara.tv":
         case "ecchi.iwara.tv": {
             let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
-            check("scene", "h1.title", {color: color, currentSite: true});
-            check("scene", "h3.title > a", {color: color});
+            check("scene", "h1.title", {color: color, currentSite: true, titleSelector: null});
+            check("scene", "h3.title > a", {color: color, titleSelector: null});
             break;
         }
         case "oreno3d.com": {
             let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
-            check("scene", "h1.video-h1", {color: color, currentSite: true});
-            check("scene", "a h2.box-h2", {color: color});
+            check("scene", "h1.video-h1", {color: color, currentSite: true, titleSelector: null});
+            check("scene", "a h2.box-h2", {color: color, titleSelector: null});
             break;
         }
         case "erommdtube.com": {
             let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
-            check("scene", "h1.show__h1", {color: color, currentSite: true});
-            check("scene", "h2.main__list-title", {color: color});
+            check("scene", "h1.show__h1", {color: color, currentSite: true, titleSelector: null});
+            check("scene", "h2.main__list-title", {color: color, titleSelector: null});
             break;
         }
         case "kemono.party":
-            check("scene", "h1.post__title", {currentSite: true});
-            check("scene", ".post-card > a[href*='/post/']");
+            check("scene", "h1.post__title", {currentSite: true, titleSelector: null});
+            check("scene", ".post-card > a[href*='/post/']", {titleSelector: null});
             break;
         case "coomer.party":
-            check("scene", "h1.post__title", {currentSite: true});
-            check("scene", ".post-card h2 > a[href*='/post/']");
+            check("scene", "h1.post__title", {currentSite: true, titleSelector: null});
+            check("scene", ".post-card h2 > a[href*='/post/']", {titleSelector: null});
             break;
         case "adultanime.dbsearch.net":
             if (document.querySelector("article > section[id='info-table']") !== null) {
@@ -44,23 +45,8 @@ import {check} from "./check";
             check("performer", "a[href*='/model/']");
             check("scene", "table#movices td > strong", {
                 urlSelector: null,
-                codeSelector: e => e.textContent.trim()
-            });
-            break;
-        case "nubilefilms.com":
-        case "nubiles.net":
-        case "nubileset.com":
-        case "nubilesunscripted.com":
-        case "nubiles-casting.com":
-        case "nubiles-porn.com":
-            check("performer", "a.title[href^='/model/profile/'], a.model[href^='/model/profile/']", {
-                prepareUrl: url => url.split(/[?#]/)[0]
-            });
-            check("scene", ".title > a[href^='/video/watch/']", {
-                prepareUrl: url => url.split(/[?#]/)[0]
-            });
-            check("gallery", "a.title[href^='/photo/gallery/']", {
-                prepareUrl: url => url.split(/[?#]/)[0]
+                codeSelector: e => e.textContent.trim(),
+                titleSelector: null,
             });
             break;
         case "www.animecharactersdatabase.com":
@@ -69,23 +55,24 @@ import {check} from "./check";
         case "www.iafd.com": {
             let prepareUrl = (url: string) => {
                 // Links on iafd have many variants. Normalize to using "-" and "https"
+                url = url.replaceAll("'", "%27")
                 let s = url.split("/");
-                s.push(s.pop().replaceAll("_", "-"));
+                s.push(s.pop().replaceAll("_", "-"));  // only in last path element
                 return s.join("/").replace(/^http:/, "https:");
             };
             if (window.location.pathname.startsWith("/person.rme/perfid=")) {
                 check("performer", "h1", {prepareUrl: prepareUrl, currentSite: true});
             } else if (window.location.pathname.startsWith("/title.rme/title=")) {
-                check("scene", "h1", {prepareUrl: prepareUrl, currentSite: true});
+                check("scene", "h1", {prepareUrl: prepareUrl, currentSite: true, titleSelector: null});
             }
             check("performer", "a[href*='/person.rme/perfid=']", {prepareUrl: prepareUrl});
-            check("scene", "a[href*='/title.rme/title=']", {prepareUrl: prepareUrl});
+            check("scene", "a[href*='/title.rme/title=']", {prepareUrl: prepareUrl, titleSelector: null});
             break;
         }
         case "metadataapi.net":
             check("performer", "a[href^='https://metadataapi.net/performers/']", {observe: true});
-            check("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", {observe: true});
-            check("movie", "a[href^='https://metadataapi.net/movies/']", {observe: true});
+            check("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", {observe: true, titleSelector: null});
+            check("movie", "a[href^='https://metadataapi.net/movies/']", {observe: true, titleSelector: null});
             break;
         case "www.javlibrary.com":
             // generic links
@@ -103,11 +90,11 @@ import {check} from "./check";
             check("scene","#video-info > #title", {
                 observe: "#dvd-id",
                 currentSite: true,
-                codeSelector: _ => document.querySelector("#dvd-id")?.textContent?.trim(),
+                codeSelector: _ => firstTextChild(document.querySelector("#dvd-id"))?.textContent?.trim(),
             });
             check("scene", ".video-label > a[href*='/movies/detail/']", {
                 observe: true,
-                codeSelector: e => e.textContent.trim(),
+                codeSelector: e => firstTextChild(e)?.textContent?.trim(),
             });
             break;
         case "www.minnano-av.com":
@@ -130,7 +117,7 @@ import {check} from "./check";
             check("performer", "a.model-name, a.model-title, a[data-img*='/models/']", {observe: true});
             break;
         case "www.data18.com":
-            check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", {observe: true});
+            check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", {observe: true, titleSelector: null});
             check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])", {observe: true});
             break;
         case "www.babepedia.com":
@@ -148,6 +135,7 @@ import {check} from "./check";
                 currentSite: true,
                 urlSelector: null,
                 stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
+                titleSelector: null,
             });
             check("performer", "div.PerformerInfo div.card-header h3 > span", {
                 observe: true,
@@ -160,6 +148,7 @@ import {check} from "./check";
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
+                titleSelector: null,
             });
             check("performer", "a[href^='/performers/'], a[href^='https://stashdb.org/performers/']", {
                 observe: true,

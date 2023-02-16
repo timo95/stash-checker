@@ -7,6 +7,7 @@ interface CheckOptions {
     codeSelector?: (e: Element) => string;
     stashIdSelector?: (e: Element) => string;
     nameSelector?: (e: Element) => string;
+    titleSelector?: (e: Element) => string;
     color?: (data: any) => string;
     currentSite?: boolean;
     observe?: boolean | string;
@@ -15,7 +16,7 @@ interface CheckOptions {
 // what the query asks for
 export type Target = "scene" | "performer" | "gallery" | "movie"
 // what the query uses to filter
-type Type = "url" | "code" | "stash_id" | "name"
+type Type = "url" | "code" | "stash_id" | "name" | "title"
 
 // Ask for stash url/key on load
 let configPromise = getConfig()
@@ -30,9 +31,6 @@ async function request(
     let access = (d: any) => d;
 
     // Build query
-    if (type === "url") {
-        queryString = encodeURIComponent(queryString);
-    }
     switch (target) {
         case "scene":
             query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,date,files{path,duration}}}}`;
@@ -64,11 +62,17 @@ async function request(
         },
         onload: function (response) {
             try {
-                let data = access(JSON.parse(response.responseText).data);
-                onload(target, data, stashUrl);
+                let r = JSON.parse(response.responseText)
+                if ("errors" in r) {
+                    r.errors.forEach((e: any) => {
+                        console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`)
+                    });
+                } else {
+                    onload(target, access(r.data), stashUrl);
+                }
             } catch (e) {
-                console.log("Failed to parse response: " + response.responseText);
                 console.log("Exception: " + e);
+                console.log("Failed to parse response: " + response.responseText);
             }
         },
     });
@@ -83,6 +87,7 @@ async function checkElement(
         codeSelector,
         stashIdSelector,
         nameSelector = e => firstTextChild(e)?.textContent?.trim(),
+        titleSelector = e => firstTextChild(e)?.textContent?.trim(),
         color = () => "green",
     }: CheckOptions
 ) {
@@ -90,6 +95,7 @@ async function checkElement(
         let url = urlSelector(element);
         url = prepareUrl(url);
         if (url) {
+            url = encodeURIComponent(url);
             console.log(url);
             await request(url, (...args) => prefixSymbol(element, ...args, "URL", color), target, "url");
         } else {
@@ -127,6 +133,15 @@ async function checkElement(
             console.log(`No Name for ${target} found.`);
         }
     }
+    if (["scene", "movie", "gallery"].includes(target) && titleSelector) {
+        let title = titleSelector(element);
+        if (title) {
+            console.log(title);
+            await request(title, (...args) => prefixSymbol(element, ...args, "Title", color), target, "title");
+        } else {
+            console.log(`No Title for ${target} found.`);
+        }
+    }
 }
 
 /**
@@ -142,8 +157,8 @@ function onAddition(selector: string, callback: any) {
     let timeout: any = undefined;
     let observer = new MutationObserver((mutations) => {
         let newNode = mutations.map(m => Array.from(m.addedNodes)
-            .filter(n => n.nodeType === Node.ELEMENT_NODE)
-            .some(n => (n as Element).matches(selector) || (n as Element).querySelector(selector)) ||  // Element or Child match
+                .filter(n => n.nodeType === Node.ELEMENT_NODE)
+                .some(n => (n as Element).matches(selector) || (n as Element).querySelector(selector)) ||  // Element or Child match
             Array.from(m.addedNodes).map(n => n.parentElement).filter(e => e).some(e => e.matches(selector))  // Parent match (if text node was added)
         ).some(n => n);
         if (newNode) {
@@ -153,8 +168,6 @@ function onAddition(selector: string, callback: any) {
                 console.log("Run queries.");
                 callback();
             }, 200);  // arbitrary delay to prevent too many calls
-        } else {
-            console.log("No update.");
         }
     });
     observer.observe(body, {childList: true, subtree: true});
