@@ -75,15 +75,22 @@ import {firstTextChild} from "./tooltip";
             check("movie", "a[href^='https://metadataapi.net/movies/']", {observe: true, titleSelector: null});
             break;
         case "www.javlibrary.com":
-            // generic links
-            check("scene", "a[href*='?v=jav']", {
-                prepareUrl: url => url.replace("videocomments.php", "").replace(/&.*$/, ""),
+            check("scene", "div[id='video_title']", {
+                currentSite: true,
+                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
+                codeSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim(),
+                titleSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim(),
+            });
+            // generic video links
+            check("scene", ".video a[href^='./?v=jav']", {
+                prepareUrl: url => url.replace(/&.*$/, ""),
                 codeSelector: e => e.querySelector("div.id")?.textContent?.trim(),
             });
-            // code for video page, review
-            check("scene", "div[id='video_title'] a[href*='?v=jav']", {
-                urlSelector: null,
-                codeSelector: _ => document.querySelector("table[id='video_jacket_info'] table:first-child td.text").textContent.trim(),
+            // best reviews
+            check("scene", ".comment strong > a[href^='videoreviews.php?v=jav']", {
+                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
+                codeSelector: e => firstTextChild(e)?.textContent?.trim()?.split(" ")[0],
+                titleSelector: e => firstTextChild(e)?.textContent?.trim()?.split(" ")[0],
             });
             break;
         case "r18.dev":
