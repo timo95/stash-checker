@@ -51,7 +51,7 @@
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerTooltip {\n  z-index: 9999 !important;\n  position: fixed !important;\n  color: black !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n.stashCheckerSymbol {\n  font-size: inherit !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerTooltip {\n  z-index: 99999 !important;\n  position: fixed !important;\n  color: black !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n.stashCheckerSymbol {\n  font-size: inherit !important;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -628,20 +628,32 @@ function formatFileData(files) {
         .map(e => e[1](file[e[0]]))
         .join("<br>")).join("<br>");
 }
+function getUrl(stashUrl, target, id) {
+    let path;
+    if (target == "gallery") {
+        path = "galleries";
+    }
+    else {
+        path = target + "s";
+    }
+    return `${stashUrl}/${path}/${id}`;
+}
 function formatEntryData(target, data, stashUrl) {
     let propertyStrings = [
-        ["id", (v) => `<a target="_blank" href="${stashUrl}/${target}s/${v}">${stashUrl}/${target}s/${v}</a>`],
-        ["title", (v) => `Title: ${v}`],
-        ["name", (v) => `Name: ${v}`],
-        ["code", (v) => `Code: ${v}`],
-        ["date", (v) => `Date: ${v}`],
-        ["files", (v) => formatFileData(v)],
-        ["queries", (v) => `Matched: ${v.join(", ")}`],
+        ["id", (v) => `<br><a target="_blank" href="${getUrl(stashUrl, target, v)}">${getUrl(stashUrl, target, v)}</a>`],
+        ["title", (v) => `<br>Title: ${v}`],
+        ["name", (v) => `<br>Name: ${v}`],
+        ["disambiguation", (v) => ` <span style="color: grey">(${v})</span>`],
+        ["alias_list", (v) => `<br>Aliases: ${v.join(", ")}`],
+        ["code", (v) => `<br>Code: ${v}`],
+        ["date", (v) => `<br>Date: ${v}`],
+        ["files", (v) => `<br>${formatFileData(v)}`],
+        ["queries", (v) => `<br>Matched: ${v.join(", ")}`],
     ];
-    return ["", ...data.map((entry) => propertyStrings
-            .filter((e) => entry[e[0]])
-            .map((e) => e[1](entry[e[0]]))
-            .join("<br>"))].join("<br><hr>");
+    return data.map((entry) => propertyStrings
+        .filter((e) => entry[e[0]])
+        .map((e) => e[1](entry[e[0]]))
+        .join("")).join("<br><hr>");
 }
 function mouseoverListener() {
     window.clearTimeout(handle);
@@ -807,7 +819,7 @@ async function request(queryString, onload, target, type) {
             access = (d) => d.findScenes.scenes;
             break;
         case "performer":
-            query = `{findPerformers(performer_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){performers{id,name}}}`;
+            query = `{findPerformers(performer_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){performers{id,name,disambiguation,alias_list}}}`;
             access = (d) => d.findPerformers.performers;
             break;
         case "gallery":
@@ -897,7 +909,7 @@ codeSelector, stashIdSelector, nameSelector = e => firstTextChild(e)?.textConten
             console.log(`No Name for ${target} found.`);
         }
     }
-    if (["scene", "movie", "gallery"].includes(target) && titleSelector) {
+    if (["scene", "gallery"].includes(target) && titleSelector) {
         let title = titleSelector(element);
         if (title) {
             console.log(title);
