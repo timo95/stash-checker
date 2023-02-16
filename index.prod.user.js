@@ -653,7 +653,7 @@ function formatEntryData(target, data, stashUrl) {
     return data.map((entry) => propertyStrings
         .filter((e) => entry[e[0]])
         .map((e) => e[1](entry[e[0]]))
-        .join("")).join("<br><hr>");
+        .join("")).join("<hr>");
 }
 function mouseoverListener() {
     window.clearTimeout(handle);
