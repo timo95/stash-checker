@@ -37,7 +37,7 @@ async function request(
             access = (d) => d.findScenes.scenes;
             break;
         case "performer":
-            query = `{findPerformers(performer_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){performers{id,name}}}`;
+            query = `{findPerformers(performer_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){performers{id,name,disambiguation,alias_list}}}`;
             access = (d) => d.findPerformers.performers;
             break;
         case "gallery":
@@ -133,7 +133,7 @@ async function checkElement(
             console.log(`No Name for ${target} found.`);
         }
     }
-    if (["scene", "movie", "gallery"].includes(target) && titleSelector) {
+    if (["scene", "gallery"].includes(target) && titleSelector) {
         let title = titleSelector(element);
         if (title) {
             console.log(title);

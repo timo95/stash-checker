@@ -69,21 +69,33 @@ function formatFileData(files: any[]): string {
     ).join("<br>");
 }
 
+function getUrl(stashUrl: string, target: Target, id: string): string {
+    let path
+    if (target == "gallery") {
+        path = "galleries";
+    } else {
+        path = target + "s";
+    }
+    return `${stashUrl}/${path}/${id}`;
+}
+
 function formatEntryData(target: Target, data: any[], stashUrl: string): string {
     let propertyStrings: [string, (v: any) => string][] = [
-        ["id", (v: any) => `<a target="_blank" href="${stashUrl}/${target}s/${v}">${stashUrl}/${target}s/${v}</a>`],
-        ["title", (v: any) => `Title: ${v}`],
-        ["name", (v: any) => `Name: ${v}`],
-        ["code", (v: any) => `Code: ${v}`],
-        ["date", (v: any) => `Date: ${v}`],
-        ["files", (v: any) => formatFileData(v)],
-        ["queries", (v: any) => `Matched: ${v.join(", ")}`],
+        ["id", (v: any) => `<br><a target="_blank" href="${getUrl(stashUrl, target, v)}">${getUrl(stashUrl, target, v)}</a>`],
+        ["title", (v: any) => `<br>Title: ${v}`],
+        ["name", (v: any) => `<br>Name: ${v}`],
+        ["disambiguation", (v: any) => ` <span style="color: grey">(${v})</span>`],
+        ["alias_list", (v: any) => `<br>Aliases: ${v.join(", ")}`],
+        ["code", (v: any) => `<br>Code: ${v}`],
+        ["date", (v: any) => `<br>Date: ${v}`],
+        ["files", (v: any) => `<br>${formatFileData(v)}`],
+        ["queries", (v: any) => `<br>Matched: ${v.join(", ")}`],
     ];
-    return ["", ...data.map((entry: any) => propertyStrings
+    return data.map((entry: any) => propertyStrings
         .filter((e) => entry[e[0]])
         .map((e) => e[1](entry[e[0]]))
-        .join("<br>")
-    )].join("<br><hr>");
+        .join("")
+    ).join("<br><hr>");
 }
 
 function mouseoverListener() {
