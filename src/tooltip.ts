@@ -95,7 +95,7 @@ function formatEntryData(target: Target, data: any[], stashUrl: string): string 
         .filter((e) => entry[e[0]])
         .map((e) => e[1](entry[e[0]]))
         .join("")
-    ).join("<hr>");
+    ).join("<br><hr>");
 }
 
 function mouseoverListener() {
