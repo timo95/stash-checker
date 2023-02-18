@@ -173,8 +173,9 @@ import {firstTextChild} from "./tooltip";
     // TODO: scenes: OF, PH, XVideos, www.manyvids.com, www.clips4sale.com, pornbox.com
     // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com, pornbox.com
     // TODO: match confidence levels (StashId - URL - Code - Name - Title)
+    // TODO: combine code/name/title with studio
     // TODO: limit observe to rerun only new additions
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: limit color functions to work with configurable colors
-    // TODO: tooltip information: rating, favorite, resolution, codec
+    // TODO: tooltip information: rating, favorite
 })();

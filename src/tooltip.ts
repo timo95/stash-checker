@@ -14,16 +14,6 @@ tooltipWindow.addEventListener("mouseout", function () {
 });
 document.body.append(tooltipWindow);
 
-function secondsToReadable(seconds: number) {
-    let h = Math.floor(seconds / 3600)
-    let m = Math.floor(seconds / 60) % 60
-    let s = Math.floor(seconds) % 60
-    return [h, m, s]
-        .map(v => v.toString().padStart(2, "0"))
-        .filter((v, i) => v !== "00" || i > 0)
-        .join(":")
-}
-
 /**
  * recursive (dfs) first non empty text node child, undefined if none available
  */
@@ -57,18 +47,6 @@ function getExistingSpan(element: Element): HTMLSpanElement {
     }
 }
 
-function formatFileData(files: any[]): string {
-    let propertyStrings: [string, (v: any) => string][] = [
-        ["path", (v: any) => `Path: ${v}`],
-        ["duration", (v: any) => `Duration: ${secondsToReadable(v)}`],
-    ];
-    return files.map((file: any) => propertyStrings
-        .filter(e => file[e[0]])
-        .map(e => e[1](file[e[0]]))
-        .join("<br>")
-    ).join("<br>");
-}
-
 function getUrl(stashUrl: string, target: Target, id: string): string {
     let path
     if (target == "gallery") {
@@ -79,6 +57,32 @@ function getUrl(stashUrl: string, target: Target, id: string): string {
     return `${stashUrl}/${path}/${id}`;
 }
 
+function secondsToReadable(seconds: number) {
+    let h = Math.floor(seconds / 3600)
+    let m = Math.floor(seconds / 60) % 60
+    let s = Math.floor(seconds) % 60
+    return [h, m, s]
+        .map(v => v.toString().padStart(2, "0"))
+        .filter((v, i) => v !== "00" || i > 0)
+        .join(":")
+}
+
+function formatFileData(files: any[]): string {
+    let propertyStrings: [string, (v: any) => string][] = [
+        ["path", (v: any) => `Path: ${v}`],
+        ["video_codec", (v: any) => `<br>Codec: ${v}`],
+        ["width", (v: any) => ` (${v}`],
+        ["height", (v: any) => `x${v})`],
+        ["bit_rate", (v: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(v / 1000000).toFixed(2)}Mbit/s`],
+        ["duration", (v: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(v)}`],
+    ];
+    return files.map((file: any) => "<div class='stashCheckerFile'>" + propertyStrings
+        .filter(e => file[e[0]])
+        .map(e => e[1](file[e[0]]))
+        .join("") + "</div>"
+    ).join("");
+}
+
 function formatEntryData(target: Target, data: any[], stashUrl: string): string {
     let propertyStrings: [string, (v: any) => string][] = [
         ["id", (v: any) => `<br><a target="_blank" href="${getUrl(stashUrl, target, v)}">${getUrl(stashUrl, target, v)}</a>`],
@@ -86,16 +90,17 @@ function formatEntryData(target: Target, data: any[], stashUrl: string): string 
         ["name", (v: any) => `<br>Name: ${v}`],
         ["disambiguation", (v: any) => ` <span style="color: grey">(${v})</span>`],
         ["alias_list", (v: any) => `<br>Aliases: ${v.join(", ")}`],
+        ["studio", (v: any) => `<br>Studio: ${v.name}`],
         ["code", (v: any) => `<br>Code: ${v}`],
         ["date", (v: any) => `<br>Date: ${v}`],
-        ["files", (v: any) => `<br>${formatFileData(v)}`],
         ["queries", (v: any) => `<br>Matched: ${v.join(", ")}`],
+        ["files", (v: any) => `${formatFileData(v)}`],
     ];
-    return data.map((entry: any) => propertyStrings
+    return data.map((entry: any) => "<hr>" + propertyStrings
         .filter((e) => entry[e[0]])
         .map((e) => e[1](entry[e[0]]))
         .join("")
-    ).join("<br><hr>");
+    ).join("");
 }
 
 function mouseoverListener() {
