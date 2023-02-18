@@ -51,7 +51,7 @@
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerTooltip {\n  z-index: 99999 !important;\n  position: fixed !important;\n  color: black !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n.stashCheckerSymbol {\n  font-size: inherit !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".stashCheckerTooltip {\n  z-index: 99999 !important;\n  position: fixed !important;\n  color: black !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: white !important;\n  border: 0.1em solid black !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n.stashCheckerTooltip hr {\n  margin-top: 0.5em !important;\n  margin-bottom: 0.5em !important;\n}\n.stashCheckerTooltip hr + br {\n  display: none !important;\n}\n.stashCheckerFile {\n  color: black !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: lightgrey !important;\n  margin: 0.5em !important;\n  padding: 0.5em !important;\n}\n.stashCheckerFile + br {\n  display: none !important;\n}\n.stashCheckerSymbol {\n  font-size: inherit !important;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -577,15 +577,6 @@ tooltipWindow.addEventListener("mouseout", function () {
     }, 500);
 });
 document.body.append(tooltipWindow);
-function secondsToReadable(seconds) {
-    let h = Math.floor(seconds / 3600);
-    let m = Math.floor(seconds / 60) % 60;
-    let s = Math.floor(seconds) % 60;
-    return [h, m, s]
-        .map(v => v.toString().padStart(2, "0"))
-        .filter((v, i) => v !== "00" || i > 0)
-        .join(":");
-}
 /**
  * recursive (dfs) first non empty text node child, undefined if none available
  */
@@ -618,16 +609,6 @@ function getExistingSpan(element) {
             .find(n => n); // first truthy
     }
 }
-function formatFileData(files) {
-    let propertyStrings = [
-        ["path", (v) => `Path: ${v}`],
-        ["duration", (v) => `Duration: ${secondsToReadable(v)}`],
-    ];
-    return files.map((file) => propertyStrings
-        .filter(e => file[e[0]])
-        .map(e => e[1](file[e[0]]))
-        .join("<br>")).join("<br>");
-}
 function getUrl(stashUrl, target, id) {
     let path;
     if (target == "gallery") {
@@ -638,6 +619,29 @@ function getUrl(stashUrl, target, id) {
     }
     return `${stashUrl}/${path}/${id}`;
 }
+function secondsToReadable(seconds) {
+    let h = Math.floor(seconds / 3600);
+    let m = Math.floor(seconds / 60) % 60;
+    let s = Math.floor(seconds) % 60;
+    return [h, m, s]
+        .map(v => v.toString().padStart(2, "0"))
+        .filter((v, i) => v !== "00" || i > 0)
+        .join(":");
+}
+function formatFileData(files) {
+    let propertyStrings = [
+        ["path", (v) => `Path: ${v}`],
+        ["video_codec", (v) => `<br>Codec: ${v}`],
+        ["width", (v) => ` (${v}`],
+        ["height", (v) => `x${v})`],
+        ["bit_rate", (v) => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(v / 1000000).toFixed(2)}Mbit/s`],
+        ["duration", (v) => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(v)}`],
+    ];
+    return files.map((file) => "<div class='stashCheckerFile'>" + propertyStrings
+        .filter(e => file[e[0]])
+        .map(e => e[1](file[e[0]]))
+        .join("") + "</div>").join("");
+}
 function formatEntryData(target, data, stashUrl) {
     let propertyStrings = [
         ["id", (v) => `<br><a target="_blank" href="${getUrl(stashUrl, target, v)}">${getUrl(stashUrl, target, v)}</a>`],
@@ -645,15 +649,16 @@ function formatEntryData(target, data, stashUrl) {
         ["name", (v) => `<br>Name: ${v}`],
         ["disambiguation", (v) => ` <span style="color: grey">(${v})</span>`],
         ["alias_list", (v) => `<br>Aliases: ${v.join(", ")}`],
+        ["studio", (v) => `<br>Studio: ${v.name}`],
         ["code", (v) => `<br>Code: ${v}`],
         ["date", (v) => `<br>Date: ${v}`],
-        ["files", (v) => `<br>${formatFileData(v)}`],
         ["queries", (v) => `<br>Matched: ${v.join(", ")}`],
+        ["files", (v) => `${formatFileData(v)}`],
     ];
-    return data.map((entry) => propertyStrings
+    return data.map((entry) => "<hr>" + propertyStrings
         .filter((e) => entry[e[0]])
         .map((e) => e[1](entry[e[0]]))
-        .join("")).join("<br><hr>");
+        .join("")).join("");
 }
 function mouseoverListener() {
     window.clearTimeout(handle);
@@ -815,7 +820,7 @@ async function request(queryString, onload, target, type) {
     // Build query
     switch (target) {
         case "scene":
-            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,date,files{path,duration}}}}`;
+            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,bit_rate}}}}`;
             access = (d) => d.findScenes.scenes;
             break;
         case "performer":
@@ -1166,10 +1171,11 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
     // TODO: scenes: OF, PH, XVideos, www.manyvids.com, www.clips4sale.com, pornbox.com
     // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com, pornbox.com
     // TODO: match confidence levels (StashId - URL - Code - Name - Title)
+    // TODO: combine code/name/title with studio
     // TODO: limit observe to rerun only new additions
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: limit color functions to work with configurable colors
-    // TODO: tooltip information: rating, favorite, resolution, codec
+    // TODO: tooltip information: rating, favorite
 })();
 
 })();
