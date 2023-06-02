@@ -33,7 +33,7 @@ async function request(
     // Build query
     switch (target) {
         case "scene":
-            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,bit_rate}}}}`;
+            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}}`;
             access = (d) => d.findScenes.scenes;
             break;
         case "performer":

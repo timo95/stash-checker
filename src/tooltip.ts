@@ -57,7 +57,7 @@ function getUrl(stashUrl: string, target: Target, id: string): string {
     return `${stashUrl}/${path}/${id}`;
 }
 
-function secondsToReadable(seconds: number) {
+function secondsToReadable(seconds: number): string {
     let h = Math.floor(seconds / 3600)
     let m = Math.floor(seconds / 60) % 60
     let s = Math.floor(seconds) % 60
@@ -67,12 +67,25 @@ function secondsToReadable(seconds: number) {
         .join(":")
 }
 
+function bytesToReadable(bytes: number): string {
+    let labels = ["KB", "MB", "GB", "TB", "PB"]
+    let label
+    for (label of labels) {
+        bytes /= 1000
+        if (bytes < 1000) {
+            break;
+        }
+    }
+    return bytes.toFixed(2) + label;
+}
+
 function formatFileData(files: any[]): string {
     let propertyStrings: [string, (v: any) => string][] = [
         ["path", (v: any) => `Path: ${v}`],
         ["video_codec", (v: any) => `<br>Codec: ${v}`],
         ["width", (v: any) => ` (${v}`],
         ["height", (v: any) => `x${v})`],
+        ["size", (v: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${bytesToReadable(v)}`],
         ["bit_rate", (v: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(v / 1000000).toFixed(2)}Mbit/s`],
         ["duration", (v: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(v)}`],
     ];

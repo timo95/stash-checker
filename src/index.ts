@@ -53,13 +53,7 @@ import {firstTextChild} from "./tooltip";
             check("performer", "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
             break;
         case "www.iafd.com": {
-            let prepareUrl = (url: string) => {
-                // Links on iafd have many variants. Normalize to using "-" and "https"
-                url = url.replaceAll("'", "%27")
-                let s = url.split("/");
-                s.push(s.pop().replaceAll("_", "-"));  // only in last path element
-                return s.join("/").replace(/^http:/, "https:");
-            };
+            let prepareUrl = (url: string) => url.replaceAll("'", "%27").replace(/^http:/, "https:");
             if (window.location.pathname.startsWith("/person.rme/perfid=")) {
                 check("performer", "h1", {prepareUrl: prepareUrl, currentSite: true});
             } else if (window.location.pathname.startsWith("/title.rme/title=")) {

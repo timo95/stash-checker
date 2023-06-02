@@ -45,5 +45,9 @@ module.exports = {
         "GM.setValue",
         "GM.registerMenuCommand",
     ],
+    connect: [
+        "localhost",
+        "*"
+    ],
     "run-at": "document-end",
 };
