@@ -3,7 +3,7 @@
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers present in your stash
 // @icon          https://docs.stashapp.cc/favicon.ico
-// @version       0.5.0
+// @version       0.5.1
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @match         *://adultanime.dbsearch.net/*
 // @match         *://coomer.party/*
@@ -29,6 +29,8 @@
 // @grant         GM.getValue
 // @grant         GM.setValue
 // @grant         GM.registerMenuCommand
+// @connect       localhost
+// @connect       *
 // @run-at        document-end
 // ==/UserScript==
 
@@ -628,12 +630,24 @@ function secondsToReadable(seconds) {
         .filter((v, i) => v !== "00" || i > 0)
         .join(":");
 }
+function bytesToReadable(bytes) {
+    let labels = ["KB", "MB", "GB", "TB", "PB"];
+    let label;
+    for (label of labels) {
+        bytes /= 1000;
+        if (bytes < 1000) {
+            break;
+        }
+    }
+    return bytes.toFixed(2) + label;
+}
 function formatFileData(files) {
     let propertyStrings = [
         ["path", (v) => `Path: ${v}`],
         ["video_codec", (v) => `<br>Codec: ${v}`],
         ["width", (v) => ` (${v}`],
         ["height", (v) => `x${v})`],
+        ["size", (v) => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${bytesToReadable(v)}`],
         ["bit_rate", (v) => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(v / 1000000).toFixed(2)}Mbit/s`],
         ["duration", (v) => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(v)}`],
     ];
@@ -820,7 +834,7 @@ async function request(queryString, onload, target, type) {
     // Build query
     switch (target) {
         case "scene":
-            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,bit_rate}}}}`;
+            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}}`;
             access = (d) => d.findScenes.scenes;
             break;
         case "performer":
@@ -1051,13 +1065,7 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
             check("performer", "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
             break;
         case "www.iafd.com": {
-            let prepareUrl = (url) => {
-                // Links on iafd have many variants. Normalize to using "-" and "https"
-                url = url.replaceAll("'", "%27");
-                let s = url.split("/");
-                s.push(s.pop().replaceAll("_", "-")); // only in last path element
-                return s.join("/").replace(/^http:/, "https:");
-            };
+            let prepareUrl = (url) => url.replaceAll("'", "%27").replace(/^http:/, "https:");
             if (window.location.pathname.startsWith("/person.rme/perfid=")) {
                 check("performer", "h1", { prepareUrl: prepareUrl, currentSite: true });
             }
