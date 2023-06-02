@@ -793,7 +793,7 @@ GM.registerMenuCommand("Set Stash Url", setStashUrl, "u");
 GM.registerMenuCommand("Set API key", setApiKey, "k");
 async function setStashUrl() {
     let stashUrl = await GM.getValue("stashUrl", undefined);
-    stashUrl = prompt("Stash URL:", stashUrl ?? "https://localhost:9999")?.trim()?.replace("\/$", "");
+    stashUrl = prompt("Stash URL:", stashUrl ?? "http://localhost:9999")?.trim()?.replace("\/$", "");
     if (stashUrl !== undefined) {
         await GM.setValue("stashUrl", stashUrl);
     }
@@ -809,7 +809,7 @@ async function getConfig() {
     let stashUrl = await GM.getValue("stashUrl", undefined);
     let apiKey = await GM.getValue("apiKey", undefined);
     if (stashUrl === undefined) {
-        stashUrl = prompt("Stash URL:", "https://localhost:9999")?.trim()?.replace("\/$", "");
+        stashUrl = prompt("Stash URL:", "http://localhost:9999")?.trim()?.replace("\/$", "");
         if (stashUrl !== undefined) {
             await GM.setValue("stashUrl", stashUrl);
         }
