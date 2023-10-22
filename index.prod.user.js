@@ -3,7 +3,7 @@
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers present in your stash
 // @icon          https://docs.stashapp.cc/favicon.ico
-// @version       0.5.6
+// @version       0.5.7
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @match         *://adultanime.dbsearch.net/*
 // @match         *://coomer.party/*
@@ -13,7 +13,7 @@
 // @match         *://kemono.party/*
 // @match         *://metadataapi.net/*
 // @match         *://oreno3d.com/*
-// @match         *://pmvstash.org/*'
+// @match         *://pmvstash.org/*
 // @match         *://r18.dev/*
 // @match         *://stashdb.org/*
 // @match         *://www.animecharactersdatabase.com/*
