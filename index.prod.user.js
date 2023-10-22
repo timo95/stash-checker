@@ -9,9 +9,11 @@
 // @match         *://coomer.party/*
 // @match         *://ecchi.iwara.tv/*
 // @match         *://erommdtube.com/*
+// @match         *://fansdb.xyz/*
 // @match         *://kemono.party/*
 // @match         *://metadataapi.net/*
 // @match         *://oreno3d.com/*
+// @match         *://pmvstash.org/*'
 // @match         *://r18.dev/*
 // @match         *://stashdb.org/*
 // @match         *://www.animecharactersdatabase.com/*
@@ -661,6 +663,7 @@ function formatEntryData(target, data, stashUrl) {
         ["id", (v) => `<br><a target="_blank" href="${getUrl(stashUrl, target, v)}">${getUrl(stashUrl, target, v)}</a>`],
         ["title", (v) => `<br>Title: ${v}`],
         ["name", (v) => `<br>Name: ${v}`],
+        ["favorite", (v) => "&emsp;&#10084;&#65039;"],
         ["disambiguation", (v) => ` <span style="color: grey">(${v})</span>`],
         ["alias_list", (v) => `<br>Aliases: ${v.join(", ")}`],
         ["studio", (v) => `<br>Studio: ${v.name}`],
@@ -766,34 +769,35 @@ function prefixSymbol(element, target, data, stashUrl, queryType, color) {
     span.setAttribute("data-queries", JSON.stringify(queries));
     span.setAttribute("data-data", JSON.stringify(data));
     let count = data.length;
-    let tooltip = target.charAt(0).toUpperCase() + target.slice(1);
+    let tooltip = "";
+    let targetP = target.charAt(0).toUpperCase() + target.slice(1);
     if (count === 0) {
         span.textContent = "✗ ";
         span.style.color = "red";
-        tooltip += " not in Stash";
+        tooltip = `${targetP} not in Stash<br>`;
     }
     else if (count === 1) {
         span.textContent = "✓ ";
         span.style.color = color(data[0]);
-        tooltip += " in Stash";
     }
     else {
         span.textContent = "! ";
         span.style.color = "orange";
-        tooltip += " has duplicate matches";
+        tooltip = `${targetP} has duplicate matches<br>`;
     }
-    tooltip += `<br>Queries: ${queries.join(", ")}`;
+    tooltip += `Queries: ${queries.join(", ")}`;
     tooltip += formatEntryData(target, data, stashUrl);
     span.setAttribute("data-info", tooltip);
 }
 
 ;// CONCATENATED MODULE: ./src/config.ts
+const DEFAULT_URL = "http://localhost:9999";
 // Register menu items
 GM.registerMenuCommand("Set Stash Url", setStashUrl, "u");
 GM.registerMenuCommand("Set API key", setApiKey, "k");
 async function setStashUrl() {
     let stashUrl = await GM.getValue("stashUrl", undefined);
-    stashUrl = prompt("Stash URL:", stashUrl ?? "http://localhost:9999")?.trim()?.replace("\/$", "");
+    stashUrl = prompt("Stash URL:", stashUrl ?? DEFAULT_URL)?.trim()?.replace("\/$", "");
     if (stashUrl !== undefined) {
         await GM.setValue("stashUrl", stashUrl);
     }
@@ -809,7 +813,7 @@ async function getConfig() {
     let stashUrl = await GM.getValue("stashUrl", undefined);
     let apiKey = await GM.getValue("apiKey", undefined);
     if (stashUrl === undefined) {
-        stashUrl = prompt("Stash URL:", "http://localhost:9999")?.trim()?.replace("\/$", "");
+        stashUrl = prompt("Stash URL:", DEFAULT_URL)?.trim()?.replace("\/$", "");
         if (stashUrl !== undefined) {
             await GM.setValue("stashUrl", stashUrl);
         }
@@ -829,27 +833,38 @@ async function getConfig() {
 // Ask for stash url/key on load
 let configPromise = getConfig();
 async function request(queryString, onload, target, type) {
+    let criterion = "";
     let query = "";
     let access = (d) => d;
+    // Build filter
+    switch (type) {
+        case "stash_id":
+            criterion = `{stash_id_endpoint:{stash_id:"${queryString}",modifier:EQUALS}}`;
+            break;
+        default:
+            criterion = `{${type}:{value:"${queryString}",modifier:EQUALS}}`;
+            break;
+    }
     // Build query
     switch (target) {
         case "scene":
-            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}}`;
+            query = `{findScenes(scene_filter:${criterion}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}}`;
             access = (d) => d.findScenes.scenes;
             break;
         case "performer":
-            query = `{findPerformers(performer_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){performers{id,name,disambiguation,alias_list}}}`;
+            query = `{findPerformers(performer_filter:${criterion}){performers{id,name,disambiguation,alias_list,favorite}}}`;
             access = (d) => d.findPerformers.performers;
             break;
         case "gallery":
-            query = `{findGalleries(gallery_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){galleries{id,title,date,files{path}}}}`;
+            query = `{findGalleries(gallery_filter:${criterion}){galleries{id,title,date,files{path}}}}`;
             access = (d) => d.findGalleries.galleries;
             break;
         case "movie":
-            query = `{findMovies(movie_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){movies{id,name,date}}}`;
+            query = `{findMovies(movie_filter:${criterion}){movies{id,name,date}}}`;
             access = (d) => d.findMovies.movies;
             break;
         default:
+            break;
     }
     // Wait for config popup if it is not stored
     let [stashUrl, apiKey] = await configPromise;
@@ -1143,6 +1158,8 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
                 prepareUrl: url => url.replace(/\/feed$/, "")
             });
             break;
+        case "fansdb.xyz":
+        case "pmvstash.org":
         case "stashdb.org":
             check("scene", "div.scene-info.card h3 > span", {
                 observe: true,
@@ -1158,13 +1175,13 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
                 stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
                 nameSelector: null,
             });
-            check("scene", "a[href^='/scenes/'], a[href^='https://stashdb.org/scenes/']", {
+            check("scene", `a[href^='/scenes/'], a[href^='https://${window.location.host}/scenes/']`, {
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
                 titleSelector: null,
             });
-            check("performer", "a[href^='/performers/'], a[href^='https://stashdb.org/performers/']", {
+            check("performer", `a[href^='/performers/'], a[href^='https://${window.location.host}/performers/']`, {
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
@@ -1183,7 +1200,7 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
     // TODO: limit observe to rerun only new additions
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: limit color functions to work with configurable colors
-    // TODO: tooltip information: rating, favorite
+    // TODO: tooltip information: rating
 })();
 
 })();
