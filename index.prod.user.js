@@ -3,7 +3,7 @@
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers present in your stash
 // @icon          https://docs.stashapp.cc/favicon.ico
-// @version       0.5.3
+// @version       0.5.5
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @match         *://adultanime.dbsearch.net/*
 // @match         *://coomer.party/*
