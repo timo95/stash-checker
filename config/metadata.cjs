@@ -25,7 +25,7 @@ module.exports = {
         "*://kemono.party/*",
         "*://metadataapi.net/*",
         "*://oreno3d.com/*",
-        "*://pmvstash.org/*'",
+        "*://pmvstash.org/*",
         "*://r18.dev/*",
         "*://stashdb.org/*",
         "*://www.animecharactersdatabase.com/*",
