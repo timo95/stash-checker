@@ -174,4 +174,5 @@ import {firstTextChild} from "./tooltip";
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: limit color functions to work with configurable colors
     // TODO: tooltip information: rating
+    // TODO: do i need to pass stash_id endpoint through?
 })();

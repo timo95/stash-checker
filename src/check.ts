@@ -34,7 +34,8 @@ async function request(
     // Build filter
     switch (type) {
         case "stash_id":
-            criterion = `{stash_id_endpoint:{stash_id:"${queryString}",modifier:EQUALS}}`;
+            let endpoint = `https://${window.location.host}/graphql`;
+            criterion = `{stash_id_endpoint:{endpoint:"${endpoint}",stash_id:"${queryString}",modifier:EQUALS}}`;
             break;
         default:
             criterion = `{${type}:{value:"${queryString}",modifier:EQUALS}}`;
