@@ -1,5 +1,7 @@
 
 
+const DEFAULT_URL = "http://localhost:9999"
+
 // Register menu items
 GM.registerMenuCommand("Set Stash Url", setStashUrl, "u" )
 GM.registerMenuCommand("Set API key", setApiKey, "k" )
@@ -7,7 +9,7 @@ GM.registerMenuCommand("Set API key", setApiKey, "k" )
 
 async function setStashUrl() {
     let stashUrl = await GM.getValue<string>("stashUrl", undefined);
-    stashUrl = prompt("Stash URL:", stashUrl ?? "http://localhost:9999")?.trim()?.replace("\/$", "")
+    stashUrl = prompt("Stash URL:", stashUrl ?? DEFAULT_URL)?.trim()?.replace("\/$", "")
     if (stashUrl !== undefined) {
         await GM.setValue("stashUrl", stashUrl)
     }
@@ -28,7 +30,7 @@ export async function getConfig(): Promise<[string, string]> {
     let apiKey = await GM.getValue<string>("apiKey", undefined);
 
     if (stashUrl === undefined) {
-        stashUrl = prompt("Stash URL:", "http://localhost:9999")?.trim()?.replace("\/$", "")
+        stashUrl = prompt("Stash URL:", DEFAULT_URL)?.trim()?.replace("\/$", "")
         if (stashUrl !== undefined) {
             await GM.setValue("stashUrl", stashUrl)
         }

@@ -130,6 +130,8 @@ import {firstTextChild} from "./tooltip";
                 prepareUrl: url => url.replace(/\/feed$/, "")
             });
             break;
+        case "fansdb.xyz":
+        case "pmvstash.org":
         case "stashdb.org":
             check("scene", "div.scene-info.card h3 > span", {
                 observe: true,
@@ -145,13 +147,13 @@ import {firstTextChild} from "./tooltip";
                 stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
                 nameSelector: null,
             });
-            check("scene", "a[href^='/scenes/'], a[href^='https://stashdb.org/scenes/']", {
+            check("scene", `a[href^='/scenes/'], a[href^='https://${window.location.host}/scenes/']`, {
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
                 titleSelector: null,
             });
-            check("performer", "a[href^='/performers/'], a[href^='https://stashdb.org/performers/']", {
+            check("performer", `a[href^='/performers/'], a[href^='https://${window.location.host}/performers/']`, {
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
@@ -171,5 +173,5 @@ import {firstTextChild} from "./tooltip";
     // TODO: limit observe to rerun only new additions
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: limit color functions to work with configurable colors
-    // TODO: tooltip information: rating, favorite
+    // TODO: tooltip information: rating
 })();

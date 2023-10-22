@@ -101,6 +101,7 @@ function formatEntryData(target: Target, data: any[], stashUrl: string): string 
         ["id", (v: any) => `<br><a target="_blank" href="${getUrl(stashUrl, target, v)}">${getUrl(stashUrl, target, v)}</a>`],
         ["title", (v: any) => `<br>Title: ${v}`],
         ["name", (v: any) => `<br>Name: ${v}`],
+        ["favorite", (v: any) => "&emsp;&#10084;&#65039;"],
         ["disambiguation", (v: any) => ` <span style="color: grey">(${v})</span>`],
         ["alias_list", (v: any) => `<br>Aliases: ${v.join(", ")}`],
         ["studio", (v: any) => `<br>Studio: ${v.name}`],
@@ -218,22 +219,22 @@ export function prefixSymbol(
     span.setAttribute("data-data", JSON.stringify(data))
 
     let count = data.length;
-    let tooltip = target.charAt(0).toUpperCase() + target.slice(1);
+    let tooltip = ""
+    let targetP = target.charAt(0).toUpperCase() + target.slice(1);
     if (count === 0) {
         span.textContent = "✗ ";
         span.style.color = "red";
-        tooltip += " not in Stash";
+        tooltip = `${targetP} not in Stash<br>`;
     } else if (count === 1) {
         span.textContent = "✓ ";
         span.style.color = color(data[0]);
-        tooltip += " in Stash";
     } else {
         span.textContent = "! ";
         span.style.color = "orange";
-        tooltip += " has duplicate matches";
+        tooltip = `${targetP} has duplicate matches<br>`;
     }
 
-    tooltip += `<br>Queries: ${queries.join(", ")}`
+    tooltip += `Queries: ${queries.join(", ")}`
     tooltip += formatEntryData(target, data, stashUrl)
     span.setAttribute("data-info", tooltip)
 }

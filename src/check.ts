@@ -27,28 +27,40 @@ async function request(
     target: Target,
     type: Type
 ) {
+    let criterion = "";
     let query = "";
     let access = (d: any) => d;
+
+    // Build filter
+    switch (type) {
+        case "stash_id":
+            criterion = `{stash_id_endpoint:{stash_id:"${queryString}",modifier:EQUALS}}`;
+            break;
+        default:
+            criterion = `{${type}:{value:"${queryString}",modifier:EQUALS}}`;
+            break;
+    }
 
     // Build query
     switch (target) {
         case "scene":
-            query = `{findScenes(scene_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}}`;
+            query = `{findScenes(scene_filter:${criterion}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}}`;
             access = (d) => d.findScenes.scenes;
             break;
         case "performer":
-            query = `{findPerformers(performer_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){performers{id,name,disambiguation,alias_list}}}`;
+            query = `{findPerformers(performer_filter:${criterion}){performers{id,name,disambiguation,alias_list,favorite}}}`;
             access = (d) => d.findPerformers.performers;
             break;
         case "gallery":
-            query = `{findGalleries(gallery_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){galleries{id,title,date,files{path}}}}`;
+            query = `{findGalleries(gallery_filter:${criterion}){galleries{id,title,date,files{path}}}}`;
             access = (d) => d.findGalleries.galleries;
             break;
         case "movie":
-            query = `{findMovies(movie_filter:{${type}:{value:"${queryString}",modifier:EQUALS}}){movies{id,name,date}}}`;
+            query = `{findMovies(movie_filter:${criterion}){movies{id,name,date}}}`;
             access = (d) => d.findMovies.movies;
             break;
         default:
+            break;
     }
 
     // Wait for config popup if it is not stored
