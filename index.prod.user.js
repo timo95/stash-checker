@@ -3,7 +3,7 @@
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers present in your stash
 // @icon          https://docs.stashapp.cc/favicon.ico
-// @version       0.5.5
+// @version       0.5.6
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @match         *://adultanime.dbsearch.net/*
 // @match         *://coomer.party/*
@@ -839,7 +839,8 @@ async function request(queryString, onload, target, type) {
     // Build filter
     switch (type) {
         case "stash_id":
-            criterion = `{stash_id_endpoint:{stash_id:"${queryString}",modifier:EQUALS}}`;
+            let endpoint = `https://${window.location.host}/graphql`;
+            criterion = `{stash_id_endpoint:{endpoint:"${endpoint}",stash_id:"${queryString}",modifier:EQUALS}}`;
             break;
         default:
             criterion = `{${type}:{value:"${queryString}",modifier:EQUALS}}`;
@@ -1201,6 +1202,7 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
     // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
     // TODO: limit color functions to work with configurable colors
     // TODO: tooltip information: rating
+    // TODO: do i need to pass stash_id endpoint through?
 })();
 
 })();
