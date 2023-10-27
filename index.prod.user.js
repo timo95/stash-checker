@@ -3,7 +3,7 @@
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers present in your stash
 // @icon          https://docs.stashapp.cc/favicon.ico
-// @version       0.5.7
+// @version       0.5.8
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @match         *://adultanime.dbsearch.net/*
 // @match         *://coomer.party/*
@@ -30,6 +30,8 @@
 // @grant         GM.xmlHttpRequest
 // @grant         GM.getValue
 // @grant         GM.setValue
+// @grant         GM.deleteValue
+// @grant         GM.listValues
 // @grant         GM.registerMenuCommand
 // @connect       localhost
 // @connect       *
@@ -161,6 +163,53 @@ module.exports = function (cssWithMappingToString) {
 module.exports = function (i) {
   return i[1];
 };
+
+/***/ }),
+
+/***/ "./src/style/main.less":
+/***/ ((__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
+
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/style-loader/dist/runtime/styleDomAPI.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/style-loader/dist/runtime/insertBySelector.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./node_modules/style-loader/dist/runtime/insertStyleElement.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./node_modules/style-loader/dist/runtime/styleTagTransform.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_main_less__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./node_modules/css-loader/dist/cjs.js!./node_modules/less-loader/dist/cjs.js!./src/style/main.less");
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var options = {};
+
+options.styleTagTransform = (_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
+options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
+
+      options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
+    
+options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
+options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_main_less__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z, options);
+
+
+
+
+       /* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_main_less__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z && _node_modules_css_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_main_less__WEBPACK_IMPORTED_MODULE_6__/* ["default"].locals */ .Z.locals ? _node_modules_css_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_main_less__WEBPACK_IMPORTED_MODULE_6__/* ["default"].locals */ .Z.locals : undefined);
+
 
 /***/ }),
 
@@ -450,124 +499,498 @@ function styleTagTransform(css, styleElement) {
 
 module.exports = styleTagTransform;
 
-/***/ })
+/***/ }),
 
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			id: moduleId,
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/nonce */
-/******/ 	(() => {
-/******/ 		__webpack_require__.nc = undefined;
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
+/***/ "./src/check.ts":
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
 
-// EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js
-var injectStylesIntoStyleTag = __webpack_require__("./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
-var injectStylesIntoStyleTag_default = /*#__PURE__*/__webpack_require__.n(injectStylesIntoStyleTag);
-// EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/styleDomAPI.js
-var styleDomAPI = __webpack_require__("./node_modules/style-loader/dist/runtime/styleDomAPI.js");
-var styleDomAPI_default = /*#__PURE__*/__webpack_require__.n(styleDomAPI);
-// EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/insertBySelector.js
-var insertBySelector = __webpack_require__("./node_modules/style-loader/dist/runtime/insertBySelector.js");
-var insertBySelector_default = /*#__PURE__*/__webpack_require__.n(insertBySelector);
-// EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js
-var setAttributesWithoutAttributes = __webpack_require__("./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js");
-var setAttributesWithoutAttributes_default = /*#__PURE__*/__webpack_require__.n(setAttributesWithoutAttributes);
-// EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/insertStyleElement.js
-var insertStyleElement = __webpack_require__("./node_modules/style-loader/dist/runtime/insertStyleElement.js");
-var insertStyleElement_default = /*#__PURE__*/__webpack_require__.n(insertStyleElement);
-// EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/styleTagTransform.js
-var styleTagTransform = __webpack_require__("./node_modules/style-loader/dist/runtime/styleTagTransform.js");
-var styleTagTransform_default = /*#__PURE__*/__webpack_require__.n(styleTagTransform);
-// EXTERNAL MODULE: ./node_modules/css-loader/dist/cjs.js!./node_modules/less-loader/dist/cjs.js!./src/style/main.less
-var main = __webpack_require__("./node_modules/css-loader/dist/cjs.js!./node_modules/less-loader/dist/cjs.js!./src/style/main.less");
-;// CONCATENATED MODULE: ./src/style/main.less
-
-      
-      
-      
-      
-      
-      
-      
-      
-      
-
-var options = {};
-
-options.styleTagTransform = (styleTagTransform_default());
-options.setAttributes = (setAttributesWithoutAttributes_default());
-
-      options.insert = insertBySelector_default().bind(null, "head");
-    
-options.domAPI = (styleDomAPI_default());
-options.insertStyleElement = (insertStyleElement_default());
-
-var update = injectStylesIntoStyleTag_default()(main/* default */.Z, options);
+__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "B": () => (/* binding */ check)
+/* harmony export */ });
+/* harmony import */ var _tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/tooltip.ts");
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/config.ts");
+var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_config__WEBPACK_IMPORTED_MODULE_1__]);
+_config__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
 
 
+// Ask for stash url/key on load
+let configPromise = (0,_config__WEBPACK_IMPORTED_MODULE_1__/* .getConfig */ .i)();
+async function request(queryString, onload, target, type) {
+    let criterion = "";
+    let query = "";
+    let access = (d) => d;
+    // Build filter
+    switch (type) {
+        case "stash_id":
+            let endpoint = `https://${window.location.host}/graphql`;
+            criterion = `{stash_id_endpoint:{endpoint:"${endpoint}",stash_id:"${queryString}",modifier:EQUALS}}`;
+            break;
+        default:
+            criterion = `{${type}:{value:"${queryString}",modifier:EQUALS}}`;
+            break;
+    }
+    // Build query
+    switch (target) {
+        case "scene":
+            query = `{findScenes(scene_filter:${criterion}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}}`;
+            access = (d) => d.findScenes.scenes;
+            break;
+        case "performer":
+            query = `{findPerformers(performer_filter:${criterion}){performers{id,name,disambiguation,alias_list,favorite}}}`;
+            access = (d) => d.findPerformers.performers;
+            break;
+        case "gallery":
+            query = `{findGalleries(gallery_filter:${criterion}){galleries{id,title,date,files{path}}}}`;
+            access = (d) => d.findGalleries.galleries;
+            break;
+        case "movie":
+            query = `{findMovies(movie_filter:${criterion}){movies{id,name,date}}}`;
+            access = (d) => d.findMovies.movies;
+            break;
+        default:
+            break;
+    }
+    // Wait for config popup if it is not stored
+    let [stashUrl, apiKey] = await configPromise;
+    GM.xmlHttpRequest({
+        method: "GET",
+        url: `${stashUrl}/graphql?query=${query}`,
+        headers: {
+            "Content-Type": "application/json",
+            ApiKey: apiKey,
+        },
+        onload: function (response) {
+            try {
+                let r = JSON.parse(response.responseText);
+                if ("errors" in r) {
+                    r.errors.forEach((e) => {
+                        console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`);
+                    });
+                }
+                else {
+                    onload(target, access(r.data), stashUrl);
+                }
+            }
+            catch (e) {
+                console.log("Exception: " + e);
+                console.log("Failed to parse response: " + response.responseText);
+            }
+        },
+    });
+}
+async function checkElement(target, element, { prepareUrl = url => url, urlSelector, // default is set in check()
+codeSelector, stashIdSelector, nameSelector = e => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .firstTextChild */ .I)(e)?.textContent?.trim(), titleSelector = e => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .firstTextChild */ .I)(e)?.textContent?.trim(), color = () => "green", }) {
+    if (urlSelector && prepareUrl) {
+        let url = urlSelector(element);
+        url = prepareUrl(url);
+        if (url) {
+            url = encodeURIComponent(url);
+            console.log(url);
+            await request(url, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "URL", color), target, "url");
+        }
+        else {
+            console.log(`No URL for ${target} found.`);
+        }
+    }
+    if (codeSelector) {
+        let code = codeSelector(element);
+        if (code) {
+            console.log(code);
+            await request(code, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "Code", color), target, "code");
+        }
+        else {
+            console.log(`No Code for ${target} found.`);
+        }
+    }
+    if (stashIdSelector) {
+        let id = stashIdSelector(element);
+        if (id) {
+            console.log(id);
+            await request(id, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "StashId", color), target, "stash_id");
+        }
+        else {
+            console.log(`No StashId for ${target} found.`);
+        }
+    }
+    if (target === "performer" && nameSelector) {
+        let name = nameSelector(element);
+        // Do not use single names
+        let nameCount = name?.split(/\s+/)?.length;
+        if (name && nameCount > 1) {
+            console.log(name);
+            await request(name, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "Name", color), target, "name");
+        }
+        else if (name && nameCount === 1) {
+            console.log(`Ignore single name: ${name}`);
+        }
+        else {
+            console.log(`No Name for ${target} found.`);
+        }
+    }
+    if (["scene", "gallery"].includes(target) && titleSelector) {
+        let title = titleSelector(element);
+        if (title) {
+            console.log(title);
+            await request(title, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "Title", color), target, "title");
+        }
+        else {
+            console.log(`No Title for ${target} found.`);
+        }
+    }
+}
+/**
+ * Run callback when a new object added to the document matches the selector.
+ * Calls callback with a timer after the last addition to prevent unnecessary executions.
+ *
+ * @param selector css selector string
+ * @param callback callback function
+ */
+function onAddition(selector, callback) {
+    // Run on each type-element addition
+    let body = document.querySelector("body");
+    let timeout = undefined;
+    let observer = new MutationObserver((mutations) => {
+        let newNode = mutations.map(m => Array.from(m.addedNodes)
+            .filter(n => n.nodeType === Node.ELEMENT_NODE)
+            .some(n => n.matches(selector) || n.querySelector(selector)) || // Element or Child match
+            Array.from(m.addedNodes).map(n => n.parentElement).filter(e => e).some(e => e.matches(selector)) // Parent match (if text node was added)
+        ).some(n => n);
+        if (newNode) {
+            console.log(`"${selector}"-element was added or modified. Start/Update Timer.`);
+            clearTimeout(timeout);
+            timeout = setTimeout(_ => {
+                console.log("Run queries.");
+                callback();
+            }, 200); // arbitrary delay to prevent too many calls
+        }
+    });
+    observer.observe(body, { childList: true, subtree: true });
+}
+/**
+ * queries for each selected element
+ *
+ * the selected element should be [a child of] the link that will be compared with stash urls
+ * the first text inside the selected element will be prepended with the symbol
+ * Set predefined selectors to "null" to not use them.
+ */
+function checkOnce(target, elementSelector, { currentSite = false, ...checkConfig } = {}) {
+    if (currentSite) {
+        let element = document.querySelector(elementSelector);
+        if (element) {
+            // url of current site
+            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? () => decodeURI(window.location.href) : checkConfig.urlSelector;
+            checkElement(target, element, checkConfig);
+        }
+    }
+    else {
+        // multiple entries with url nearest to element
+        document.querySelectorAll(elementSelector).forEach((element) => {
+            // url nearest to selected element traversing towards the root (children are ignored)
+            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? (e) => decodeURI(e.closest("a").href) : checkConfig.urlSelector;
+            checkElement(target, element, checkConfig);
+        });
+    }
+}
+/**
+ * queries for each selected element
+ *
+ * the selected element should be [a child of] the link that will be compared with stash urls
+ * the first text inside the selected element will be prepended with the symbol
+ * Set predefined selectors to "null" to not use them.
+ */
+function check(target, elementSelector, { observe = false, ...checkConfig } = {}) {
+    // Exclude direct children of tooltip window (some selectors match the stash link)
+    elementSelector = ":not(.stashCheckerTooltip) > " + elementSelector;
+    // Callback on addition of new elements fitting the query
+    if (observe) {
+        let selector = typeof observe === "string" ? observe : elementSelector;
+        onAddition(selector, (_) => checkOnce(target, elementSelector, checkConfig));
+    }
+    checkOnce(target, elementSelector, checkConfig);
+}
+
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } });
+
+/***/ }),
+
+/***/ "./src/config.ts":
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "c": () => (/* binding */ isSiteBlocked),
+/* harmony export */   "i": () => (/* binding */ getConfig)
+/* harmony export */ });
+const DEFAULT_URL = "http://localhost:9999";
+// Register menu items
+GM.registerMenuCommand("Set Stash Url", setStashUrl, "u");
+GM.registerMenuCommand("Set API key", setApiKey, "k");
+if (await isSiteBlocked()) {
+    GM.registerMenuCommand("Activate for current site", unblockSite, "a");
+}
+else {
+    GM.registerMenuCommand("Deactivate for current site", blockSite, "d");
+}
+function getBlockedKey() {
+    return `blocked_${window.location.host}`.replace(/[\.\-\:]/, "_");
+}
+async function isSiteBlocked() {
+    return await GM.getValue(getBlockedKey(), false);
+}
+async function blockSite() {
+    await GM.setValue(getBlockedKey(), true);
+    window.location.reload();
+}
+async function unblockSite() {
+    await GM.deleteValue(getBlockedKey());
+    window.location.reload();
+}
+async function setStashUrl() {
+    let stashUrl = await GM.getValue("stashUrl", undefined);
+    stashUrl = prompt("Stash URL:", stashUrl ?? DEFAULT_URL)?.trim()?.replace("\/$", "");
+    if (stashUrl !== undefined) {
+        await GM.setValue("stashUrl", stashUrl);
+    }
+}
+async function setApiKey() {
+    let apiKey = await GM.getValue("apiKey", undefined);
+    apiKey = prompt("API Key:", apiKey ?? "")?.trim()?.replace("\/$", "");
+    if (apiKey !== undefined) {
+        await GM.setValue("apiKey", apiKey);
+    }
+}
+async function getConfig() {
+    let stashUrl = await GM.getValue("stashUrl", undefined);
+    let apiKey = await GM.getValue("apiKey", undefined);
+    if (stashUrl === undefined) {
+        stashUrl = prompt("Stash URL:", DEFAULT_URL)?.trim()?.replace("\/$", "");
+        if (stashUrl !== undefined) {
+            await GM.setValue("stashUrl", stashUrl);
+        }
+    }
+    if (apiKey === undefined) {
+        apiKey = prompt("API Key:")?.trim()?.replace("\/$", "");
+        if (apiKey !== undefined) {
+            await GM.setValue("apiKey", apiKey);
+        }
+    }
+    return [stashUrl ?? "", apiKey ?? ""];
+}
+
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } }, 1);
+
+/***/ }),
+
+/***/ "./src/index.ts":
+/***/ ((module, __unused_webpack___webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+/* harmony import */ var _style_main_less__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/style/main.less");
+/* harmony import */ var _check__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/check.ts");
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/config.ts");
+/* harmony import */ var _tooltip__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/tooltip.ts");
+var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_check__WEBPACK_IMPORTED_MODULE_1__, _config__WEBPACK_IMPORTED_MODULE_2__]);
+([_check__WEBPACK_IMPORTED_MODULE_1__, _config__WEBPACK_IMPORTED_MODULE_2__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__);
 
 
-       /* harmony default export */ const style_main = (main/* default */.Z && main/* default.locals */.Z.locals ? main/* default.locals */.Z.locals : undefined);
 
-;// CONCATENATED MODULE: ./src/tooltip.ts
+
+(async function () {
+    if (await (0,_config__WEBPACK_IMPORTED_MODULE_2__/* .isSiteBlocked */ .c)()) {
+        console.log("Userscript is deactivated for this site. Activate in userscript menu.");
+        return;
+    }
+    switch (window.location.host) {
+        case "www.iwara.tv":
+        case "ecchi.iwara.tv": {
+            let color = (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue";
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "h1.title", { color: color, currentSite: true, titleSelector: null });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "h3.title > a", { color: color, titleSelector: null });
+            break;
+        }
+        case "oreno3d.com": {
+            let color = (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue";
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "h1.video-h1", { color: color, currentSite: true, titleSelector: null });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "a h2.box-h2", { color: color, titleSelector: null });
+            break;
+        }
+        case "erommdtube.com": {
+            let color = (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue";
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "h1.show__h1", { color: color, currentSite: true, titleSelector: null });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "h2.main__list-title", { color: color, titleSelector: null });
+            break;
+        }
+        case "kemono.party":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "h1.post__title", { currentSite: true, titleSelector: null });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", ".post-card > a[href*='/post/']", { titleSelector: null });
+            break;
+        case "coomer.party":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "h1.post__title", { currentSite: true, titleSelector: null });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", ".post-card h2 > a[href*='/post/']", { titleSelector: null });
+            break;
+        case "adultanime.dbsearch.net":
+            if (document.querySelector("article > section[id='info-table']") !== null) {
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "div[id='main-inner'] > article > h2", {
+                    currentSite: true,
+                    codeSelector: (_) => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
+                });
+            }
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "div[class='item-info'] > h4 > a, div[class='item-info'] > h5 > a");
+            break;
+        case "xslist.org":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "span[itemprop='name']", { currentSite: true });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href*='/model/']");
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "table#movices td > strong", {
+                urlSelector: null,
+                codeSelector: e => e.textContent.trim(),
+                titleSelector: null,
+            });
+            break;
+        case "www.animecharactersdatabase.com":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
+            break;
+        case "www.iafd.com": {
+            let prepareUrl = (url) => url.replaceAll("'", "%27").replace(/^http:/, "https:");
+            if (window.location.pathname.startsWith("/person.rme/perfid=")) {
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "h1", { prepareUrl: prepareUrl, currentSite: true });
+            }
+            else if (window.location.pathname.startsWith("/title.rme/title=")) {
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "h1", { prepareUrl: prepareUrl, currentSite: true, titleSelector: null });
+            }
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href*='/person.rme/perfid=']", { prepareUrl: prepareUrl });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "a[href*='/title.rme/title=']", { prepareUrl: prepareUrl, titleSelector: null });
+            break;
+        }
+        case "metadataapi.net":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href^='https://metadataapi.net/performers/']", { observe: true });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", { observe: true, titleSelector: null });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("movie", "a[href^='https://metadataapi.net/movies/']", { observe: true, titleSelector: null });
+            break;
+        case "www.javlibrary.com":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "div[id='video_title']", {
+                currentSite: true,
+                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
+                codeSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim(),
+                titleSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim(),
+            });
+            // generic video links
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", ".video a[href^='./?v=jav']", {
+                prepareUrl: url => url.replace(/&.*$/, ""),
+                codeSelector: e => e.querySelector("div.id")?.textContent?.trim(),
+            });
+            // best reviews
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", ".comment strong > a[href^='videoreviews.php?v=jav']", {
+                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
+                codeSelector: e => (0,_tooltip__WEBPACK_IMPORTED_MODULE_3__/* .firstTextChild */ .I)(e)?.textContent?.trim()?.split(" ")[0],
+                titleSelector: e => (0,_tooltip__WEBPACK_IMPORTED_MODULE_3__/* .firstTextChild */ .I)(e)?.textContent?.trim()?.split(" ")[0],
+            });
+            break;
+        case "r18.dev":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "#video-info > #title", {
+                observe: "#dvd-id",
+                currentSite: true,
+                codeSelector: _ => (0,_tooltip__WEBPACK_IMPORTED_MODULE_3__/* .firstTextChild */ .I)(document.querySelector("#dvd-id"))?.textContent?.trim(),
+            });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", ".video-label > a[href*='/movies/detail/']", {
+                observe: true,
+                codeSelector: e => (0,_tooltip__WEBPACK_IMPORTED_MODULE_3__/* .firstTextChild */ .I)(e)?.textContent?.trim(),
+            });
+            break;
+        case "www.minnano-av.com":
+            if (/actress\d{1,6}/.test(window.location.pathname)) {
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "h1", {
+                    prepareUrl: url => url.split("?")[0],
+                    currentSite: true,
+                });
+            }
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
+                prepareUrl: url => url.split("?")[0],
+            });
+            break;
+        case "www.indexxx.com":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "h1[id='model-name']", { currentSite: true });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span");
+            break;
+        case "www.thenude.com":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "span.model-name", { currentSite: true });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a.model-name, a.model-title, a[data-img*='/models/']", { observe: true });
+            break;
+        case "www.data18.com":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", { observe: true, titleSelector: null });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])", { observe: true });
+            break;
+        case "www.babepedia.com":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "h1#babename", { currentSite: true });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href*='/babe/']", { observe: true });
+            break;
+        case "www.freeones.com":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
+                prepareUrl: url => url.replace(/\/feed$/, "")
+            });
+            break;
+        case "fansdb.xyz":
+        case "pmvstash.org":
+        case "stashdb.org":
+            let exclude = ":not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "div.scene-info.card h3 > span", {
+                observe: true,
+                currentSite: true,
+                urlSelector: null,
+                stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
+                titleSelector: null,
+            });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "div.PerformerInfo div.card-header h3 > span", {
+                observe: true,
+                currentSite: true,
+                urlSelector: null,
+                stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
+                nameSelector: null,
+            });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
+                observe: true,
+                urlSelector: null,
+                stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
+                titleSelector: null,
+            });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", `a[href^='/performers/']${exclude}, a[href^='https://${window.location.host}/performers/']${exclude}`, {
+                observe: true,
+                urlSelector: null,
+                stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
+                nameSelector: null,
+            });
+            break;
+        default:
+            console.log("No configuration for website found.");
+            break;
+    }
+    // TODO: fix: data18 performers overview
+    // TODO: scenes: OF, PH, XVideos, www.manyvids.com, www.clips4sale.com, pornbox.com
+    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com, pornbox.com
+    // TODO: match confidence levels (StashId - URL - Code - Name - Title)
+    // TODO: combine code/name/title with studio
+    // TODO: limit observe to rerun only new additions
+    // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead, tooltip templates (string with placeholders)
+    //      TODO: generate query based on tooltip template and available entries
+    //      TODO: limit color functions to work with configurable colors
+    // TODO: tooltip information: rating
+    // TODO: pass stash_id endpoint through? no non-stashbox stash_id site yet
+})();
+
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } });
+
+/***/ }),
+
+/***/ "./src/tooltip.ts":
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "F": () => (/* binding */ prefixSymbol),
+/* harmony export */   "I": () => (/* binding */ firstTextChild)
+/* harmony export */ });
 let handle;
 let tooltipWindow = document.createElement("div");
 tooltipWindow.style.display = "none";
@@ -790,422 +1213,145 @@ function prefixSymbol(element, target, data, stashUrl, queryType, color) {
     span.setAttribute("data-info", tooltip);
 }
 
-;// CONCATENATED MODULE: ./src/config.ts
-const DEFAULT_URL = "http://localhost:9999";
-// Register menu items
-GM.registerMenuCommand("Set Stash Url", setStashUrl, "u");
-GM.registerMenuCommand("Set API key", setApiKey, "k");
-async function setStashUrl() {
-    let stashUrl = await GM.getValue("stashUrl", undefined);
-    stashUrl = prompt("Stash URL:", stashUrl ?? DEFAULT_URL)?.trim()?.replace("\/$", "");
-    if (stashUrl !== undefined) {
-        await GM.setValue("stashUrl", stashUrl);
-    }
-}
-async function setApiKey() {
-    let apiKey = await GM.getValue("apiKey", undefined);
-    apiKey = prompt("API Key:", apiKey ?? "")?.trim()?.replace("\/$", "");
-    if (apiKey !== undefined) {
-        await GM.setValue("apiKey", apiKey);
-    }
-}
-async function getConfig() {
-    let stashUrl = await GM.getValue("stashUrl", undefined);
-    let apiKey = await GM.getValue("apiKey", undefined);
-    if (stashUrl === undefined) {
-        stashUrl = prompt("Stash URL:", DEFAULT_URL)?.trim()?.replace("\/$", "");
-        if (stashUrl !== undefined) {
-            await GM.setValue("stashUrl", stashUrl);
-        }
-    }
-    if (apiKey === undefined) {
-        apiKey = prompt("API Key:")?.trim()?.replace("\/$", "");
-        if (apiKey !== undefined) {
-            await GM.setValue("apiKey", apiKey);
-        }
-    }
-    return [stashUrl ?? "", apiKey ?? ""];
-}
 
-;// CONCATENATED MODULE: ./src/check.ts
+/***/ })
 
-
-// Ask for stash url/key on load
-let configPromise = getConfig();
-async function request(queryString, onload, target, type) {
-    let criterion = "";
-    let query = "";
-    let access = (d) => d;
-    // Build filter
-    switch (type) {
-        case "stash_id":
-            let endpoint = `https://${window.location.host}/graphql`;
-            criterion = `{stash_id_endpoint:{endpoint:"${endpoint}",stash_id:"${queryString}",modifier:EQUALS}}`;
-            break;
-        default:
-            criterion = `{${type}:{value:"${queryString}",modifier:EQUALS}}`;
-            break;
-    }
-    // Build query
-    switch (target) {
-        case "scene":
-            query = `{findScenes(scene_filter:${criterion}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}}`;
-            access = (d) => d.findScenes.scenes;
-            break;
-        case "performer":
-            query = `{findPerformers(performer_filter:${criterion}){performers{id,name,disambiguation,alias_list,favorite}}}`;
-            access = (d) => d.findPerformers.performers;
-            break;
-        case "gallery":
-            query = `{findGalleries(gallery_filter:${criterion}){galleries{id,title,date,files{path}}}}`;
-            access = (d) => d.findGalleries.galleries;
-            break;
-        case "movie":
-            query = `{findMovies(movie_filter:${criterion}){movies{id,name,date}}}`;
-            access = (d) => d.findMovies.movies;
-            break;
-        default:
-            break;
-    }
-    // Wait for config popup if it is not stored
-    let [stashUrl, apiKey] = await configPromise;
-    GM.xmlHttpRequest({
-        method: "GET",
-        url: `${stashUrl}/graphql?query=${query}`,
-        headers: {
-            "Content-Type": "application/json",
-            ApiKey: apiKey,
-        },
-        onload: function (response) {
-            try {
-                let r = JSON.parse(response.responseText);
-                if ("errors" in r) {
-                    r.errors.forEach((e) => {
-                        console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`);
-                    });
-                }
-                else {
-                    onload(target, access(r.data), stashUrl);
-                }
-            }
-            catch (e) {
-                console.log("Exception: " + e);
-                console.log("Failed to parse response: " + response.responseText);
-            }
-        },
-    });
-}
-async function checkElement(target, element, { prepareUrl = url => url, urlSelector, // default is set in check()
-codeSelector, stashIdSelector, nameSelector = e => firstTextChild(e)?.textContent?.trim(), titleSelector = e => firstTextChild(e)?.textContent?.trim(), color = () => "green", }) {
-    if (urlSelector && prepareUrl) {
-        let url = urlSelector(element);
-        url = prepareUrl(url);
-        if (url) {
-            url = encodeURIComponent(url);
-            console.log(url);
-            await request(url, (...args) => prefixSymbol(element, ...args, "URL", color), target, "url");
-        }
-        else {
-            console.log(`No URL for ${target} found.`);
-        }
-    }
-    if (codeSelector) {
-        let code = codeSelector(element);
-        if (code) {
-            console.log(code);
-            await request(code, (...args) => prefixSymbol(element, ...args, "Code", color), target, "code");
-        }
-        else {
-            console.log(`No Code for ${target} found.`);
-        }
-    }
-    if (stashIdSelector) {
-        let id = stashIdSelector(element);
-        if (id) {
-            console.log(id);
-            await request(id, (...args) => prefixSymbol(element, ...args, "StashId", color), target, "stash_id");
-        }
-        else {
-            console.log(`No StashId for ${target} found.`);
-        }
-    }
-    if (target === "performer" && nameSelector) {
-        let name = nameSelector(element);
-        // Do not use single names
-        let nameCount = name?.split(/\s+/)?.length;
-        if (name && nameCount > 1) {
-            console.log(name);
-            await request(name, (...args) => prefixSymbol(element, ...args, "Name", color), target, "name");
-        }
-        else if (name && nameCount === 1) {
-            console.log(`Ignore single name: ${name}`);
-        }
-        else {
-            console.log(`No Name for ${target} found.`);
-        }
-    }
-    if (["scene", "gallery"].includes(target) && titleSelector) {
-        let title = titleSelector(element);
-        if (title) {
-            console.log(title);
-            await request(title, (...args) => prefixSymbol(element, ...args, "Title", color), target, "title");
-        }
-        else {
-            console.log(`No Title for ${target} found.`);
-        }
-    }
-}
-/**
- * Run callback when a new object added to the document matches the selector.
- * Calls callback with a timer after the last addition to prevent unnecessary executions.
- *
- * @param selector css selector string
- * @param callback callback function
- */
-function onAddition(selector, callback) {
-    // Run on each type-element addition
-    let body = document.querySelector("body");
-    let timeout = undefined;
-    let observer = new MutationObserver((mutations) => {
-        let newNode = mutations.map(m => Array.from(m.addedNodes)
-            .filter(n => n.nodeType === Node.ELEMENT_NODE)
-            .some(n => n.matches(selector) || n.querySelector(selector)) || // Element or Child match
-            Array.from(m.addedNodes).map(n => n.parentElement).filter(e => e).some(e => e.matches(selector)) // Parent match (if text node was added)
-        ).some(n => n);
-        if (newNode) {
-            console.log(`"${selector}"-element was added or modified. Start/Update Timer.`);
-            clearTimeout(timeout);
-            timeout = setTimeout(_ => {
-                console.log("Run queries.");
-                callback();
-            }, 200); // arbitrary delay to prevent too many calls
-        }
-    });
-    observer.observe(body, { childList: true, subtree: true });
-}
-/**
- * queries for each selected element
- *
- * the selected element should be [a child of] the link that will be compared with stash urls
- * the first text inside the selected element will be prepended with the symbol
- * Set predefined selectors to "null" to not use them.
- */
-function checkOnce(target, elementSelector, { currentSite = false, ...checkConfig } = {}) {
-    if (currentSite) {
-        let element = document.querySelector(elementSelector);
-        if (element) {
-            // url of current site
-            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? () => decodeURI(window.location.href) : checkConfig.urlSelector;
-            checkElement(target, element, checkConfig);
-        }
-    }
-    else {
-        // multiple entries with url nearest to element
-        document.querySelectorAll(elementSelector).forEach((element) => {
-            // url nearest to selected element traversing towards the root (children are ignored)
-            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? (e) => decodeURI(e.closest("a").href) : checkConfig.urlSelector;
-            checkElement(target, element, checkConfig);
-        });
-    }
-}
-/**
- * queries for each selected element
- *
- * the selected element should be [a child of] the link that will be compared with stash urls
- * the first text inside the selected element will be prepended with the symbol
- * Set predefined selectors to "null" to not use them.
- */
-function check(target, elementSelector, { observe = false, ...checkConfig } = {}) {
-    // Exclude direct children of tooltip window (some selectors match the stash link)
-    elementSelector = ":not(.stashCheckerTooltip) > " + elementSelector;
-    // Callback on addition of new elements fitting the query
-    if (observe) {
-        let selector = typeof observe === "string" ? observe : elementSelector;
-        onAddition(selector, (_) => checkOnce(target, elementSelector, checkConfig));
-    }
-    checkOnce(target, elementSelector, checkConfig);
-}
-
-;// CONCATENATED MODULE: ./src/index.ts
-
-
-
-(function () {
-    switch (window.location.host) {
-        case "www.iwara.tv":
-        case "ecchi.iwara.tv": {
-            let color = (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue";
-            check("scene", "h1.title", { color: color, currentSite: true, titleSelector: null });
-            check("scene", "h3.title > a", { color: color, titleSelector: null });
-            break;
-        }
-        case "oreno3d.com": {
-            let color = (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue";
-            check("scene", "h1.video-h1", { color: color, currentSite: true, titleSelector: null });
-            check("scene", "a h2.box-h2", { color: color, titleSelector: null });
-            break;
-        }
-        case "erommdtube.com": {
-            let color = (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue";
-            check("scene", "h1.show__h1", { color: color, currentSite: true, titleSelector: null });
-            check("scene", "h2.main__list-title", { color: color, titleSelector: null });
-            break;
-        }
-        case "kemono.party":
-            check("scene", "h1.post__title", { currentSite: true, titleSelector: null });
-            check("scene", ".post-card > a[href*='/post/']", { titleSelector: null });
-            break;
-        case "coomer.party":
-            check("scene", "h1.post__title", { currentSite: true, titleSelector: null });
-            check("scene", ".post-card h2 > a[href*='/post/']", { titleSelector: null });
-            break;
-        case "adultanime.dbsearch.net":
-            if (document.querySelector("article > section[id='info-table']") !== null) {
-                check("scene", "div[id='main-inner'] > article > h2", {
-                    currentSite: true,
-                    codeSelector: (_) => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
-                });
-            }
-            check("scene", "div[class='item-info'] > h4 > a, div[class='item-info'] > h5 > a");
-            break;
-        case "xslist.org":
-            check("performer", "span[itemprop='name']", { currentSite: true });
-            check("performer", "a[href*='/model/']");
-            check("scene", "table#movices td > strong", {
-                urlSelector: null,
-                codeSelector: e => e.textContent.trim(),
-                titleSelector: null,
-            });
-            break;
-        case "www.animecharactersdatabase.com":
-            check("performer", "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
-            break;
-        case "www.iafd.com": {
-            let prepareUrl = (url) => url.replaceAll("'", "%27").replace(/^http:/, "https:");
-            if (window.location.pathname.startsWith("/person.rme/perfid=")) {
-                check("performer", "h1", { prepareUrl: prepareUrl, currentSite: true });
-            }
-            else if (window.location.pathname.startsWith("/title.rme/title=")) {
-                check("scene", "h1", { prepareUrl: prepareUrl, currentSite: true, titleSelector: null });
-            }
-            check("performer", "a[href*='/person.rme/perfid=']", { prepareUrl: prepareUrl });
-            check("scene", "a[href*='/title.rme/title=']", { prepareUrl: prepareUrl, titleSelector: null });
-            break;
-        }
-        case "metadataapi.net":
-            check("performer", "a[href^='https://metadataapi.net/performers/']", { observe: true });
-            check("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", { observe: true, titleSelector: null });
-            check("movie", "a[href^='https://metadataapi.net/movies/']", { observe: true, titleSelector: null });
-            break;
-        case "www.javlibrary.com":
-            check("scene", "div[id='video_title']", {
-                currentSite: true,
-                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
-                codeSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim(),
-                titleSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim(),
-            });
-            // generic video links
-            check("scene", ".video a[href^='./?v=jav']", {
-                prepareUrl: url => url.replace(/&.*$/, ""),
-                codeSelector: e => e.querySelector("div.id")?.textContent?.trim(),
-            });
-            // best reviews
-            check("scene", ".comment strong > a[href^='videoreviews.php?v=jav']", {
-                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
-                codeSelector: e => firstTextChild(e)?.textContent?.trim()?.split(" ")[0],
-                titleSelector: e => firstTextChild(e)?.textContent?.trim()?.split(" ")[0],
-            });
-            break;
-        case "r18.dev":
-            check("scene", "#video-info > #title", {
-                observe: "#dvd-id",
-                currentSite: true,
-                codeSelector: _ => firstTextChild(document.querySelector("#dvd-id"))?.textContent?.trim(),
-            });
-            check("scene", ".video-label > a[href*='/movies/detail/']", {
-                observe: true,
-                codeSelector: e => firstTextChild(e)?.textContent?.trim(),
-            });
-            break;
-        case "www.minnano-av.com":
-            if (/actress\d{1,6}/.test(window.location.pathname)) {
-                check("performer", "h1", {
-                    prepareUrl: url => url.split("?")[0],
-                    currentSite: true,
-                });
-            }
-            check("performer", "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
-                prepareUrl: url => url.split("?")[0],
-            });
-            break;
-        case "www.indexxx.com":
-            check("performer", "h1[id='model-name']", { currentSite: true });
-            check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span");
-            break;
-        case "www.thenude.com":
-            check("performer", "span.model-name", { currentSite: true });
-            check("performer", "a.model-name, a.model-title, a[data-img*='/models/']", { observe: true });
-            break;
-        case "www.data18.com":
-            check("scene", "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", { observe: true, titleSelector: null });
-            check("performer", "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])", { observe: true });
-            break;
-        case "www.babepedia.com":
-            check("performer", "h1#babename", { currentSite: true });
-            check("performer", "a[href*='/babe/']", { observe: true });
-            break;
-        case "www.freeones.com":
-            check("performer", "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
-                prepareUrl: url => url.replace(/\/feed$/, "")
-            });
-            break;
-        case "fansdb.xyz":
-        case "pmvstash.org":
-        case "stashdb.org":
-            check("scene", "div.scene-info.card h3 > span", {
-                observe: true,
-                currentSite: true,
-                urlSelector: null,
-                stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
-                titleSelector: null,
-            });
-            check("performer", "div.PerformerInfo div.card-header h3 > span", {
-                observe: true,
-                currentSite: true,
-                urlSelector: null,
-                stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
-                nameSelector: null,
-            });
-            check("scene", `a[href^='/scenes/'], a[href^='https://${window.location.host}/scenes/']`, {
-                observe: true,
-                urlSelector: null,
-                stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
-                titleSelector: null,
-            });
-            check("performer", `a[href^='/performers/'], a[href^='https://${window.location.host}/performers/']`, {
-                observe: true,
-                urlSelector: null,
-                stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
-                nameSelector: null,
-            });
-            break;
-        default:
-            console.log("No configuration for website found.");
-            break;
-    }
-    // TODO: fix: data18 performers overview
-    // TODO: scenes: OF, PH, XVideos, www.manyvids.com, www.clips4sale.com, pornbox.com
-    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com, pornbox.com
-    // TODO: match confidence levels (StashId - URL - Code - Name - Title)
-    // TODO: combine code/name/title with studio
-    // TODO: limit observe to rerun only new additions
-    // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
-    // TODO: limit color functions to work with configurable colors
-    // TODO: tooltip information: rating
-    // TODO: do i need to pass stash_id endpoint through?
-})();
-
-})();
-
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			id: moduleId,
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/async module */
+/******/ 	(() => {
+/******/ 		var webpackQueues = typeof Symbol === "function" ? Symbol("webpack queues") : "__webpack_queues__";
+/******/ 		var webpackExports = typeof Symbol === "function" ? Symbol("webpack exports") : "__webpack_exports__";
+/******/ 		var webpackError = typeof Symbol === "function" ? Symbol("webpack error") : "__webpack_error__";
+/******/ 		var resolveQueue = (queue) => {
+/******/ 			if(queue && !queue.d) {
+/******/ 				queue.d = 1;
+/******/ 				queue.forEach((fn) => (fn.r--));
+/******/ 				queue.forEach((fn) => (fn.r-- ? fn.r++ : fn()));
+/******/ 			}
+/******/ 		}
+/******/ 		var wrapDeps = (deps) => (deps.map((dep) => {
+/******/ 			if(dep !== null && typeof dep === "object") {
+/******/ 				if(dep[webpackQueues]) return dep;
+/******/ 				if(dep.then) {
+/******/ 					var queue = [];
+/******/ 					queue.d = 0;
+/******/ 					dep.then((r) => {
+/******/ 						obj[webpackExports] = r;
+/******/ 						resolveQueue(queue);
+/******/ 					}, (e) => {
+/******/ 						obj[webpackError] = e;
+/******/ 						resolveQueue(queue);
+/******/ 					});
+/******/ 					var obj = {};
+/******/ 					obj[webpackQueues] = (fn) => (fn(queue));
+/******/ 					return obj;
+/******/ 				}
+/******/ 			}
+/******/ 			var ret = {};
+/******/ 			ret[webpackQueues] = x => {};
+/******/ 			ret[webpackExports] = dep;
+/******/ 			return ret;
+/******/ 		}));
+/******/ 		__webpack_require__.a = (module, body, hasAwait) => {
+/******/ 			var queue;
+/******/ 			hasAwait && ((queue = []).d = 1);
+/******/ 			var depQueues = new Set();
+/******/ 			var exports = module.exports;
+/******/ 			var currentDeps;
+/******/ 			var outerResolve;
+/******/ 			var reject;
+/******/ 			var promise = new Promise((resolve, rej) => {
+/******/ 				reject = rej;
+/******/ 				outerResolve = resolve;
+/******/ 			});
+/******/ 			promise[webpackExports] = exports;
+/******/ 			promise[webpackQueues] = (fn) => (queue && fn(queue), depQueues.forEach(fn), promise["catch"](x => {}));
+/******/ 			module.exports = promise;
+/******/ 			body((deps) => {
+/******/ 				currentDeps = wrapDeps(deps);
+/******/ 				var fn;
+/******/ 				var getResult = () => (currentDeps.map((d) => {
+/******/ 					if(d[webpackError]) throw d[webpackError];
+/******/ 					return d[webpackExports];
+/******/ 				}))
+/******/ 				var promise = new Promise((resolve) => {
+/******/ 					fn = () => (resolve(getResult));
+/******/ 					fn.r = 0;
+/******/ 					var fnQueue = (q) => (q !== queue && !depQueues.has(q) && (depQueues.add(q), q && !q.d && (fn.r++, q.push(fn))));
+/******/ 					currentDeps.map((dep) => (dep[webpackQueues](fnQueue)));
+/******/ 				});
+/******/ 				return fn.r ? promise : getResult();
+/******/ 			}, (err) => ((err ? reject(promise[webpackError] = err) : outerResolve(exports)), resolveQueue(queue)));
+/******/ 			queue && (queue.d = 0);
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/nonce */
+/******/ 	(() => {
+/******/ 		__webpack_require__.nc = undefined;
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module used 'module' so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.ts");
+/******/ 	
 /******/ })()
 ;
