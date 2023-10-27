@@ -724,27 +724,25 @@ __webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __we
 /* harmony export */   "i": () => (/* binding */ getConfig)
 /* harmony export */ });
 const DEFAULT_URL = "http://localhost:9999";
+let blockedKey = `blocked_${window.location.host}`.replace(/[\.\-]/, "_");
 // Register menu items
 GM.registerMenuCommand("Set Stash Url", setStashUrl, "u");
 GM.registerMenuCommand("Set API key", setApiKey, "k");
 if (await isSiteBlocked()) {
-    GM.registerMenuCommand("Activate for current site", unblockSite, "a");
+    GM.registerMenuCommand(`Activate for ${window.location.host}`, unblockSite, "a");
 }
 else {
-    GM.registerMenuCommand("Deactivate for current site", blockSite, "d");
-}
-function getBlockedKey() {
-    return `blocked_${window.location.host}`.replace(/[\.\-\:]/, "_");
+    GM.registerMenuCommand(`Deactivate for ${window.location.host}`, blockSite, "d");
 }
 async function isSiteBlocked() {
-    return await GM.getValue(getBlockedKey(), false);
+    return await GM.getValue(blockedKey, false);
 }
 async function blockSite() {
-    await GM.setValue(getBlockedKey(), true);
+    await GM.setValue(blockedKey, true);
     window.location.reload();
 }
 async function unblockSite() {
-    await GM.deleteValue(getBlockedKey());
+    await GM.deleteValue(blockedKey);
     window.location.reload();
 }
 async function setStashUrl() {
