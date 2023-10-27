@@ -33,6 +33,9 @@ const webpackConfig = {
             },
         ],
     },
+    experiments: {
+        topLevelAwait: true
+    },
     plugins: process.env.npm_config_report ? [new BundleAnalyzerPlugin()] : [],
 };
 

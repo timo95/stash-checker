@@ -1,7 +1,7 @@
 {
   "name": "stash-checker",
   "description": "Add checkmarks to scenes/performers present in your stash",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "author": {
     "name": "timo95",
     "email": "24251362+timo95@users.noreply.github.com"

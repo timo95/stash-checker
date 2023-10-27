@@ -1,8 +1,14 @@
 import "./style/main.less";
 import {check} from "./check";
+import {isSiteBlocked} from "./config";
 import {firstTextChild} from "./tooltip";
 
-(function () {
+(async function () {
+    if (await isSiteBlocked()) {
+        console.log("Userscript is deactivated for this site. Activate in userscript menu.");
+        return;
+    }
+
     switch (window.location.host) {
         case "www.iwara.tv":
         case "ecchi.iwara.tv": {
@@ -133,6 +139,7 @@ import {firstTextChild} from "./tooltip";
         case "fansdb.xyz":
         case "pmvstash.org":
         case "stashdb.org":
+            let exclude = ":not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
             check("scene", "div.scene-info.card h3 > span", {
                 observe: true,
                 currentSite: true,
@@ -147,13 +154,13 @@ import {firstTextChild} from "./tooltip";
                 stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
                 nameSelector: null,
             });
-            check("scene", `a[href^='/scenes/'], a[href^='https://${window.location.host}/scenes/']`, {
+            check("scene", `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
                 titleSelector: null,
             });
-            check("performer", `a[href^='/performers/'], a[href^='https://${window.location.host}/performers/']`, {
+            check("performer", `a[href^='/performers/']${exclude}, a[href^='https://${window.location.host}/performers/']${exclude}`, {
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
@@ -171,8 +178,9 @@ import {firstTextChild} from "./tooltip";
     // TODO: match confidence levels (StashId - URL - Code - Name - Title)
     // TODO: combine code/name/title with studio
     // TODO: limit observe to rerun only new additions
-    // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead
-    // TODO: limit color functions to work with configurable colors
+    // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead, tooltip templates (string with placeholders)
+    //      TODO: generate query based on tooltip template and available entries
+    //      TODO: limit color functions to work with configurable colors
     // TODO: tooltip information: rating
-    // TODO: do i need to pass stash_id endpoint through?
+    // TODO: pass stash_id endpoint through? no non-stashbox stash_id site yet
 })();

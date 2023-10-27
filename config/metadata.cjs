@@ -45,6 +45,8 @@ module.exports = {
         "GM.xmlHttpRequest",
         "GM.getValue",
         "GM.setValue",
+        "GM.deleteValue",
+        "GM.listValues",
         "GM.registerMenuCommand",
     ],
     connect: [
