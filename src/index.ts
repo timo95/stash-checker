@@ -171,16 +171,4 @@ import {firstTextChild} from "./tooltip";
             console.log("No configuration for website found.");
             break;
     }
-
-    // TODO: fix: data18 performers overview
-    // TODO: scenes: OF, PH, XVideos, www.manyvids.com, www.clips4sale.com, pornbox.com
-    // TODO: performers: boobpedia.com, www.adultfilmdatabase.com, www.wikidata.org, www.eurobabeindex.com, pornbox.com
-    // TODO: match confidence levels (StashId - URL - Code - Name - Title)
-    // TODO: combine code/name/title with studio
-    // TODO: limit observe to rerun only new additions
-    // TODO: config: do not show cross mark if none found, custom symbols, default colors, options when to show ! instead, tooltip templates (string with placeholders)
-    //      TODO: generate query based on tooltip template and available entries
-    //      TODO: limit color functions to work with configurable colors
-    // TODO: tooltip information: rating
-    // TODO: pass stash_id endpoint through? no non-stashbox stash_id site yet
 })();
