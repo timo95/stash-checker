@@ -21,6 +21,7 @@ module.exports = {
         "*://coomer.party/*",
         "*://ecchi.iwara.tv/*",
         "*://erommdtube.com/*",
+        "*://fansdb.cc/*",
         "*://fansdb.xyz/*",
         "*://kemono.party/*",
         "*://metadataapi.net/*",

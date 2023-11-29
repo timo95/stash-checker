@@ -136,6 +136,7 @@ import {firstTextChild} from "./tooltip";
                 prepareUrl: url => url.replace(/\/feed$/, "")
             });
             break;
+        case "fansdb.cc":
         case "fansdb.xyz":
         case "pmvstash.org":
         case "stashdb.org":
