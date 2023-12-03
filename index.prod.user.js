@@ -9,6 +9,7 @@
 // @match         *://coomer.party/*
 // @match         *://ecchi.iwara.tv/*
 // @match         *://erommdtube.com/*
+// @match         *://fansdb.cc/*
 // @match         *://fansdb.xyz/*
 // @match         *://kemono.party/*
 // @match         *://metadataapi.net/*
@@ -929,6 +930,7 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_che
                 prepareUrl: url => url.replace(/\/feed$/, "")
             });
             break;
+        case "fansdb.cc":
         case "fansdb.xyz":
         case "pmvstash.org":
         case "stashdb.org":
