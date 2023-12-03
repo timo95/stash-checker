@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name          Stash Checker
 // @name:en       Stash Checker
-// @description   Add checkmarks to scenes/performers present in your stash
+// @description   Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
 // @icon          https://docs.stashapp.cc/favicon.ico
-// @version       0.6.0
+// @version       0.6.1
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
+// @source        https://github.com/timo95/stash-checker
 // @match         *://adultanime.dbsearch.net/*
 // @match         *://coomer.party/*
 // @match         *://ecchi.iwara.tv/*
@@ -51,7 +52,7 @@
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/css-loader/dist/runtime/noSourceMaps.js");
 /* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -213,7 +214,7 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 
-       /* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_main_less__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z && _node_modules_css_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_main_less__WEBPACK_IMPORTED_MODULE_6__/* ["default"].locals */ .Z.locals ? _node_modules_css_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_main_less__WEBPACK_IMPORTED_MODULE_6__/* ["default"].locals */ .Z.locals : undefined);
+       /* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_main_less__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z && _node_modules_css_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_main_less__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z.locals ? _node_modules_css_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_main_less__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z.locals : undefined);
 
 
 /***/ }),
@@ -511,7 +512,7 @@ module.exports = styleTagTransform;
 
 __webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "B": () => (/* binding */ check)
+/* harmony export */   B: () => (/* binding */ check)
 /* harmony export */ });
 /* harmony import */ var _tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/tooltip.ts");
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/config.ts");
@@ -521,15 +522,14 @@ _config__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.then ? (a
 
 // Ask for stash url/key on load
 let configPromise = (0,_config__WEBPACK_IMPORTED_MODULE_1__/* .getConfig */ .i)();
-async function request(queryString, onload, target, type) {
+async function request(queryString, onload, target, type, { stashIdEndpoint }) {
     let criterion = "";
     let query = "";
     let access = (d) => d;
     // Build filter
     switch (type) {
         case "stash_id":
-            let endpoint = `https://${window.location.host}/graphql`;
-            criterion = `{stash_id_endpoint:{endpoint:"${endpoint}",stash_id:"${queryString}",modifier:EQUALS}}`;
+            criterion = `{stash_id_endpoint:{endpoint:"${stashIdEndpoint}",stash_id:"${queryString}",modifier:EQUALS}}`;
             break;
         default:
             criterion = `{${type}:{value:"${queryString}",modifier:EQUALS}}`;
@@ -584,15 +584,15 @@ async function request(queryString, onload, target, type) {
         },
     });
 }
-async function checkElement(target, element, { prepareUrl = url => url, urlSelector, // default is set in check()
-codeSelector, stashIdSelector, nameSelector = e => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .firstTextChild */ .I)(e)?.textContent?.trim(), titleSelector = e => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .firstTextChild */ .I)(e)?.textContent?.trim(), color = () => "green", }) {
+async function checkElement(target, element, { currentSite = false, prepareUrl = url => url, urlSelector = currentSite ?
+    () => decodeURI(window.location.href) :
+    (e) => decodeURI(e.closest("a").href), codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = e => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .firstTextChild */ .I)(e)?.textContent?.trim(), titleSelector = e => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .firstTextChild */ .I)(e)?.textContent?.trim(), color = () => "green", }) {
     if (urlSelector && prepareUrl) {
-        let url = urlSelector(element);
-        url = prepareUrl(url);
+        let url = prepareUrl(urlSelector(element));
         if (url) {
             url = encodeURIComponent(url);
             console.log(url);
-            await request(url, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "URL", color), target, "url");
+            await request(url, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "URL", color), target, "url", { stashIdEndpoint });
         }
         else {
             console.log(`No URL for ${target} found.`);
@@ -602,7 +602,7 @@ codeSelector, stashIdSelector, nameSelector = e => (0,_tooltip__WEBPACK_IMPORTED
         let code = codeSelector(element);
         if (code) {
             console.log(code);
-            await request(code, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "Code", color), target, "code");
+            await request(code, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "Code", color), target, "code", { stashIdEndpoint });
         }
         else {
             console.log(`No Code for ${target} found.`);
@@ -612,7 +612,7 @@ codeSelector, stashIdSelector, nameSelector = e => (0,_tooltip__WEBPACK_IMPORTED
         let id = stashIdSelector(element);
         if (id) {
             console.log(id);
-            await request(id, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "StashId", color), target, "stash_id");
+            await request(id, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "StashId", color), target, "stash_id", { stashIdEndpoint });
         }
         else {
             console.log(`No StashId for ${target} found.`);
@@ -624,7 +624,7 @@ codeSelector, stashIdSelector, nameSelector = e => (0,_tooltip__WEBPACK_IMPORTED
         let nameCount = name?.split(/\s+/)?.length;
         if (name && nameCount > 1) {
             console.log(name);
-            await request(name, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "Name", color), target, "name");
+            await request(name, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "Name", color), target, "name", { stashIdEndpoint });
         }
         else if (name && nameCount === 1) {
             console.log(`Ignore single name: ${name}`);
@@ -637,7 +637,7 @@ codeSelector, stashIdSelector, nameSelector = e => (0,_tooltip__WEBPACK_IMPORTED
         let title = titleSelector(element);
         if (title) {
             console.log(title);
-            await request(title, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "Title", color), target, "title");
+            await request(title, (...args) => (0,_tooltip__WEBPACK_IMPORTED_MODULE_0__/* .prefixSymbol */ .F)(element, ...args, "Title", color), target, "title", { stashIdEndpoint });
         }
         else {
             console.log(`No Title for ${target} found.`);
@@ -679,35 +679,18 @@ function onAddition(selector, callback) {
  * the first text inside the selected element will be prepended with the symbol
  * Set predefined selectors to "null" to not use them.
  */
-function checkOnce(target, elementSelector, { currentSite = false, ...checkConfig } = {}) {
-    document.querySelectorAll(elementSelector).forEach((element) => {
-        if (currentSite) {
-            // url of current site
-            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? () => decodeURI(window.location.href) : checkConfig.urlSelector;
-        }
-        else {
-            // url nearest to selected element traversing towards the root (children are ignored)
-            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? (e) => decodeURI(e.closest("a").href) : checkConfig.urlSelector;
-        }
-        checkElement(target, element, checkConfig);
-    });
-}
-/**
- * queries for each selected element
- *
- * the selected element should be [a child of] the link that will be compared with stash urls
- * the first text inside the selected element will be prepended with the symbol
- * Set predefined selectors to "null" to not use them.
- */
 function check(target, elementSelector, { observe = false, ...checkConfig } = {}) {
-    // Exclude direct children of tooltip window (some selectors match the stash link)
-    elementSelector = ":not(.stashCheckerTooltip) > " + elementSelector;
+    // Exclude direct children of tooltip window, because selectors might match the stash link
+    elementSelector = elementSelector
+        .split(",")
+        .map(s => " :not(.stashCheckerTooltip) > " + s)
+        .join(",");
     // Callback on addition of new elements fitting the query
     if (observe) {
-        let selector = typeof observe === "string" ? observe : elementSelector;
-        onAddition(selector, (_) => checkOnce(target, elementSelector, checkConfig));
+        observe = typeof observe === "string" ? observe : elementSelector;
+        onAddition(observe, (_) => document.querySelectorAll(elementSelector).forEach((e) => checkElement(target, e, checkConfig)));
     }
-    checkOnce(target, elementSelector, checkConfig);
+    document.querySelectorAll(elementSelector).forEach((e) => checkElement(target, e, checkConfig));
 }
 
 __webpack_async_result__();
@@ -720,8 +703,8 @@ __webpack_async_result__();
 
 __webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "c": () => (/* binding */ isSiteBlocked),
-/* harmony export */   "i": () => (/* binding */ getConfig)
+/* harmony export */   c: () => (/* binding */ isSiteBlocked),
+/* harmony export */   i: () => (/* binding */ getConfig)
 /* harmony export */ });
 const DEFAULT_URL = "http://localhost:9999";
 let blockedKey = `blocked_${window.location.host}`.replace(/[\.\-]/, "_");
@@ -864,14 +847,15 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_che
         }
         case "metadataapi.net": {
             let stashIdSelector = (_) => document.evaluate("//div[text()='TPDB UUID']/following-sibling::div/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim();
+            let stashIdEndpoint = "https://api.metadataapi.net/graphql";
             if (window.location.pathname.startsWith("/performers/")) {
-                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "div[class='pl-4'] > h2", { observe: true, currentSite: true, stashIdSelector });
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "div[class='pl-4'] > h2", { observe: true, currentSite: true, stashIdSelector, stashIdEndpoint });
             }
             else if (window.location.pathname.startsWith("/scenes/")) {
-                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "div[class='flex justify-between'] > h2", { observe: true, currentSite: true, stashIdSelector });
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "div[class='flex justify-between'] > h2", { observe: true, currentSite: true, stashIdSelector, stashIdEndpoint });
             }
             else if (window.location.pathname.startsWith("/movies/")) {
-                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("movie", "div[class='flex justify-between'] > h2", { observe: true, currentSite: true, stashIdSelector });
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("movie", "div[class='flex justify-between'] > h2", { observe: true, currentSite: true, stashIdSelector, stashIdEndpoint });
             }
             (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href^='https://metadataapi.net/performers/']", { observe: true });
             (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", { observe: true, titleSelector: null });
@@ -971,6 +955,7 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_che
         case "fansdb.xyz":
         case "pmvstash.org":
         case "stashdb.org":
+            // These buttons are only visible with edit permissions.
             let exclude = ":not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
             (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "div.scene-info.card h3 > span", {
                 observe: true,
@@ -1014,8 +999,8 @@ __webpack_async_result__();
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "F": () => (/* binding */ prefixSymbol),
-/* harmony export */   "I": () => (/* binding */ firstTextChild)
+/* harmony export */   F: () => (/* binding */ prefixSymbol),
+/* harmony export */   I: () => (/* binding */ firstTextChild)
 /* harmony export */ });
 let handle;
 let tooltipWindow = document.createElement("div");
@@ -1275,7 +1260,7 @@ function prefixSymbol(element, target, data, stashUrl, queryType, color) {
 /******/ 		var webpackExports = typeof Symbol === "function" ? Symbol("webpack exports") : "__webpack_exports__";
 /******/ 		var webpackError = typeof Symbol === "function" ? Symbol("webpack error") : "__webpack_error__";
 /******/ 		var resolveQueue = (queue) => {
-/******/ 			if(queue && !queue.d) {
+/******/ 			if(queue && queue.d < 1) {
 /******/ 				queue.d = 1;
 /******/ 				queue.forEach((fn) => (fn.r--));
 /******/ 				queue.forEach((fn) => (fn.r-- ? fn.r++ : fn()));
@@ -1306,7 +1291,7 @@ function prefixSymbol(element, target, data, stashUrl, queryType, color) {
 /******/ 		}));
 /******/ 		__webpack_require__.a = (module, body, hasAwait) => {
 /******/ 			var queue;
-/******/ 			hasAwait && ((queue = []).d = 1);
+/******/ 			hasAwait && ((queue = []).d = -1);
 /******/ 			var depQueues = new Set();
 /******/ 			var exports = module.exports;
 /******/ 			var currentDeps;
@@ -1334,7 +1319,7 @@ function prefixSymbol(element, target, data, stashUrl, queryType, color) {
 /******/ 				});
 /******/ 				return fn.r ? promise : getResult();
 /******/ 			}, (err) => ((err ? reject(promise[webpackError] = err) : outerResolve(exports)), resolveQueue(queue)));
-/******/ 			queue && (queue.d = 0);
+/******/ 			queue && queue.d < 0 && (queue.d = 0);
 /******/ 		};
 /******/ 	})();
 /******/ 	
