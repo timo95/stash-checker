@@ -1,85 +1,45 @@
-# This is a project help you build userscript with webpack
+# Stash Checker
 
-Just [use this git repo as a template](https://github.com/Trim21/webpack-userscript-template/generate).
+Stash Checker is an userscript for porn websites to check if a Scene/Performer is in your [Stash](https://github.com/stashapp/stash) instance.
+It shows a checkmark if an item was found in your Stash.
+Hovering over the checkmark gives you a tooltip with information about the item in your Stash.
 
-## dev
+<img src="docs/assets/tooltip.png" alt="tooltip" width="500"/>
 
-1. Allow Tampermonkey's access to local file URIs [tampermonkey/faq](https://tampermonkey.net/faq.php?ext=dhdg#Q204)
-2. install deps with `npm i` or `npm ci`.
-3. `npm run dev` to start your development.
+## Installation
 
-Now you will see 2 files in `./dist/`
+You need a browser plugin to run userscripts like [Tampermonkey](https://www.tampermonkey.net/).
 
--   `dist/index.dev.user.js`: **You should install this userscript in your browser.** It's a simple loader that load `dist/index.debug.js` on matched web page.
--   `dist/index.debug.js`: This is the development build with `eval-source-map`. It will be automatically loaded by `dist/index.dev.user.js` via `@require file://.../dist/index.debug.js` metadata, **Don't add it to your userscript manager.**
+The newest release of Stash Checker gets deployed to [this Gist](https://gist.github.com/timo95/562b9363d491e3ee281cb46944445fcd).
+Click on the `Raw` button to import this script to Tampermonkey.
 
-4. edit [src/index.ts](./src/index.ts), you can even import css or less files. You can use scss if you like.
-5. go wo <https://www.example.com/> and open console, you'll see it's working.
+## Stash URL
 
-livereload is default enabled, use [this Chrome extension](https://chrome.google.com/webstore/detail/jnihajbhpnppcggbcgedagnkighmdlei)
+On first use the script asks for your Stash URL and API key.
+Leave the key empty, if none is required.
 
-### NOTICE
+You can change the URL and key later in Tampermonkey's userscript menu.
 
-Everytime you change your metadata config,
-you'll have to restart webpack server and install newly generated `dist/index.dev.user.js` UserScript in your browser again.
+<img src="docs/assets/menu.png" alt="menu" width="200"/>
 
-## used package
+## Stash version compatibility
 
-If you prefer some other bundler like rollup, you may use part of some of these packages.
+At the moment only the newest Stash versions are supported.
+For backwards compatibility, see this [feature request](https://github.com/timo95/stash-checker/issues/9).
 
-[userscript-metadata-generator](https://github.com/trim21/userscript-metadata-generator)
+## Supported Websites
 
-[gm-fetch](https://github.com/trim21/gm-fetch)
+The `@match` section at the top of the script lists all supported websites.
+Go [here](https://github.com/timo95/stash-checker/issues/5) to request more.
 
-[userscript-metadata-webpack-plugin](https://github.com/trim21/userscript-metadata-webpack-plugin)
+## Matching
 
+Most entries get matched to your Stash by their URL.
+Some websites also support matching by title or studio code.
+The tooltip lists all fields used for matching and which ones successfully matched to the Stash entry.
 
-## Cross Site Request
+All instances of Stash-box only match by stashId.
 
-you can call `GM.xmlHttpRequest` directly or use a fetch API based on `GM.xmlHttpRequest` <https://github.com/Trim21/gm-fetch>
+## Development
 
-## TypeScript
-
-use typescript as normal, see [example](src/index.ts)
-
-## dependencies
-
-There are two ways to using a package on npm.
-
-### UserScript way
-
-like original UserScript way, you will need to add them to your [user script metadata's require section](./config/metadata.cjs#L16-L18) , and exclude them in [config/webpack.config.base.cjs](./config/webpack.config.base.cjs#L18-L20)
-
-### Webpack way
-
-just install packages with npm and import them in your code, webpack will take care them.
-
-## Build
-
-```bash
-npm run build
-```
-
-`dist/index.prod.user.js` is the final script. you can manually copy it to greasyfork for deploy.
-
-### Minify
-
-There is a [limitation in greasyfork](https://greasyfork.org/en/help/code-rules), your code must not be obfuscated or minified.
-
-If you don't need to deploy your script to greasyfork, enable minify as you like.
-
-## automatically Deploy
-
-[github actions](./.github/workflows/deploy.yaml#L36) will deploy production userscript to gh-pages branch.
-
-[example](https://github.com/Trim21/webpack-userscript-template/tree/gh-pages)
-
-[deployed](https://trim21.github.io/webpack-userscript-template/)
-
-You can auto use greasyfork's auto update function.
-
-## Q&A
-
-you may find enabling source map not working well in production code, because Tampermonkey will add extra lines (all your `@require`) before your script. I don't know if there is a good fix for this, You need to use webpack config `devtool` with `eval` prefix to make it work as expected, so source map is disabled in this production build.
-
-<https://webpack.js.org/configuration/devtool/#development>
+See [here](docs/DEVELOPMENT.md).
