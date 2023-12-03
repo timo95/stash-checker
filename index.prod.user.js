@@ -11,11 +11,15 @@
 // @match         *://erommdtube.com/*
 // @match         *://fansdb.cc/*
 // @match         *://fansdb.xyz/*
+// @match         *://gayeroticvideoindex.com/*
 // @match         *://kemono.party/*
 // @match         *://metadataapi.net/*
+// @match         *://onlyfans.com/*
 // @match         *://oreno3d.com/*
 // @match         *://pmvstash.org/*
+// @match         *://www.pornteengirl.com/*
 // @match         *://r18.dev/*
+// @match         *://shemalestardb.com/*
 // @match         *://stashdb.org/*
 // @match         *://www.animecharactersdatabase.com/*
 // @match         *://www.babepedia.com/*
@@ -676,22 +680,17 @@ function onAddition(selector, callback) {
  * Set predefined selectors to "null" to not use them.
  */
 function checkOnce(target, elementSelector, { currentSite = false, ...checkConfig } = {}) {
-    if (currentSite) {
-        let element = document.querySelector(elementSelector);
-        if (element) {
+    document.querySelectorAll(elementSelector).forEach((element) => {
+        if (currentSite) {
             // url of current site
             checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? () => decodeURI(window.location.href) : checkConfig.urlSelector;
-            checkElement(target, element, checkConfig);
         }
-    }
-    else {
-        // multiple entries with url nearest to element
-        document.querySelectorAll(elementSelector).forEach((element) => {
+        else {
             // url nearest to selected element traversing towards the root (children are ignored)
             checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? (e) => decodeURI(e.closest("a").href) : checkConfig.urlSelector;
-            checkElement(target, element, checkConfig);
-        });
-    }
+        }
+        checkElement(target, element, checkConfig);
+    });
 }
 /**
  * queries for each selected element
@@ -863,11 +862,22 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_che
             (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "a[href*='/title.rme/title=']", { prepareUrl: prepareUrl, titleSelector: null });
             break;
         }
-        case "metadataapi.net":
+        case "metadataapi.net": {
+            let stashIdSelector = (_) => document.evaluate("//div[text()='TPDB UUID']/following-sibling::div/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim();
+            if (window.location.pathname.startsWith("/performers/")) {
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "div[class='pl-4'] > h2", { observe: true, currentSite: true, stashIdSelector });
+            }
+            else if (window.location.pathname.startsWith("/scenes/")) {
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "div[class='flex justify-between'] > h2", { observe: true, currentSite: true, stashIdSelector });
+            }
+            else if (window.location.pathname.startsWith("/movies/")) {
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("movie", "div[class='flex justify-between'] > h2", { observe: true, currentSite: true, stashIdSelector });
+            }
             (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href^='https://metadataapi.net/performers/']", { observe: true });
             (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", { observe: true, titleSelector: null });
             (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("movie", "a[href^='https://metadataapi.net/movies/']", { observe: true, titleSelector: null });
             break;
+        }
         case "www.javlibrary.com":
             (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "div[id='video_title']", {
                 currentSite: true,
@@ -927,8 +937,35 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_che
             break;
         case "www.freeones.com":
             (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
-                prepareUrl: url => url.replace(/\/feed$/, "")
+                prepareUrl: url => url.replace(/\/feed$/, "").replace(/\/[a-z]{2}\//, "/")
             });
+            break;
+        case "shemalestardb.com":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "h2[id='star-name']", { currentSite: true });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "figcaption > a[href*='/stars/']");
+            break;
+        case "onlyfans.com":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "div[class*='b-username'] > div[class*='g-user-name']", { observe: true, currentSite: true });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[class*='b-username'] > div[class*='g-user-name']", { observe: true });
+            break;
+        case "www.pornteengirl.com":
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href*='/model/']", {
+                nameSelector: e => (0,_tooltip__WEBPACK_IMPORTED_MODULE_3__/* .firstTextChild */ .I)(e)?.textContent?.trim()?.replace(/\([^()]*\)$/, "")?.trimEnd()
+            });
+            break;
+        case "gayeroticvideoindex.com":
+            if (window.location.pathname.startsWith("/performer/")) {
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "[id='data'] h1", { currentSite: true });
+            }
+            else if (window.location.pathname.startsWith("/episode/")) {
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "[id='data'] h1", { currentSite: true });
+            }
+            else if (window.location.pathname.startsWith("/video/")) {
+                (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("movie", "[id='data'] h1", { currentSite: true });
+            }
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("performer", "a[href*='performer/']", { observe: true });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("scene", "a[href*='episode/']", { observe: true });
+            (0,_check__WEBPACK_IMPORTED_MODULE_1__/* .check */ .B)("movie", "a[href*='video/']", { observe: true });
             break;
         case "fansdb.cc":
         case "fansdb.xyz":
