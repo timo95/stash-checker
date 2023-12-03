@@ -71,12 +71,13 @@ import {firstTextChild} from "./tooltip";
         }
         case "metadataapi.net": {
             let stashIdSelector = (_: Element) => document.evaluate("//div[text()='TPDB UUID']/following-sibling::div/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim();
+            let stashIdEndpoint = "https://api.metadataapi.net/graphql";
             if (window.location.pathname.startsWith("/performers/")) {
-                check("performer", "div[class='pl-4'] > h2", {observe: true, currentSite: true, stashIdSelector});
+                check("performer", "div[class='pl-4'] > h2", {observe: true, currentSite: true, stashIdSelector, stashIdEndpoint});
             } else if (window.location.pathname.startsWith("/scenes/")) {
-                check("scene", "div[class='flex justify-between'] > h2", {observe: true, currentSite: true, stashIdSelector});
+                check("scene", "div[class='flex justify-between'] > h2", {observe: true, currentSite: true, stashIdSelector, stashIdEndpoint});
             } else if (window.location.pathname.startsWith("/movies/")) {
-                check("movie", "div[class='flex justify-between'] > h2", {observe: true, currentSite: true, stashIdSelector});
+                check("movie", "div[class='flex justify-between'] > h2", {observe: true, currentSite: true, stashIdSelector, stashIdEndpoint});
             }
             check("performer", "a[href^='https://metadataapi.net/performers/']", {observe: true});
             check("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", {observe: true, titleSelector: null});
@@ -174,6 +175,7 @@ import {firstTextChild} from "./tooltip";
         case "fansdb.xyz":
         case "pmvstash.org":
         case "stashdb.org":
+            // These buttons are only visible with edit permissions.
             let exclude = ":not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
             check("scene", "div.scene-info.card h3 > span", {
                 observe: true,

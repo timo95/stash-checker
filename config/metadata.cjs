@@ -14,7 +14,7 @@ module.exports = {
     icon: "https://docs.stashapp.cc/favicon.ico",
     version: version,
     author: author,
-    // source: repository.url,
+    source: repository.url,
     // 'license': 'MIT',
     match: [
         "*://adultanime.dbsearch.net/*",

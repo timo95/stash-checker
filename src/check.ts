@@ -6,6 +6,7 @@ interface CheckOptions {
     prepareUrl?: (url: string) => string;
     codeSelector?: (e: Element) => string;
     stashIdSelector?: (e: Element) => string;
+    stashIdEndpoint?: string;
     nameSelector?: (e: Element) => string;
     titleSelector?: (e: Element) => string;
     color?: (data: any) => string;
@@ -25,7 +26,8 @@ async function request(
     queryString: string,
     onload: (target: Target, data: any[], stashUrl: string) => any,
     target: Target,
-    type: Type
+    type: Type,
+    {stashIdEndpoint}: CheckOptions
 ) {
     let criterion = "";
     let query = "";
@@ -34,8 +36,7 @@ async function request(
     // Build filter
     switch (type) {
         case "stash_id":
-            let endpoint = `https://${window.location.host}/graphql`;
-            criterion = `{stash_id_endpoint:{endpoint:"${endpoint}",stash_id:"${queryString}",modifier:EQUALS}}`;
+            criterion = `{stash_id_endpoint:{endpoint:"${stashIdEndpoint}",stash_id:"${queryString}",modifier:EQUALS}}`;
             break;
         default:
             criterion = `{${type}:{value:"${queryString}",modifier:EQUALS}}`;
@@ -95,22 +96,25 @@ async function checkElement(
     target: Target,
     element: Element,
     {
+        currentSite = false,
         prepareUrl = url => url,
-        urlSelector,  // default is set in check()
+        urlSelector = currentSite ?
+            () => decodeURI(window.location.href) :
+            (e: Element) => decodeURI(e.closest("a").href),
         codeSelector,
         stashIdSelector,
+        stashIdEndpoint = `https://${window.location.host}/graphql`,
         nameSelector = e => firstTextChild(e)?.textContent?.trim(),
         titleSelector = e => firstTextChild(e)?.textContent?.trim(),
         color = () => "green",
     }: CheckOptions
 ) {
     if (urlSelector && prepareUrl) {
-        let url = urlSelector(element);
-        url = prepareUrl(url);
+        let url = prepareUrl(urlSelector(element));
         if (url) {
             url = encodeURIComponent(url);
             console.log(url);
-            await request(url, (...args) => prefixSymbol(element, ...args, "URL", color), target, "url");
+            await request(url, (...args) => prefixSymbol(element, ...args, "URL", color), target, "url", {stashIdEndpoint});
         } else {
             console.log(`No URL for ${target} found.`);
         }
@@ -119,7 +123,7 @@ async function checkElement(
         let code = codeSelector(element);
         if (code) {
             console.log(code);
-            await request(code, (...args) => prefixSymbol(element, ...args, "Code", color), target, "code");
+            await request(code, (...args) => prefixSymbol(element, ...args, "Code", color), target, "code", {stashIdEndpoint});
         } else {
             console.log(`No Code for ${target} found.`);
         }
@@ -128,7 +132,7 @@ async function checkElement(
         let id = stashIdSelector(element);
         if (id) {
             console.log(id);
-            await request(id, (...args) => prefixSymbol(element, ...args, "StashId", color), target, "stash_id");
+            await request(id, (...args) => prefixSymbol(element, ...args, "StashId", color), target, "stash_id", {stashIdEndpoint});
         } else {
             console.log(`No StashId for ${target} found.`);
         }
@@ -139,7 +143,7 @@ async function checkElement(
         let nameCount = name?.split(/\s+/)?.length
         if (name && nameCount > 1) {
             console.log(name);
-            await request(name, (...args) => prefixSymbol(element, ...args, "Name", color), target, "name");
+            await request(name, (...args) => prefixSymbol(element, ...args, "Name", color), target, "name", {stashIdEndpoint});
         } else if (name && nameCount === 1) {
             console.log(`Ignore single name: ${name}`)
         } else {
@@ -150,7 +154,7 @@ async function checkElement(
         let title = titleSelector(element);
         if (title) {
             console.log(title);
-            await request(title, (...args) => prefixSymbol(element, ...args, "Title", color), target, "title");
+            await request(title, (...args) => prefixSymbol(element, ...args, "Title", color), target, "title", {stashIdEndpoint});
         } else {
             console.log(`No Title for ${target} found.`);
         }
@@ -193,42 +197,23 @@ function onAddition(selector: string, callback: any) {
  * the first text inside the selected element will be prepended with the symbol
  * Set predefined selectors to "null" to not use them.
  */
-function checkOnce(
-    target: Target,
-    elementSelector: string,
-    {currentSite = false, ...checkConfig}: CheckOptions = {}
-) {
-    document.querySelectorAll(elementSelector).forEach((element) => {
-        if (currentSite) {
-            // url of current site
-            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? () => decodeURI(window.location.href) : checkConfig.urlSelector;
-        } else {
-            // url nearest to selected element traversing towards the root (children are ignored)
-            checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? (e: Element) => decodeURI(e.closest("a").href) : checkConfig.urlSelector;
-        }
-        checkElement(target, element, checkConfig);
-    });
-}
-
-/**
- * queries for each selected element
- *
- * the selected element should be [a child of] the link that will be compared with stash urls
- * the first text inside the selected element will be prepended with the symbol
- * Set predefined selectors to "null" to not use them.
- */
 export function check(
     target: Target,
     elementSelector: string,
     {observe = false, ...checkConfig}: CheckOptions = {}
 ) {
-    // Exclude direct children of tooltip window (some selectors match the stash link)
-    elementSelector = ":not(.stashCheckerTooltip) > " + elementSelector;
+    // Exclude direct children of tooltip window, because selectors might match the stash link
+    elementSelector = elementSelector
+        .split(",")
+        .map(s => " :not(.stashCheckerTooltip) > " + s)
+        .join(",");
 
     // Callback on addition of new elements fitting the query
     if (observe) {
-        let selector = typeof observe === "string" ? observe : elementSelector
-        onAddition(selector, (_: any) => checkOnce(target, elementSelector, checkConfig))
+        observe = typeof observe === "string" ? observe : elementSelector
+        onAddition(observe, (_: any) =>
+            document.querySelectorAll(elementSelector).forEach((e) => checkElement(target, e, checkConfig))
+        );
     }
-    checkOnce(target, elementSelector, checkConfig)
+    document.querySelectorAll(elementSelector).forEach((e) => checkElement(target, e, checkConfig));
 }
