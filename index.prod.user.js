@@ -3,9 +3,10 @@
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
 // @icon          https://docs.stashapp.cc/favicon.ico
-// @version       0.6.1
+// @version       0.6.2
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @source        https://github.com/timo95/stash-checker
+// @license       WTFPL
 // @match         *://adultanime.dbsearch.net/*
 // @match         *://coomer.party/*
 // @match         *://ecchi.iwara.tv/*
@@ -18,7 +19,6 @@
 // @match         *://onlyfans.com/*
 // @match         *://oreno3d.com/*
 // @match         *://pmvstash.org/*
-// @match         *://www.pornteengirl.com/*
 // @match         *://r18.dev/*
 // @match         *://shemalestardb.com/*
 // @match         *://stashdb.org/*
@@ -31,6 +31,7 @@
 // @match         *://www.iwara.tv/*
 // @match         *://www.javlibrary.com/*
 // @match         *://www.minnano-av.com/*
+// @match         *://www.pornteengirl.com/*
 // @match         *://www.thenude.com/*
 // @match         *://xslist.org/*
 // @grant         GM.xmlHttpRequest
