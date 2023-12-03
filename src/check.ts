@@ -198,21 +198,16 @@ function checkOnce(
     elementSelector: string,
     {currentSite = false, ...checkConfig}: CheckOptions = {}
 ) {
-    if (currentSite) {
-        let element = document.querySelector(elementSelector);
-        if (element) {
+    document.querySelectorAll(elementSelector).forEach((element) => {
+        if (currentSite) {
             // url of current site
             checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? () => decodeURI(window.location.href) : checkConfig.urlSelector;
-            checkElement(target, element, checkConfig);
-        }
-    } else {
-        // multiple entries with url nearest to element
-        document.querySelectorAll(elementSelector).forEach((element) => {
+        } else {
             // url nearest to selected element traversing towards the root (children are ignored)
             checkConfig.urlSelector = (checkConfig.urlSelector === undefined) ? (e: Element) => decodeURI(e.closest("a").href) : checkConfig.urlSelector;
-            checkElement(target, element, checkConfig);
-        });
-    }
+        }
+        checkElement(target, element, checkConfig);
+    });
 }
 
 /**

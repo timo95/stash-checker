@@ -19,7 +19,7 @@ Livereload is default enabled, use [this Chrome extension](https://chrome.google
 ### NOTICE
 
 Everytime you change your metadata config,
-you'll have to restart webpack server and install the newly generated `dist/index.dev.user.js` UserScript in your browser again.
+you'll have to restart the webpack server and install the newly generated `dist/index.dev.user.js` UserScript in your browser again.
 
 ## Dependencies
 

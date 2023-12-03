@@ -69,11 +69,20 @@ import {firstTextChild} from "./tooltip";
             check("scene", "a[href*='/title.rme/title=']", {prepareUrl: prepareUrl, titleSelector: null});
             break;
         }
-        case "metadataapi.net":
+        case "metadataapi.net": {
+            let stashIdSelector = (_: Element) => document.evaluate("//div[text()='TPDB UUID']/following-sibling::div/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim();
+            if (window.location.pathname.startsWith("/performers/")) {
+                check("performer", "div[class='pl-4'] > h2", {observe: true, currentSite: true, stashIdSelector});
+            } else if (window.location.pathname.startsWith("/scenes/")) {
+                check("scene", "div[class='flex justify-between'] > h2", {observe: true, currentSite: true, stashIdSelector});
+            } else if (window.location.pathname.startsWith("/movies/")) {
+                check("movie", "div[class='flex justify-between'] > h2", {observe: true, currentSite: true, stashIdSelector});
+            }
             check("performer", "a[href^='https://metadataapi.net/performers/']", {observe: true});
             check("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", {observe: true, titleSelector: null});
             check("movie", "a[href^='https://metadataapi.net/movies/']", {observe: true, titleSelector: null});
             break;
+        }
         case "www.javlibrary.com":
             check("scene", "div[id='video_title']", {
                 currentSite: true,
@@ -133,8 +142,33 @@ import {firstTextChild} from "./tooltip";
             break;
         case "www.freeones.com":
             check("performer", "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
-                prepareUrl: url => url.replace(/\/feed$/, "")
+                prepareUrl: url => url.replace(/\/feed$/, "").replace(/\/[a-z]{2}\//, "/")
             });
+            break;
+        case "shemalestardb.com":
+            check("performer", "h2[id='star-name']", {currentSite: true});
+            check("performer", "figcaption > a[href*='/stars/']");
+            break;
+        case "onlyfans.com":
+            check("performer", "div[class*='b-username'] > div[class*='g-user-name']", {observe: true, currentSite: true});
+            check("performer", "a[class*='b-username'] > div[class*='g-user-name']", {observe: true});
+            break;
+        case "www.pornteengirl.com":
+            check("performer", "a[href*='/model/']", {
+                 nameSelector: e => firstTextChild(e)?.textContent?.trim()?.replace(/\([^()]*\)$/, "")?.trimEnd()
+            });
+            break;
+        case "gayeroticvideoindex.com":
+            if (window.location.pathname.startsWith("/performer/")) {
+                check("performer", "[id='data'] h1", {currentSite: true});
+            } else if (window.location.pathname.startsWith("/episode/")) {
+                check("scene", "[id='data'] h1", {currentSite: true});
+            } else if (window.location.pathname.startsWith("/video/")) {
+                check("movie", "[id='data'] h1", {currentSite: true});
+            }
+            check("performer", "a[href*='performer/']", {observe: true});
+            check("scene", "a[href*='episode/']", {observe: true});
+            check("movie", "a[href*='video/']", {observe: true});
             break;
         case "fansdb.cc":
         case "fansdb.xyz":
