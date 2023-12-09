@@ -8,7 +8,7 @@ Hovering over the checkmark gives you a tooltip with information about the item 
 
 ## Installation
 
-You need a browser plugin to run userscripts like [Tampermonkey](https://www.tampermonkey.net/).
+You need a browser plugin like [Tampermonkey](https://www.tampermonkey.net/) to run userscripts.
 
 The newest release of Stash Checker gets deployed to [this Gist](https://gist.github.com/timo95/562b9363d491e3ee281cb46944445fcd).
 Click on the `Raw` button to import this script to Tampermonkey.

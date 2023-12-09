@@ -65,11 +65,11 @@ async function request(
             break;
     }
 
-    // Wait for config popup if it is not stored
+    // Get config values or wait for popup if it is not stored
     let [stashUrl, apiKey] = await configPromise
     GM.xmlHttpRequest({
         method: "GET",
-        url: `${stashUrl}/graphql?query=${query}`,
+        url: `${stashUrl}/graphql?query=${encodeURIComponent(query)}`,  // encode query (important for url and some titles)
         headers: {
             "Content-Type": "application/json",
             ApiKey: apiKey,
@@ -92,6 +92,22 @@ async function request(
     });
 }
 
+/**
+ * For a given element query stash with each configured query.
+ * Default selectors for most queries are defined here.
+ *
+ * @param target
+ * @param element
+ * @param currentSite
+ * @param prepareUrl
+ * @param urlSelector
+ * @param codeSelector
+ * @param stashIdSelector
+ * @param stashIdEndpoint
+ * @param nameSelector
+ * @param titleSelector
+ * @param color
+ */
 async function checkElement(
     target: Target,
     element: Element,
@@ -112,7 +128,6 @@ async function checkElement(
     if (urlSelector && prepareUrl) {
         let url = prepareUrl(urlSelector(element));
         if (url) {
-            url = encodeURIComponent(url);
             console.log(url);
             await request(url, (...args) => prefixSymbol(element, ...args, "URL", color), target, "url", {stashIdEndpoint});
         } else {
@@ -179,12 +194,13 @@ function onAddition(selector: string, callback: any) {
             Array.from(m.addedNodes).map(n => n.parentElement).filter(e => e).some(e => e.matches(selector))  // Parent match (if text node was added)
         ).some(n => n);
         if (newNode) {
+            // Delay callback, because callback currently runs on all elements instead of only new ones.
             console.log(`"${selector}"-element was added or modified. Start/Update Timer.`);
             clearTimeout(timeout);
             timeout = setTimeout(_ => {
                 console.log("Run queries.");
                 callback();
-            }, 200);  // arbitrary delay to prevent too many calls
+            }, 200);
         }
     });
     observer.observe(body, {childList: true, subtree: true});

@@ -197,10 +197,11 @@ export function prefixSymbol(
     // Look for existing check spans
     let span = getExistingSpan(element)
     if (span) {
-        // Add previous queries tried and remove duplicates
+        // Merge new result with existing results
         queries = [...new Set<string>(JSON.parse(span.getAttribute("data-queries"))).add(queryType)].sort()
         data = mergeData(JSON.parse(span.getAttribute("data-data")), data)
     } else {
+        // Create new span
         span = document.createElement("span");
         span.classList.add("stashCheckerSymbol");
         span.setAttribute("data-type", "stash-symbol")
@@ -210,14 +211,18 @@ export function prefixSymbol(
         // it works with cases were non text elements (images) are inside the selected element
         let text = firstTextChild(element)
         if (text) {
+            // If node contains text, insert span before the text
             text.parentNode.insertBefore(span, text);
+            console.log("span inserted")
         } else {
             return  // abort if no text in span
         }
     }
+    // Store merged query results on span
     span.setAttribute("data-queries", JSON.stringify(queries))
     span.setAttribute("data-data", JSON.stringify(data))
 
+    // Set symbol and tooltip content based on query results
     let count = data.length;
     let tooltip = ""
     let targetP = target.charAt(0).toUpperCase() + target.slice(1);
@@ -233,8 +238,9 @@ export function prefixSymbol(
         span.style.color = "orange";
         tooltip = `${targetP} has duplicate matches<br>`;
     }
-
     tooltip += `Queries: ${queries.join(", ")}`
     tooltip += formatEntryData(target, data, stashUrl)
+
+    // Store tooltip content on span
     span.setAttribute("data-info", tooltip)
 }

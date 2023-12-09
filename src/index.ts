@@ -1,14 +1,19 @@
 import "./style/main.less";
 import {check} from "./check";
-import {isSiteBlocked} from "./config";
+import {initMenu, isSiteBlocked} from "./config";
 import {firstTextChild} from "./tooltip";
 
 (async function () {
+    // Register menu items
+    await initMenu();
+
+    // Stop, if site block is configured
     if (await isSiteBlocked()) {
         console.log("Userscript is deactivated for this site. Activate in userscript menu.");
         return;
     }
 
+    // Main area
     switch (window.location.host) {
         case "www.iwara.tv":
         case "ecchi.iwara.tv": {
@@ -44,7 +49,7 @@ import {firstTextChild} from "./tooltip";
                     codeSelector: (_) => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
                 });
             }
-            check("scene", "div[class='item-info'] > h4 > a, div[class='item-info'] > h5 > a");
+            check("scene", "div.item-info > h4 > a, div.item-info > h5 > a");
             break;
         case "xslist.org":
             check("performer", "span[itemprop='name']", {currentSite: true});
@@ -73,15 +78,15 @@ import {firstTextChild} from "./tooltip";
             let stashIdSelector = (_: Element) => document.evaluate("//div[text()='TPDB UUID']/following-sibling::div/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim();
             let stashIdEndpoint = "https://api.metadataapi.net/graphql";
             if (window.location.pathname.startsWith("/performers/")) {
-                check("performer", "div[class='pl-4'] > h2", {observe: true, currentSite: true, stashIdSelector, stashIdEndpoint});
+                check("performer", "div.pl-4 > h2", {observe: true, currentSite: true, stashIdSelector, stashIdEndpoint});
             } else if (window.location.pathname.startsWith("/scenes/")) {
-                check("scene", "div[class='flex justify-between'] > h2", {observe: true, currentSite: true, stashIdSelector, stashIdEndpoint});
+                check("scene", "div.flex.justify-between > h2", {observe: true, currentSite: true, stashIdSelector, stashIdEndpoint});
             } else if (window.location.pathname.startsWith("/movies/")) {
-                check("movie", "div[class='flex justify-between'] > h2", {observe: true, currentSite: true, stashIdSelector, stashIdEndpoint});
+                check("movie", "div.flex.justify-between > h2", {observe: true, currentSite: true, stashIdSelector, stashIdEndpoint});
             }
             check("performer", "a[href^='https://metadataapi.net/performers/']", {observe: true});
-            check("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", {observe: true, titleSelector: null});
-            check("movie", "a[href^='https://metadataapi.net/movies/']", {observe: true, titleSelector: null});
+            check("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", {observe: true});
+            check("movie", "a[href^='https://metadataapi.net/movies/']", {observe: true});
             break;
         }
         case "www.javlibrary.com":
@@ -127,7 +132,7 @@ import {firstTextChild} from "./tooltip";
             break;
         case "www.indexxx.com":
             check("performer", "h1[id='model-name']", {currentSite: true});
-            check("performer", "a[class*='modelLink'][href*='https://www.indexxx.com/m/'] > span");
+            check("performer", "a.modelLink[href*='https://www.indexxx.com/m/'] > span");
             break;
         case "www.thenude.com":
             check("performer", "span.model-name", {currentSite: true});
@@ -151,8 +156,8 @@ import {firstTextChild} from "./tooltip";
             check("performer", "figcaption > a[href*='/stars/']");
             break;
         case "onlyfans.com":
-            check("performer", "div[class*='b-username'] > div[class*='g-user-name']", {observe: true, currentSite: true});
-            check("performer", "a[class*='b-username'] > div[class*='g-user-name']", {observe: true});
+            check("performer", "div.b-username > div.g-user-name", {observe: true, currentSite: true});
+            check("performer", "a.b-username > div.g-user-name", {observe: true});
             break;
         case "www.pornteengirl.com":
             check("performer", "a[href*='/model/']", {
