@@ -3,7 +3,7 @@
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
 // @icon          https://docs.stashapp.cc/favicon.ico
-// @version       0.6.3
+// @version       0.6.4
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @source        https://github.com/timo95/stash-checker
 // @license       WTFPL
@@ -754,12 +754,14 @@ function prefixSymbol(element, target, data, stashUrl, queryType, color) {
         // Merge new result with existing results
         queries = [...new Set(JSON.parse(span.getAttribute("data-queries"))).add(queryType)].sort();
         data = mergeData(JSON.parse(span.getAttribute("data-data")), data);
+        span.setAttribute("data-count", (parseInt(span.getAttribute("data-count")) + 1).toString());
     }
     else {
         // Create new span
         span = document.createElement("span");
         span.classList.add("stashCheckerSymbol");
         span.setAttribute("data-type", "stash-symbol");
+        span.setAttribute("data-count", "1");
         span.addEventListener("mouseover", mouseoverListener);
         span.addEventListener("mouseout", mouseoutListener);
         // insert before first text because css selectors cannot select text nodes directly
@@ -768,7 +770,6 @@ function prefixSymbol(element, target, data, stashUrl, queryType, color) {
         if (text) {
             // If node contains text, insert span before the text
             text.parentNode.insertBefore(span, text);
-            console.log("span inserted");
         }
         else {
             return; // abort if no text in span
@@ -973,7 +974,7 @@ async function checkElement(target, element, { currentSite = false, prepareUrl =
             console.log(`No StashId for ${target} found.`);
         }
     }
-    if (target === "performer" && nameSelector) {
+    if (["performer", "movie"].includes(target) && nameSelector) {
         let name = nameSelector(element);
         // Do not use single names
         let nameCount = name?.split(/\s+/)?.length;
@@ -1000,51 +1001,37 @@ async function checkElement(target, element, { currentSite = false, prepareUrl =
     }
 }
 /**
- * Run callback when a new object added to the document matches the selector.
- * Calls callback with a timer after the last addition to prevent unnecessary executions.
+ * Run callback when a new element added to the document matches the selector.
  *
  * @param selector css selector string
  * @param callback callback function
  */
 function onAddition(selector, callback) {
-    // Run on each type-element addition
-    let body = document.querySelector("body");
-    let timeout = undefined;
+    // Run on each element addition
     let observer = new MutationObserver((mutations) => {
-        let newNode = mutations.map(m => Array.from(m.addedNodes)
+        let addedElements = mutations
+            .flatMap(m => Array.from(m.addedNodes))
             .filter(n => n.nodeType === Node.ELEMENT_NODE)
-            .some(n => n.matches(selector) || n.querySelector(selector)) || // Element or Child match
-            Array.from(m.addedNodes).map(n => n.parentElement).filter(e => e).some(e => e.matches(selector)) // Parent match (if text node was added)
-        ).some(n => n);
-        if (newNode) {
-            // Delay callback, because callback currently runs on all elements instead of only new ones.
-            console.log(`"${selector}"-element was added or modified. Start/Update Timer.`);
-            clearTimeout(timeout);
-            timeout = setTimeout(_ => {
-                console.log("Run queries.");
-                callback();
-            }, 200);
-        }
+            .map(n => n);
+        addedElements
+            .filter(e => e.matches(selector))
+            .concat(addedElements.flatMap(e => Array.from(e.querySelectorAll(selector))))
+            .filter(e => !e.parentElement.matches(".stashCheckerTooltip"))
+            .forEach(callback);
     });
+    let body = document.querySelector("body");
     observer.observe(body, { childList: true, subtree: true });
 }
 /**
- * queries for each selected element
+ * Queries for each selected element
  *
- * the selected element should be [a child of] the link that will be compared with stash urls
- * the first text inside the selected element will be prepended with the symbol
- * Set predefined selectors to "null" to not use them.
+ * The selected element should be [a descendant of] the link that will be compared with stash urls.
+ * The first text inside the selected element will be prepended with the symbol.
  */
 function check(target, elementSelector, { observe = false, ...checkConfig } = {}) {
-    // Exclude direct children of tooltip window, because selectors might match the stash link
-    elementSelector = elementSelector
-        .split(",")
-        .map(s => " :not(.stashCheckerTooltip) > " + s)
-        .join(",");
-    // Callback on addition of new elements fitting the query
+    // Run query on addition of new elements fitting the selector
     if (observe) {
-        observe = typeof observe === "string" ? observe : elementSelector;
-        onAddition(observe, (_) => document.querySelectorAll(elementSelector).forEach((e) => checkElement(target, e, checkConfig)));
+        onAddition(elementSelector, (element) => checkElement(target, element, checkConfig));
     }
     document.querySelectorAll(elementSelector).forEach((e) => checkElement(target, e, checkConfig));
 }
@@ -1162,7 +1149,7 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
             break;
         case "r18.dev":
             check("scene", "#video-info > #title", {
-                observe: "#dvd-id",
+                observe: true,
                 currentSite: true,
                 codeSelector: _ => firstTextChild(document.querySelector("#dvd-id"))?.textContent?.trim(),
             });
