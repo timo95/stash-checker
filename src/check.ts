@@ -11,7 +11,7 @@ interface CheckOptions {
     titleSelector?: (e: Element) => string;
     color?: (data: any) => string;
     currentSite?: boolean;
-    observe?: boolean | string;
+    observe?: boolean;
 }
 
 // what the query asks for
@@ -152,7 +152,7 @@ async function checkElement(
             console.log(`No StashId for ${target} found.`);
         }
     }
-    if (target === "performer" && nameSelector) {
+    if (["performer", "movie"].includes(target) && nameSelector) {
         let name = nameSelector(element);
         // Do not use single names
         let nameCount = name?.split(/\s+/)?.length
@@ -177,58 +177,43 @@ async function checkElement(
 }
 
 /**
- * Run callback when a new object added to the document matches the selector.
- * Calls callback with a timer after the last addition to prevent unnecessary executions.
+ * Run callback when a new element added to the document matches the selector.
  *
  * @param selector css selector string
  * @param callback callback function
  */
-function onAddition(selector: string, callback: any) {
-    // Run on each type-element addition
-    let body = document.querySelector("body");
-    let timeout: any = undefined;
+function onAddition(selector: string, callback: (e: Element) => void) {
+    // Run on each element addition
     let observer = new MutationObserver((mutations) => {
-        let newNode = mutations.map(m => Array.from(m.addedNodes)
-                .filter(n => n.nodeType === Node.ELEMENT_NODE)
-                .some(n => (n as Element).matches(selector) || (n as Element).querySelector(selector)) ||  // Element or Child match
-            Array.from(m.addedNodes).map(n => n.parentElement).filter(e => e).some(e => e.matches(selector))  // Parent match (if text node was added)
-        ).some(n => n);
-        if (newNode) {
-            // Delay callback, because callback currently runs on all elements instead of only new ones.
-            console.log(`"${selector}"-element was added or modified. Start/Update Timer.`);
-            clearTimeout(timeout);
-            timeout = setTimeout(_ => {
-                console.log("Run queries.");
-                callback();
-            }, 200);
-        }
+        let addedElements = mutations
+            .flatMap(m => Array.from(m.addedNodes))
+            .filter(n => n.nodeType === Node.ELEMENT_NODE)
+            .map(n => n as Element)
+        addedElements
+            .filter(e => e.matches(selector))
+            .concat(addedElements.flatMap(e => Array.from(e.querySelectorAll(selector))))
+            .filter(e => !e.parentElement.matches(".stashCheckerTooltip"))
+            .forEach(callback);
     });
+    let body = document.querySelector("body");
     observer.observe(body, {childList: true, subtree: true});
 }
 
 /**
- * queries for each selected element
+ * Queries for each selected element
  *
- * the selected element should be [a child of] the link that will be compared with stash urls
- * the first text inside the selected element will be prepended with the symbol
- * Set predefined selectors to "null" to not use them.
+ * The selected element should be [a descendant of] the link that will be compared with stash urls.
+ * The first text inside the selected element will be prepended with the symbol.
  */
 export function check(
     target: Target,
     elementSelector: string,
     {observe = false, ...checkConfig}: CheckOptions = {}
 ) {
-    // Exclude direct children of tooltip window, because selectors might match the stash link
-    elementSelector = elementSelector
-        .split(",")
-        .map(s => " :not(.stashCheckerTooltip) > " + s)
-        .join(",");
-
-    // Callback on addition of new elements fitting the query
+    // Run query on addition of new elements fitting the selector
     if (observe) {
-        observe = typeof observe === "string" ? observe : elementSelector
-        onAddition(observe, (_: any) =>
-            document.querySelectorAll(elementSelector).forEach((e) => checkElement(target, e, checkConfig))
+        onAddition(elementSelector, (element: Element) =>
+            checkElement(target, element, checkConfig)
         );
     }
     document.querySelectorAll(elementSelector).forEach((e) => checkElement(target, e, checkConfig));

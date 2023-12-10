@@ -200,11 +200,13 @@ export function prefixSymbol(
         // Merge new result with existing results
         queries = [...new Set<string>(JSON.parse(span.getAttribute("data-queries"))).add(queryType)].sort()
         data = mergeData(JSON.parse(span.getAttribute("data-data")), data)
+        span.setAttribute("data-count", (parseInt(span.getAttribute("data-count")) + 1).toString())
     } else {
         // Create new span
         span = document.createElement("span");
         span.classList.add("stashCheckerSymbol");
         span.setAttribute("data-type", "stash-symbol")
+        span.setAttribute("data-count", "1")
         span.addEventListener("mouseover", mouseoverListener);
         span.addEventListener("mouseout", mouseoutListener);
         // insert before first text because css selectors cannot select text nodes directly
@@ -213,7 +215,6 @@ export function prefixSymbol(
         if (text) {
             // If node contains text, insert span before the text
             text.parentNode.insertBefore(span, text);
-            console.log("span inserted")
         } else {
             return  // abort if no text in span
         }

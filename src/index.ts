@@ -110,7 +110,7 @@ import {firstTextChild} from "./tooltip";
             break;
         case "r18.dev":
             check("scene","#video-info > #title", {
-                observe: "#dvd-id",
+                observe: true,
                 currentSite: true,
                 codeSelector: _ => firstTextChild(document.querySelector("#dvd-id"))?.textContent?.trim(),
             });
