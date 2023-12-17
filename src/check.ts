@@ -1,14 +1,16 @@
 import {firstTextChild, prefixSymbol} from "./tooltip";
 import {getConfig} from "./config";
 
+type Selector = (e: Element) => string;
+
 interface CheckOptions {
-    urlSelector?: (e: Element) => string;
+    urlSelector?: Selector;
     prepareUrl?: (url: string) => string;
-    codeSelector?: (e: Element) => string;
-    stashIdSelector?: (e: Element) => string;
+    codeSelector?: Selector;
+    stashIdSelector?: Selector;
     stashIdEndpoint?: string;
-    nameSelector?: (e: Element) => string;
-    titleSelector?: (e: Element) => string;
+    nameSelector?: Selector;
+    titleSelector?: Selector;
     color?: (data: any) => string;
     currentSite?: boolean;
     observe?: boolean;
@@ -29,8 +31,8 @@ async function request(
     type: Type,
     {stashIdEndpoint}: CheckOptions
 ) {
-    let criterion = "";
-    let query = "";
+    let criterion;
+    let query;
     let access = (d: any) => d;
 
     // Build filter
@@ -62,7 +64,7 @@ async function request(
             access = (d) => d.findMovies.movies;
             break;
         default:
-            break;
+            return;
     }
 
     // Get config values or wait for popup if it is not stored
@@ -128,7 +130,7 @@ async function checkElement(
     if (urlSelector && prepareUrl) {
         let url = prepareUrl(urlSelector(element));
         if (url) {
-            console.log(url);
+            console.debug(`URL: ${url}`);
             await request(url, (...args) => prefixSymbol(element, ...args, "URL", color), target, "url", {stashIdEndpoint});
         } else {
             console.log(`No URL for ${target} found.`);
@@ -137,7 +139,7 @@ async function checkElement(
     if (codeSelector) {
         let code = codeSelector(element);
         if (code) {
-            console.log(code);
+            console.debug(`Code: ${code}`);
             await request(code, (...args) => prefixSymbol(element, ...args, "Code", color), target, "code", {stashIdEndpoint});
         } else {
             console.log(`No Code for ${target} found.`);
@@ -146,7 +148,7 @@ async function checkElement(
     if (stashIdSelector) {
         let id = stashIdSelector(element);
         if (id) {
-            console.log(id);
+            console.debug(`StashId: ${id}`);
             await request(id, (...args) => prefixSymbol(element, ...args, "StashId", color), target, "stash_id", {stashIdEndpoint});
         } else {
             console.log(`No StashId for ${target} found.`);
@@ -157,7 +159,7 @@ async function checkElement(
         // Do not use single names
         let nameCount = name?.split(/\s+/)?.length
         if (name && nameCount > 1) {
-            console.log(name);
+            console.debug(`Name: ${name}`);
             await request(name, (...args) => prefixSymbol(element, ...args, "Name", color), target, "name", {stashIdEndpoint});
         } else if (name && nameCount === 1) {
             console.log(`Ignore single name: ${name}`)
@@ -168,7 +170,7 @@ async function checkElement(
     if (["scene", "gallery"].includes(target) && titleSelector) {
         let title = titleSelector(element);
         if (title) {
-            console.log(title);
+            console.debug(`Title: ${title}`);
             await request(title, (...args) => prefixSymbol(element, ...args, "Title", color), target, "title", {stashIdEndpoint});
         } else {
             console.log(`No Title for ${target} found.`);

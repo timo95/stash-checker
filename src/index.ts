@@ -14,12 +14,31 @@ import {firstTextChild} from "./tooltip";
     }
 
     // Main area
+    console.log("Running Stash Checker")
     switch (window.location.host) {
-        case "www.iwara.tv":
-        case "ecchi.iwara.tv": {
+        case "www.iwara.tv": {
             let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
-            check("scene", "h1.title", {color: color, currentSite: true, titleSelector: null});
-            check("scene", "h3.title > a", {color: color, titleSelector: null});
+            // Video code in the URL
+            let codeRegex = /(?<=video\/)([a-zA-Z0-9]+)(?=\/|$)/
+            // Cut URL after code off
+            let prepareUrl = (url: String) => {
+                let match = url.match(codeRegex)
+                return url.substring(0, match.index + match.at(0).length)
+            }
+
+            check("scene", ".page-video__details > .text--h1", {
+                observe: true,
+                currentSite: true,
+                color: color,
+                prepareUrl,
+                codeSelector: () => window.location.pathname.match(codeRegex).at(0)
+            });
+            check("scene", "a.videoTeaser__title", {
+                observe: true,
+                color: color,
+                prepareUrl,
+                codeSelector: (e: Element) => e.getAttribute("href").match(codeRegex).at(0)
+            });
             break;
         }
         case "oreno3d.com": {
@@ -76,13 +95,17 @@ import {firstTextChild} from "./tooltip";
         }
         case "metadataapi.net": {
             let stashIdSelector = (_: Element) => document.evaluate("//div[text()='TPDB UUID']/following-sibling::div/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim();
+            // Alternative endpoint url. Query both the default and this one.
             let stashIdEndpoint = "https://api.metadataapi.net/graphql";
             if (window.location.pathname.startsWith("/performers/")) {
-                check("performer", "div.pl-4 > h2", {observe: true, currentSite: true, stashIdSelector, stashIdEndpoint});
+                check("performer", "div.pl-4 > h2", {observe: true, currentSite: true, stashIdSelector});
+                check("performer", "div.pl-4 > h2", {observe: true, currentSite: true, urlSelector: null, nameSelector: null, stashIdSelector, stashIdEndpoint});
             } else if (window.location.pathname.startsWith("/scenes/")) {
-                check("scene", "div.flex.justify-between > h2", {observe: true, currentSite: true, stashIdSelector, stashIdEndpoint});
+                check("scene", "div.flex.justify-between > h2", {observe: true, currentSite: true, stashIdSelector});
+                check("scene", "div.flex.justify-between > h2", {observe: true, currentSite: true, titleSelector: null, stashIdSelector, stashIdEndpoint});
             } else if (window.location.pathname.startsWith("/movies/")) {
-                check("movie", "div.flex.justify-between > h2", {observe: true, currentSite: true, stashIdSelector, stashIdEndpoint});
+                check("movie", "div.flex.justify-between > h2", {observe: true, currentSite: true, stashIdSelector});
+                check("movie", "div.flex.justify-between > h2", {observe: true, currentSite: true, nameSelector: null, stashIdSelector, stashIdEndpoint});
             }
             check("performer", "a[href^='https://metadataapi.net/performers/']", {observe: true});
             check("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", {observe: true});

@@ -19,7 +19,6 @@ module.exports = {
     match: [
         "*://adultanime.dbsearch.net/*",
         "*://coomer.party/*",
-        "*://ecchi.iwara.tv/*",
         "*://erommdtube.com/*",
         "*://fansdb.cc/*",
         "*://fansdb.xyz/*",
