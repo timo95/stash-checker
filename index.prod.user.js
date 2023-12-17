@@ -3,13 +3,12 @@
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
 // @icon          https://docs.stashapp.cc/favicon.ico
-// @version       0.6.4
+// @version       0.6.5
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @source        https://github.com/timo95/stash-checker
 // @license       WTFPL
 // @match         *://adultanime.dbsearch.net/*
 // @match         *://coomer.party/*
-// @match         *://ecchi.iwara.tv/*
 // @match         *://erommdtube.com/*
 // @match         *://fansdb.cc/*
 // @match         *://fansdb.xyz/*
@@ -864,8 +863,8 @@ async function getConfig() {
 // Ask for stash url/key on load
 let configPromise = getConfig();
 async function request(queryString, onload, target, type, { stashIdEndpoint }) {
-    let criterion = "";
-    let query = "";
+    let criterion;
+    let query;
     let access = (d) => d;
     // Build filter
     switch (type) {
@@ -895,7 +894,7 @@ async function request(queryString, onload, target, type, { stashIdEndpoint }) {
             access = (d) => d.findMovies.movies;
             break;
         default:
-            break;
+            return;
     }
     // Get config values or wait for popup if it is not stored
     let [stashUrl, apiKey] = await configPromise;
@@ -947,7 +946,7 @@ async function checkElement(target, element, { currentSite = false, prepareUrl =
     if (urlSelector && prepareUrl) {
         let url = prepareUrl(urlSelector(element));
         if (url) {
-            console.log(url);
+            console.debug(`URL: ${url}`);
             await request(url, (...args) => prefixSymbol(element, ...args, "URL", color), target, "url", { stashIdEndpoint });
         }
         else {
@@ -957,7 +956,7 @@ async function checkElement(target, element, { currentSite = false, prepareUrl =
     if (codeSelector) {
         let code = codeSelector(element);
         if (code) {
-            console.log(code);
+            console.debug(`Code: ${code}`);
             await request(code, (...args) => prefixSymbol(element, ...args, "Code", color), target, "code", { stashIdEndpoint });
         }
         else {
@@ -967,7 +966,7 @@ async function checkElement(target, element, { currentSite = false, prepareUrl =
     if (stashIdSelector) {
         let id = stashIdSelector(element);
         if (id) {
-            console.log(id);
+            console.debug(`StashId: ${id}`);
             await request(id, (...args) => prefixSymbol(element, ...args, "StashId", color), target, "stash_id", { stashIdEndpoint });
         }
         else {
@@ -979,7 +978,7 @@ async function checkElement(target, element, { currentSite = false, prepareUrl =
         // Do not use single names
         let nameCount = name?.split(/\s+/)?.length;
         if (name && nameCount > 1) {
-            console.log(name);
+            console.debug(`Name: ${name}`);
             await request(name, (...args) => prefixSymbol(element, ...args, "Name", color), target, "name", { stashIdEndpoint });
         }
         else if (name && nameCount === 1) {
@@ -992,7 +991,7 @@ async function checkElement(target, element, { currentSite = false, prepareUrl =
     if (["scene", "gallery"].includes(target) && titleSelector) {
         let title = titleSelector(element);
         if (title) {
-            console.log(title);
+            console.debug(`Title: ${title}`);
             await request(title, (...args) => prefixSymbol(element, ...args, "Title", color), target, "title", { stashIdEndpoint });
         }
         else {
@@ -1050,12 +1049,30 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
         return;
     }
     // Main area
+    console.log("Running Stash Checker");
     switch (window.location.host) {
-        case "www.iwara.tv":
-        case "ecchi.iwara.tv": {
+        case "www.iwara.tv": {
             let color = (d) => d.files.some((f) => f.path.endsWith("_Source.mp4")) ? "green" : "blue";
-            check("scene", "h1.title", { color: color, currentSite: true, titleSelector: null });
-            check("scene", "h3.title > a", { color: color, titleSelector: null });
+            // Video code in the URL
+            let codeRegex = /(?<=video\/)([a-zA-Z0-9]+)(?=\/|$)/;
+            // Cut URL after code off
+            let prepareUrl = (url) => {
+                let match = url.match(codeRegex);
+                return url.substring(0, match.index + match.at(0).length);
+            };
+            check("scene", ".page-video__details > .text--h1", {
+                observe: true,
+                currentSite: true,
+                color: color,
+                prepareUrl,
+                codeSelector: () => window.location.pathname.match(codeRegex).at(0)
+            });
+            check("scene", "a.videoTeaser__title", {
+                observe: true,
+                color: color,
+                prepareUrl,
+                codeSelector: (e) => e.getAttribute("href").match(codeRegex).at(0)
+            });
             break;
         }
         case "oreno3d.com": {
@@ -1113,15 +1130,19 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
         }
         case "metadataapi.net": {
             let stashIdSelector = (_) => document.evaluate("//div[text()='TPDB UUID']/following-sibling::div/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim();
+            // Alternative endpoint url. Query both the default and this one.
             let stashIdEndpoint = "https://api.metadataapi.net/graphql";
             if (window.location.pathname.startsWith("/performers/")) {
-                check("performer", "div.pl-4 > h2", { observe: true, currentSite: true, stashIdSelector, stashIdEndpoint });
+                check("performer", "div.pl-4 > h2", { observe: true, currentSite: true, stashIdSelector });
+                check("performer", "div.pl-4 > h2", { observe: true, currentSite: true, urlSelector: null, nameSelector: null, stashIdSelector, stashIdEndpoint });
             }
             else if (window.location.pathname.startsWith("/scenes/")) {
-                check("scene", "div.flex.justify-between > h2", { observe: true, currentSite: true, stashIdSelector, stashIdEndpoint });
+                check("scene", "div.flex.justify-between > h2", { observe: true, currentSite: true, stashIdSelector });
+                check("scene", "div.flex.justify-between > h2", { observe: true, currentSite: true, titleSelector: null, stashIdSelector, stashIdEndpoint });
             }
             else if (window.location.pathname.startsWith("/movies/")) {
-                check("movie", "div.flex.justify-between > h2", { observe: true, currentSite: true, stashIdSelector, stashIdEndpoint });
+                check("movie", "div.flex.justify-between > h2", { observe: true, currentSite: true, stashIdSelector });
+                check("movie", "div.flex.justify-between > h2", { observe: true, currentSite: true, nameSelector: null, stashIdSelector, stashIdEndpoint });
             }
             check("performer", "a[href^='https://metadataapi.net/performers/']", { observe: true });
             check("scene", "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", { observe: true });
