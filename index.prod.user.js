@@ -893,6 +893,14 @@ async function request(queryString, onload, target, type, { stashIdEndpoint }) {
             query = `{findMovies(movie_filter:${criterion}){movies{id,name,date}}}`;
             access = (d) => d.findMovies.movies;
             break;
+        case "studio":
+            query = `{findStudios(studio_filter:${criterion}){studios{id,name}}}`;
+            access = (d) => d.findStudios.studios;
+            break;
+        case "tag":
+            query = `{findTags(tag_filter:${criterion}){tags{id,name}}}`;
+            access = (d) => d.findTags.tags;
+            break;
         default:
             return;
     }
@@ -1244,32 +1252,68 @@ function check(target, elementSelector, { observe = false, ...checkConfig } = {}
         case "stashdb.org":
             // These buttons are only visible with edit permissions.
             let exclude = ":not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
-            check("scene", "div.scene-info.card h3 > span", {
-                observe: true,
-                currentSite: true,
-                urlSelector: null,
-                stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
-                titleSelector: null,
-            });
-            check("performer", "div.PerformerInfo div.card-header h3 > span", {
-                observe: true,
-                currentSite: true,
-                urlSelector: null,
-                stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
-                nameSelector: null,
-            });
+            if (window.location.pathname.startsWith("/scenes/")) {
+                check("scene", "div.scene-info.card h3 > span", {
+                    observe: true,
+                    currentSite: true,
+                    urlSelector: null,
+                    stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
+                    titleSelector: null,
+                });
+            }
             check("scene", `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
                 titleSelector: null,
             });
+            if (window.location.pathname.startsWith("/performers/")) {
+                check("performer", "div.PerformerInfo div.card-header h3 > span", {
+                    observe: true,
+                    currentSite: true,
+                    urlSelector: null,
+                    stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
+                    nameSelector: null,
+                });
+            }
             check("performer", `a[href^='/performers/']${exclude}, a[href^='https://${window.location.host}/performers/']${exclude}`, {
                 observe: true,
                 urlSelector: null,
                 stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
                 nameSelector: null,
             });
+            if (window.location.pathname.startsWith("/studios/")) {
+                check("studio", ".studio-title > h3 > span", {
+                    observe: true,
+                    currentSite: true,
+                    urlSelector: null,
+                    stashIdSelector: () => window.location.href.replace(/^.*\/studios\//, "").split(/[?#]/)[0],
+                    nameSelector: null,
+                });
+            }
+            check("studio", `a[href^='/studios/']${exclude}, a[href^='https://${window.location.host}/studios/']${exclude}`, {
+                observe: true,
+                urlSelector: null,
+                stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/studios\//, "")?.split(/[?#]/)[0],
+                nameSelector: null,
+            });
+            if (window.location.pathname.startsWith("/tags/")) {
+                check("tag", ".MainContent > .NarrowPage h3 > span", {
+                    observe: true,
+                    currentSite: true,
+                    urlSelector: null,
+                    stashIdSelector: () => window.location.href.replace(/^.*\/tags\//, "").split(/[?#]/)[0],
+                    nameSelector: null,
+                });
+            }
+            else if (window.location.pathname === "/tags") {
+                check("tag", `a[href^='/tags/']${exclude}, a[href^='https://${window.location.host}/tags/']${exclude}`, {
+                    observe: true,
+                    urlSelector: null,
+                    stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/tags\//, "")?.split(/[?#]/)[0],
+                    nameSelector: null,
+                });
+            }
             break;
         default:
             console.log("No configuration for website found.");
