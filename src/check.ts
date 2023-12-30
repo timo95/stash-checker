@@ -17,7 +17,7 @@ interface CheckOptions {
 }
 
 // what the query asks for
-export type Target = "scene" | "performer" | "gallery" | "movie"
+export type Target = "scene" | "performer" | "gallery" | "movie" | "studio" | "tag"
 // what the query uses to filter
 type Type = "url" | "code" | "stash_id" | "name" | "title"
 
@@ -62,6 +62,14 @@ async function request(
         case "movie":
             query = `{findMovies(movie_filter:${criterion}){movies{id,name,date}}}`;
             access = (d) => d.findMovies.movies;
+            break;
+        case "studio":
+            query = `{findStudios(studio_filter:${criterion}){studios{id,name}}}`;
+            access = (d) => d.findStudios.studios;
+            break;
+        case "tag":
+            query = `{findTags(tag_filter:${criterion}){tags{id,name}}}`;
+            access = (d) => d.findTags.tags;
             break;
         default:
             return;
