@@ -5,9 +5,10 @@
     "noImplicitAny": true,
     "moduleResolution": "Node",
     "module": "ESNext",
-    "target": "ES2020",
+    "target": "ES2021",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "lib": ["ES2021.String", "dom"]
+    "lib": ["ES2021", "dom"],
+    "sourceMap": true,
   }
 }

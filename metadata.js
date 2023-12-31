@@ -1,20 +1,12 @@
-const {
-    author,
-    repository,
-    version,
-    description,
-} = require("../package.json");
+import meta from "./package.json" with { type: "json" };
 
-module.exports = {
-    name: {
-        "": "Stash Checker",
-        en: "Stash Checker",
-    },
-    description: description,
+export default {
+    name: "Stash Checker",
+    description: meta.description,
     icon: "https://docs.stashapp.cc/favicon.ico",
-    version: version,
-    author: author,
-    source: repository.url,
+    version: meta.version,
+    author: meta.author.name,
+    source: meta.repository.url,
     license: 'WTFPL',
     match: [
         "*://adultanime.dbsearch.net/*",

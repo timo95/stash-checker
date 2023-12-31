@@ -7,14 +7,14 @@
     "email": "24251362+timo95@users.noreply.github.com"
   },
   "scripts": {
-    "analize": "cross-env npm_config_report=true npm run build",
-    "build": "webpack --config config/webpack.config.prod.cjs",
-    "dev": "webpack serve --config config/webpack.config.dev.cjs"
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "dev": "cross-env NODE_ENV=development webpack serve --config webpack.config.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/timo95/stash-checker"
   },
+  "type": "module",
   "private": true,
   "devDependencies": {
     "@types/greasemonkey": "^4.0.7",
@@ -25,11 +25,11 @@
     "less": "^4.2.0",
     "less-loader": "^11.1.4",
     "style-loader": "^3.3.3",
+    "terser-webpack-plugin": "^5.3.10",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",
-    "userscript-metadata-webpack-plugin": "^0.4.0",
+    "webpack-userscript": "^3.2.2",
     "webpack": "^5.89.0",
-    "webpack-bundle-analyzer": "^4.10.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1",
     "webpack-merge": "^5.10.0",
