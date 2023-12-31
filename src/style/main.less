@@ -1,22 +1,56 @@
-@background_color: yellow;
+
+:root {
+    --stash-checker-color-text: #323232;
+    --stash-checker-color-link-visited: #323232;
+    --stash-checker-color-link-hover: #039;
+    --stash-checker-color-link-active: #039;
+    --stash-checker-color-border: #323232;
+    --stash-checker-color-bg: #ffffff;
+    --stash-checker-color-card: #f2f2f2;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --stash-checker-color-text: #e0e0e0;
+        --stash-checker-color-link-visited: #c7c7c7;
+        --stash-checker-color-link-hover: #f2f2f2;
+        --stash-checker-color-link-active: #039;
+        --stash-checker-color-border: #5a5a5a;
+        --stash-checker-color-bg: #202020;
+        --stash-checker-color-card: #464646;
+    }
+}
 
 .stashCheckerTooltip {
     z-index: 99999 !important;
     position: fixed !important;
-    color: black !important;
+    color: var(--stash-checker-color-text) !important;
     text-align: left !important;
     font-size: medium !important;
     line-height: normal !important;
-    background-color: white !important;
-    border: 0.1em solid black !important;
+    background-color: var(--stash-checker-color-bg) !important;
+    border: 0.1em solid var(--stash-checker-color-border) !important;
     border-radius: 0.5em !important;
     padding: 0.5em !important;
     margin-top: -0.5em !important;
 }
 
+.stashCheckerTooltip a:link {
+    color: var(--stash-checker-color-text) !important;
+}
+.stashCheckerTooltip a:visited {
+    color: var(--stash-checker-color-link-visited) !important;
+}
+.stashCheckerTooltip a:hover {
+    color: var(--stash-checker-color-link-hover) !important;
+}
+.stashCheckerTooltip a:active {
+    color: var(--stash-checker-color-link-active) !important;
+}
 .stashCheckerTooltip hr {
     margin-top: 0.5em !important;
     margin-bottom: 0.5em !important;
+    border-color: var(--stash-checker-color-card) !important;
 }
 
 .stashCheckerTooltip hr + br {
@@ -24,13 +58,13 @@
 }
 
 .stashCheckerFile {
-    color: black !important;
     text-align: left !important;
     font-size: medium !important;
     line-height: normal !important;
-    background-color: lightgrey !important;
     margin: 0.5em !important;
     padding: 0.5em !important;
+    color: var(--stash-checker-color-text) !important;
+    background-color: var(--stash-checker-color-card) !important;
 }
 
 .stashCheckerFile + br {
