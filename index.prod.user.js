@@ -3,7 +3,7 @@
 // @name:en       Stash Checker
 // @description   Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
 // @icon          https://docs.stashapp.cc/favicon.ico
-// @version       0.6.5
+// @version       0.6.6
 // @author        timo95 <24251362+timo95@users.noreply.github.com>
 // @source        https://github.com/timo95/stash-checker
 // @license       WTFPL
@@ -908,7 +908,7 @@ async function request(queryString, onload, target, type, { stashIdEndpoint }) {
     let [stashUrl, apiKey] = await configPromise;
     GM.xmlHttpRequest({
         method: "GET",
-        url: `${stashUrl}/graphql?query=${encodeURIComponent(query)}`,
+        url: `${stashUrl}/graphql?query=${encodeURIComponent(query)}`, // encode query (important for url and some titles)
         headers: {
             "Content-Type": "application/json",
             ApiKey: apiKey,
