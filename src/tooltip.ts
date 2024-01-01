@@ -3,7 +3,7 @@ import {Target} from "./check";
 let handle: number;
 let tooltipWindow: HTMLDivElement = document.createElement("div");
 tooltipWindow.style.display = "none";
-tooltipWindow.classList.add("stashCheckerTooltip");
+tooltipWindow.classList.add("stashChecker", "tooltip");
 tooltipWindow.addEventListener("mouseover", function () {
     window.clearTimeout(handle);
 });
@@ -89,7 +89,7 @@ function formatFileData(files: any[]): string {
         ["bit_rate", (v: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(v / 1000000).toFixed(2)}Mbit/s`],
         ["duration", (v: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(v)}`],
     ];
-    return files.map((file: any) => "<div class='stashCheckerFile'>" + propertyStrings
+    return files.map((file: any) => "<div class='stashChecker file'>" + propertyStrings
         .filter(e => file[e[0]])
         .map(e => e[1](file[e[0]]))
         .join("") + "</div>"
@@ -204,7 +204,7 @@ export function prefixSymbol(
     } else {
         // Create new span
         span = document.createElement("span");
-        span.classList.add("stashCheckerSymbol");
+        span.classList.add("stashChecker", "checkmark");
         span.setAttribute("data-type", "stash-symbol")
         span.setAttribute("data-count", "1")
         span.addEventListener("mouseover", mouseoverListener);

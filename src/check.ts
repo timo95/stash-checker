@@ -202,7 +202,7 @@ function onAddition(selector: string, callback: (e: Element) => void) {
         addedElements
             .filter(e => e.matches(selector))
             .concat(addedElements.flatMap(e => Array.from(e.querySelectorAll(selector))))
-            .filter(e => !e.parentElement.matches(".stashCheckerTooltip"))
+            .filter(e => !e.parentElement.matches(".stashChecker"))
             .forEach(callback);
     });
     let body = document.querySelector("body");
