@@ -1,4 +1,4 @@
-import "./style/main.less";
+import "./style/main.scss";
 import {check} from "./check";
 import {initMenu, initSettings, isSiteBlocked} from "./config";
 import {initTooltip} from "./tooltipElement";

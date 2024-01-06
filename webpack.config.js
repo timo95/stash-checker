@@ -31,13 +31,13 @@ export default {
                 exclude: /node-modules/,
             },
             {
-                test: /\.less$/,
-                use: ["style-loader", "css-loader", "cssimportant-loader", "less-loader"],
+                test: /\.s[ac]ss$/i,
+                use: ["style-loader", "css-loader", "cssimportant-loader", "sass-loader"],
                 exclude: /node-modules/,
             },
             {
                 test: /\.css$/,
-                use: ["style-loader", "css-loader"],
+                use: ["style-loader", "css-loader", "cssimportant-loader"],
                 exclude: /node-modules/,
             },
         ],
