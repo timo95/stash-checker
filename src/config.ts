@@ -2,15 +2,66 @@
 const DEFAULT_STASH_URL = "http://localhost:9999"
 const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
 
+let settingsModal: HTMLDivElement;
+let settings: HTMLDivElement;
+
+type StashEndpoint = {
+    name: string,
+    url: string,
+    key: string,
+}
+
 export async function initMenu() {
-    GM.registerMenuCommand("Set Stash Url", setStashUrl, "u" );
-    GM.registerMenuCommand("Set API key", setApiKey, "k" );
+    GM.registerMenuCommand("Settings", openSettings, "s");
+    GM.registerMenuCommand("Set Stash Url", setStashUrl, "u");
+    GM.registerMenuCommand("Set API key", setApiKey, "k");
 
     if (await isSiteBlocked()) {
         GM.registerMenuCommand(`Activate for ${window.location.host}`, unblockSite, "a");
     } else {
         GM.registerMenuCommand(`Deactivate for ${window.location.host}`, blockSite, "d");
     }
+}
+
+export async function initSettings() {
+    settingsModal = document.createElement("div");
+    settingsModal.style.display = "none";
+    settingsModal.classList.add("stashChecker", "modal");
+    settingsModal.addEventListener("click", function (event) {
+        if (event.target === settingsModal) {
+            settingsModal.style.display = "none";
+        }
+    });
+
+    settings = document.createElement("div");
+    settings.classList.add("stashChecker", "settings");
+
+    settings.append(initEndpoints())
+    settingsModal.append(settings)
+    document.body.append(settingsModal);
+}
+
+function initEndpoints(): HTMLDivElement {
+    let endpoints = document.createElement("div");
+    endpoints.classList.add("stashChecker", "endpoints");
+
+    let defaultData: StashEndpoint[] = [{
+        name: "Localhost",
+        url: "localhost.8080",
+        key: "",
+    }];
+
+    let data = defaultData  // TODO actual data
+
+    let endpointList = data.map((datum, index) => {
+        let endpoint = document.createElement("div")
+        endpoint.classList.add("stashChecker", "endpoint")
+        endpoint.innerHTML = `<p>${datum.name}</p><button id="stashCheckerEndpoint-${index}">Edit</button>`
+        return endpoint
+    });
+
+    endpoints.append(...endpointList)
+    return endpoints
 }
 
 export async function isSiteBlocked(): Promise<boolean> {
@@ -61,4 +112,8 @@ export async function getConfig(): Promise<[string, string]> {
     }
 
     return [stashUrl ?? "", apiKey ?? ""]
+}
+
+async function openSettings() {
+    settingsModal.style.display = "initial";
 }

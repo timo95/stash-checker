@@ -1,7 +1,7 @@
 {
   "name": "stash-checker",
   "description": "Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.",
-  "version": "0.6.6",
+  "version": "0.7.0",
   "author": {
     "name": "timo95",
     "email": "24251362+timo95@users.noreply.github.com"
@@ -22,6 +22,7 @@
     "browserslist": "^4.22.2",
     "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
+    "cssimportant-loader": "^0.4.0",
     "less": "^4.2.0",
     "less-loader": "^11.1.4",
     "style-loader": "^3.3.3",

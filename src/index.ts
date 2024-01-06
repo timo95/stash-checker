@@ -1,9 +1,14 @@
 import "./style/main.less";
 import {check} from "./check";
-import {initMenu, isSiteBlocked} from "./config";
-import {firstTextChild} from "./tooltip";
+import {initMenu, initSettings, isSiteBlocked} from "./config";
+import {initTooltip} from "./tooltipElement";
+import {firstTextChild} from "./utils";
 
 (async function () {
+    // Create (invisible) tooltip window
+    await initTooltip();
+    // Create (invisible) settings modal
+    await initSettings();
     // Register menu items
     await initMenu();
 

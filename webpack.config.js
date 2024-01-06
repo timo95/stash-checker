@@ -32,7 +32,7 @@ export default {
             },
             {
                 test: /\.less$/,
-                use: ["style-loader", "css-loader", "less-loader"],
+                use: ["style-loader", "css-loader", "cssimportant-loader", "less-loader"],
                 exclude: /node-modules/,
             },
             {

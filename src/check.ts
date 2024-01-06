@@ -1,5 +1,6 @@
-import {firstTextChild, prefixSymbol} from "./tooltip";
+import {prefixSymbol} from "./tooltip";
 import {getConfig} from "./config";
+import {firstTextChild} from "./utils";
 
 type Selector = (e: Element) => string;
 
@@ -193,6 +194,7 @@ async function checkElement(
  * @param callback callback function
  */
 function onAddition(selector: string, callback: (e: Element) => void) {
+    let exclude = ".stashChecker, .stashCheckerCheckmark"
     // Run on each element addition
     let observer = new MutationObserver((mutations) => {
         let addedElements = mutations
@@ -202,7 +204,7 @@ function onAddition(selector: string, callback: (e: Element) => void) {
         addedElements
             .filter(e => e.matches(selector))
             .concat(addedElements.flatMap(e => Array.from(e.querySelectorAll(selector))))
-            .filter(e => !e.parentElement.matches(".stashChecker"))
+            .filter(e => !e.matches(exclude) && !e.parentElement.matches(exclude))
             .forEach(callback);
     });
     let body = document.querySelector("body");
