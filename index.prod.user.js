@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Stash Checker
 // @description Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
-// @version 0.6.6
+// @version 0.7.0
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
 // @match *://coomer.party/*
@@ -46,7 +46,7 @@
 (() => {
   "use strict";
   var __webpack_modules__ = {
-    886: (module, __webpack_exports__, __webpack_require__) => {
+    243: (module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
         Z: () => __WEBPACK_DEFAULT_EXPORT__
       });
@@ -55,7 +55,7 @@
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = __webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
       var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default());
-      ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232;\n  --stash-checker-color-link-visited: #323232;\n  --stash-checker-color-link-hover: #039;\n  --stash-checker-color-link-active: #039;\n  --stash-checker-color-border: #323232;\n  --stash-checker-color-bg: #ffffff;\n  --stash-checker-color-card: #f2f2f2;\n}\n@media (prefers-color-scheme: dark) {\n  :root {\n    --stash-checker-color-text: #e0e0e0;\n    --stash-checker-color-link-visited: #c7c7c7;\n    --stash-checker-color-link-hover: #f2f2f2;\n    --stash-checker-color-link-active: #039;\n    --stash-checker-color-border: #5a5a5a;\n    --stash-checker-color-bg: #202020;\n    --stash-checker-color-card: #464646;\n  }\n}\n.stashCheckerTooltip {\n  z-index: 99999 !important;\n  position: fixed !important;\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: 0.1em solid var(--stash-checker-color-border) !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n.stashCheckerTooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n.stashCheckerTooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n.stashCheckerTooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n.stashCheckerTooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n.stashCheckerTooltip hr {\n  margin-top: 0.5em !important;\n  margin-bottom: 0.5em !important;\n  border-color: var(--stash-checker-color-card) !important;\n}\n.stashCheckerTooltip hr + br {\n  display: none !important;\n}\n.stashCheckerFile {\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  margin: 0.5em !important;\n  padding: 0.5em !important;\n  color: var(--stash-checker-color-text) !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n.stashCheckerFile + br {\n  display: none !important;\n}\n.stashCheckerSymbol {\n  font-size: inherit !important;\n}\n`, "" ]);
+      ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --stash-checker-color-text: #e0e0e0 !important;\n    --stash-checker-color-link-visited: #c7c7c7 !important;\n    --stash-checker-color-link-hover: #f2f2f2 !important;\n    --stash-checker-color-link-active: #039 !important;\n    --stash-checker-color-border: #5a5a5a !important;\n    --stash-checker-color-bg: #202020 !important;\n    --stash-checker-color-card: #464646 !important;\n  }\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.tooltip {\n  z-index: 99999 !important;\n  position: fixed !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: 0.1em solid var(--stash-checker-color-border) !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  margin-top: -0.5em !important;\n}\n\n.stashChecker.file {\n  margin: 0.5em !important;\n  padding: 0.5em !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: auto !important;\n  background-color: #000000 !important;\n  background-color: rgba(0, 0, 0, 0.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 20vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: 0.1em solid var(--stash-checker-color-border) !important;\n  border-radius: 0.5em !important;\n  padding: 0.5em !important;\n  width: auto !important;\n}\n\n.stashChecker.endpoints {\n  display: flex !important;\n  flex-direction: column !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: stretch !important;\n}\n\n.stashChecker.endpoint {\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  width: 30em !important;\n  padding: 1em !important;\n  margin: 1em !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint button {\n  background-color: red !important;\n  height: 2em !important;\n  width: 4em !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: 0.5em !important;\n  margin-bottom: 0.5em !important;\n  border-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tooltip hr + br {\n  display: none !important;\n}\n\n.stashChecker.file + br {\n  display: none !important;\n}\n\n.stashCheckerCheckmark {\n  font-size: inherit !important;\n}`, "" ]);
       const __WEBPACK_DEFAULT_EXPORT__ = ___CSS_LOADER_EXPORT___;
     },
     645: module => {
@@ -317,7 +317,7 @@
     var insertStyleElement_default = __webpack_require__.n(insertStyleElement);
     var styleTagTransform = __webpack_require__(589);
     var styleTagTransform_default = __webpack_require__.n(styleTagTransform);
-    var main = __webpack_require__(886);
+    var main = __webpack_require__(243);
     var options = {};
     options.styleTagTransform = styleTagTransform_default();
     options.setAttributes = setAttributesWithoutAttributes_default();
@@ -326,24 +326,44 @@
     options.insertStyleElement = insertStyleElement_default();
     var update = injectStylesIntoStyleTag_default()(main.Z, options);
     const style_main = main.Z && main.Z.locals ? main.Z.locals : void 0;
-    let handle;
-    let tooltipWindow = document.createElement("div");
-    tooltipWindow.style.display = "none";
-    tooltipWindow.classList.add("stashCheckerTooltip");
-    tooltipWindow.addEventListener("mouseover", (function() {
+    async function initTooltip() {
+      let tooltipWindow = document.createElement("div");
+      tooltipWindow.style.display = "none";
+      tooltipWindow.classList.add("stashChecker", "tooltip");
+      tooltipWindow.id = "stashChecker-tooltipWindow";
+      tooltipWindow.addEventListener("mouseover", (function() {
+        let handle = parseInt(this.getAttribute("handle"));
+        window.clearTimeout(handle);
+      }));
+      tooltipWindow.addEventListener("mouseout", (function() {
+        let handle = window.setTimeout((function() {
+          tooltipWindow.style.display = "none";
+        }), 500);
+        this.setAttribute("handle", handle.toString());
+      }));
+      document.body.append(tooltipWindow);
+    }
+    function mouseoverListener() {
+      let tooltipWindow = document.getElementById("stashChecker-tooltipWindow");
+      let handle = parseInt(tooltipWindow.getAttribute("handle"));
       window.clearTimeout(handle);
-    }));
-    tooltipWindow.addEventListener("mouseout", (function() {
-      handle = window.setTimeout((function() {
+      let margin = 10;
+      let symbolPos = this.getBoundingClientRect();
+      tooltipWindow.innerHTML = this.getAttribute("data-info");
+      tooltipWindow.style.display = "";
+      let north = tooltipWindow.clientHeight + margin < symbolPos.top;
+      if (north) tooltipWindow.style.top = `${Math.max(margin, symbolPos.top - tooltipWindow.clientHeight).toFixed(0)}px`; else tooltipWindow.style.top = `${Math.min(window.innerHeight - tooltipWindow.clientHeight - margin, symbolPos.top + symbolPos.height + margin).toFixed(0)}px`;
+      tooltipWindow.style.left = `${Math.max(margin, Math.min(window.innerWidth - tooltipWindow.clientWidth - margin, symbolPos.left + symbolPos.width / 2 - tooltipWindow.clientWidth / 2)).toFixed(0)}px`;
+    }
+    function mouseoutListener() {
+      let tooltipWindow = document.getElementById("stashChecker-tooltipWindow");
+      let handle = window.setTimeout((function() {
         tooltipWindow.style.display = "none";
       }), 500);
-    }));
-    document.body.append(tooltipWindow);
+      tooltipWindow.setAttribute("handle", handle.toString());
+    }
     function firstTextChild(node) {
       if (node.nodeType === Node.TEXT_NODE && node.textContent.match(/^[\s<>]*$/) === null) return node; else return Array.from(node.childNodes).filter((n => ![ "svg" ].includes(n.nodeName.toLowerCase()))).filter((n => n.nodeType === Node.ELEMENT_NODE ? n.getAttribute("data-type") !== "stash-symbol" : true)).map(firstTextChild).find((n => n));
-    }
-    function getExistingSpan(element) {
-      if (element.getAttribute("data-type") === "stash-symbol") return element; else return Array.from(element.childNodes).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n)).map(getExistingSpan).find((n => n));
     }
     function getUrl(stashUrl, target, id) {
       let path;
@@ -365,28 +385,16 @@
       }
       return bytes.toFixed(2) + label;
     }
+    function getExistingSymbol(element) {
+      if (element.getAttribute("data-type") === "stash-symbol") return element; else return Array.from(element.childNodes).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n)).map(getExistingSymbol).find((n => n));
+    }
     function formatFileData(files) {
       let propertyStrings = [ [ "path", v => `Path: ${v}` ], [ "video_codec", v => `<br>Codec: ${v}` ], [ "width", v => ` (${v}` ], [ "height", v => `x${v})` ], [ "size", v => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${bytesToReadable(v)}` ], [ "bit_rate", v => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(v / 1e6).toFixed(2)}Mbit/s` ], [ "duration", v => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(v)}` ] ];
-      return files.map((file => "<div class='stashCheckerFile'>" + propertyStrings.filter((e => file[e[0]])).map((e => e[1](file[e[0]]))).join("") + "</div>")).join("");
+      return files.map((file => "<div class='stashChecker file'>" + propertyStrings.filter((e => file[e[0]])).map((e => e[1](file[e[0]]))).join("") + "</div>")).join("");
     }
     function formatEntryData(target, data, stashUrl) {
       let propertyStrings = [ [ "id", v => `<br><a target="_blank" href="${getUrl(stashUrl, target, v)}">${getUrl(stashUrl, target, v)}</a>` ], [ "title", v => `<br>Title: ${v}` ], [ "name", v => `<br>Name: ${v}` ], [ "favorite", v => "&emsp;&#10084;&#65039;" ], [ "disambiguation", v => ` <span style="color: grey">(${v})</span>` ], [ "alias_list", v => `<br>Aliases: ${v.join(", ")}` ], [ "studio", v => `<br>Studio: ${v.name}` ], [ "code", v => `<br>Code: ${v}` ], [ "date", v => `<br>Date: ${v}` ], [ "queries", v => `<br>Matched: ${v.join(", ")}` ], [ "files", v => `${formatFileData(v)}` ] ];
       return data.map((entry => "<hr>" + propertyStrings.filter((e => entry[e[0]])).map((e => e[1](entry[e[0]]))).join(""))).join("");
-    }
-    function mouseoverListener() {
-      window.clearTimeout(handle);
-      let margin = 10;
-      let symbolPos = this.getBoundingClientRect();
-      tooltipWindow.innerHTML = this.getAttribute("data-info");
-      tooltipWindow.style.display = "";
-      let north = tooltipWindow.clientHeight + margin < symbolPos.top;
-      if (north) tooltipWindow.style.top = `${Math.max(margin, symbolPos.top - tooltipWindow.clientHeight).toFixed(0)}px`; else tooltipWindow.style.top = `${Math.min(window.innerHeight - tooltipWindow.clientHeight - margin, symbolPos.top + symbolPos.height + margin).toFixed(0)}px`;
-      tooltipWindow.style.left = `${Math.max(margin, Math.min(window.innerWidth - tooltipWindow.clientWidth - margin, symbolPos.left + symbolPos.width / 2 - tooltipWindow.clientWidth / 2)).toFixed(0)}px`;
-    }
-    function mouseoutListener() {
-      handle = window.setTimeout((function() {
-        tooltipWindow.style.display = "none";
-      }), 500);
     }
     function mergeData(target, source) {
       let mapTarget = new Map(target.map((e => [ e.id, e ])));
@@ -408,48 +416,82 @@
       data.forEach((entry => {
         entry["queries"] = queries;
       }));
-      let span = getExistingSpan(element);
-      if (span) {
-        queries = [ ...new Set(JSON.parse(span.getAttribute("data-queries"))).add(queryType) ].sort();
-        data = mergeData(JSON.parse(span.getAttribute("data-data")), data);
-        span.setAttribute("data-count", (parseInt(span.getAttribute("data-count")) + 1).toString());
+      let symbol = getExistingSymbol(element);
+      if (symbol) {
+        queries = [ ...new Set(JSON.parse(symbol.getAttribute("data-queries"))).add(queryType) ].sort();
+        data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data);
+        symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")) + 1).toString());
       } else {
-        span = document.createElement("span");
-        span.classList.add("stashCheckerSymbol");
-        span.setAttribute("data-type", "stash-symbol");
-        span.setAttribute("data-count", "1");
-        span.addEventListener("mouseover", mouseoverListener);
-        span.addEventListener("mouseout", mouseoutListener);
+        symbol = document.createElement("span");
+        symbol.classList.add("stashCheckerCheckmark");
+        symbol.setAttribute("data-type", "stash-symbol");
+        symbol.setAttribute("data-count", "1");
+        symbol.addEventListener("mouseover", mouseoverListener);
+        symbol.addEventListener("mouseout", mouseoutListener);
         let text = firstTextChild(element);
-        if (text) text.parentNode.insertBefore(span, text); else return;
+        if (text) text.parentNode.insertBefore(symbol, text); else return;
       }
-      span.setAttribute("data-queries", JSON.stringify(queries));
-      span.setAttribute("data-data", JSON.stringify(data));
+      symbol.setAttribute("data-queries", JSON.stringify(queries));
+      symbol.setAttribute("data-data", JSON.stringify(data));
       let count = data.length;
       let tooltip = "";
-      let targetP = target.charAt(0).toUpperCase() + target.slice(1);
+      let targetReadable = target.charAt(0).toUpperCase() + target.slice(1);
       if (count === 0) {
-        span.textContent = "✗ ";
-        span.style.color = "red";
-        tooltip = `${targetP} not in Stash<br>`;
+        symbol.textContent = "✗ ";
+        symbol.style.color = "red";
+        tooltip = `${targetReadable} not in Stash<br>`;
       } else if (count === 1) {
-        span.textContent = "✓ ";
-        span.style.color = color(data[0]);
+        symbol.textContent = "✓ ";
+        symbol.style.color = color(data[0]);
       } else {
-        span.textContent = "! ";
-        span.style.color = "orange";
-        tooltip = `${targetP} has duplicate matches<br>`;
+        symbol.textContent = "! ";
+        symbol.style.color = "orange";
+        tooltip = `${targetReadable} has duplicate matches<br>`;
       }
       tooltip += `Queries: ${queries.join(", ")}`;
       tooltip += formatEntryData(target, data, stashUrl);
-      span.setAttribute("data-info", tooltip);
+      symbol.setAttribute("data-info", tooltip);
     }
     const DEFAULT_STASH_URL = "http://localhost:9999";
     const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
+    let settingsModal;
+    let settings;
     async function initMenu() {
+      GM.registerMenuCommand("Settings", openSettings, "s");
       GM.registerMenuCommand("Set Stash Url", setStashUrl, "u");
       GM.registerMenuCommand("Set API key", setApiKey, "k");
       if (await isSiteBlocked()) GM.registerMenuCommand(`Activate for ${window.location.host}`, unblockSite, "a"); else GM.registerMenuCommand(`Deactivate for ${window.location.host}`, blockSite, "d");
+    }
+    async function initSettings() {
+      settingsModal = document.createElement("div");
+      settingsModal.style.display = "none";
+      settingsModal.classList.add("stashChecker", "modal");
+      settingsModal.addEventListener("click", (function(event) {
+        if (event.target === settingsModal) settingsModal.style.display = "none";
+      }));
+      settings = document.createElement("div");
+      settings.classList.add("stashChecker", "settings");
+      settings.append(initEndpoints());
+      settingsModal.append(settings);
+      document.body.append(settingsModal);
+    }
+    function initEndpoints() {
+      let endpoints = document.createElement("div");
+      endpoints.classList.add("stashChecker", "endpoints");
+      let defaultData = [ {
+        name: "Localhost",
+        url: "localhost.8080",
+        key: ""
+      } ];
+      let data = defaultData;
+      let endpointList = data.map(((datum, index) => {
+        let endpoint = document.createElement("div");
+        endpoint.classList.add("stashChecker", "endpoint");
+        endpoint.innerHTML = `<p>${datum.name}</p><button id="stashCheckerEndpoint-${index}">Edit</button>`;
+        return endpoint;
+      }));
+      endpoints.append(...endpointList);
+      return endpoints;
     }
     async function isSiteBlocked() {
       return await GM.getValue(BLOCKED_SITE_KEY, false);
@@ -484,6 +526,9 @@
         if (apiKey !== void 0) await GM.setValue("apiKey", apiKey);
       }
       return [ stashUrl ?? "", apiKey ?? "" ];
+    }
+    async function openSettings() {
+      settingsModal.style.display = "initial";
     }
     let configPromise = getConfig();
     async function request(queryString, onload, target, type, {stashIdEndpoint}) {
@@ -603,9 +648,10 @@
       }
     }
     function onAddition(selector, callback) {
+      let exclude = ".stashChecker, .stashCheckerCheckmark";
       let observer = new MutationObserver((mutations => {
         let addedElements = mutations.flatMap((m => Array.from(m.addedNodes))).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n));
-        addedElements.filter((e => e.matches(selector))).concat(addedElements.flatMap((e => Array.from(e.querySelectorAll(selector))))).filter((e => !e.parentElement.matches(".stashCheckerTooltip"))).forEach(callback);
+        addedElements.filter((e => e.matches(selector))).concat(addedElements.flatMap((e => Array.from(e.querySelectorAll(selector))))).filter((e => !e.matches(exclude) && !e.parentElement.matches(exclude))).forEach(callback);
       }));
       let body = document.querySelector("body");
       observer.observe(body, {
@@ -618,6 +664,8 @@
       document.querySelectorAll(elementSelector).forEach((e => checkElement(target, e, checkConfig)));
     }
     (async function() {
+      await initTooltip();
+      await initSettings();
       await initMenu();
       if (await isSiteBlocked()) {
         console.log("Userscript is deactivated for this site. Activate in userscript menu.");
