@@ -1,5 +1,5 @@
 import {prefixSymbol} from "./tooltip";
-import {getConfig} from "./config";
+import {StashEndpoint, stashEndpoints} from "./config";
 import {firstTextChild} from "./utils";
 
 type Selector = (e: Element) => string;
@@ -22,9 +22,6 @@ export type Target = "scene" | "performer" | "gallery" | "movie" | "studio" | "t
 // what the query uses to filter
 type Type = "url" | "code" | "stash_id" | "name" | "title"
 
-// Ask for stash url/key on load
-let configPromise = getConfig()
-
 async function request(
     queryString: string,
     onload: (target: Target, data: any[], stashUrl: string) => any,
@@ -32,8 +29,8 @@ async function request(
     type: Type,
     {stashIdEndpoint}: CheckOptions
 ) {
-    let criterion;
-    let query;
+    let criterion: string;
+    let query: string;
     let access = (d: any) => d;
 
     // Build filter
@@ -77,29 +74,30 @@ async function request(
     }
 
     // Get config values or wait for popup if it is not stored
-    let [stashUrl, apiKey] = await configPromise
-    GM.xmlHttpRequest({
-        method: "GET",
-        url: `${stashUrl}/graphql?query=${encodeURIComponent(query)}`,  // encode query (important for url and some titles)
-        headers: {
-            "Content-Type": "application/json",
-            ApiKey: apiKey,
-        },
-        onload: function (response) {
-            try {
-                let r = JSON.parse(response.responseText)
-                if ("errors" in r) {
-                    r.errors.forEach((e: any) => {
-                        console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`)
-                    });
-                } else {
-                    onload(target, access(r.data), stashUrl);
+    stashEndpoints.forEach((endpoint: StashEndpoint) => {
+        GM.xmlHttpRequest({
+            method: "GET",
+            url: `${endpoint.url}?query=${encodeURIComponent(query)}`,  // encode query (important for url and some titles)
+            headers: {
+                "Content-Type": "application/json",
+                ApiKey: endpoint.key,
+            },
+            onload: function (response) {
+                try {
+                    let r = JSON.parse(response.responseText)
+                    if ("errors" in r) {
+                        r.errors.forEach((e: any) => {
+                            console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`)
+                        });
+                    } else {
+                        onload(target, access(r.data), endpoint.url);
+                    }
+                } catch (e) {
+                    console.log("Exception: " + e);
+                    console.log("Failed to parse response: " + response.responseText);
                 }
-            } catch (e) {
-                console.log("Exception: " + e);
-                console.log("Failed to parse response: " + response.responseText);
-            }
-        },
+            },
+        });
     });
 }
 

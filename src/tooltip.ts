@@ -34,9 +34,9 @@ function formatFileData(files: any[]): string {
     ).join("");
 }
 
-function formatEntryData(target: Target, data: any[], stashUrl: string): string {
+function formatEntryData(target: Target, data: any[], urls: string[]): string {
     let propertyStrings: [string, (v: any) => string][] = [
-        ["id", (v: any) => `<br><a target="_blank" href="${getUrl(stashUrl, target, v)}">${getUrl(stashUrl, target, v)}</a>`],
+        ["id", (v: any) => `<br>${formatStashLinks(urls, v, target)}`],
         ["title", (v: any) => `<br>Title: ${v}`],
         ["name", (v: any) => `<br>Name: ${v}`],
         ["favorite", (v: any) => "&emsp;&#10084;&#65039;"],
@@ -55,6 +55,11 @@ function formatEntryData(target: Target, data: any[], stashUrl: string): string 
     ).join("");
 }
 
+function formatStashLinks(urls: string[], id: string, target: Target): string {
+    return urls.map((url: string) => `<a target="_blank" href="${getUrl(url, target, id)}">${getUrl(url, target, id)}</a>`)
+        .join("<br>")
+}
+
 /**
  * Similar to object.assign(), but also merges the children of the objects.
  *
@@ -66,12 +71,18 @@ function mergeData(target: any[], source: any[]): any[] {
     let mapSource: Map<string, any> = new Map(source.map(e => [e.id, e]))
     mapSource.forEach((value, key) => {
         if (mapTarget.has(key)) {
-            // merge which queries were successful
-            let set = new Set(value["queries"])
-            mapTarget.get(key)["queries"].forEach((query: string) => {
-                set.add(query)
+            // merge stash endpoint urls
+            let urls = new Set(value["urls"])
+            mapTarget.get(key)["urls"].forEach((endpoint: string) => {
+                urls.add(endpoint)
             })
-            value["queries"] = [...set].sort()
+            value["urls"] = [...urls].sort()
+            // merge which queries were successful
+            let queries = new Set(value["queries"])
+            mapTarget.get(key)["queries"].forEach((query: string) => {
+                queries.add(query)
+            })
+            value["queries"] = [...queries].sort()
         }
         mapTarget.set(key, value)
     });
@@ -97,9 +108,11 @@ export function prefixSymbol(
     queryType: string,
     color: (data: any[]) => string
 ) {
+    let urls = [stashUrl]
     let queries = [queryType]
-    // Query for each found entry
+    // Query and url for each found entry
     data.forEach((entry: any) => {
+        entry["urls"] = urls
         entry["queries"] = queries
     });
 
@@ -107,6 +120,7 @@ export function prefixSymbol(
     let symbol = getExistingSymbol(element)
     if (symbol) {
         // Merge new result with existing results
+        urls = [...new Set<string>(JSON.parse(symbol.getAttribute("data-urls"))).add(stashUrl)].sort()
         queries = [...new Set<string>(JSON.parse(symbol.getAttribute("data-queries"))).add(queryType)].sort()
         data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data)
         symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")) + 1).toString())
@@ -114,8 +128,8 @@ export function prefixSymbol(
         // Create new symbol
         symbol = document.createElement("span");
         symbol.classList.add("stashCheckerCheckmark");
-        symbol.setAttribute("data-type", "stash-symbol")
-        symbol.setAttribute("data-count", "1")
+        symbol.setAttribute("data-type", "stash-symbol");
+        symbol.setAttribute("data-count", "1");
         symbol.addEventListener("mouseover", mouseoverListener);
         symbol.addEventListener("mouseout", mouseoutListener);
         // insert before first text because css selectors cannot select text nodes directly
@@ -149,7 +163,7 @@ export function prefixSymbol(
         tooltip = `${targetReadable} has duplicate matches<br>`;
     }
     tooltip += `Queries: ${queries.join(", ")}`
-    tooltip += formatEntryData(target, data, stashUrl)
+    tooltip += formatEntryData(target, data, urls)
 
     // Store tooltip content on symbol
     symbol.setAttribute("data-info", tooltip)

@@ -6,16 +6,16 @@ const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_")
 let settingsModal: HTMLDivElement;
 let settings: HTMLDivElement;
 
-type StashEndpoint = {
+export type StashEndpoint = {
     name: string,
     url: string,
     key: string,
 }
 
+export let stashEndpoints: StashEndpoint[] = []
+
 export async function initMenu() {
     GM.registerMenuCommand("Settings", openSettings, "s");
-    GM.registerMenuCommand("Set Stash Url", setStashUrl, "u");
-    GM.registerMenuCommand("Set API key", setApiKey, "k");
 
     if (await isSiteBlocked()) {
         GM.registerMenuCommand(`Activate for ${window.location.host}`, unblockSite, "a");
@@ -34,35 +34,57 @@ export async function initSettings() {
         }
     });
 
-    settings = document.createElement("div");
-    settings.classList.add("stashChecker", "settings");
-
-    settings.append(initEndpoints())
-    settingsModal.append(settings)
-    document.body.append(settingsModal);
-}
-
-function initEndpoints(): HTMLDivElement {
-    let endpoints = document.createElement("div");
-    endpoints.classList.add("stashChecker", "endpoints");
-
     let defaultData: StashEndpoint[] = [{
         name: "Localhost",
-        url: "localhost.8080",
+        url: "http://localhost:9999",
         key: "",
     }];
+    stashEndpoints = await getValue<StashEndpoint[]>("stashEndpoints", defaultData);
 
-    let data = defaultData  // TODO actual data
+    settings = document.createElement("div");
+    settings.id = "stashChecker-settings"
+    settings.classList.add("stashChecker", "settings");
+    settings.append(await initEndpoints())
+    settingsModal.append(settings)
+    document.body.append(settingsModal);
+    await updateEndpoints();
+}
 
-    let endpointList = data.map((datum, index) => {
-        let endpoint = document.createElement("div")
-        endpoint.classList.add("stashChecker", "endpoint")
-        endpoint.innerHTML = `<p>${datum.name}</p><button id="stashCheckerEndpoint-${index}">Edit</button>`
-        return endpoint
+async function initEndpoints(): Promise<HTMLDivElement> {
+    let endpoints = document.createElement("div");
+    endpoints.id = "stashChecker-endpoints"
+    endpoints.classList.add("stashChecker", "endpoints");
+    return endpoints;
+}
+
+async function updateEndpoints() {
+    let endpoints = document.getElementById("stashChecker-endpoints")
+    let endpointList = stashEndpoints.map((endpoint: StashEndpoint, index: number) => {
+        let div = document.createElement("div");
+        div.classList.add("stashChecker", "endpoint");
+        div.innerHTML = `<p>${endpoint.name}</p>`
+        let button = document.createElement("button");
+        button.setAttribute("data-index", index.toString());
+        button.addEventListener("click", editEndpointListener);
+        button.innerHTML = "Edit";
+        div.append(button);
+        return div;
     });
+    endpoints.replaceChildren(...endpointList)
+}
 
-    endpoints.append(...endpointList)
-    return endpoints
+async function editEndpointListener(this: HTMLButtonElement) {
+    let index = parseInt(this.getAttribute("data-index"));
+    let oldEndpoint: StashEndpoint = stashEndpoints[index];
+
+    let newEndpoint: StashEndpoint = {
+        name: prompt("Name:", oldEndpoint.name)?.trim()?? "",
+        url: prompt("URL:", oldEndpoint.url)?.trim()?? "",
+        key: prompt("API Key:", oldEndpoint.key)?.trim()?? "",
+    };
+    stashEndpoints[index] = newEndpoint;
+    setValue("stashEndpoints", stashEndpoints);
+    updateEndpoints();
 }
 
 export async function isSiteBlocked(): Promise<boolean> {
@@ -77,42 +99,6 @@ async function blockSite() {
 async function unblockSite() {
     await deleteValue(BLOCKED_SITE_KEY);
     window.location.reload();
-}
-
-async function setStashUrl() {
-    let stashUrl = await getValue<string>("stashUrl", undefined);
-    stashUrl = prompt("Stash URL:", stashUrl ?? DEFAULT_STASH_URL)?.trim()?.replace("\/$", "")
-    if (stashUrl !== undefined) {
-        await setValue("stashUrl", stashUrl)
-    }
-}
-
-async function setApiKey() {
-    let apiKey = await getValue<string>("apiKey", undefined);
-    apiKey = prompt("API Key:", apiKey ?? "")?.trim()?.replace("\/$", "")
-    if (apiKey !== undefined) {
-        await setValue("apiKey", apiKey)
-    }
-}
-
-export async function getConfig(): Promise<[string, string]> {
-    let stashUrl = await getValue<string>("stashUrl", undefined);
-    let apiKey = await getValue<string>("apiKey", undefined);
-
-    if (stashUrl === undefined) {
-        stashUrl = prompt("Stash URL:", DEFAULT_STASH_URL)?.trim()?.replace("\/$", "")
-        if (stashUrl !== undefined) {
-            await setValue("stashUrl", stashUrl)
-        }
-    }
-    if (apiKey === undefined) {
-        apiKey = prompt("API Key:")?.trim()?.replace("\/$", "")
-        if (apiKey !== undefined) {
-            await setValue("apiKey", apiKey)
-        }
-    }
-
-    return [stashUrl ?? "", apiKey ?? ""]
 }
 
 async function openSettings() {
