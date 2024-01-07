@@ -392,32 +392,43 @@
       let propertyStrings = [ [ "path", v => `Path: ${v}` ], [ "video_codec", v => `<br>Codec: ${v}` ], [ "width", v => ` (${v}` ], [ "height", v => `x${v})` ], [ "size", v => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${bytesToReadable(v)}` ], [ "bit_rate", v => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(v / 1e6).toFixed(2)}Mbit/s` ], [ "duration", v => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(v)}` ] ];
       return files.map((file => "<div class='stashChecker file'>" + propertyStrings.filter((e => file[e[0]])).map((e => e[1](file[e[0]]))).join("") + "</div>")).join("");
     }
-    function formatEntryData(target, data, stashUrl) {
-      let propertyStrings = [ [ "id", v => `<br><a target="_blank" href="${getUrl(stashUrl, target, v)}">${getUrl(stashUrl, target, v)}</a>` ], [ "title", v => `<br>Title: ${v}` ], [ "name", v => `<br>Name: ${v}` ], [ "favorite", v => "&emsp;&#10084;&#65039;" ], [ "disambiguation", v => ` <span style="color: grey">(${v})</span>` ], [ "alias_list", v => `<br>Aliases: ${v.join(", ")}` ], [ "studio", v => `<br>Studio: ${v.name}` ], [ "code", v => `<br>Code: ${v}` ], [ "date", v => `<br>Date: ${v}` ], [ "queries", v => `<br>Matched: ${v.join(", ")}` ], [ "files", v => `${formatFileData(v)}` ] ];
+    function formatEntryData(target, data, urls) {
+      let propertyStrings = [ [ "id", v => `<br>${formatStashLinks(urls, v, target)}` ], [ "title", v => `<br>Title: ${v}` ], [ "name", v => `<br>Name: ${v}` ], [ "favorite", v => "&emsp;&#10084;&#65039;" ], [ "disambiguation", v => ` <span style="color: grey">(${v})</span>` ], [ "alias_list", v => `<br>Aliases: ${v.join(", ")}` ], [ "studio", v => `<br>Studio: ${v.name}` ], [ "code", v => `<br>Code: ${v}` ], [ "date", v => `<br>Date: ${v}` ], [ "queries", v => `<br>Matched: ${v.join(", ")}` ], [ "files", v => `${formatFileData(v)}` ] ];
       return data.map((entry => "<hr>" + propertyStrings.filter((e => entry[e[0]])).map((e => e[1](entry[e[0]]))).join(""))).join("");
+    }
+    function formatStashLinks(urls, id, target) {
+      return urls.map((url => `<a target="_blank" href="${getUrl(url, target, id)}">${getUrl(url, target, id)}</a>`)).join("<br>");
     }
     function mergeData(target, source) {
       let mapTarget = new Map(target.map((e => [ e.id, e ])));
       let mapSource = new Map(source.map((e => [ e.id, e ])));
       mapSource.forEach(((value, key) => {
         if (mapTarget.has(key)) {
-          let set = new Set(value["queries"]);
-          mapTarget.get(key)["queries"].forEach((query => {
-            set.add(query);
+          let urls = new Set(value["urls"]);
+          mapTarget.get(key)["urls"].forEach((endpoint => {
+            urls.add(endpoint);
           }));
-          value["queries"] = [ ...set ].sort();
+          value["urls"] = [ ...urls ].sort();
+          let queries = new Set(value["queries"]);
+          mapTarget.get(key)["queries"].forEach((query => {
+            queries.add(query);
+          }));
+          value["queries"] = [ ...queries ].sort();
         }
         mapTarget.set(key, value);
       }));
       return Array.from(mapTarget.values());
     }
     function prefixSymbol(element, target, data, stashUrl, queryType, color) {
+      let urls = [ stashUrl ];
       let queries = [ queryType ];
       data.forEach((entry => {
+        entry["urls"] = urls;
         entry["queries"] = queries;
       }));
       let symbol = getExistingSymbol(element);
       if (symbol) {
+        urls = [ ...new Set(JSON.parse(symbol.getAttribute("data-urls"))).add(stashUrl) ].sort();
         queries = [ ...new Set(JSON.parse(symbol.getAttribute("data-queries"))).add(queryType) ].sort();
         data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data);
         symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")) + 1).toString());
@@ -449,7 +460,7 @@
         tooltip = `${targetReadable} has duplicate matches<br>`;
       }
       tooltip += `Queries: ${queries.join(", ")}`;
-      tooltip += formatEntryData(target, data, stashUrl);
+      tooltip += formatEntryData(target, data, urls);
       symbol.setAttribute("data-info", tooltip);
     }
     async function getValue(key, defaultValue) {
@@ -472,10 +483,9 @@
     const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
     let settingsModal;
     let settings;
+    let stashEndpoints = [];
     async function initMenu() {
       GM.registerMenuCommand("Settings", openSettings, "s");
-      GM.registerMenuCommand("Set Stash Url", setStashUrl, "u");
-      GM.registerMenuCommand("Set API key", setApiKey, "k");
       if (await isSiteBlocked()) GM.registerMenuCommand(`Activate for ${window.location.host}`, unblockSite, "a"); else GM.registerMenuCommand(`Deactivate for ${window.location.host}`, blockSite, "d");
     }
     async function initSettings() {
@@ -485,29 +495,52 @@
       settingsModal.addEventListener("click", (function(event) {
         if (event.target === settingsModal) settingsModal.style.display = "none";
       }));
-      settings = document.createElement("div");
-      settings.classList.add("stashChecker", "settings");
-      settings.append(initEndpoints());
-      settingsModal.append(settings);
-      document.body.append(settingsModal);
-    }
-    function initEndpoints() {
-      let endpoints = document.createElement("div");
-      endpoints.classList.add("stashChecker", "endpoints");
       let defaultData = [ {
         name: "Localhost",
-        url: "localhost.8080",
+        url: "http://localhost:9999",
         key: ""
       } ];
-      let data = defaultData;
-      let endpointList = data.map(((datum, index) => {
-        let endpoint = document.createElement("div");
-        endpoint.classList.add("stashChecker", "endpoint");
-        endpoint.innerHTML = `<p>${datum.name}</p><button id="stashCheckerEndpoint-${index}">Edit</button>`;
-        return endpoint;
-      }));
-      endpoints.append(...endpointList);
+      stashEndpoints = await getValue("stashEndpoints", defaultData);
+      settings = document.createElement("div");
+      settings.id = "stashChecker-settings";
+      settings.classList.add("stashChecker", "settings");
+      settings.append(await initEndpoints());
+      settingsModal.append(settings);
+      document.body.append(settingsModal);
+      await updateEndpoints();
+    }
+    async function initEndpoints() {
+      let endpoints = document.createElement("div");
+      endpoints.id = "stashChecker-endpoints";
+      endpoints.classList.add("stashChecker", "endpoints");
       return endpoints;
+    }
+    async function updateEndpoints() {
+      let endpoints = document.getElementById("stashChecker-endpoints");
+      let endpointList = stashEndpoints.map(((endpoint, index) => {
+        let div = document.createElement("div");
+        div.classList.add("stashChecker", "endpoint");
+        div.innerHTML = `<p>${endpoint.name}</p>`;
+        let button = document.createElement("button");
+        button.setAttribute("data-index", index.toString());
+        button.addEventListener("click", editEndpointListener);
+        button.innerHTML = "Edit";
+        div.append(button);
+        return div;
+      }));
+      endpoints.replaceChildren(...endpointList);
+    }
+    async function editEndpointListener() {
+      let index = parseInt(this.getAttribute("data-index"));
+      let oldEndpoint = stashEndpoints[index];
+      let newEndpoint = {
+        name: prompt("Name:", oldEndpoint.name)?.trim() ?? "",
+        url: prompt("URL:", oldEndpoint.url)?.trim() ?? "",
+        key: prompt("API Key:", oldEndpoint.key)?.trim() ?? ""
+      };
+      stashEndpoints[index] = newEndpoint;
+      setValue("stashEndpoints", stashEndpoints);
+      updateEndpoints();
     }
     async function isSiteBlocked() {
       return await getValue(BLOCKED_SITE_KEY, false);
@@ -520,33 +553,9 @@
       await deleteValue(BLOCKED_SITE_KEY);
       window.location.reload();
     }
-    async function setStashUrl() {
-      let stashUrl = await getValue("stashUrl", void 0);
-      stashUrl = prompt("Stash URL:", stashUrl ?? DEFAULT_STASH_URL)?.trim()?.replace("/$", "");
-      if (stashUrl !== void 0) await setValue("stashUrl", stashUrl);
-    }
-    async function setApiKey() {
-      let apiKey = await getValue("apiKey", void 0);
-      apiKey = prompt("API Key:", apiKey ?? "")?.trim()?.replace("/$", "");
-      if (apiKey !== void 0) await setValue("apiKey", apiKey);
-    }
-    async function getConfig() {
-      let stashUrl = await getValue("stashUrl", void 0);
-      let apiKey = await getValue("apiKey", void 0);
-      if (stashUrl === void 0) {
-        stashUrl = prompt("Stash URL:", DEFAULT_STASH_URL)?.trim()?.replace("/$", "");
-        if (stashUrl !== void 0) await setValue("stashUrl", stashUrl);
-      }
-      if (apiKey === void 0) {
-        apiKey = prompt("API Key:")?.trim()?.replace("/$", "");
-        if (apiKey !== void 0) await setValue("apiKey", apiKey);
-      }
-      return [ stashUrl ?? "", apiKey ?? "" ];
-    }
     async function openSettings() {
       settingsModal.style.display = "initial";
     }
-    let configPromise = getConfig();
     async function request(queryString, onload, target, type, {stashIdEndpoint}) {
       let criterion;
       let query;
@@ -594,26 +603,27 @@
        default:
         return;
       }
-      let [stashUrl, apiKey] = await configPromise;
-      GM.xmlHttpRequest({
-        method: "GET",
-        url: `${stashUrl}/graphql?query=${encodeURIComponent(query)}`,
-        headers: {
-          "Content-Type": "application/json",
-          ApiKey: apiKey
-        },
-        onload: function(response) {
-          try {
-            let r = JSON.parse(response.responseText);
-            if ("errors" in r) r.errors.forEach((e => {
-              console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`);
-            })); else onload(target, access(r.data), stashUrl);
-          } catch (e) {
-            console.log("Exception: " + e);
-            console.log("Failed to parse response: " + response.responseText);
+      stashEndpoints.forEach((endpoint => {
+        GM.xmlHttpRequest({
+          method: "GET",
+          url: `${endpoint.url}?query=${encodeURIComponent(query)}`,
+          headers: {
+            "Content-Type": "application/json",
+            ApiKey: endpoint.key
+          },
+          onload: function(response) {
+            try {
+              let r = JSON.parse(response.responseText);
+              if ("errors" in r) r.errors.forEach((e => {
+                console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`);
+              })); else onload(target, access(r.data), endpoint.url);
+            } catch (e) {
+              console.log("Exception: " + e);
+              console.log("Failed to parse response: " + response.responseText);
+            }
           }
-        }
-      });
+        });
+      }));
     }
     async function checkElement(target, element, {currentSite = false, prepareUrl = url => url, urlSelector = currentSite ? () => decodeURI(window.location.href) : e => decodeURI(e.closest("a").href), codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = e => firstTextChild(e)?.textContent?.trim(), titleSelector = e => firstTextChild(e)?.textContent?.trim(), color = () => "green"}) {
       if (urlSelector && prepareUrl) {
