@@ -1,6 +1,7 @@
 
 /**
- * Get value of type T from storage.
+ * Get value of type T from storage. Deletes stored key-value pair, if it fails to parse the value.
+ *
  * Implementation of storage differs between userscript and browser extension.
  *
  * @param key key used to store value
@@ -19,6 +20,7 @@ export async function getValue<T>(key: string, defaultValue?: T): Promise<T> {
 
 /**
  * Write value of type T to storage.
+ *
  * Implementation of storage differs between userscript and browser extension.
  *
  * @param key key used to store value
@@ -30,6 +32,7 @@ export async function setValue<T>(key: string, value: T): Promise<void> {
 
 /**
  * Delete key-value pair from storage.
+ *
  * Implementation of storage differs between userscript and browser extension.
  *
  * @param key key used to store value
