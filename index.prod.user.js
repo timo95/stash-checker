@@ -452,6 +452,22 @@
       tooltip += formatEntryData(target, data, stashUrl);
       symbol.setAttribute("data-info", tooltip);
     }
+    async function getValue(key, defaultValue) {
+      const text = await GM.getValue(key, void 0);
+      try {
+        return text === void 0 ? Promise.resolve(defaultValue) : JSON.parse(text);
+      } catch (e) {
+        console.warn("Failed to parse stored value. Delete stored key-value pair.");
+        await deleteValue(key);
+        return defaultValue;
+      }
+    }
+    async function setValue(key, value) {
+      return GM.setValue(key, JSON.stringify(value));
+    }
+    async function deleteValue(key) {
+      return GM.deleteValue(key);
+    }
     const DEFAULT_STASH_URL = "http://localhost:9999";
     const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
     let settingsModal;
@@ -494,36 +510,36 @@
       return endpoints;
     }
     async function isSiteBlocked() {
-      return await GM.getValue(BLOCKED_SITE_KEY, false);
+      return await getValue(BLOCKED_SITE_KEY, false);
     }
     async function blockSite() {
-      await GM.setValue(BLOCKED_SITE_KEY, true);
+      await setValue(BLOCKED_SITE_KEY, true);
       window.location.reload();
     }
     async function unblockSite() {
-      await GM.deleteValue(BLOCKED_SITE_KEY);
+      await deleteValue(BLOCKED_SITE_KEY);
       window.location.reload();
     }
     async function setStashUrl() {
-      let stashUrl = await GM.getValue("stashUrl", void 0);
+      let stashUrl = await getValue("stashUrl", void 0);
       stashUrl = prompt("Stash URL:", stashUrl ?? DEFAULT_STASH_URL)?.trim()?.replace("/$", "");
-      if (stashUrl !== void 0) await GM.setValue("stashUrl", stashUrl);
+      if (stashUrl !== void 0) await setValue("stashUrl", stashUrl);
     }
     async function setApiKey() {
-      let apiKey = await GM.getValue("apiKey", void 0);
+      let apiKey = await getValue("apiKey", void 0);
       apiKey = prompt("API Key:", apiKey ?? "")?.trim()?.replace("/$", "");
-      if (apiKey !== void 0) await GM.setValue("apiKey", apiKey);
+      if (apiKey !== void 0) await setValue("apiKey", apiKey);
     }
     async function getConfig() {
-      let stashUrl = await GM.getValue("stashUrl", void 0);
-      let apiKey = await GM.getValue("apiKey", void 0);
+      let stashUrl = await getValue("stashUrl", void 0);
+      let apiKey = await getValue("apiKey", void 0);
       if (stashUrl === void 0) {
         stashUrl = prompt("Stash URL:", DEFAULT_STASH_URL)?.trim()?.replace("/$", "");
-        if (stashUrl !== void 0) await GM.setValue("stashUrl", stashUrl);
+        if (stashUrl !== void 0) await setValue("stashUrl", stashUrl);
       }
       if (apiKey === void 0) {
         apiKey = prompt("API Key:")?.trim()?.replace("/$", "");
-        if (apiKey !== void 0) await GM.setValue("apiKey", apiKey);
+        if (apiKey !== void 0) await setValue("apiKey", apiKey);
       }
       return [ stashUrl ?? "", apiKey ?? "" ];
     }
