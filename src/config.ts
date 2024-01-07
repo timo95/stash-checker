@@ -78,9 +78,9 @@ async function editEndpointListener(this: HTMLButtonElement) {
     let oldEndpoint: StashEndpoint = stashEndpoints[index];
 
     let newEndpoint: StashEndpoint = {
-        name: prompt("Name:", oldEndpoint.name)?.trim()?? "",
-        url: prompt("URL:", oldEndpoint.url)?.trim()?? "",
-        key: prompt("API Key:", oldEndpoint.key)?.trim()?? "",
+        name: prompt("Name:", oldEndpoint.name)?.trim()?? oldEndpoint.name,
+        url: prompt("URL:", oldEndpoint.url)?.trim()?? oldEndpoint.url,
+        key: prompt("API Key:", oldEndpoint.key)?.trim()?? oldEndpoint.key,
     };
     stashEndpoints[index] = newEndpoint;
     setValue("stashEndpoints", stashEndpoints);
