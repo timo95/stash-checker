@@ -37,6 +37,7 @@ function formatFileData(files: any[]): string {
 function formatEntryData(target: Target, data: any[], urls: string[]): string {
     let propertyStrings: [string, (v: any) => string][] = [
         ["id", (v: any) => `<br>${formatStashLinks(urls, v, target)}`],
+        ["queries", (v: any) => `<br>Matched: ${v.join(", ")}`],
         ["title", (v: any) => `<br>Title: ${v}`],
         ["name", (v: any) => `<br>Name: ${v}`],
         ["favorite", (v: any) => "&emsp;&#10084;&#65039;"],
@@ -45,7 +46,6 @@ function formatEntryData(target: Target, data: any[], urls: string[]): string {
         ["studio", (v: any) => `<br>Studio: ${v.name}`],
         ["code", (v: any) => `<br>Code: ${v}`],
         ["date", (v: any) => `<br>Date: ${v}`],
-        ["queries", (v: any) => `<br>Matched: ${v.join(", ")}`],
         ["files", (v: any) => `${formatFileData(v)}`],
     ];
     return data.map((entry: any) => "<hr>" + propertyStrings
@@ -56,7 +56,8 @@ function formatEntryData(target: Target, data: any[], urls: string[]): string {
 }
 
 function formatStashLinks(urls: string[], id: string, target: Target): string {
-    return urls.map((url: string) => `<a target="_blank" href="${getUrl(url, target, id)}">${getUrl(url, target, id)}</a>`)
+    return urls.map((url: string) => url.replace(/\/graphql\/?$/, ""))
+        .map((url: string) => `<a target="_blank" href="${getUrl(url, target, id)}">${getUrl(url, target, id)}</a>`)
         .join("<br>")
 }
 

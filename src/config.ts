@@ -44,8 +44,13 @@ export async function initSettings() {
     settings = document.createElement("div");
     settings.id = "stashChecker-settings"
     settings.classList.add("stashChecker", "settings");
-    settings.append(await initEndpoints())
-    settingsModal.append(settings)
+    settings.innerHTML = "<h2>Stash Endpoints</h2>"
+    let description = document.createElement("p");
+    description.classList.add("stashChecker", "sub-heading");
+    description.innerHTML = "Add Stash Endpoints.";
+    settings.append(description);
+    settings.append(await initEndpoints());
+    settingsModal.append(settings);
     document.body.append(settingsModal);
     await updateEndpoints();
 }
@@ -62,15 +67,43 @@ async function updateEndpoints() {
     let endpointList = stashEndpoints.map((endpoint: StashEndpoint, index: number) => {
         let div = document.createElement("div");
         div.classList.add("stashChecker", "endpoint");
-        div.innerHTML = `<p>${endpoint.name}</p>`
-        let button = document.createElement("button");
-        button.setAttribute("data-index", index.toString());
-        button.addEventListener("click", editEndpointListener);
-        button.innerHTML = "Edit";
-        div.append(button);
+        div.innerHTML = `<div><h3>${endpoint.name}</h3><p>${endpoint.url}</p></div>`
+        let editButton = document.createElement("button");
+        editButton.classList.add("stashChecker", "btn", "btn-primary")
+        editButton.setAttribute("data-index", index.toString());
+        editButton.addEventListener("click", editEndpointListener);
+        editButton.innerHTML = "Edit";
+        div.append(editButton);
+        let deleteButton = document.createElement("button");
+        deleteButton.classList.add("stashChecker", "btn", "btn-danger")
+        deleteButton.setAttribute("data-index", index.toString());
+        deleteButton.addEventListener("click", deleteEndpointListener);
+        deleteButton.innerHTML = "Delete";
+        div.append(deleteButton);
         return div;
     });
+    // Add Endpoint
+    let div = document.createElement("div");
+    div.classList.add("stashChecker", "endpoint");
+    div.innerHTML = "<div></div>"
+    let addButton = document.createElement("button");
+    addButton.classList.add("stashChecker", "btn", "btn-primary")
+    addButton.addEventListener("click", addEndpointListener);
+    addButton.innerHTML = "Add";
+    div.append(addButton);
+    endpointList.push(div)
     endpoints.replaceChildren(...endpointList)
+}
+
+async function addEndpointListener(this: HTMLButtonElement) {
+    let newEndpoint: StashEndpoint = {
+        name: prompt("Name:")?.trim()?? "",
+        url: prompt("URL:")?.trim()?? "",
+        key: prompt("API Key:")?.trim()?? "",
+    };
+    stashEndpoints.push(newEndpoint);
+    setValue("stashEndpoints", stashEndpoints);
+    updateEndpoints();
 }
 
 async function editEndpointListener(this: HTMLButtonElement) {
@@ -83,6 +116,13 @@ async function editEndpointListener(this: HTMLButtonElement) {
         key: prompt("API Key:", oldEndpoint.key)?.trim()?? oldEndpoint.key,
     };
     stashEndpoints[index] = newEndpoint;
+    setValue("stashEndpoints", stashEndpoints);
+    updateEndpoints();
+}
+
+async function deleteEndpointListener(this: HTMLButtonElement) {
+    let index = parseInt(this.getAttribute("data-index"));
+    stashEndpoints.splice(index, 1);
     setValue("stashEndpoints", stashEndpoints);
     updateEndpoints();
 }

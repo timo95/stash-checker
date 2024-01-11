@@ -29,19 +29,24 @@
     opacity: 1;
 }
 
+.stashChecker.sub-heading {
+    font-size: 0.8rem;
+    margin: 0.5rem 0 0;
+}
+
 .stashChecker.tooltip {
     z-index: 99999;
     position: fixed;
     background-color: var(--stash-checker-color-bg);
-    border: 0.1em solid var(--stash-checker-color-border);
-    border-radius: 0.5em;
-    padding: 0.5em;
-    margin-top: -0.5em;
+    border: 0.1rem solid var(--stash-checker-color-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-top: -0.5rem;
 }
 
 .stashChecker.file {
-    margin: 0.5em;
-    padding: 0.5em;
+    margin: 0.5rem;
+    padding: 0.5rem;
     background-color: var(--stash-checker-color-card);
 }
 
@@ -60,10 +65,10 @@
 .stashChecker.settings {
     margin: 20vh auto;
     background-color: var(--stash-checker-color-bg);
-    border: 0.1em solid var(--stash-checker-color-border);
-    border-radius: 0.5em;
-    padding: 0.5em;
-    width: auto;
+    border: 0.1rem solid var(--stash-checker-color-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    width: fit-content;
 }
 
 .stashChecker.endpoints {
@@ -80,16 +85,70 @@
     justify-content:space-between;
     justify-items: flex-start;
     align-items: center;
-    width: 30em;
-    padding: 1em;
-    margin: 1em;
+    width: 30rem;
+    padding: 1rem;
+    margin: 0.1rem;
     background-color: var(--stash-checker-color-card);
 }
 
-.stashChecker.endpoint button {
-    background-color: red;
-    height: 2em;
-    width: 4em;
+.stashChecker.endpoint > button {
+    flex-grow: 0;
+    margin-left: 0.5rem;
+}
+
+.stashChecker.endpoint > div {
+    flex-grow: 1;
+}
+
+.stashChecker.endpoint > div > * {
+    margin: 0;
+}
+
+.stashChecker.btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.stashChecker.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+.stashChecker.btn:hover {
+    color: #212529;
+    text-decoration: none;
+}
+.stashChecker.btn-primary {
+    color: #fff;
+    background-color: #137cbd;
+    border-color: #137cbd;
+}
+.stashChecker.btn-primary:hover {
+    color: #fff;
+    background-color: #10659a;
+    border-color: #0e5e8f;
+}
+.stashChecker.btn-danger {
+    color: #fff;
+    background-color: #db3737;
+    border-color: #db3737;
+}
+.stashChecker.btn-danger:hover {
+    color: #fff;
+    background-color: #c82424;
+    border-color: #bd2222;
 }
 
 .stashChecker.tooltip a:link {
@@ -105,8 +164,8 @@
     color: var(--stash-checker-color-link-active);
 }
 .stashChecker.tooltip hr {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
     border-color: var(--stash-checker-color-card);
 }
 
