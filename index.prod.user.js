@@ -392,23 +392,23 @@
       let propertyStrings = [ [ "path", v => `Path: ${v}` ], [ "video_codec", v => `<br>Codec: ${v}` ], [ "width", v => ` (${v}` ], [ "height", v => `x${v})` ], [ "size", v => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${bytesToReadable(v)}` ], [ "bit_rate", v => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(v / 1e6).toFixed(2)}Mbit/s` ], [ "duration", v => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(v)}` ] ];
       return files.map((file => "<div class='stashChecker file'>" + propertyStrings.filter((e => file[e[0]])).map((e => e[1](file[e[0]]))).join("") + "</div>")).join("");
     }
-    function formatEntryData(target, data, urls) {
-      let propertyStrings = [ [ "id", v => `<br>${formatStashLinks(urls, v, target)}` ], [ "queries", v => `<br>Matched: ${v.join(", ")}` ], [ "title", v => `<br>Title: ${v}` ], [ "name", v => `<br>Name: ${v}` ], [ "favorite", v => "&emsp;&#10084;&#65039;" ], [ "disambiguation", v => ` <span style="color: grey">(${v})</span>` ], [ "alias_list", v => `<br>Aliases: ${v.join(", ")}` ], [ "studio", v => `<br>Studio: ${v.name}` ], [ "code", v => `<br>Code: ${v}` ], [ "date", v => `<br>Date: ${v}` ], [ "files", v => `${formatFileData(v)}` ] ];
+    function formatEntryData(target, data, endpoints) {
+      let propertyStrings = [ [ "id", id => `<br>${endpoints.map((endpoint => formatEndpointLinks(endpoint, id, target))).join("<br>")}` ], [ "queries", v => `<br>Matched: ${v.join(", ")}` ], [ "title", v => `<br>Title: ${v}` ], [ "name", v => `<br>Name: ${v}` ], [ "favorite", v => "&emsp;&#10084;&#65039;" ], [ "disambiguation", v => ` <span style="color: grey">(${v})</span>` ], [ "alias_list", v => `<br>Aliases: ${v.join(", ")}` ], [ "studio", v => `<br>Studio: ${v.name}` ], [ "code", v => `<br>Code: ${v}` ], [ "date", v => `<br>Date: ${v}` ], [ "files", v => `${formatFileData(v)}` ] ];
       return data.map((entry => "<hr>" + propertyStrings.filter((e => entry[e[0]])).map((e => e[1](entry[e[0]]))).join(""))).join("");
     }
-    function formatStashLinks(urls, id, target) {
-      return urls.map((url => url.replace(/\/graphql\/?$/, ""))).map((url => `<a target="_blank" href="${getUrl(url, target, id)}">${getUrl(url, target, id)}</a>`)).join("<br>");
+    function formatEndpointLinks(endpoint, id, target) {
+      return `<a target="_blank" href="${getUrl(endpoint.url.replace(/\/graphql\/?$/, ""), target, id)}">${endpoint.name}</a>`;
     }
     function mergeData(target, source) {
       let mapTarget = new Map(target.map((e => [ e.id, e ])));
       let mapSource = new Map(source.map((e => [ e.id, e ])));
       mapSource.forEach(((value, key) => {
         if (mapTarget.has(key)) {
-          let urls = new Set(value["urls"]);
-          mapTarget.get(key)["urls"].forEach((endpoint => {
-            urls.add(endpoint);
+          let endpoints = new Set(value["endpoints"]);
+          mapTarget.get(key)["endpoints"].forEach((endpoint => {
+            endpoints.add(endpoint);
           }));
-          value["urls"] = [ ...urls ].sort();
+          value["endpoints"] = [ ...endpoints ].sort();
           let queries = new Set(value["queries"]);
           mapTarget.get(key)["queries"].forEach((query => {
             queries.add(query);
@@ -419,16 +419,16 @@
       }));
       return Array.from(mapTarget.values());
     }
-    function prefixSymbol(element, target, data, stashUrl, queryType, color) {
-      let urls = [ stashUrl ];
+    function prefixSymbol(element, target, data, endpoint, queryType, color) {
+      let endpoints = [ endpoint ];
       let queries = [ queryType ];
       data.forEach((entry => {
-        entry["urls"] = urls;
+        entry["endpoints"] = endpoints;
         entry["queries"] = queries;
       }));
       let symbol = getExistingSymbol(element);
       if (symbol) {
-        urls = [ ...new Set(JSON.parse(symbol.getAttribute("data-urls"))).add(stashUrl) ].sort();
+        endpoints = [ ...new Set(JSON.parse(symbol.getAttribute("data-endpoints"))).add(endpoint) ].sort(((a, b) => a.name.localeCompare(b.name)));
         queries = [ ...new Set(JSON.parse(symbol.getAttribute("data-queries"))).add(queryType) ].sort();
         data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data);
         symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")) + 1).toString());
@@ -442,6 +442,7 @@
         let text = firstTextChild(element);
         if (text) text.parentNode.insertBefore(symbol, text); else return;
       }
+      symbol.setAttribute("data-endpoints", JSON.stringify(endpoints));
       symbol.setAttribute("data-queries", JSON.stringify(queries));
       symbol.setAttribute("data-data", JSON.stringify(data));
       let count = data.length;
@@ -459,8 +460,11 @@
         symbol.style.color = "orange";
         tooltip = `${targetReadable} has duplicate matches<br>`;
       }
+      tooltip += `Endpoints: ${endpoints.map((endpoint => endpoint.name)).join(", ")}`;
+      tooltip += "<br>";
       tooltip += `Queries: ${queries.join(", ")}`;
-      tooltip += formatEntryData(target, data, urls);
+      void 0;
+      tooltip += formatEntryData(target, data, endpoints);
       symbol.setAttribute("data-info", tooltip);
     }
     async function getValue(key, defaultValue) {
@@ -653,7 +657,7 @@
               let r = JSON.parse(response.responseText);
               if ("errors" in r) r.errors.forEach((e => {
                 console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`);
-              })); else onload(target, access(r.data), endpoint.url);
+              })); else onload(target, access(r.data), endpoint);
             } catch (e) {
               console.log("Exception: " + e);
               console.log("Failed to parse response: " + response.responseText);
