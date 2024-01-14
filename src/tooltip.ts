@@ -1,6 +1,11 @@
 import {Target} from "./check";
 import {mouseoutListener, mouseoverListener} from "./tooltipElement";
 import {bytesToReadable, firstTextChild, getUrl, secondsToReadable} from "./utils";
+import {StashEndpoint} from "./config";
+
+interface StashEntry {
+    [key: string]: any;
+}
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -34,9 +39,9 @@ function formatFileData(files: any[]): string {
     ).join("");
 }
 
-function formatEntryData(target: Target, data: any[], urls: string[]): string {
+function formatEntryData(target: Target, data: StashEntry[], endpoints: StashEndpoint[]): string {
     let propertyStrings: [string, (v: any) => string][] = [
-        ["id", (v: any) => `<br>${formatStashLinks(urls, v, target)}`],
+        ["id", (id: any) => `<br>${endpoints.map(endpoint => formatEndpointLinks(endpoint, id, target)).join("<br>")}`],
         ["queries", (v: any) => `<br>Matched: ${v.join(", ")}`],
         ["title", (v: any) => `<br>Title: ${v}`],
         ["name", (v: any) => `<br>Name: ${v}`],
@@ -55,10 +60,8 @@ function formatEntryData(target: Target, data: any[], urls: string[]): string {
     ).join("");
 }
 
-function formatStashLinks(urls: string[], id: string, target: Target): string {
-    return urls.map((url: string) => url.replace(/\/graphql\/?$/, ""))
-        .map((url: string) => `<a target="_blank" href="${getUrl(url, target, id)}">${getUrl(url, target, id)}</a>`)
-        .join("<br>")
+function formatEndpointLinks(endpoint: StashEndpoint, id: string, target: Target): string {
+    return `<a target="_blank" href="${getUrl(endpoint.url.replace(/\/graphql\/?$/, ""), target, id)}">${endpoint.name}</a>`
 }
 
 /**
@@ -67,17 +70,17 @@ function formatStashLinks(urls: string[], id: string, target: Target): string {
  * @param target
  * @param source
  */
-function mergeData(target: any[], source: any[]): any[] {
-    let mapTarget: Map<string, any> = new Map(target.map(e => [e.id, e]))
-    let mapSource: Map<string, any> = new Map(source.map(e => [e.id, e]))
+function mergeData(target: StashEntry[], source: StashEntry[]): StashEntry[] {
+    let mapTarget: Map<string, StashEntry> = new Map(target.map(e => [e.id, e]))
+    let mapSource: Map<string, StashEntry> = new Map(source.map(e => [e.id, e]))
     mapSource.forEach((value, key) => {
         if (mapTarget.has(key)) {
-            // merge stash endpoint urls
-            let urls = new Set(value["urls"])
-            mapTarget.get(key)["urls"].forEach((endpoint: string) => {
-                urls.add(endpoint)
+            // merge stash endpoints
+            let endpoints = new Set(value["endpoints"])
+            mapTarget.get(key)["endpoints"].forEach((endpoint: StashEndpoint) => {
+                endpoints.add(endpoint)
             })
-            value["urls"] = [...urls].sort()
+            value["endpoints"] = [...endpoints].sort()
             // merge which queries were successful
             let queries = new Set(value["queries"])
             mapTarget.get(key)["queries"].forEach((query: string) => {
@@ -97,23 +100,23 @@ function mergeData(target: any[], source: any[]): any[] {
  * @param element
  * @param target
  * @param data
- * @param stashUrl
+ * @param endpoint
  * @param queryType
  * @param color
  */
 export function prefixSymbol(
     element: Element,
     target: Target,
-    data: any,
-    stashUrl: string,
+    data: StashEntry[],
+    endpoint: StashEndpoint,
     queryType: string,
-    color: (data: any[]) => string
+    color: (data: StashEntry) => string
 ) {
-    let urls = [stashUrl]
+    let endpoints = [endpoint]
     let queries = [queryType]
     // Query and url for each found entry
     data.forEach((entry: any) => {
-        entry["urls"] = urls
+        entry["endpoints"] = endpoints
         entry["queries"] = queries
     });
 
@@ -121,7 +124,8 @@ export function prefixSymbol(
     let symbol = getExistingSymbol(element)
     if (symbol) {
         // Merge new result with existing results
-        urls = [...new Set<string>(JSON.parse(symbol.getAttribute("data-urls"))).add(stashUrl)].sort()
+        endpoints = [...new Set<StashEndpoint>(JSON.parse(symbol.getAttribute("data-endpoints"))).add(endpoint)]
+            .sort((a, b) => a.name.localeCompare(b.name))
         queries = [...new Set<string>(JSON.parse(symbol.getAttribute("data-queries"))).add(queryType)].sort()
         data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data)
         symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")) + 1).toString())
@@ -144,6 +148,7 @@ export function prefixSymbol(
         }
     }
     // Store merged query results on symbol
+    symbol.setAttribute("data-endpoints", JSON.stringify(endpoints))
     symbol.setAttribute("data-queries", JSON.stringify(queries))
     symbol.setAttribute("data-data", JSON.stringify(data))
 
@@ -163,8 +168,11 @@ export function prefixSymbol(
         symbol.style.color = "orange";
         tooltip = `${targetReadable} has duplicate matches<br>`;
     }
+    tooltip += `Endpoints: ${endpoints.map(endpoint => endpoint.name).join(", ")}`
+    tooltip += "<br>"
     tooltip += `Queries: ${queries.join(", ")}`
-    tooltip += formatEntryData(target, data, urls)
+    console.debug(endpoint)
+    tooltip += formatEntryData(target, data, endpoints)
 
     // Store tooltip content on symbol
     symbol.setAttribute("data-info", tooltip)

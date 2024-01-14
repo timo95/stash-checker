@@ -24,7 +24,7 @@ type Type = "url" | "code" | "stash_id" | "name" | "title"
 
 async function request(
     queryString: string,
-    onload: (target: Target, data: any[], stashUrl: string) => any,
+    onload: (target: Target, data: any[], endpoint: StashEndpoint) => any,
     target: Target,
     type: Type,
     {stashIdEndpoint}: CheckOptions
@@ -90,7 +90,7 @@ async function request(
                             console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`)
                         });
                     } else {
-                        onload(target, access(r.data), endpoint.url);
+                        onload(target, access(r.data), endpoint);
                     }
                 } catch (e) {
                     console.log("Exception: " + e);
