@@ -506,7 +506,7 @@
       }));
       let defaultData = [ {
         name: "Localhost",
-        url: "http://localhost:9999",
+        url: "http://localhost:9999/graphql",
         key: ""
       } ];
       stashEndpoints = await getValue("stashEndpoints", defaultData);
