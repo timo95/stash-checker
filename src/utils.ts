@@ -18,14 +18,15 @@ export function firstTextChild(node: Node): Node {
     }
 }
 
-export function getUrl(stashUrl: string, target: Target, id: string): string {
+export function entryLink(stashUrl: string, target: Target, id: string): string {
     let path
     if (target == "gallery") {
         path = "galleries";
     } else {
         path = target + "s";
     }
-    return `${stashUrl}/${path}/${id}`;
+    let url = `${stashUrl}/${path}/${id}`;
+    return `<a target="_blank" href="${url}">${url}</a>`
 }
 
 export function secondsToReadable(seconds: number): string {
