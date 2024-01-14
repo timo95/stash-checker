@@ -55,7 +55,7 @@
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = __webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
       var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default());
-      ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --stash-checker-color-text: #e0e0e0 !important;\n    --stash-checker-color-link-visited: #c7c7c7 !important;\n    --stash-checker-color-link-hover: #f2f2f2 !important;\n    --stash-checker-color-link-active: #039 !important;\n    --stash-checker-color-border: #5a5a5a !important;\n    --stash-checker-color-bg: #202020 !important;\n    --stash-checker-color-card: #464646 !important;\n  }\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.sub-heading {\n  font-size: .8rem !important;\n  margin: .5rem 0 0 !important;\n}\n\n.stashChecker.tooltip {\n  z-index: 99999 !important;\n  position: fixed !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  margin-top: -0.5rem !important;\n}\n\n.stashChecker.file {\n  margin: .5rem !important;\n  padding: .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: auto !important;\n  background-color: #000 !important;\n  background-color: rgba(0,0,0,.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 20vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  width: fit-content !important;\n}\n\n.stashChecker.endpoints {\n  display: flex !important;\n  flex-direction: column !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: stretch !important;\n}\n\n.stashChecker.endpoint {\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  width: 30rem !important;\n  padding: 1rem !important;\n  margin: .1rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint>button {\n  flex-grow: 0 !important;\n  margin-left: .5rem !important;\n}\n\n.stashChecker.endpoint>div {\n  flex-grow: 1 !important;\n}\n\n.stashChecker.endpoint>div>* {\n  margin: 0 !important;\n}\n\n.stashChecker.btn {\n  display: inline-block !important;\n  font-weight: 400 !important;\n  color: #212529 !important;\n  text-align: center !important;\n  vertical-align: middle !important;\n  user-select: none !important;\n  background-color: rgba(0,0,0,0) !important;\n  border: 1px solid rgba(0,0,0,0) !important;\n  border-top-color: rgba(0,0,0,0) !important;\n  border-right-color: rgba(0,0,0,0) !important;\n  border-bottom-color: rgba(0,0,0,0) !important;\n  border-left-color: rgba(0,0,0,0) !important;\n  padding: .375rem .75rem !important;\n  font-size: 1rem !important;\n  line-height: 1.5 !important;\n  border-radius: .25rem !important;\n  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n}\n\n.stashChecker.btn:not(:disabled):not(.disabled) {\n  cursor: pointer !important;\n}\n\n.stashChecker.btn:hover {\n  color: #212529 !important;\n  text-decoration: none !important;\n}\n\n.stashChecker.btn-primary {\n  color: #fff !important;\n  background-color: #137cbd !important;\n  border-color: #137cbd !important;\n}\n\n.stashChecker.btn-primary:hover {\n  color: #fff !important;\n  background-color: #10659a !important;\n  border-color: #0e5e8f !important;\n}\n\n.stashChecker.btn-danger {\n  color: #fff !important;\n  background-color: #db3737 !important;\n  border-color: #db3737 !important;\n}\n\n.stashChecker.btn-danger:hover {\n  color: #fff !important;\n  background-color: #c82424 !important;\n  border-color: #bd2222 !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: .5rem !important;\n  margin-bottom: .5rem !important;\n  border-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tooltip hr+br {\n  display: none !important;\n}\n\n.stashChecker.file+br {\n  display: none !important;\n}\n\n.stashCheckerCheckmark {\n  font-size: inherit !important;\n}`, "" ]);
+      ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --stash-checker-color-text: #e0e0e0 !important;\n    --stash-checker-color-link-visited: #c7c7c7 !important;\n    --stash-checker-color-link-hover: #f2f2f2 !important;\n    --stash-checker-color-link-active: #039 !important;\n    --stash-checker-color-border: #5a5a5a !important;\n    --stash-checker-color-bg: #202020 !important;\n    --stash-checker-color-card: #464646 !important;\n  }\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.sub-heading {\n  font-size: .8rem !important;\n  margin: .5rem 0 0 !important;\n}\n\n.stashChecker.tooltip {\n  z-index: 99999 !important;\n  position: fixed !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  margin-top: -0.5rem !important;\n}\n\n.stashChecker.file {\n  margin: .5rem !important;\n  padding: .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: auto !important;\n  background-color: #000 !important;\n  background-color: rgba(0,0,0,.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 20vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  width: 35rem !important;\n}\n\n.stashChecker.endpoints {\n  display: flex !important;\n  flex-direction: column !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: stretch !important;\n}\n\n.stashChecker.endpoint {\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  padding: 1rem !important;\n  margin: .1rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint>button {\n  flex-grow: 0 !important;\n  margin-left: .5rem !important;\n}\n\n.stashChecker.endpoint>div {\n  flex-grow: 1 !important;\n}\n\n.stashChecker.endpoint>div>* {\n  margin: 0 !important;\n}\n\n.stashChecker.btn {\n  display: inline-block !important;\n  font-weight: 400 !important;\n  color: #212529 !important;\n  text-align: center !important;\n  vertical-align: middle !important;\n  user-select: none !important;\n  background-color: rgba(0,0,0,0) !important;\n  border: 1px solid rgba(0,0,0,0) !important;\n  border-top-color: rgba(0,0,0,0) !important;\n  border-right-color: rgba(0,0,0,0) !important;\n  border-bottom-color: rgba(0,0,0,0) !important;\n  border-left-color: rgba(0,0,0,0) !important;\n  padding: .375rem .75rem !important;\n  font-size: 1rem !important;\n  line-height: 1.5 !important;\n  border-radius: .25rem !important;\n  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n}\n\n.stashChecker.btn:not(:disabled):not(.disabled) {\n  cursor: pointer !important;\n}\n\n.stashChecker.btn:hover {\n  color: #212529 !important;\n  text-decoration: none !important;\n}\n\n.stashChecker.btn-primary {\n  color: #fff !important;\n  background-color: #137cbd !important;\n  border-color: #137cbd !important;\n}\n\n.stashChecker.btn-primary:hover {\n  color: #fff !important;\n  background-color: #10659a !important;\n  border-color: #0e5e8f !important;\n}\n\n.stashChecker.btn-danger {\n  color: #fff !important;\n  background-color: #db3737 !important;\n  border-color: #db3737 !important;\n}\n\n.stashChecker.btn-danger:hover {\n  color: #fff !important;\n  background-color: #c82424 !important;\n  border-color: #bd2222 !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: .5rem !important;\n  margin-bottom: .5rem !important;\n  border-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tooltip hr+br {\n  display: none !important;\n}\n\n.stashChecker.file+br {\n  display: none !important;\n}\n\n.stashCheckerCheckmark {\n  font-size: inherit !important;\n}`, "" ]);
       const __WEBPACK_DEFAULT_EXPORT__ = ___CSS_LOADER_EXPORT___;
     },
     645: module => {
@@ -365,10 +365,11 @@
     function firstTextChild(node) {
       if (node.nodeType === Node.TEXT_NODE && node.textContent.match(/^[\s<>]*$/) === null) return node; else return Array.from(node.childNodes).filter((n => ![ "svg" ].includes(n.nodeName.toLowerCase()))).filter((n => n.nodeType === Node.ELEMENT_NODE ? n.getAttribute("data-type") !== "stash-symbol" : true)).map(firstTextChild).find((n => n));
     }
-    function getUrl(stashUrl, target, id) {
+    function entryLink(stashUrl, target, id) {
       let path;
       if (target == "gallery") path = "galleries"; else path = target + "s";
-      return `${stashUrl}/${path}/${id}`;
+      let url = `${stashUrl}/${path}/${id}`;
+      return `<a target="_blank" href="${url}">${url}</a>`;
     }
     function secondsToReadable(seconds) {
       let h = Math.floor(seconds / 3600);
@@ -389,47 +390,53 @@
       if (element.getAttribute("data-type") === "stash-symbol") return element; else return Array.from(element.childNodes).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n)).map(getExistingSymbol).find((n => n));
     }
     function formatFileData(files) {
-      let propertyStrings = [ [ "path", v => `Path: ${v}` ], [ "video_codec", v => `<br>Codec: ${v}` ], [ "width", v => ` (${v}` ], [ "height", v => `x${v})` ], [ "size", v => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${bytesToReadable(v)}` ], [ "bit_rate", v => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(v / 1e6).toFixed(2)}Mbit/s` ], [ "duration", v => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(v)}` ] ];
+      let propertyStrings = [ [ "path", path => `Path: ${path}` ], [ "video_codec", video_codec => `<br>Codec: ${video_codec}` ], [ "width", width => ` (${width}` ], [ "height", height => `x${height})` ], [ "size", size => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${bytesToReadable(size)}` ], [ "bit_rate", bit_rate => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(bit_rate / 1e6).toFixed(2)}Mbit/s` ], [ "duration", duration => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(duration)}` ] ];
       return files.map((file => "<div class='stashChecker file'>" + propertyStrings.filter((e => file[e[0]])).map((e => e[1](file[e[0]]))).join("") + "</div>")).join("");
     }
-    function formatEntryData(target, data, endpoints) {
-      let propertyStrings = [ [ "id", id => `<br>${endpoints.map((endpoint => formatEndpointLinks(endpoint, id, target))).join("<br>")}` ], [ "queries", v => `<br>Matched: ${v.join(", ")}` ], [ "title", v => `<br>Title: ${v}` ], [ "name", v => `<br>Name: ${v}` ], [ "favorite", v => "&emsp;&#10084;&#65039;" ], [ "disambiguation", v => ` <span style="color: grey">(${v})</span>` ], [ "alias_list", v => `<br>Aliases: ${v.join(", ")}` ], [ "studio", v => `<br>Studio: ${v.name}` ], [ "code", v => `<br>Code: ${v}` ], [ "date", v => `<br>Date: ${v}` ], [ "files", v => `${formatFileData(v)}` ] ];
-      return data.map((entry => "<hr>" + propertyStrings.filter((e => entry[e[0]])).map((e => e[1](entry[e[0]]))).join(""))).join("");
+    function formatQueries(queries, target, id) {
+      return queries.map((query => `${query.endpoint} (Matched: ${query.types.join(", ")}) ${entryLink(query.url, target, id)}`)).join("<br>");
     }
-    function formatEndpointLinks(endpoint, id, target) {
-      return `<a target="_blank" href="${getUrl(endpoint.url.replace(/\/graphql\/?$/, ""), target, id)}">${endpoint.name}</a>`;
+    function formatEntryData(target, data) {
+      let propertyStrings = [ [ "id", (id, queries) => `<br>Endpoints:<br>${formatQueries(queries, target, id)}` ], [ "title", title => `<br>Title: ${title}` ], [ "name", name => `<br>Name: ${name}` ], [ "favorite", () => "&emsp;&#10084;&#65039;" ], [ "disambiguation", disambiguation => ` <span style="color: grey">(${disambiguation})</span>` ], [ "alias_list", alias_list => `<br>Aliases: ${alias_list.join(", ")}` ], [ "studio", studio => `<br>Studio: ${studio.name}` ], [ "code", code => `<br>Code: ${code}` ], [ "date", date => `<br>Date: ${date}` ], [ "files", files => `${formatFileData(files)}` ] ];
+      return data.map((entry => "<hr>" + propertyStrings.filter((e => entry[e[0]])).map((e => e[1](entry[e[0]], entry["queries"]))).join(""))).join("");
     }
     function mergeData(target, source) {
       let mapTarget = new Map(target.map((e => [ e.id, e ])));
       let mapSource = new Map(source.map((e => [ e.id, e ])));
-      mapSource.forEach(((value, key) => {
+      mapSource.forEach(((sourceValue, key) => {
         if (mapTarget.has(key)) {
-          let endpoints = new Set(value["endpoints"]);
-          mapTarget.get(key)["endpoints"].forEach((endpoint => {
-            endpoints.add(endpoint);
+          let sourceQueries = new Map(sourceValue["queries"].map((v => [ v.endpoint, v ])));
+          let targetQueries = new Map(mapTarget.get(key)["queries"].map((v => [ v.endpoint, v ])));
+          sourceQueries.forEach(((sourceQuery, key) => {
+            if (targetQueries.has(key)) {
+              let targetQuery = targetQueries.get(key);
+              let typeSet = new Set(sourceQuery.types);
+              targetQuery.types.forEach((type => typeSet.add(type)));
+              sourceQuery.types = [ ...typeSet ];
+            }
+            targetQueries.set(key, sourceQuery);
           }));
-          value["endpoints"] = [ ...endpoints ].sort();
-          let queries = new Set(value["queries"]);
-          mapTarget.get(key)["queries"].forEach((query => {
-            queries.add(query);
-          }));
-          value["queries"] = [ ...queries ].sort();
+          sourceValue["queries"] = [ ...targetQueries.values() ].sort(((a, b) => a.endpoint.localeCompare(b.endpoint)));
         }
-        mapTarget.set(key, value);
+        mapTarget.set(key, sourceValue);
       }));
       return Array.from(mapTarget.values());
     }
     function prefixSymbol(element, target, data, endpoint, queryType, color) {
-      let endpoints = [ endpoint ];
-      let queries = [ queryType ];
+      let endpoints = [ endpoint.name ];
+      let queryTypes = [ queryType ];
+      let query = {
+        endpoint: endpoint.name,
+        url: endpoint.url.replace(/\/graphql\/?$/, ""),
+        types: queryTypes
+      };
       data.forEach((entry => {
-        entry["endpoints"] = endpoints;
-        entry["queries"] = queries;
+        entry["queries"] = [ query ];
       }));
       let symbol = getExistingSymbol(element);
       if (symbol) {
-        endpoints = [ ...new Set(JSON.parse(symbol.getAttribute("data-endpoints"))).add(endpoint) ].sort(((a, b) => a.name.localeCompare(b.name)));
-        queries = [ ...new Set(JSON.parse(symbol.getAttribute("data-queries"))).add(queryType) ].sort();
+        endpoints = [ ...new Set(JSON.parse(symbol.getAttribute("data-endpoints"))).add(endpoint.name) ].sort();
+        queryTypes = [ ...new Set(JSON.parse(symbol.getAttribute("data-queries"))).add(queryType) ].sort();
         data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data);
         symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")) + 1).toString());
       } else {
@@ -443,7 +450,7 @@
         if (text) text.parentNode.insertBefore(symbol, text); else return;
       }
       symbol.setAttribute("data-endpoints", JSON.stringify(endpoints));
-      symbol.setAttribute("data-queries", JSON.stringify(queries));
+      symbol.setAttribute("data-queries", JSON.stringify(queryTypes));
       symbol.setAttribute("data-data", JSON.stringify(data));
       let count = data.length;
       let tooltip = "";
@@ -460,11 +467,10 @@
         symbol.style.color = "orange";
         tooltip = `${targetReadable} has duplicate matches<br>`;
       }
-      tooltip += `Endpoints: ${endpoints.map((endpoint => endpoint.name)).join(", ")}`;
+      tooltip += `Endpoints: ${endpoints.join(", ")}`;
       tooltip += "<br>";
-      tooltip += `Queries: ${queries.join(", ")}`;
-      void 0;
-      tooltip += formatEntryData(target, data, endpoints);
+      tooltip += `Queries: ${queryTypes.join(", ")}`;
+      tooltip += formatEntryData(target, data);
       symbol.setAttribute("data-info", tooltip);
     }
     async function getValue(key, defaultValue) {
@@ -483,7 +489,6 @@
     async function deleteValue(key) {
       return GM.deleteValue(key);
     }
-    const DEFAULT_STASH_URL = "http://localhost:9999";
     const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
     let settingsModal;
     let settings;
@@ -511,7 +516,7 @@
       settings.innerHTML = "<h2>Stash Endpoints</h2>";
       let description = document.createElement("p");
       description.classList.add("stashChecker", "sub-heading");
-      description.innerHTML = "Add Stash Endpoints.";
+      description.innerHTML = "The GraphQL endpoint URL can be generated by appending '/graphql' to your Stash base URL. The API key can be found on your security settings page. Leave the field empty, if none is required.";
       settings.append(description);
       settings.append(await initEndpoints());
       settingsModal.append(settings);
