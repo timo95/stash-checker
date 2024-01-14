@@ -68,7 +68,7 @@
     border: 0.1rem solid var(--stash-checker-color-border);
     border-radius: 0.5rem;
     padding: 0.5rem;
-    width: fit-content;
+    width: 35rem;
 }
 
 .stashChecker.endpoints {
@@ -85,7 +85,6 @@
     justify-content:space-between;
     justify-items: flex-start;
     align-items: center;
-    width: 30rem;
     padding: 1rem;
     margin: 0.1rem;
     background-color: var(--stash-checker-color-card);
