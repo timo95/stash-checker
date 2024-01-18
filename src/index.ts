@@ -204,6 +204,7 @@ import {firstTextChild} from "./utils";
             check("scene", "a[href*='episode/']", {observe: true});
             check("movie", "a[href*='video/']", {observe: true});
             break;
+        case "fansdb.cc":
         case "fansdb.xyz":
         case "pmvstash.org":
         case "stashdb.org":
