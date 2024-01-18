@@ -6,7 +6,6 @@
 // @match *://adultanime.dbsearch.net/*
 // @match *://coomer.party/*
 // @match *://erommdtube.com/*
-// @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://gayeroticvideoindex.com/*
 // @match *://kemono.party/*
@@ -1044,7 +1043,6 @@
         });
         break;
 
-       case "fansdb.cc":
        case "fansdb.xyz":
        case "pmvstash.org":
        case "stashdb.org":
