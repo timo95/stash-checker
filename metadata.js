@@ -12,7 +12,6 @@ export default {
         "*://adultanime.dbsearch.net/*",
         "*://coomer.party/*",
         "*://erommdtube.com/*",
-        "*://fansdb.cc/*",
         "*://fansdb.xyz/*",
         "*://gayeroticvideoindex.com/*",
         "*://kemono.party/*",
