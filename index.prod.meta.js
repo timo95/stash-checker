@@ -6,6 +6,7 @@
 // @match *://adultanime.dbsearch.net/*
 // @match *://coomer.party/*
 // @match *://erommdtube.com/*
+// @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://gayeroticvideoindex.com/*
 // @match *://kemono.party/*
