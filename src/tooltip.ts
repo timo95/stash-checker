@@ -1,18 +1,15 @@
-import {Target} from "./check";
+import {StashEntry, StashQuery, Target, Type} from "./dataTypes";
 import {mouseoutListener, mouseoverListener} from "./tooltipElement";
 import {bytesToReadable, firstTextChild, entryLink, secondsToReadable} from "./utils";
 import {StashEndpoint} from "./config";
 
-interface StashEntry {
-    [key: string]: any;
-}
-
-interface StashQuery {
-    endpoint: string;
-    url: string;
-    types: string[];
-    matchQuality: number;
-}
+const typeToString = new Map<Type, string>([
+    [Type.Url, "URL"],
+    [Type.Code, "Code"],
+    [Type.StashId, "StashId"],
+    [Type.Name, "Name"],
+    [Type.Title, "Title"],
+])
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -55,7 +52,9 @@ function matchQuality(matchQuality: number): string {
 }
 
 function formatQueries(queries: StashQuery[], target: Target, id: string): string {
-    return queries.map(query => `${matchQuality(query.matchQuality)} ${query.endpoint} (Matched: ${query.types.join(", ")}): ${entryLink(query.url, target, id)}`).join("<br>")
+    return queries.map(query =>
+        `${matchQuality(query.matchQuality)} ${query.endpoint} (Matched: ${query.types.map(type => typeToString.get(type)).join(", ")}): ${entryLink(query.url, target, id)}`
+    ).join("<br>")
 }
 
 function formatEntryData(target: Target, data: StashEntry[]): string {
@@ -78,14 +77,21 @@ function formatEntryData(target: Target, data: StashEntry[]): string {
     ).join("");
 }
 
+function updateMatchQuality(queries: StashQuery[], numQueries: number): StashQuery[] {
+    return queries.map(query => {
+        query.matchQuality = query.types.length / numQueries
+        return query
+    })
+}
+
 /**
  * Similar to object.assign(), but also merges the children of the objects.
  *
  * @param target
  * @param source
- * @param queryTypes
+ * @param numQueries
  */
-function mergeData(target: StashEntry[], source: StashEntry[], queryTypes: string[]): StashEntry[] {
+function mergeData(target: StashEntry[], source: StashEntry[], numQueries: number): StashEntry[] {
     let mapTarget: Map<string, StashEntry> = new Map(target.map(e => [e.id, e]))
     let mapSource: Map<string, StashEntry> = new Map(source.map(e => [e.id, e]))
     mapSource.forEach((sourceValue, key) => {
@@ -99,9 +105,7 @@ function mergeData(target: StashEntry[], source: StashEntry[], queryTypes: strin
                     let targetQuery = targetQueries.get(key)
                     let typeSet = new Set(sourceQuery.types)
                     targetQuery.types.forEach(type => typeSet.add(type));
-
-                    sourceQuery.types = [...typeSet]
-                    sourceQuery.matchQuality = sourceQuery.types.filter((type: string) => queryTypes.includes(type)).length / queryTypes.length
+                    sourceQuery.types = [...typeSet].sort()
                 }
                 targetQueries.set(key, sourceQuery)
             });
@@ -111,7 +115,11 @@ function mergeData(target: StashEntry[], source: StashEntry[], queryTypes: strin
         }
         mapTarget.set(key, sourceValue)
     });
-    return Array.from(mapTarget.values());
+    // Update match quality
+    return Array.from(mapTarget.values()).map(datum => {
+        datum["queries"] = updateMatchQuality(datum["queries"], numQueries)
+        return datum
+    })
 }
 
 /**
@@ -122,20 +130,20 @@ function mergeData(target: StashEntry[], source: StashEntry[], queryTypes: strin
  * @param target
  * @param data
  * @param endpoint
- * @param queryType
+ * @param type
  * @param color
  */
 export function prefixSymbol(
     element: Element,
     target: Target,
-    data: StashEntry[],
+    type: Type,
     endpoint: StashEndpoint,
-    queryType: string,
+    data: StashEntry[],
     color: (data: StashEntry) => string
 ) {
     // All queries used here
     let endpoints = [endpoint.name]
-    let queryTypes = [queryType]
+    let queryTypes = [type]
     // Specific query for this result
     let query: StashQuery = {
         endpoint: endpoint.name,
@@ -144,7 +152,7 @@ export function prefixSymbol(
         matchQuality: 1
     }
     // Add query for each found entry
-    data.forEach((entry: any) => {
+    data.forEach((entry: StashEntry) => {
         entry["queries"] = [query]
     });
 
@@ -153,8 +161,8 @@ export function prefixSymbol(
     if (symbol) {
         // Merge new result with existing results
         endpoints = [...new Set<string>(JSON.parse(symbol.getAttribute("data-endpoints"))).add(endpoint.name)].sort()
-        queryTypes = [...new Set<string>(JSON.parse(symbol.getAttribute("data-queries"))).add(queryType)].sort()
-        data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data, queryTypes)
+        queryTypes = [...new Set<Type>(JSON.parse(symbol.getAttribute("data-queries"))).add(type)].sort()
+        data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data, queryTypes.length)
         symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")) + 1).toString())
     } else {
         // Create new symbol
@@ -198,7 +206,7 @@ export function prefixSymbol(
     // All used queries
     tooltip += `Endpoints: ${endpoints.join(", ")}`
     tooltip += "<br>"
-    tooltip += `Queries: ${queryTypes.join(", ")}`
+    tooltip += `Queries: ${queryTypes.map(type => typeToString.get(type)).join(", ")}`
     // List of results
     tooltip += formatEntryData(target, data)
 

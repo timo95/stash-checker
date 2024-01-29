@@ -1,4 +1,4 @@
-import {Target} from "./check";
+import {Target} from "./dataTypes";
 
 /**
  * recursive (dfs) first non empty text node child, undefined if none available

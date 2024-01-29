@@ -1,6 +1,7 @@
 import {prefixSymbol} from "./tooltip";
 import {StashEndpoint, stashEndpoints} from "./config";
 import {firstTextChild} from "./utils";
+import {Target, Type} from "./dataTypes";
 
 type Selector = (e: Element) => string;
 
@@ -17,14 +18,9 @@ interface CheckOptions {
     observe?: boolean;
 }
 
-// what the query asks for
-export type Target = "scene" | "performer" | "gallery" | "movie" | "studio" | "tag"
-// what the query uses to filter
-type Type = "url" | "code" | "stash_id" | "name" | "title"
-
 async function request(
     queryString: string,
-    onload: (target: Target, data: any[], endpoint: StashEndpoint) => any,
+    onload: (target: Target, type: Type, endpoint: StashEndpoint, data: any[]) => any,
     target: Target,
     type: Type,
     {stashIdEndpoint}: CheckOptions
@@ -35,7 +31,7 @@ async function request(
 
     // Build filter
     switch (type) {
-        case "stash_id":
+        case Type.StashId:
             criterion = `{stash_id_endpoint:{endpoint:"${stashIdEndpoint}",stash_id:"${queryString}",modifier:EQUALS}}`;
             break;
         default:
@@ -45,27 +41,27 @@ async function request(
 
     // Build query
     switch (target) {
-        case "scene":
+        case Target.Scene:
             query = `{findScenes(scene_filter:${criterion}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}}`;
             access = (d) => d.findScenes.scenes;
             break;
-        case "performer":
+        case Target.Performer:
             query = `{findPerformers(performer_filter:${criterion}){performers{id,name,disambiguation,alias_list,favorite}}}`;
             access = (d) => d.findPerformers.performers;
             break;
-        case "gallery":
+        case Target.Gallery:
             query = `{findGalleries(gallery_filter:${criterion}){galleries{id,title,date,files{path}}}}`;
             access = (d) => d.findGalleries.galleries;
             break;
-        case "movie":
+        case Target.Movie:
             query = `{findMovies(movie_filter:${criterion}){movies{id,name,date}}}`;
             access = (d) => d.findMovies.movies;
             break;
-        case "studio":
+        case Target.Studio:
             query = `{findStudios(studio_filter:${criterion}){studios{id,name}}}`;
             access = (d) => d.findStudios.studios;
             break;
-        case "tag":
+        case Target.Tag:
             query = `{findTags(tag_filter:${criterion}){tags{id,name}}}`;
             access = (d) => d.findTags.tags;
             break;
@@ -90,7 +86,7 @@ async function request(
                             console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`)
                         });
                     } else {
-                        onload(target, access(r.data), endpoint);
+                        onload(target, type, endpoint, access(r.data));
                     }
                 } catch (e) {
                     console.log("Exception: " + e);
@@ -138,7 +134,7 @@ async function checkElement(
         let url = prepareUrl(urlSelector(element));
         if (url) {
             console.debug(`URL: ${url}`);
-            await request(url, (...args) => prefixSymbol(element, ...args, "URL", color), target, "url", {stashIdEndpoint});
+            await request(url, (...args) => prefixSymbol(element, ...args, color), target, Type.Url, {stashIdEndpoint});
         } else {
             console.log(`No URL for ${target} found.`);
         }
@@ -147,7 +143,7 @@ async function checkElement(
         let code = codeSelector(element);
         if (code) {
             console.debug(`Code: ${code}`);
-            await request(code, (...args) => prefixSymbol(element, ...args, "Code", color), target, "code", {stashIdEndpoint});
+            await request(code, (...args) => prefixSymbol(element, ...args, color), target, Type.Code, {stashIdEndpoint});
         } else {
             console.log(`No Code for ${target} found.`);
         }
@@ -156,7 +152,7 @@ async function checkElement(
         let id = stashIdSelector(element);
         if (id) {
             console.debug(`StashId: ${id}`);
-            await request(id, (...args) => prefixSymbol(element, ...args, "StashId", color), target, "stash_id", {stashIdEndpoint});
+            await request(id, (...args) => prefixSymbol(element, ...args, color), target, Type.StashId, {stashIdEndpoint});
         } else {
             console.log(`No StashId for ${target} found.`);
         }
@@ -167,7 +163,7 @@ async function checkElement(
         let nameCount = name?.split(/\s+/)?.length
         if (name && nameCount > 1) {
             console.debug(`Name: ${name}`);
-            await request(name, (...args) => prefixSymbol(element, ...args, "Name", color), target, "name", {stashIdEndpoint});
+            await request(name, (...args) => prefixSymbol(element, ...args, color), target, Type.Name, {stashIdEndpoint});
         } else if (name && nameCount === 1) {
             console.log(`Ignore single name: ${name}`)
         } else {
@@ -178,7 +174,7 @@ async function checkElement(
         let title = titleSelector(element);
         if (title) {
             console.debug(`Title: ${title}`);
-            await request(title, (...args) => prefixSymbol(element, ...args, "Title", color), target, "title", {stashIdEndpoint});
+            await request(title, (...args) => prefixSymbol(element, ...args, color), target, Type.Title, {stashIdEndpoint});
         } else {
             console.log(`No Title for ${target} found.`);
         }
