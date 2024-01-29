@@ -11,6 +11,7 @@ interface StashQuery {
     endpoint: string;
     url: string;
     types: string[];
+    matchQuality: number;
 }
 
 /**
@@ -45,13 +46,21 @@ function formatFileData(files: any[]): string {
     ).join("");
 }
 
+function matchQuality(matchQuality: number): string {
+    let color = ""
+    if (matchQuality == 1) color = "rgb(0,100,0)"
+    else if (matchQuality > 0.5) color = "rgb(100,100,0)"
+    else color = "rgb(100,50,0)"
+    return `<span class="matchQuality" style="background-color: ${color}"></span>`
+}
+
 function formatQueries(queries: StashQuery[], target: Target, id: string): string {
-    return queries.map(query => `${query.endpoint} (Matched: ${query.types.join(", ")}) ${entryLink(query.url, target, id)}`).join("<br>")
+    return queries.map(query => `${matchQuality(query.matchQuality)} ${query.endpoint} (Matched: ${query.types.join(", ")}): ${entryLink(query.url, target, id)}`).join("<br>")
 }
 
 function formatEntryData(target: Target, data: StashEntry[]): string {
     let propertyStrings: [string, (v: any, queries: StashQuery[]) => string][] = [
-        ["id", (id: any, queries: StashQuery[]) => `<br>Endpoints:<br>${formatQueries(queries, target, id)}`],
+        ["id", (id: any, queries: StashQuery[]) => `<br>${formatQueries(queries, target, id)}`],
         ["title", (title: any) => `<br>Title: ${title}`],
         ["name", (name: any) => `<br>Name: ${name}`],
         ["favorite", () => "&emsp;&#10084;&#65039;"],
@@ -74,8 +83,9 @@ function formatEntryData(target: Target, data: StashEntry[]): string {
  *
  * @param target
  * @param source
+ * @param queryTypes
  */
-function mergeData(target: StashEntry[], source: StashEntry[]): StashEntry[] {
+function mergeData(target: StashEntry[], source: StashEntry[], queryTypes: string[]): StashEntry[] {
     let mapTarget: Map<string, StashEntry> = new Map(target.map(e => [e.id, e]))
     let mapSource: Map<string, StashEntry> = new Map(source.map(e => [e.id, e]))
     mapSource.forEach((sourceValue, key) => {
@@ -91,6 +101,7 @@ function mergeData(target: StashEntry[], source: StashEntry[]): StashEntry[] {
                     targetQuery.types.forEach(type => typeSet.add(type));
 
                     sourceQuery.types = [...typeSet]
+                    sourceQuery.matchQuality = sourceQuery.types.filter((type: string) => queryTypes.includes(type)).length / queryTypes.length
                 }
                 targetQueries.set(key, sourceQuery)
             });
@@ -129,7 +140,8 @@ export function prefixSymbol(
     let query: StashQuery = {
         endpoint: endpoint.name,
         url: endpoint.url.replace(/\/graphql\/?$/, ""),
-        types: queryTypes
+        types: queryTypes,
+        matchQuality: 1
     }
     // Add query for each found entry
     data.forEach((entry: any) => {
@@ -142,7 +154,7 @@ export function prefixSymbol(
         // Merge new result with existing results
         endpoints = [...new Set<string>(JSON.parse(symbol.getAttribute("data-endpoints"))).add(endpoint.name)].sort()
         queryTypes = [...new Set<string>(JSON.parse(symbol.getAttribute("data-queries"))).add(queryType)].sort()
-        data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data)
+        data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data, queryTypes)
         symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")) + 1).toString())
     } else {
         // Create new symbol
