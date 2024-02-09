@@ -10,15 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: "lts/*"
-          cache: "npm"
-
-      - run: npm ci
-      - run: npm run build
+      - uses: .github/actions/build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
