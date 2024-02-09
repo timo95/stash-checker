@@ -1,4 +1,8 @@
 
+## [0.8.2]
+
+- Fix github actions
+
 ## [0.8.1]
 
 - Automated release text generation
