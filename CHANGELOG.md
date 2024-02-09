@@ -1,4 +1,9 @@
 
+## [0.8.1]
+
+- Automated release text generation
+- Fix version number
+
 ## [0.8.0]
 
 - Add matching quality based on number of matched queries
