@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: /.github/actions/build
+      - uses: ./.github/actions/build
 
       - name: Get version from tag
         id: tag_name
