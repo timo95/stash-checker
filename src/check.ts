@@ -18,7 +18,7 @@ interface CheckOptions {
     observe?: boolean;
 }
 
-export async function request(endpoint: StashEndpoint, query: string, onload: (data: any) => void, onerror?: () => void): Promise<void> {
+export async function request(endpoint: StashEndpoint, query: string, onload?: (data: any) => void, onerror?: () => void): Promise<void> {
     GM.xmlHttpRequest({
         method: "GET",
         url: `${endpoint.url}?query=${encodeURIComponent(query)}`,  // encode query (important for url and some titles)
@@ -34,15 +34,16 @@ export async function request(endpoint: StashEndpoint, query: string, onload: (d
                         console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`)
                     });
                 } else {
-                    onload(r.data);
+                    if (onload) onload(r.data);
                 }
             } catch (e) {
                 console.log("Exception: " + e);
                 console.log("Failed to parse response: " + response.responseText);
             }
         },
-        onerror() {
-            onerror();
+        onerror(response) {
+            console.debug(response)
+            if (onerror) onerror();
         }
     });
 }
