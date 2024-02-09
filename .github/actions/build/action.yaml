@@ -9,6 +9,8 @@ runs:
         node-version: "lts/*"
         cache: "npm"
     - name: Install dependencies
+      shell: bash
       run: npm ci
     - name: Build
+      shell: bash
       run: npm run build
