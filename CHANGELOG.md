@@ -1,4 +1,8 @@
 
+## [0.8.3]
+
+- Add Stash endpoint connection check
+
 ## [0.8.2]
 
 - Fix github actions
