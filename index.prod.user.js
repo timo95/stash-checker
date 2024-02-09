@@ -656,14 +656,15 @@
             let r = JSON.parse(response.responseText);
             if ("errors" in r) r.errors.forEach((e => {
               console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`);
-            })); else onload(r.data);
+            })); else if (onload) onload(r.data);
           } catch (e) {
             console.log("Exception: " + e);
             console.log("Failed to parse response: " + response.responseText);
           }
         },
-        onerror() {
-          onerror();
+        onerror(response) {
+          void 0;
+          if (onerror) onerror();
         }
       });
     }
