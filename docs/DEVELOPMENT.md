@@ -1,5 +1,3 @@
-# This is a project help you build userscript with webpack
-
 ## Development
 
 1. Allow Tampermonkey's access to local file URIs [tampermonkey/faq](https://tampermonkey.net/faq.php?ext=dhdg#Q204)
@@ -38,6 +36,8 @@ npm run build
 ```
 
 `dist/index.prod.user.js` is the final script.
+
+`dist/index.prod.meta.js` can be used to compare the script version without having to download the whole script.
 
 ## Automatic Deploy
 
