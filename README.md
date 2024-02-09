@@ -41,13 +41,15 @@ At the moment only the newest Stash versions are supported.
 For backwards compatibility, see this [feature request](https://github.com/timo95/stash-checker/issues/9).
 
 
-## Matching
+## Troubleshooting
 
-Most entries get matched to your Stash by their URL.
-Some websites also support matching by title or studio code.
-The tooltip lists all fields used for matching and which ones successfully matched to the Stash entry.
+### My Stash endpoint shows `no connection`
 
-All instances of Stash-box only match by stashId.
+- Check for the correct URL. It should include the scheme (`http`/`https`) at the beginning and end with `/graphql`.
+- Check the API key. Leave the field empty, if none is required.
+- Tampermonkey may block the connection. Make sure, that the domain is whitelisted in the Tampermonkey settings.
+- Firefox's "HTTPS only mode" can block a connection, if the URL uses `http` but does not include `localhost`. The whitelist doesn't help, you have to deactivate the feature.
+- Some websites can block connections due to a strict Content-Security-Policy-Header (CSP). Change Tampermonkey settings to remove this header.
 
 ## Development
 
