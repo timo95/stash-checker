@@ -1,5 +1,5 @@
 import {prefixSymbol} from "./tooltip";
-import {StashEndpoint, stashEndpoints} from "./config";
+import {StashEndpoint, stashEndpoints} from "./settings";
 import {firstTextChild} from "./utils";
 import {Target, Type} from "./dataTypes";
 
@@ -18,7 +18,36 @@ interface CheckOptions {
     observe?: boolean;
 }
 
-async function request(
+export async function request(endpoint: StashEndpoint, query: string, onload: (data: any) => void, onerror?: () => void): Promise<void> {
+    GM.xmlHttpRequest({
+        method: "GET",
+        url: `${endpoint.url}?query=${encodeURIComponent(query)}`,  // encode query (important for url and some titles)
+        headers: {
+            "Content-Type": "application/json",
+            ApiKey: endpoint.key,
+        },
+        onload: function (response) {
+            try {
+                let r = JSON.parse(response.responseText)
+                if ("errors" in r) {
+                    r.errors.forEach((e: any) => {
+                        console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`)
+                    });
+                } else {
+                    onload(r.data);
+                }
+            } catch (e) {
+                console.log("Exception: " + e);
+                console.log("Failed to parse response: " + response.responseText);
+            }
+        },
+        onerror() {
+            onerror();
+        }
+    });
+}
+
+async function queryStash(
     queryString: string,
     onload: (target: Target, type: Type, endpoint: StashEndpoint, data: any[]) => any,
     target: Target,
@@ -71,29 +100,7 @@ async function request(
 
     // Get config values or wait for popup if it is not stored
     stashEndpoints.forEach((endpoint: StashEndpoint) => {
-        GM.xmlHttpRequest({
-            method: "GET",
-            url: `${endpoint.url}?query=${encodeURIComponent(query)}`,  // encode query (important for url and some titles)
-            headers: {
-                "Content-Type": "application/json",
-                ApiKey: endpoint.key,
-            },
-            onload: function (response) {
-                try {
-                    let r = JSON.parse(response.responseText)
-                    if ("errors" in r) {
-                        r.errors.forEach((e: any) => {
-                            console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`)
-                        });
-                    } else {
-                        onload(target, type, endpoint, access(r.data));
-                    }
-                } catch (e) {
-                    console.log("Exception: " + e);
-                    console.log("Failed to parse response: " + response.responseText);
-                }
-            },
-        });
+        request(endpoint, query, (data: any) => onload(target, type, endpoint, access(data)));
     });
 }
 
@@ -134,7 +141,7 @@ async function checkElement(
         let url = prepareUrl(urlSelector(element));
         if (url) {
             console.debug(`URL: ${url}`);
-            await request(url, (...args) => prefixSymbol(element, ...args, color), target, Type.Url, {stashIdEndpoint});
+            await queryStash(url, (...args) => prefixSymbol(element, ...args, color), target, Type.Url, {stashIdEndpoint});
         } else {
             console.log(`No URL for ${target} found.`);
         }
@@ -143,7 +150,7 @@ async function checkElement(
         let code = codeSelector(element);
         if (code) {
             console.debug(`Code: ${code}`);
-            await request(code, (...args) => prefixSymbol(element, ...args, color), target, Type.Code, {stashIdEndpoint});
+            await queryStash(code, (...args) => prefixSymbol(element, ...args, color), target, Type.Code, {stashIdEndpoint});
         } else {
             console.log(`No Code for ${target} found.`);
         }
@@ -152,7 +159,7 @@ async function checkElement(
         let id = stashIdSelector(element);
         if (id) {
             console.debug(`StashId: ${id}`);
-            await request(id, (...args) => prefixSymbol(element, ...args, color), target, Type.StashId, {stashIdEndpoint});
+            await queryStash(id, (...args) => prefixSymbol(element, ...args, color), target, Type.StashId, {stashIdEndpoint});
         } else {
             console.log(`No StashId for ${target} found.`);
         }
@@ -163,7 +170,7 @@ async function checkElement(
         let nameCount = name?.split(/\s+/)?.length
         if (name && nameCount > 1) {
             console.debug(`Name: ${name}`);
-            await request(name, (...args) => prefixSymbol(element, ...args, color), target, Type.Name, {stashIdEndpoint});
+            await queryStash(name, (...args) => prefixSymbol(element, ...args, color), target, Type.Name, {stashIdEndpoint});
         } else if (name && nameCount === 1) {
             console.log(`Ignore single name: ${name}`)
         } else {
@@ -174,7 +181,7 @@ async function checkElement(
         let title = titleSelector(element);
         if (title) {
             console.debug(`Title: ${title}`);
-            await request(title, (...args) => prefixSymbol(element, ...args, color), target, Type.Title, {stashIdEndpoint});
+            await queryStash(title, (...args) => prefixSymbol(element, ...args, color), target, Type.Title, {stashIdEndpoint});
         } else {
             console.log(`No Title for ${target} found.`);
         }

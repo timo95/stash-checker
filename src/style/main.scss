@@ -1,6 +1,7 @@
 
 :root {
     --stash-checker-color-text: #323232;
+    --stash-checker-color-text-light: #989898;
     --stash-checker-color-link-visited: #323232;
     --stash-checker-color-link-hover: #039;
     --stash-checker-color-link-active: #039;
@@ -12,6 +13,7 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --stash-checker-color-text: #e0e0e0;
+        --stash-checker-color-text-light: #707070;
         --stash-checker-color-link-visited: #c7c7c7;
         --stash-checker-color-link-hover: #f2f2f2;
         --stash-checker-color-link-active: #039;
@@ -69,6 +71,15 @@
     border-radius: 0.5rem;
     padding: 0.5rem;
     width: 35rem;
+}
+
+.stashChecker.settings h3 {
+    font-size: 1.25rem;
+}
+
+.stashChecker.settings .version {
+    color: var(--stash-checker-color-text-light);
+    font-size: 1.25rem;
 }
 
 .stashChecker.endpoints {

@@ -1,7 +1,7 @@
 import {StashEntry, StashQuery, Target, Type} from "./dataTypes";
 import {mouseoutListener, mouseoverListener} from "./tooltipElement";
 import {bytesToReadable, firstTextChild, entryLink, secondsToReadable} from "./utils";
-import {StashEndpoint} from "./config";
+import {StashEndpoint} from "./settings";
 
 const typeToString = new Map<Type, string>([
     [Type.Url, "URL"],

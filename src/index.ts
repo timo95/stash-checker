@@ -1,6 +1,6 @@
 import "./style/main.scss";
 import {check} from "./check";
-import {initMenu, initSettings, isSiteBlocked} from "./config";
+import {initMenu, initSettings, isSiteBlocked} from "./settings";
 import {initTooltip} from "./tooltipElement";
 import {firstTextChild} from "./utils";
 import {Target} from "./dataTypes";

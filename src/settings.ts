@@ -1,4 +1,5 @@
 import {deleteValue, getValue, setValue} from "./storage";
+import {request} from "./check";
 
 const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
 
@@ -67,6 +68,7 @@ async function updateEndpoints() {
         let div = document.createElement("div");
         div.classList.add("stashChecker", "endpoint");
         div.innerHTML = `<div><h3>${endpoint.name}</h3><p>${endpoint.url}</p></div>`
+        getVersion(endpoint, div.querySelector("h3"))
         let editButton = document.createElement("button");
         editButton.classList.add("stashChecker", "btn", "btn-primary")
         editButton.setAttribute("data-index", index.toString());
@@ -142,4 +144,12 @@ async function unblockSite() {
 
 async function openSettings() {
     settingsModal.style.display = "initial";
+}
+
+async function getVersion(endpoint: StashEndpoint, element: HTMLElement) {
+    await request(endpoint, "{version{version}}", data => {
+        element.innerHTML += `<span class="version"> (${data.version.version})</span>`
+    }, () => {
+        element.innerHTML += `<span class="version"> (no connection)</span>`
+    })
 }
