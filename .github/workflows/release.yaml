@@ -22,7 +22,7 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      - name: Deploy
+      - name: Deploy Gist
         uses: exuanbo/actions-deploy-gist@v1
         with:
           token: ${{ secrets.TOKEN }}
@@ -31,3 +31,13 @@ jobs:
           gist_description: Checks if a Scene/Performer is present in Stash
           file_path: dist/index.prod.user.js
           file_type: text
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: dist/index.prod.*
+          body_path: CHANGELOG.md
+          fail_on_unmatched_files: true
+          generate_release_notes: true

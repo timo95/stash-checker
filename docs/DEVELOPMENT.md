@@ -41,4 +41,4 @@ npm run build
 
 ## Automatic Deploy
 
-[Github Actions](../.github/workflows/deploy.yaml) will deploy the production userscript to this [Gist](https://gist.github.com/timo95/562b9363d491e3ee281cb46944445fcd) on each new version tag.
+[Github Actions](../.github/workflows/release.yaml) will deploy the production userscript to this [Gist](https://gist.github.com/timo95/562b9363d491e3ee281cb46944445fcd) on each new version tag.
