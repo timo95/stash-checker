@@ -2,8 +2,6 @@ name: deploy
 
 on:
   push:
-    branches:
-      - v*
     tags:
       - v*
 
@@ -21,7 +19,20 @@ jobs:
 
       - run: npm ci
       - run: npm run build
-
+      - name: Get version from tag
+        id: tag_name
+        run: |
+          echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
+        shell: bash
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          validation_level: warn
+          version: ${{ steps.tag_name.outputs.current_version }}
+          path: ./CHANGELOG.md
       - name: Deploy Gist
         uses: exuanbo/actions-deploy-gist@v1
         with:
@@ -38,6 +49,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: dist/index.prod.*
-          body_path: CHANGELOG.md
+          tag_name: ${{ steps.changelog_reader.outputs.version }}
+          name: Release ${{ steps.changelog_reader.outputs.version }}
+          body: ${{ steps.changelog_reader.outputs.changes }}
           fail_on_unmatched_files: true
           generate_release_notes: true
