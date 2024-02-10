@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Stash Checker
 // @description Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
-// @version 0.8.3
+// @version 0.8.4
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
 // @match *://coomer.party/*
@@ -601,26 +601,25 @@
         key: prompt("API Key:")?.trim() ?? ""
       };
       stashEndpoints.push(newEndpoint);
-      setValue("stashEndpoints", stashEndpoints);
-      updateEndpoints();
+      void setValue("stashEndpoints", stashEndpoints);
+      await updateEndpoints();
     }
     async function editEndpointListener() {
       let index = parseInt(this.getAttribute("data-index"));
       let oldEndpoint = stashEndpoints[index];
-      let newEndpoint = {
+      stashEndpoints[index] = {
         name: prompt("Name:", oldEndpoint.name)?.trim() ?? oldEndpoint.name,
         url: prompt("URL:", oldEndpoint.url)?.trim() ?? oldEndpoint.url,
         key: prompt("API Key:", oldEndpoint.key)?.trim() ?? oldEndpoint.key
       };
-      stashEndpoints[index] = newEndpoint;
-      setValue("stashEndpoints", stashEndpoints);
-      updateEndpoints();
+      void setValue("stashEndpoints", stashEndpoints);
+      await updateEndpoints();
     }
     async function deleteEndpointListener() {
       let index = parseInt(this.getAttribute("data-index"));
       stashEndpoints.splice(index, 1);
-      setValue("stashEndpoints", stashEndpoints);
-      updateEndpoints();
+      void setValue("stashEndpoints", stashEndpoints);
+      await updateEndpoints();
     }
     async function isSiteBlocked() {
       return await getValue(BLOCKED_SITE_KEY, false);
@@ -747,17 +746,18 @@
           });
         } else console.log(`No StashId for ${target} found.`);
       }
-      if ([ "performer", "movie" ].includes(target) && nameSelector) {
+      if ([ Target.Performer, Target.Movie, Target.Studio, Target.Tag ].includes(target) && nameSelector) {
         let name = nameSelector(element);
         let nameCount = name?.split(/\s+/)?.length;
-        if (name && nameCount > 1) {
+        let ignore = target === Target.Performer && nameCount === 1;
+        if (name && !ignore) {
           void 0;
           await queryStash(name, ((...args) => prefixSymbol(element, ...args, color)), target, Type.Name, {
             stashIdEndpoint
           });
-        } else if (name && nameCount === 1) console.log(`Ignore single name: ${name}`); else console.log(`No Name for ${target} found.`);
+        } else if (name && ignore) console.log(`Ignore single name: ${name}`); else console.log(`No Name for ${target} found.`);
       }
-      if ([ "scene", "gallery" ].includes(target) && titleSelector) {
+      if ([ Target.Scene, Target.Gallery ].includes(target) && titleSelector) {
         let title = titleSelector(element);
         if (title) {
           void 0;
@@ -892,25 +892,15 @@
         break;
 
        case "www.iafd.com":
-        {
-          let prepareUrl = url => url.replaceAll("'", "%27").replace(/^http:/, "https:");
-          if (window.location.pathname.startsWith("/person.rme/perfid=")) check(Target.Performer, "h1", {
-            prepareUrl,
-            currentSite: true
-          }); else if (window.location.pathname.startsWith("/title.rme/title=")) check(Target.Scene, "h1", {
-            prepareUrl,
-            currentSite: true,
-            titleSelector: null
-          });
-          check(Target.Performer, "a[href*='/person.rme/perfid=']", {
-            prepareUrl
-          });
-          check(Target.Scene, "a[href*='/title.rme/title=']", {
-            prepareUrl,
-            titleSelector: null
-          });
-          break;
-        }
+        if (window.location.pathname.startsWith("/person.rme/perfid=")) check(Target.Performer, "h1", {
+          currentSite: true
+        }); else if (window.location.pathname.startsWith("/title.rme/id=")) check(Target.Scene, "h1", {
+          currentSite: true
+        });
+        check(Target.Performer, "a[href*='/person.rme/perfid=']");
+        check(Target.Scene, "a[href*='/title.rme/id=']");
+        check(Target.Studio, "a[href*='/studio.rme/studio=']");
+        break;
 
        case "metadataapi.net":
         {
