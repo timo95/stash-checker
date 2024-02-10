@@ -89,14 +89,14 @@ import {Target} from "./dataTypes";
             check(Target.Performer, "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
             break;
         case "www.iafd.com": {
-            let prepareUrl = (url: string) => url.replaceAll("'", "%27").replace(/^http:/, "https:");
             if (window.location.pathname.startsWith("/person.rme/perfid=")) {
-                check(Target.Performer, "h1", {prepareUrl: prepareUrl, currentSite: true});
-            } else if (window.location.pathname.startsWith("/title.rme/title=")) {
-                check(Target.Scene, "h1", {prepareUrl: prepareUrl, currentSite: true, titleSelector: null});
+                check(Target.Performer, "h1", {currentSite: true});
+            } else if (window.location.pathname.startsWith("/title.rme/id=")) {
+                check(Target.Scene, "h1", {currentSite: true});
             }
-            check(Target.Performer, "a[href*='/person.rme/perfid=']", {prepareUrl: prepareUrl});
-            check(Target.Scene, "a[href*='/title.rme/title=']", {prepareUrl: prepareUrl, titleSelector: null});
+            check(Target.Performer, "a[href*='/person.rme/perfid=']");
+            check(Target.Scene, "a[href*='/title.rme/id=']");
+            check(Target.Studio, "a[href*='/studio.rme/studio=']");
             break;
         }
         case "metadataapi.net": {
