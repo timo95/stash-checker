@@ -103,29 +103,28 @@ async function addEndpointListener(this: HTMLButtonElement) {
         key: prompt("API Key:")?.trim()?? "",
     };
     stashEndpoints.push(newEndpoint);
-    setValue("stashEndpoints", stashEndpoints);
-    updateEndpoints();
+    void setValue("stashEndpoints", stashEndpoints);
+    await updateEndpoints();
 }
 
 async function editEndpointListener(this: HTMLButtonElement) {
     let index = parseInt(this.getAttribute("data-index"));
     let oldEndpoint: StashEndpoint = stashEndpoints[index];
 
-    let newEndpoint: StashEndpoint = {
-        name: prompt("Name:", oldEndpoint.name)?.trim()?? oldEndpoint.name,
-        url: prompt("URL:", oldEndpoint.url)?.trim()?? oldEndpoint.url,
-        key: prompt("API Key:", oldEndpoint.key)?.trim()?? oldEndpoint.key,
+    stashEndpoints[index] = {
+        name: prompt("Name:", oldEndpoint.name)?.trim() ?? oldEndpoint.name,
+        url: prompt("URL:", oldEndpoint.url)?.trim() ?? oldEndpoint.url,
+        key: prompt("API Key:", oldEndpoint.key)?.trim() ?? oldEndpoint.key,
     };
-    stashEndpoints[index] = newEndpoint;
-    setValue("stashEndpoints", stashEndpoints);
-    updateEndpoints();
+    void setValue("stashEndpoints", stashEndpoints);
+    await updateEndpoints();
 }
 
 async function deleteEndpointListener(this: HTMLButtonElement) {
     let index = parseInt(this.getAttribute("data-index"));
     stashEndpoints.splice(index, 1);
-    setValue("stashEndpoints", stashEndpoints);
-    updateEndpoints();
+    void setValue("stashEndpoints", stashEndpoints);
+    await updateEndpoints();
 }
 
 export async function isSiteBlocked(): Promise<boolean> {
