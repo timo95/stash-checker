@@ -165,20 +165,21 @@ async function checkElement(
             console.log(`No StashId for ${target} found.`);
         }
     }
-    if (["performer", "movie"].includes(target) && nameSelector) {
+    if ([Target.Performer, Target.Movie, Target.Studio, Target.Tag].includes(target) && nameSelector) {
         let name = nameSelector(element);
-        // Do not use single names
+        // Do not use single performer names
         let nameCount = name?.split(/\s+/)?.length
-        if (name && nameCount > 1) {
+        let ignore = target === Target.Performer && nameCount === 1
+        if (name && !ignore) {
             console.debug(`Name: ${name}`);
             await queryStash(name, (...args) => prefixSymbol(element, ...args, color), target, Type.Name, {stashIdEndpoint});
-        } else if (name && nameCount === 1) {
+        } else if (name && ignore) {
             console.log(`Ignore single name: ${name}`)
         } else {
             console.log(`No Name for ${target} found.`);
         }
     }
-    if (["scene", "gallery"].includes(target) && titleSelector) {
+    if ([Target.Scene, Target.Gallery].includes(target) && titleSelector) {
         let title = titleSelector(element);
         if (title) {
             console.debug(`Title: ${title}`);
