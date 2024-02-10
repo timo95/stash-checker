@@ -1,4 +1,9 @@
 
+## [0.8.4]
+
+- Fix IAFD scene query
+- Add IAFD studio query
+
 ## [0.8.3]
 
 - Add Stash endpoint connection check
