@@ -1,4 +1,8 @@
 
+## [0.9.0]
+
+- Change license to MIT
+
 ## [0.8.4]
 
 - Fix IAFD scene query

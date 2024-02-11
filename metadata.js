@@ -7,7 +7,7 @@ export default {
     version: meta.version,
     author: meta.author.name,
     source: meta.repository.url,
-    license: 'WTFPL',
+    license: 'MIT',
     match: [
         "*://adultanime.dbsearch.net/*",
         "*://coomer.party/*",
