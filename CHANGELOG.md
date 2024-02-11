@@ -1,4 +1,8 @@
 
+## [0.9.2]
+
+- Ignore create button on stash-box
+
 ## [0.9.1]
 
 - Fix issue bug where multiple batch requests per endpoint don't work
