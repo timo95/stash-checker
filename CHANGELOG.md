@@ -2,6 +2,7 @@
 ## [0.9.0]
 
 - Change license to MIT
+- Use batch requests to speed up websites with many entries [#24]
 
 ## [0.8.4]
 

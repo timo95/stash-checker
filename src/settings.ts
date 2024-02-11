@@ -141,8 +141,8 @@ async function openSettings() {
 }
 
 async function getVersion(endpoint: StashEndpoint, element: HTMLElement) {
-    await request(endpoint, "{version{version}}", data => {
-        element.innerHTML += `<span class="version"> (${data.version.version})</span>`
+    await request(endpoint, "version{version}", false, data => {
+        element.innerHTML += `<span class="version"> (${data.version})</span>`
     }, () => {
         element.innerHTML += `<span class="version"> (no connection)</span>`
     })

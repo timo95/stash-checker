@@ -18,38 +18,38 @@ async function queryStash(
     // Build filter
     switch (type) {
         case Type.StashId:
-            criterion = `{stash_id_endpoint:{endpoint:"${stashIdEndpoint}",stash_id:"${queryString}",modifier:EQUALS}}`;
+            criterion = `stash_id_endpoint:{endpoint:"${stashIdEndpoint}",stash_id:"${queryString}",modifier:EQUALS}`;
             break;
         default:
-            criterion = `{${type}:{value:"${queryString}",modifier:EQUALS}}`;
+            criterion = `${type}:{value:"${queryString}",modifier:EQUALS}`;
             break;
     }
 
     // Build query
     switch (target) {
         case Target.Scene:
-            query = `{findScenes(scene_filter:${criterion}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}}`;
-            access = (d) => d.findScenes.scenes;
+            query = `findScenes(scene_filter:{${criterion}}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}`;
+            access = (d) => d.scenes;
             break;
         case Target.Performer:
-            query = `{findPerformers(performer_filter:${criterion}){performers{id,name,disambiguation,alias_list,favorite}}}`;
-            access = (d) => d.findPerformers.performers;
+            query = `findPerformers(performer_filter:{${criterion}}){performers{id,name,disambiguation,alias_list,favorite}}`;
+            access = (d) => d.performers;
             break;
         case Target.Gallery:
-            query = `{findGalleries(gallery_filter:${criterion}){galleries{id,title,date,files{path}}}}`;
-            access = (d) => d.findGalleries.galleries;
+            query = `findGalleries(gallery_filter:{${criterion}}){galleries{id,title,date,files{path}}}`;
+            access = (d) => d.galleries;
             break;
         case Target.Movie:
-            query = `{findMovies(movie_filter:${criterion}){movies{id,name,date}}}`;
-            access = (d) => d.findMovies.movies;
+            query = `findMovies(movie_filter:{${criterion}}){movies{id,name,date}}`;
+            access = (d) => d.movies;
             break;
         case Target.Studio:
-            query = `{findStudios(studio_filter:${criterion}){studios{id,name}}}`;
-            access = (d) => d.findStudios.studios;
+            query = `findStudios(studio_filter:{${criterion}}){studios{id,name}}`;
+            access = (d) => d.studios;
             break;
         case Target.Tag:
-            query = `{findTags(tag_filter:${criterion}){tags{id,name}}}`;
-            access = (d) => d.findTags.tags;
+            query = `findTags(tag_filter:{${criterion}}){tags{id,name}}`;
+            access = (d) => d.tags;
             break;
         default:
             return;
@@ -57,7 +57,7 @@ async function queryStash(
 
     // Get config values or wait for popup if it is not stored
     stashEndpoints.forEach((endpoint: StashEndpoint) => {
-        request(endpoint, query, (data: any) => onload(target, type, endpoint, access(data)));
+        request(endpoint, query, true, (data: any) => onload(target, type, endpoint, access(data)));
     });
 }
 
