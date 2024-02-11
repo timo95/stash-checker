@@ -50,9 +50,7 @@ async function addRequest(
     batchQuery.onload.push(onload);
     batchQuery.onerror.push(onerror);
     // send or save
-    console.debug(`Batch query size: ${batchQuery.queries.length}`);
     if (batchQuery.queries.length >= maxBatchSize) {
-        console.debug(`Batch query full: Run it.`)
         window.clearTimeout(batchQuery.timerHandle);
         batchQueries.delete(endpoint);
         return batchRequest(endpoint, batchQuery);
