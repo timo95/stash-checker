@@ -1,4 +1,8 @@
 
+## [0.9.1]
+
+- Fix issue bug where multiple batch requests per endpoint don't work
+
 ## [0.9.0]
 
 - Change license to MIT
