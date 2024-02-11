@@ -1,15 +1,15 @@
 // ==UserScript==
 // @name Stash Checker
 // @description Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
-// @version 0.9.0
+// @version 0.9.3
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
-// @match *://coomer.party/*
+// @match *://coomer.su/*
 // @match *://erommdtube.com/*
 // @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://gayeroticvideoindex.com/*
-// @match *://kemono.party/*
+// @match *://kemono.su/*
 // @match *://metadataapi.net/*
 // @match *://onlyfans.com/*
 // @match *://oreno3d.com/*

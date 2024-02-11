@@ -1,15 +1,15 @@
 // ==UserScript==
 // @name Stash Checker
 // @description Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
-// @version 0.9.0
+// @version 0.9.3
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
-// @match *://coomer.party/*
+// @match *://coomer.su/*
 // @match *://erommdtube.com/*
 // @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://gayeroticvideoindex.com/*
-// @match *://kemono.party/*
+// @match *://kemono.su/*
 // @match *://metadataapi.net/*
 // @match *://onlyfans.com/*
 // @match *://oreno3d.com/*
@@ -587,7 +587,7 @@
               })); else if (onload) onload(r.data);
             } catch (e) {
               void 0;
-              if (onerror) onerror(response.responseText.length < 20 ? response.responseText : "wrong path");
+              if (onerror) onerror(response.responseText);
             }
             break;
 
@@ -723,7 +723,9 @@
       await request(endpoint, "version{version}", false, (data => {
         element.innerHTML += `<span class="version"> (${data.version})</span>`;
       }), (message => {
-        element.innerHTML += `<span class="version"> (${message?.trim() ?? "no connection"})</span>`;
+        let explanation = "no connection";
+        if (message) explanation = message.length < 30 ? message?.trim() : "wrong path";
+        element.innerHTML += `<span class="version"> (${explanation})</span>`;
       }));
     }
     async function queryStash(queryString, onload, target, type, {stashIdEndpoint}) {
@@ -906,22 +908,13 @@
           break;
         }
 
-       case "kemono.party":
+       case "coomer.su":
+       case "kemono.su":
         check(Target.Scene, "h1.post__title", {
           currentSite: true,
           titleSelector: null
         });
         check(Target.Scene, ".post-card > a[href*='/post/']", {
-          titleSelector: null
-        });
-        break;
-
-       case "coomer.party":
-        check(Target.Scene, "h1.post__title", {
-          currentSite: true,
-          titleSelector: null
-        });
-        check(Target.Scene, ".post-card h2 > a[href*='/post/']", {
           titleSelector: null
         });
         break;
