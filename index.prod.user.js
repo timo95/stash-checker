@@ -531,7 +531,10 @@
     async function addRequest(endpoint, query, onload, onerror) {
       let batchQuery = batchQueries.get(endpoint);
       if (!batchQuery) {
-        let timerHandle = window.setTimeout((() => batchRequest(endpoint, batchQueries.get(endpoint))), batchTimeout);
+        let timerHandle = window.setTimeout((() => {
+          batchRequest(endpoint, batchQueries.get(endpoint));
+          batchQueries.delete(endpoint);
+        }), batchTimeout);
         batchQuery = {
           timerHandle,
           queries: [],
@@ -542,7 +545,9 @@
       batchQuery.queries.push(query);
       batchQuery.onload.push(onload);
       batchQuery.onerror.push(onerror);
+      void 0;
       if (batchQuery.queries.length >= maxBatchSize) {
+        void 0;
         window.clearTimeout(batchQuery.timerHandle);
         batchQueries.delete(endpoint);
         return batchRequest(endpoint, batchQuery);
