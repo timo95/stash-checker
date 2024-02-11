@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Stash Checker
 // @description Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
-// @version 0.8.4
+// @version 0.9.0
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
 // @match *://coomer.party/*
@@ -38,7 +38,7 @@
 // @grant GM.listValues
 // @grant GM.registerMenuCommand
 // @icon https://docs.stashapp.cc/favicon.ico
-// @license WTFPL
+// @license MIT
 // @run-at document-end
 // @source https://github.com/timo95/stash-checker
 // ==/UserScript==
@@ -412,7 +412,7 @@
       return files.map((file => "<div class='stashChecker file'>" + propertyStrings.filter((e => file[e[0]])).map((e => e[1](file[e[0]]))).join("") + "</div>")).join("");
     }
     function matchQuality(matchQuality) {
-      let color = "";
+      let color;
       if (matchQuality == 1) color = "rgb(0,100,0)"; else if (matchQuality > .5) color = "rgb(100,100,0)"; else color = "rgb(100,50,0)";
       return `<span class="matchQuality" style="background-color: ${color}"></span>`;
     }
@@ -521,6 +521,69 @@
     }
     async function deleteValue(key) {
       return GM.deleteValue(key);
+    }
+    const batchTimeout = 1;
+    const maxBatchSize = 100;
+    let batchQueries = new Map;
+    async function request(endpoint, query, batchRequest, onload, onerror) {
+      if (batchRequest) return addRequest(endpoint, query, onload); else {
+        if (onerror) console.warn("'onerror' callback is not handled on batch requests");
+        return sendRequest(endpoint, `q:${query}`, (data => onload(data.q)), onerror);
+      }
+    }
+    async function addRequest(endpoint, query, onload) {
+      let batchQuery = batchQueries.get(endpoint);
+      if (!batchQuery) {
+        let timerHandle = window.setTimeout((() => batchRequest(endpoint, batchQueries.get(endpoint))), batchTimeout);
+        batchQuery = {
+          timerHandle,
+          queries: [],
+          onload: []
+        };
+      }
+      batchQuery.queries.push(query);
+      batchQuery.onload.push(onload);
+      if (batchQuery.queries.length >= maxBatchSize) {
+        window.clearTimeout(batchQuery.timerHandle);
+        batchQueries.delete(endpoint);
+        return batchRequest(endpoint, batchQuery);
+      } else batchQueries.set(endpoint, batchQuery);
+    }
+    async function batchRequest(endpoint, batchQuery) {
+      let query = batchQuery.queries.map(((query, index) => `q${index}:${query}`)).join();
+      let onload = data => {
+        void 0;
+        batchQuery.onload.forEach(((onload, index) => {
+          if (onload) onload(data[`q${index}`]);
+        }));
+      };
+      console.info(`Sending batch request of size ${batchQuery.queries.length} to endpoint '${endpoint.name}'`);
+      return sendRequest(endpoint, query, onload);
+    }
+    async function sendRequest(endpoint, query, onload, onerror) {
+      GM.xmlHttpRequest({
+        method: "GET",
+        url: `${endpoint.url}?query={${encodeURIComponent(query)}}`,
+        headers: {
+          "Content-Type": "application/json",
+          ApiKey: endpoint.key
+        },
+        onload: function(response) {
+          try {
+            let r = JSON.parse(response.responseText);
+            if ("errors" in r) r.errors.forEach((e => {
+              console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`);
+            })); else if (onload) onload(r.data);
+          } catch (e) {
+            console.log("Exception: " + e);
+            console.log("Failed to parse response: " + response.responseText);
+          }
+        },
+        onerror(response) {
+          void 0;
+          if (onerror) onerror();
+        }
+      });
     }
     const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
     let settingsModal;
@@ -636,36 +699,11 @@
       settingsModal.style.display = "initial";
     }
     async function getVersion(endpoint, element) {
-      await request(endpoint, "{version{version}}", (data => {
-        element.innerHTML += `<span class="version"> (${data.version.version})</span>`;
+      await request(endpoint, "version{version}", false, (data => {
+        element.innerHTML += `<span class="version"> (${data.version})</span>`;
       }), (() => {
         element.innerHTML += `<span class="version"> (no connection)</span>`;
       }));
-    }
-    async function request(endpoint, query, onload, onerror) {
-      GM.xmlHttpRequest({
-        method: "GET",
-        url: `${endpoint.url}?query=${encodeURIComponent(query)}`,
-        headers: {
-          "Content-Type": "application/json",
-          ApiKey: endpoint.key
-        },
-        onload: function(response) {
-          try {
-            let r = JSON.parse(response.responseText);
-            if ("errors" in r) r.errors.forEach((e => {
-              console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`);
-            })); else if (onload) onload(r.data);
-          } catch (e) {
-            console.log("Exception: " + e);
-            console.log("Failed to parse response: " + response.responseText);
-          }
-        },
-        onerror(response) {
-          void 0;
-          if (onerror) onerror();
-        }
-      });
     }
     async function queryStash(queryString, onload, target, type, {stashIdEndpoint}) {
       let criterion;
@@ -673,49 +711,49 @@
       let access = d => d;
       switch (type) {
        case Type.StashId:
-        criterion = `{stash_id_endpoint:{endpoint:"${stashIdEndpoint}",stash_id:"${queryString}",modifier:EQUALS}}`;
+        criterion = `stash_id_endpoint:{endpoint:"${stashIdEndpoint}",stash_id:"${queryString}",modifier:EQUALS}`;
         break;
 
        default:
-        criterion = `{${type}:{value:"${queryString}",modifier:EQUALS}}`;
+        criterion = `${type}:{value:"${queryString}",modifier:EQUALS}`;
         break;
       }
       switch (target) {
        case Target.Scene:
-        query = `{findScenes(scene_filter:${criterion}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}}`;
-        access = d => d.findScenes.scenes;
+        query = `findScenes(scene_filter:{${criterion}}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}`;
+        access = d => d.scenes;
         break;
 
        case Target.Performer:
-        query = `{findPerformers(performer_filter:${criterion}){performers{id,name,disambiguation,alias_list,favorite}}}`;
-        access = d => d.findPerformers.performers;
+        query = `findPerformers(performer_filter:{${criterion}}){performers{id,name,disambiguation,alias_list,favorite}}`;
+        access = d => d.performers;
         break;
 
        case Target.Gallery:
-        query = `{findGalleries(gallery_filter:${criterion}){galleries{id,title,date,files{path}}}}`;
-        access = d => d.findGalleries.galleries;
+        query = `findGalleries(gallery_filter:{${criterion}}){galleries{id,title,date,files{path}}}`;
+        access = d => d.galleries;
         break;
 
        case Target.Movie:
-        query = `{findMovies(movie_filter:${criterion}){movies{id,name,date}}}`;
-        access = d => d.findMovies.movies;
+        query = `findMovies(movie_filter:{${criterion}}){movies{id,name,date}}`;
+        access = d => d.movies;
         break;
 
        case Target.Studio:
-        query = `{findStudios(studio_filter:${criterion}){studios{id,name}}}`;
-        access = d => d.findStudios.studios;
+        query = `findStudios(studio_filter:{${criterion}}){studios{id,name}}`;
+        access = d => d.studios;
         break;
 
        case Target.Tag:
-        query = `{findTags(tag_filter:${criterion}){tags{id,name}}}`;
-        access = d => d.findTags.tags;
+        query = `findTags(tag_filter:{${criterion}}){tags{id,name}}`;
+        access = d => d.tags;
         break;
 
        default:
         return;
       }
       stashEndpoints.forEach((endpoint => {
-        request(endpoint, query, (data => onload(target, type, endpoint, access(data))));
+        request(endpoint, query, true, (data => onload(target, type, endpoint, access(data))));
       }));
     }
     async function checkElement(target, element, {currentSite = false, prepareUrl = url => url, urlSelector = currentSite ? () => decodeURI(window.location.href) : e => decodeURI(e.closest("a").href), codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = e => firstTextChild(e)?.textContent?.trim(), titleSelector = e => firstTextChild(e)?.textContent?.trim(), color = () => "green"}) {

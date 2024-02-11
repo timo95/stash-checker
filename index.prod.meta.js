@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Stash Checker
 // @description Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
-// @version 0.8.4
+// @version 0.9.0
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
 // @match *://coomer.party/*
@@ -38,7 +38,7 @@
 // @grant GM.listValues
 // @grant GM.registerMenuCommand
 // @icon https://docs.stashapp.cc/favicon.ico
-// @license WTFPL
+// @license MIT
 // @run-at document-end
 // @source https://github.com/timo95/stash-checker
 // ==/UserScript==
