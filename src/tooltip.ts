@@ -8,7 +8,7 @@ const typeToString = new Map<Type, string>([
     [Type.StashId, "StashId"],
     [Type.Name, "Name"],
     [Type.Title, "Title"],
-])
+]);
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -43,17 +43,17 @@ function formatFileData(files: any[]): string {
 }
 
 function matchQuality(matchQuality: number): string {
-    let color = ""
-    if (matchQuality == 1) color = "rgb(0,100,0)"
-    else if (matchQuality > 0.5) color = "rgb(100,100,0)"
-    else color = "rgb(100,50,0)"
-    return `<span class="matchQuality" style="background-color: ${color}"></span>`
+    let color;
+    if (matchQuality == 1) color = "rgb(0,100,0)";
+    else if (matchQuality > 0.5) color = "rgb(100,100,0)";
+    else color = "rgb(100,50,0)";
+    return `<span class="matchQuality" style="background-color: ${color}"></span>`;
 }
 
 function formatQueries(queries: StashQuery[], target: Target, id: string): string {
     return queries.map(query =>
         `${matchQuality(query.matchQuality)} ${query.endpoint} (Matched: ${query.types.map(type => typeToString.get(type)).join(", ")}): ${entryLink(query.url, target, id)}`
-    ).join("<br>")
+    ).join("<br>");
 }
 
 function formatEntryData(target: Target, data: StashEntry[]): string {
@@ -78,8 +78,8 @@ function formatEntryData(target: Target, data: StashEntry[]): string {
 
 function updateMatchQuality(queries: StashQuery[], numQueries: number): StashQuery[] {
     return queries.map(query => {
-        query.matchQuality = query.types.length / numQueries
-        return query
+        query.matchQuality = query.types.length / numQueries;
+        return query;
     })
 }
 
