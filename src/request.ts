@@ -105,7 +105,7 @@ async function sendRequest(
                         }
                     } catch (e) {
                         console.debug("Failed to parse response: " + response.responseText);
-                        if (onerror) onerror(response.responseText.length < 20 ? response.responseText : "wrong path");
+                        if (onerror) onerror(response.responseText);
                     }
                     break;
                 }
