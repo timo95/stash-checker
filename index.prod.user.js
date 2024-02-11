@@ -545,9 +545,7 @@
       batchQuery.queries.push(query);
       batchQuery.onload.push(onload);
       batchQuery.onerror.push(onerror);
-      void 0;
       if (batchQuery.queries.length >= maxBatchSize) {
-        void 0;
         window.clearTimeout(batchQuery.timerHandle);
         batchQueries.delete(endpoint);
         return batchRequest(endpoint, batchQuery);
