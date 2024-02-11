@@ -3,6 +3,7 @@
 
 - Change license to MIT
 - Use batch requests to speed up websites with many entries [#24]
+- Improve messages for endpoint connection problems
 
 ## [0.8.4]
 
