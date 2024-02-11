@@ -526,23 +526,22 @@
     const maxBatchSize = 100;
     let batchQueries = new Map;
     async function request(endpoint, query, batchRequest, onload, onerror) {
-      if (batchRequest) return addRequest(endpoint, query, onload); else {
-        if (onerror) console.warn("'onerror' callback is not handled on batch requests");
-        return sendRequest(endpoint, `q:${query}`, (data => onload(data.q)), onerror);
-      }
+      if (batchRequest) return addRequest(endpoint, query, onload, onerror); else return sendRequest(endpoint, `q:${query}`, (data => onload(data.q)), onerror);
     }
-    async function addRequest(endpoint, query, onload) {
+    async function addRequest(endpoint, query, onload, onerror) {
       let batchQuery = batchQueries.get(endpoint);
       if (!batchQuery) {
         let timerHandle = window.setTimeout((() => batchRequest(endpoint, batchQueries.get(endpoint))), batchTimeout);
         batchQuery = {
           timerHandle,
           queries: [],
-          onload: []
+          onload: [],
+          onerror: []
         };
       }
       batchQuery.queries.push(query);
       batchQuery.onload.push(onload);
+      batchQuery.onerror.push(onerror);
       if (batchQuery.queries.length >= maxBatchSize) {
         window.clearTimeout(batchQuery.timerHandle);
         batchQueries.delete(endpoint);
@@ -557,8 +556,14 @@
           if (onload) onload(data[`q${index}`]);
         }));
       };
+      let onerror = message => {
+        void 0;
+        batchQuery.onerror.forEach((onerror => {
+          if (onerror) onerror(message);
+        }));
+      };
       console.info(`Sending batch request of size ${batchQuery.queries.length} to endpoint '${endpoint.name}'`);
-      return sendRequest(endpoint, query, onload);
+      return sendRequest(endpoint, query, onload, onerror);
     }
     async function sendRequest(endpoint, query, onload, onerror) {
       GM.xmlHttpRequest({
@@ -569,22 +574,35 @@
           ApiKey: endpoint.key
         },
         onload: function(response) {
-          try {
-            let r = JSON.parse(response.responseText);
-            if ("errors" in r) r.errors.forEach((e => {
-              console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`);
-            })); else if (onload) onload(r.data);
-          } catch (e) {
-            console.log("Exception: " + e);
-            console.log("Failed to parse response: " + response.responseText);
+          switch (response.status) {
+           case 200:
+            try {
+              let r = JSON.parse(response.responseText);
+              if ("errors" in r) r.errors.forEach((e => {
+                console.error(`Stash returned "${e.extensions.code}" error: ${e.message}`);
+                if (onerror) onerror(e.message);
+              })); else if (onload) onload(r.data);
+            } catch (e) {
+              void 0;
+              if (onerror) onerror(response.responseText.length < 20 ? response.responseText : "wrong path");
+            }
+            break;
+
+           default:
+            void 0;
+            if (onerror) onerror(response.responseText ?? statusMessage(response.status, response.statusText));
           }
         },
-        onerror(response) {
+        onerror: function(response) {
           void 0;
           if (onerror) onerror();
         }
       });
     }
+    function statusMessage(status, statusText) {
+      if (statusText && statusText.trim() !== "") return `${status}: ${statusText}`; else return `${status}: ${friendlyHttpStatus.get(status)}`;
+    }
+    let friendlyHttpStatus = new Map([ [ 200, "OK" ], [ 201, "Created" ], [ 202, "Accepted" ], [ 203, "Non-Authoritative Information" ], [ 204, "No Content" ], [ 205, "Reset Content" ], [ 206, "Partial Content" ], [ 300, "Multiple Choices" ], [ 301, "Moved Permanently" ], [ 302, "Found" ], [ 303, "See Other" ], [ 304, "Not Modified" ], [ 305, "Use Proxy" ], [ 306, "Unused" ], [ 307, "Temporary Redirect" ], [ 400, "Bad Request" ], [ 401, "Unauthorized" ], [ 402, "Payment Required" ], [ 403, "Forbidden" ], [ 404, "Not Found" ], [ 405, "Method Not Allowed" ], [ 406, "Not Acceptable" ], [ 407, "Proxy Authentication Required" ], [ 408, "Request Timeout" ], [ 409, "Conflict" ], [ 410, "Gone" ], [ 411, "Length Required" ], [ 412, "Precondition Required" ], [ 413, "Request Entry Too Large" ], [ 414, "Request-URI Too Long" ], [ 415, "Unsupported Media Type" ], [ 416, "Requested Range Not Satisfiable" ], [ 417, "Expectation Failed" ], [ 418, "I'm a teapot" ], [ 429, "Too Many Requests" ], [ 500, "Internal Server Error" ], [ 501, "Not Implemented" ], [ 502, "Bad Gateway" ], [ 503, "Service Unavailable" ], [ 504, "Gateway Timeout" ], [ 505, "HTTP Version Not Supported" ] ]);
     const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
     let settingsModal;
     let settings;
@@ -701,8 +719,8 @@
     async function getVersion(endpoint, element) {
       await request(endpoint, "version{version}", false, (data => {
         element.innerHTML += `<span class="version"> (${data.version})</span>`;
-      }), (() => {
-        element.innerHTML += `<span class="version"> (no connection)</span>`;
+      }), (message => {
+        element.innerHTML += `<span class="version"> (${message?.trim() ?? "no connection"})</span>`;
       }));
     }
     async function queryStash(queryString, onload, target, type, {stashIdEndpoint}) {
