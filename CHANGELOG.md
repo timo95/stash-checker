@@ -1,4 +1,8 @@
 
+## [0.9.3]
+
+- Update coomer.su and kemono.su
+
 ## [0.9.2]
 
 - Ignore create button on stash-box

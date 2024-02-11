@@ -59,13 +59,10 @@ import {Target} from "./dataTypes";
             check(Target.Scene, "h2.main__list-title", {color: color, titleSelector: null});
             break;
         }
-        case "kemono.party":
+        case "coomer.su":
+        case "kemono.su":
             check(Target.Scene, "h1.post__title", {currentSite: true, titleSelector: null});
             check(Target.Scene, ".post-card > a[href*='/post/']", {titleSelector: null});
-            break;
-        case "coomer.party":
-            check(Target.Scene, "h1.post__title", {currentSite: true, titleSelector: null});
-            check(Target.Scene, ".post-card h2 > a[href*='/post/']", {titleSelector: null});
             break;
         case "adultanime.dbsearch.net":
             if (document.querySelector("article > section[id='info-table']") !== null) {
