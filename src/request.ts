@@ -107,7 +107,7 @@ async function sendRequest(
                     break;
                 }
                 default: {
-                    console.debug(`Error: Response code ${response.status}: ${response.statusText}`);
+                    console.debug(`Error: Response code ${statusMessage(response.status, response.statusText)}`);
                     if (onerror) onerror(response.responseText ?? statusMessage(response.status, response.statusText));
                 }
             }
