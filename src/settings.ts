@@ -1,16 +1,11 @@
 import {deleteValue, getValue, setValue} from "./storage";
-import {request} from "./check";
+import {request} from "./request";
+import {StashEndpoint} from "./dataTypes";
 
 const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
 
 let settingsModal: HTMLDivElement;
 let settings: HTMLDivElement;
-
-export type StashEndpoint = {
-    name: string,
-    url: string,
-    key: string,
-}
 
 export let stashEndpoints: StashEndpoint[] = []
 

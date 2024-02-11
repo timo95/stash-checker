@@ -1,52 +1,8 @@
 import {prefixSymbol} from "./tooltip";
-import {StashEndpoint, stashEndpoints} from "./settings";
+import {stashEndpoints} from "./settings";
 import {firstTextChild} from "./utils";
-import {Target, Type} from "./dataTypes";
-
-type Selector = (e: Element) => string;
-
-interface CheckOptions {
-    urlSelector?: Selector;
-    prepareUrl?: (url: string) => string;
-    codeSelector?: Selector;
-    stashIdSelector?: Selector;
-    stashIdEndpoint?: string;
-    nameSelector?: Selector;
-    titleSelector?: Selector;
-    color?: (data: any) => string;
-    currentSite?: boolean;
-    observe?: boolean;
-}
-
-export async function request(endpoint: StashEndpoint, query: string, onload?: (data: any) => void, onerror?: () => void): Promise<void> {
-    GM.xmlHttpRequest({
-        method: "GET",
-        url: `${endpoint.url}?query=${encodeURIComponent(query)}`,  // encode query (important for url and some titles)
-        headers: {
-            "Content-Type": "application/json",
-            ApiKey: endpoint.key,
-        },
-        onload: function (response) {
-            try {
-                let r = JSON.parse(response.responseText)
-                if ("errors" in r) {
-                    r.errors.forEach((e: any) => {
-                        console.log(`Stash returned "${e.extensions.code}" error: ${e.message}`)
-                    });
-                } else {
-                    if (onload) onload(r.data);
-                }
-            } catch (e) {
-                console.log("Exception: " + e);
-                console.log("Failed to parse response: " + response.responseText);
-            }
-        },
-        onerror(response) {
-            console.debug(response)
-            if (onerror) onerror();
-        }
-    });
-}
+import {CheckOptions, StashEndpoint, Target, Type} from "./dataTypes";
+import {request} from "./request";
 
 async function queryStash(
     queryString: string,
