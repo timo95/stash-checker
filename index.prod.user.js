@@ -1147,7 +1147,7 @@
        case "fansdb.xyz":
        case "pmvstash.org":
        case "stashdb.org":
-        let exclude = ":not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
+        let exclude = ":not(a[href$='/add']):not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
         if (window.location.pathname.startsWith("/scenes/")) check(Target.Scene, "div.scene-info.card h3 > span", {
           observe: true,
           currentSite: true,
