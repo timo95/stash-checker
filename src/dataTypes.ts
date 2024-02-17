@@ -30,13 +30,13 @@ export interface StashQuery {
  */
 export interface BatchQuery {
     timerHandle: number,
-    requests: Request[],
+    queries: GraphQlQuery[],
 }
 
 /**
  * A graphql query and result handlers.
  */
-export interface Request {
+export interface GraphQlQuery {
     query: string,
     onload?: (data: any) => void,
     onerror?: (message?: string) => void
