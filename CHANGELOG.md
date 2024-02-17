@@ -1,7 +1,7 @@
 
 ## [0.10.0]
 
-
+- Add metadata for userscript auto-updates [#27]
 
 ## [0.9.3]
 

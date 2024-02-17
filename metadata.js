@@ -8,6 +8,8 @@ export default {
     author: meta.author.name,
     source: meta.repository.url,
     license: 'MIT',
+    updateURL: meta.repository.url + "/releases/latest/download/index.prod.meta.js",
+    downloadURL: meta.repository.url + "/releases/latest/download/index.prod.user.js",
     match: [
         "*://adultanime.dbsearch.net/*",
         "*://coomer.su/*",
