@@ -18,6 +18,8 @@ import {Target} from "./dataTypes";
         console.log("Userscript is deactivated for this site. Activate in userscript menu.");
         return;
     }
+    
+    let currentSite = () => window.location.href
 
     // Main area
     console.log("Running Stash Checker")
@@ -34,7 +36,7 @@ import {Target} from "./dataTypes";
 
             check(Target.Scene, ".page-video__details > .text--h1", {
                 observe: true,
-                currentSite: true,
+                urlSelector: currentSite,
                 color: color,
                 prepareUrl,
                 codeSelector: () => window.location.pathname.match(codeRegex).at(0)
@@ -49,32 +51,32 @@ import {Target} from "./dataTypes";
         }
         case "oreno3d.com": {
             let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
-            check(Target.Scene, "h1.video-h1", {color: color, currentSite: true, titleSelector: null});
+            check(Target.Scene, "h1.video-h1", {color: color, urlSelector: currentSite, titleSelector: null});
             check(Target.Scene, "a h2.box-h2", {color: color, titleSelector: null});
             break;
         }
         case "erommdtube.com": {
             let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
-            check(Target.Scene, "h1.show__h1", {color: color, currentSite: true, titleSelector: null});
+            check(Target.Scene, "h1.show__h1", {color: color, urlSelector: currentSite, titleSelector: null});
             check(Target.Scene, "h2.main__list-title", {color: color, titleSelector: null});
             break;
         }
         case "coomer.su":
         case "kemono.su":
-            check(Target.Scene, "h1.post__title", {currentSite: true, titleSelector: null});
+            check(Target.Scene, "h1.post__title", {urlSelector: currentSite, titleSelector: null});
             check(Target.Scene, ".post-card > a[href*='/post/']", {titleSelector: null});
             break;
         case "adultanime.dbsearch.net":
             if (document.querySelector("article > section[id='info-table']") !== null) {
                 check(Target.Scene, "div[id='main-inner'] > article > h2", {
-                    currentSite: true,
+                    urlSelector: currentSite,
                     codeSelector: (_) => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
                 });
             }
             check(Target.Scene, "div.item-info > h4 > a, div.item-info > h5 > a");
             break;
         case "xslist.org":
-            check(Target.Performer, "span[itemprop='name']", {currentSite: true});
+            check(Target.Performer, "span[itemprop='name']", {urlSelector: currentSite});
             check(Target.Performer, "a[href*='/model/']");
             check(Target.Scene, "table#movices td > strong", {
                 urlSelector: null,
@@ -87,9 +89,9 @@ import {Target} from "./dataTypes";
             break;
         case "www.iafd.com": {
             if (window.location.pathname.startsWith("/person.rme/perfid=")) {
-                check(Target.Performer, "h1", {currentSite: true});
+                check(Target.Performer, "h1", {urlSelector: currentSite});
             } else if (window.location.pathname.startsWith("/title.rme/id=")) {
-                check(Target.Scene, "h1", {currentSite: true});
+                check(Target.Scene, "h1", {urlSelector: currentSite});
             }
             check(Target.Performer, "a[href*='/person.rme/perfid=']");
             check(Target.Scene, "a[href*='/title.rme/id=']");
@@ -101,14 +103,14 @@ import {Target} from "./dataTypes";
             // Alternative endpoint url. Query both the default and this one.
             let stashIdEndpoint = "https://api.metadataapi.net/graphql";
             if (window.location.pathname.startsWith("/performers/")) {
-                check(Target.Performer, "div.pl-4 > h2", {observe: true, currentSite: true, stashIdSelector});
-                check(Target.Performer, "div.pl-4 > h2", {observe: true, currentSite: true, urlSelector: null, nameSelector: null, stashIdSelector, stashIdEndpoint});
+                check(Target.Performer, "div.pl-4 > h2", {observe: true, urlSelector: currentSite, stashIdSelector});
+                check(Target.Performer, "div.pl-4 > h2", {observe: true, urlSelector: null, nameSelector: null, stashIdSelector, stashIdEndpoint});
             } else if (window.location.pathname.startsWith("/scenes/")) {
-                check(Target.Scene, "div.flex.justify-between > h2", {observe: true, currentSite: true, stashIdSelector});
-                check(Target.Scene, "div.flex.justify-between > h2", {observe: true, currentSite: true, titleSelector: null, stashIdSelector, stashIdEndpoint});
+                check(Target.Scene, "div.flex.justify-between > h2", {observe: true, urlSelector: currentSite, stashIdSelector});
+                check(Target.Scene, "div.flex.justify-between > h2", {observe: true, urlSelector: null, titleSelector: null, stashIdSelector, stashIdEndpoint});
             } else if (window.location.pathname.startsWith("/movies/")) {
-                check(Target.Movie, "div.flex.justify-between > h2", {observe: true, currentSite: true, stashIdSelector});
-                check(Target.Movie, "div.flex.justify-between > h2", {observe: true, currentSite: true, nameSelector: null, stashIdSelector, stashIdEndpoint});
+                check(Target.Movie, "div.flex.justify-between > h2", {observe: true, urlSelector: currentSite, stashIdSelector});
+                check(Target.Movie, "div.flex.justify-between > h2", {observe: true, urlSelector: null, nameSelector: null, stashIdSelector, stashIdEndpoint});
             }
             check(Target.Performer, "a[href^='https://metadataapi.net/performers/']", {observe: true});
             check(Target.Scene, "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", {observe: true});
@@ -117,7 +119,7 @@ import {Target} from "./dataTypes";
         }
         case "www.javlibrary.com":
             check(Target.Scene, "div[id='video_title']", {
-                currentSite: true,
+                urlSelector: currentSite,
                 prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
                 codeSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim(),
                 titleSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim(),
@@ -137,7 +139,7 @@ import {Target} from "./dataTypes";
         case "r18.dev":
             check(Target.Scene,"#video-info > #title", {
                 observe: true,
-                currentSite: true,
+                urlSelector: currentSite,
                 codeSelector: _ => firstTextChild(document.querySelector("#dvd-id"))?.textContent?.trim(),
             });
             check(Target.Scene, ".video-label > a[href*='/movies/detail/']", {
@@ -149,7 +151,7 @@ import {Target} from "./dataTypes";
             if (/actress\d{1,6}/.test(window.location.pathname)) {
                 check(Target.Performer, "h1", {
                     prepareUrl: url => url.split("?")[0],
-                    currentSite: true,
+                    urlSelector: currentSite,
                 });
             }
             check(Target.Performer, "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
@@ -157,11 +159,11 @@ import {Target} from "./dataTypes";
             });
             break;
         case "www.indexxx.com":
-            check(Target.Performer, "h1[id='model-name']", {currentSite: true});
+            check(Target.Performer, "h1[id='model-name']", {urlSelector: currentSite});
             check(Target.Performer, "a.modelLink[href*='https://www.indexxx.com/m/'] > span");
             break;
         case "www.thenude.com":
-            check(Target.Performer, "span.model-name", {currentSite: true});
+            check(Target.Performer, "span.model-name", {urlSelector: currentSite});
             check(Target.Performer, "a.model-name, a.model-title, a[data-img*='/models/']", {observe: true});
             break;
         case "www.data18.com":
@@ -169,7 +171,7 @@ import {Target} from "./dataTypes";
             check(Target.Performer, "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])", {observe: true});
             break;
         case "www.babepedia.com":
-            check(Target.Performer, "h1#babename", {currentSite: true});
+            check(Target.Performer, "h1#babename", {urlSelector: currentSite});
             check(Target.Performer, "a[href*='/babe/']", {observe: true});
             break;
         case "www.freeones.com":
@@ -178,11 +180,11 @@ import {Target} from "./dataTypes";
             });
             break;
         case "shemalestardb.com":
-            check(Target.Performer, "h2[id='star-name']", {currentSite: true});
+            check(Target.Performer, "h2[id='star-name']", {urlSelector: currentSite});
             check(Target.Performer, "figcaption > a[href*='/stars/']");
             break;
         case "onlyfans.com":
-            check(Target.Performer, "div.b-username > div.g-user-name", {observe: true, currentSite: true});
+            check(Target.Performer, "div.b-username > div.g-user-name", {observe: true, urlSelector: currentSite});
             check(Target.Performer, "a.b-username > div.g-user-name", {observe: true});
             break;
         case "www.pornteengirl.com":
@@ -192,11 +194,11 @@ import {Target} from "./dataTypes";
             break;
         case "gayeroticvideoindex.com":
             if (window.location.pathname.startsWith("/performer/")) {
-                check(Target.Performer, "[id='data'] h1", {currentSite: true});
+                check(Target.Performer, "[id='data'] h1", {urlSelector: currentSite});
             } else if (window.location.pathname.startsWith("/episode/")) {
-                check(Target.Scene, "[id='data'] h1", {currentSite: true});
+                check(Target.Scene, "[id='data'] h1", {urlSelector: currentSite});
             } else if (window.location.pathname.startsWith("/video/")) {
-                check(Target.Movie, "[id='data'] h1", {currentSite: true});
+                check(Target.Movie, "[id='data'] h1", {urlSelector: currentSite});
             }
             check(Target.Performer, "a[href*='performer/']", {observe: true});
             check(Target.Scene, "a[href*='episode/']", {observe: true});
@@ -211,7 +213,6 @@ import {Target} from "./dataTypes";
             if (window.location.pathname.startsWith("/scenes/")) {
                 check(Target.Scene, "div.scene-info.card h3 > span", {
                     observe: true,
-                    currentSite: true,
                     urlSelector: null,
                     stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
                     titleSelector: null,
@@ -226,7 +227,6 @@ import {Target} from "./dataTypes";
             if (window.location.pathname.startsWith("/performers/")) {
                 check(Target.Performer, "div.PerformerInfo div.card-header h3 > span", {
                     observe: true,
-                    currentSite: true,
                     urlSelector: null,
                     stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
                     nameSelector: null,
@@ -241,7 +241,6 @@ import {Target} from "./dataTypes";
             if (window.location.pathname.startsWith("/studios/")) {
                 check(Target.Studio, ".studio-title > h3 > span", {
                     observe: true,
-                    currentSite: true,
                     urlSelector: null,
                     stashIdSelector: () => window.location.href.replace(/^.*\/studios\//, "").split(/[?#]/)[0],
                     nameSelector: null,
@@ -256,7 +255,6 @@ import {Target} from "./dataTypes";
             if (window.location.pathname.startsWith("/tags/")) {
                 check(Target.Tag, ".MainContent > .NarrowPage h3 > span", {
                     observe: true,
-                    currentSite: true,
                     urlSelector: null,
                     stashIdSelector: () => window.location.href.replace(/^.*\/tags\//, "").split(/[?#]/)[0],
                     nameSelector: null,

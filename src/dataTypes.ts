@@ -65,6 +65,5 @@ export interface CheckOptions {
     nameSelector?: Selector;
     titleSelector?: Selector;
     color?: (data: any) => string;
-    currentSite?: boolean;
     observe?: boolean;
 }

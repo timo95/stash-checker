@@ -67,7 +67,6 @@ async function queryStash(
  *
  * @param target
  * @param element
- * @param currentSite
  * @param prepareUrl
  * @param urlSelector
  * @param codeSelector
@@ -81,11 +80,8 @@ async function checkElement(
     target: Target,
     element: Element,
     {
-        currentSite = false,
         prepareUrl = url => url,
-        urlSelector = currentSite ?
-            () => decodeURI(window.location.href) :
-            (e: Element) => decodeURI(e.closest("a").href),
+        urlSelector = (e: Element) => e.closest("a").href,
         codeSelector,
         stashIdSelector,
         stashIdEndpoint = `https://${window.location.host}/graphql`,
