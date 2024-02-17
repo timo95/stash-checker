@@ -18,22 +18,21 @@
   "private": true,
   "devDependencies": {
     "@types/greasemonkey": "^4.0.7",
-    "@types/node": "^20.10.6",
-    "browserslist": "^4.22.2",
+    "@types/node": "^20.11.19",
+    "browserslist": "^4.23.0",
     "cross-env": "^7.0.3",
-    "css-loader": "^6.8.1",
+    "css-loader": "^6.10.0",
     "cssimportant-loader": "^0.4.0",
-    "sass": "^1.69.7",
+    "sass": "^1.71.0",
     "sass-loader": "^13.3.3",
-    "style-loader": "^3.3.3",
+    "style-loader": "^3.3.4",
     "terser-webpack-plugin": "^5.3.10",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",
-    "webpack-userscript": "^3.2.2",
-    "webpack": "^5.89.0",
+    "webpack": "^5.90.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1",
-    "webpack-merge": "^5.10.0",
-    "webpack-sources": "^3.2.3"
+    "webpack-sources": "^3.2.3",
+    "webpack-userscript": "^3.2.2"
   }
 }
