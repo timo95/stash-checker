@@ -1,10 +1,10 @@
-import {openSettings} from "./settingsElement";
+import {openSettingsWindow} from "./settings";
 import {deleteValue, getValue, setValue} from "./storage";
 
 const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
 
 export async function initMenu() {
-    GM.registerMenuCommand("Settings", openSettings, "s");
+    GM.registerMenuCommand("Settings", openSettingsWindow, "s");
 
     if (await isSiteBlocked()) {
         GM.registerMenuCommand(`Activate for ${window.location.host}`, unblockSite, "a");

@@ -4,12 +4,12 @@ import {initEndpointSettings} from "./settings/endpoints";
 import {initTooltip} from "./tooltipElement";
 import {firstTextChild} from "./utils";
 import {Target} from "./dataTypes";
-import {initSettingsElement} from "./settings/settingsElement";
+import {initSettingsWindow} from "./settings/settings";
 import {initMenu, isSiteBlocked} from "./settings/menu";
 
 (async function () {
     await initTooltip();
-    initSettingsElement();
+    initSettingsWindow();
     await initEndpointSettings();
     await initMenu();
 
