@@ -8,7 +8,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const dev = process.env.NODE_ENV === "development";
-if (dev) metadata.name += " Dev"
+if (dev) {
+    metadata.name += " Dev"
+    metadata.updateURL = undefined
+    metadata.downloadURL = undefined
+}
 
 export default {
     mode: dev ? "development" : "production",
