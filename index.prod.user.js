@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Stash Checker
-// @description Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
-// @version 0.9.3
+// @description Add checkmarks on porn websites to scenes/performers that are present in your own Stash instance.
+// @version 0.10.0
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
 // @match *://coomer.su/*
@@ -31,6 +31,7 @@
 // @match *://xslist.org/*
 // @connect localhost
 // @connect *
+// @downloadURL https://github.com/timo95/stash-checker/releases/latest/download/index.prod.user.js
 // @grant GM.xmlHttpRequest
 // @grant GM.getValue
 // @grant GM.setValue
@@ -41,24 +42,25 @@
 // @license MIT
 // @run-at document-end
 // @source https://github.com/timo95/stash-checker
+// @updateURL https://github.com/timo95/stash-checker/releases/latest/download/index.prod.meta.js
 // ==/UserScript==
 
 (() => {
   "use strict";
   var __webpack_modules__ = {
-    550: (module, __webpack_exports__, __webpack_require__) => {
+    661: (module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
-        Z: () => __WEBPACK_DEFAULT_EXPORT__
+        A: () => __WEBPACK_DEFAULT_EXPORT__
       });
-      var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(81);
+      var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(601);
       var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = __webpack_require__.n(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-      var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
+      var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(314);
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = __webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
       var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default());
       ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-text-light: #989898 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --stash-checker-color-text: #e0e0e0 !important;\n    --stash-checker-color-text-light: #707070 !important;\n    --stash-checker-color-link-visited: #c7c7c7 !important;\n    --stash-checker-color-link-hover: #f2f2f2 !important;\n    --stash-checker-color-link-active: #039 !important;\n    --stash-checker-color-border: #5a5a5a !important;\n    --stash-checker-color-bg: #202020 !important;\n    --stash-checker-color-card: #464646 !important;\n  }\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.sub-heading {\n  font-size: .8rem !important;\n  margin: .5rem 0 0 !important;\n}\n\n.stashChecker.tooltip {\n  z-index: 99999 !important;\n  position: fixed !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  margin-top: -0.5rem !important;\n}\n\n.stashChecker.file {\n  margin: .5rem !important;\n  padding: .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: auto !important;\n  background-color: #000 !important;\n  background-color: rgba(0,0,0,.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 20vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  width: 35rem !important;\n}\n\n.stashChecker.settings h3 {\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settings .version {\n  color: var(--stash-checker-color-text-light) !important;\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.endpoints {\n  display: flex !important;\n  flex-direction: column !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: stretch !important;\n}\n\n.stashChecker.endpoint {\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  padding: 1rem !important;\n  margin: .1rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint>button {\n  flex-grow: 0 !important;\n  margin-left: .5rem !important;\n}\n\n.stashChecker.endpoint>div {\n  flex-grow: 1 !important;\n}\n\n.stashChecker.endpoint>div>* {\n  margin: 0 !important;\n}\n\n.stashChecker>.matchQuality {\n  width: .8em !important;\n  height: .8em !important;\n  display: inline-block !important;\n  border-radius: 50% !important;\n}\n\n.stashChecker.btn {\n  display: inline-block !important;\n  font-weight: 400 !important;\n  color: #212529 !important;\n  text-align: center !important;\n  vertical-align: middle !important;\n  user-select: none !important;\n  background-color: rgba(0,0,0,0) !important;\n  border: 1px solid rgba(0,0,0,0) !important;\n  border-top-color: rgba(0,0,0,0) !important;\n  border-right-color: rgba(0,0,0,0) !important;\n  border-bottom-color: rgba(0,0,0,0) !important;\n  border-left-color: rgba(0,0,0,0) !important;\n  padding: .375rem .75rem !important;\n  font-size: 1rem !important;\n  line-height: 1.5 !important;\n  border-radius: .25rem !important;\n  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n}\n\n.stashChecker.btn:not(:disabled):not(.disabled) {\n  cursor: pointer !important;\n}\n\n.stashChecker.btn:hover {\n  color: #212529 !important;\n  text-decoration: none !important;\n}\n\n.stashChecker.btn-primary {\n  color: #fff !important;\n  background-color: #137cbd !important;\n  border-color: #137cbd !important;\n}\n\n.stashChecker.btn-primary:hover {\n  color: #fff !important;\n  background-color: #10659a !important;\n  border-color: #0e5e8f !important;\n}\n\n.stashChecker.btn-danger {\n  color: #fff !important;\n  background-color: #db3737 !important;\n  border-color: #db3737 !important;\n}\n\n.stashChecker.btn-danger:hover {\n  color: #fff !important;\n  background-color: #c82424 !important;\n  border-color: #bd2222 !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: .5rem !important;\n  margin-bottom: .5rem !important;\n  border-color: var(--stash-checker-color-card) !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tooltip hr+br {\n  display: none !important;\n}\n\n.stashChecker.file+br {\n  display: none !important;\n}\n\n.stashCheckerCheckmark {\n  font-size: inherit !important;\n}`, "" ]);
       const __WEBPACK_DEFAULT_EXPORT__ = ___CSS_LOADER_EXPORT___;
     },
-    645: module => {
+    314: module => {
       module.exports = function(cssWithMappingToString) {
         var list = [];
         list.toString = function toString() {
@@ -103,12 +105,12 @@
         return list;
       };
     },
-    81: module => {
+    601: module => {
       module.exports = function(i) {
         return i[1];
       };
     },
-    379: module => {
+    72: module => {
       var stylesInDOM = [];
       function getIndexByIdentifier(identifier) {
         var result = -1;
@@ -186,7 +188,7 @@
         };
       };
     },
-    569: module => {
+    659: module => {
       var memo = {};
       function getTarget(target) {
         if (typeof memo[target] === "undefined") {
@@ -207,7 +209,7 @@
       }
       module.exports = insertBySelector;
     },
-    216: module => {
+    540: module => {
       function insertStyleElement(options) {
         var element = document.createElement("style");
         options.setAttributes(element, options.attributes);
@@ -216,14 +218,14 @@
       }
       module.exports = insertStyleElement;
     },
-    565: (module, __unused_webpack_exports, __webpack_require__) => {
+    56: (module, __unused_webpack_exports, __webpack_require__) => {
       function setAttributesWithoutAttributes(styleElement) {
         var nonce = true ? __webpack_require__.nc : 0;
         if (nonce) styleElement.setAttribute("nonce", nonce);
       }
       module.exports = setAttributesWithoutAttributes;
     },
-    795: module => {
+    825: module => {
       function apply(styleElement, options, obj) {
         var css = "";
         if (obj.supports) css += "@supports (".concat(obj.supports, ") {");
@@ -259,7 +261,7 @@
       }
       module.exports = domAPI;
     },
-    589: module => {
+    113: module => {
       function styleTagTransform(css, styleElement) {
         if (styleElement.styleSheet) styleElement.styleSheet.cssText = css; else {
           while (styleElement.firstChild) styleElement.removeChild(styleElement.firstChild);
@@ -305,27 +307,27 @@
   })();
   var __webpack_exports__ = {};
   (() => {
-    var injectStylesIntoStyleTag = __webpack_require__(379);
+    var injectStylesIntoStyleTag = __webpack_require__(72);
     var injectStylesIntoStyleTag_default = __webpack_require__.n(injectStylesIntoStyleTag);
-    var styleDomAPI = __webpack_require__(795);
+    var styleDomAPI = __webpack_require__(825);
     var styleDomAPI_default = __webpack_require__.n(styleDomAPI);
-    var insertBySelector = __webpack_require__(569);
+    var insertBySelector = __webpack_require__(659);
     var insertBySelector_default = __webpack_require__.n(insertBySelector);
-    var setAttributesWithoutAttributes = __webpack_require__(565);
+    var setAttributesWithoutAttributes = __webpack_require__(56);
     var setAttributesWithoutAttributes_default = __webpack_require__.n(setAttributesWithoutAttributes);
-    var insertStyleElement = __webpack_require__(216);
+    var insertStyleElement = __webpack_require__(540);
     var insertStyleElement_default = __webpack_require__.n(insertStyleElement);
-    var styleTagTransform = __webpack_require__(589);
+    var styleTagTransform = __webpack_require__(113);
     var styleTagTransform_default = __webpack_require__.n(styleTagTransform);
-    var main = __webpack_require__(550);
+    var main = __webpack_require__(661);
     var options = {};
     options.styleTagTransform = styleTagTransform_default();
     options.setAttributes = setAttributesWithoutAttributes_default();
     options.insert = insertBySelector_default().bind(null, "head");
     options.domAPI = styleDomAPI_default();
     options.insertStyleElement = insertStyleElement_default();
-    var update = injectStylesIntoStyleTag_default()(main.Z, options);
-    const style_main = main.Z && main.Z.locals ? main.Z.locals : void 0;
+    var update = injectStylesIntoStyleTag_default()(main.A, options);
+    const style_main = main.A && main.A.locals ? main.A.locals : void 0;
     var Target;
     (function(Target) {
       Target["Scene"] = "scene";
@@ -522,56 +524,63 @@
     async function deleteValue(key) {
       return GM.deleteValue(key);
     }
-    const batchTimeout = 1;
+    const batchTimeout = 10;
     const maxBatchSize = 100;
     let batchQueries = new Map;
-    async function request(endpoint, query, batchRequest, onload, onerror) {
-      if (batchRequest) return addRequest(endpoint, query, onload, onerror); else return sendRequest(endpoint, `q:${query}`, (data => onload(data.q)), onerror);
+    async function request(endpoint, query, batchQueries = false) {
+      if (batchQueries) return addQuery(endpoint, query); else {
+        let namedQuery = {
+          query: `q:${query.query}`,
+          onload: data => query.onload(data.q),
+          onerror: query.onerror
+        };
+        return sendQuery(endpoint, namedQuery);
+      }
     }
-    async function addRequest(endpoint, query, onload, onerror) {
+    async function addQuery(endpoint, query) {
       let batchQuery = batchQueries.get(endpoint);
       if (!batchQuery) {
         let timerHandle = window.setTimeout((() => {
-          batchRequest(endpoint, batchQueries.get(endpoint));
+          sendQuery(endpoint, buildBatchQuery(endpoint, batchQueries.get(endpoint)));
           batchQueries.delete(endpoint);
         }), batchTimeout);
         batchQuery = {
           timerHandle,
-          queries: [],
-          onload: [],
-          onerror: []
+          queries: []
         };
       }
       batchQuery.queries.push(query);
-      batchQuery.onload.push(onload);
-      batchQuery.onerror.push(onerror);
       if (batchQuery.queries.length >= maxBatchSize) {
         window.clearTimeout(batchQuery.timerHandle);
         batchQueries.delete(endpoint);
-        return batchRequest(endpoint, batchQuery);
+        return sendQuery(endpoint, buildBatchQuery(endpoint, batchQuery));
       } else batchQueries.set(endpoint, batchQuery);
     }
-    async function batchRequest(endpoint, batchQuery) {
-      let query = batchQuery.queries.map(((query, index) => `q${index}:${query}`)).join();
+    function buildBatchQuery(endpoint, batchQuery) {
+      let query = batchQuery.queries.map(((request, index) => `q${index}:${request.query}`)).join();
       let onload = data => {
         void 0;
-        batchQuery.onload.forEach(((onload, index) => {
-          if (onload) onload(data[`q${index}`]);
+        batchQuery.queries.forEach(((request, index) => {
+          if (request.onload) request.onload(data[`q${index}`]);
         }));
       };
       let onerror = message => {
         void 0;
-        batchQuery.onerror.forEach((onerror => {
-          if (onerror) onerror(message);
+        batchQuery.queries.forEach((request => {
+          if (request.onerror) request.onerror(message);
         }));
       };
-      console.info(`Sending batch request of size ${batchQuery.queries.length} to endpoint '${endpoint.name}'`);
-      return sendRequest(endpoint, query, onload, onerror);
+      console.info(`Sending batch query of size ${batchQuery.queries.length} to endpoint '${endpoint.name}'`);
+      return {
+        query,
+        onload,
+        onerror
+      };
     }
-    async function sendRequest(endpoint, query, onload, onerror) {
+    async function sendQuery(endpoint, query) {
       GM.xmlHttpRequest({
         method: "GET",
-        url: `${endpoint.url}?query={${encodeURIComponent(query)}}`,
+        url: `${endpoint.url}?query={${encodeURIComponent(query.query)}}`,
         headers: {
           "Content-Type": "application/json",
           ApiKey: endpoint.key
@@ -583,22 +592,22 @@
               let r = JSON.parse(response.responseText);
               if ("errors" in r) r.errors.forEach((e => {
                 console.error(`Stash returned "${e.extensions.code}" error: ${e.message}`);
-                if (onerror) onerror(e.message);
-              })); else if (onload) onload(r.data);
+                if (query.onerror) query.onerror(e.message);
+              })); else if (query.onload) query.onload(r.data);
             } catch (e) {
               void 0;
-              if (onerror) onerror(response.responseText);
+              if (query.onerror) query.onerror(response.responseText);
             }
             break;
 
            default:
             void 0;
-            if (onerror) onerror(response.responseText ?? statusMessage(response.status, response.statusText));
+            if (query.onerror) query.onerror(response.responseText ?? statusMessage(response.status, response.statusText));
           }
         },
         onerror: function(response) {
           void 0;
-          if (onerror) onerror();
+          if (query.onerror) query.onerror();
         }
       });
     }
@@ -720,13 +729,19 @@
       settingsModal.style.display = "initial";
     }
     async function getVersion(endpoint, element) {
-      await request(endpoint, "version{version}", false, (data => {
+      let onload = data => {
         element.innerHTML += `<span class="version"> (${data.version})</span>`;
-      }), (message => {
+      };
+      let onerror = message => {
         let explanation = "no connection";
         if (message) explanation = message.length < 30 ? message?.trim() : "wrong path";
         element.innerHTML += `<span class="version"> (${explanation})</span>`;
-      }));
+      };
+      await request(endpoint, {
+        query: "version{version}",
+        onload,
+        onerror
+      });
     }
     async function queryStash(queryString, onload, target, type, {stashIdEndpoint}) {
       let criterion;
@@ -776,10 +791,14 @@
         return;
       }
       stashEndpoints.forEach((endpoint => {
-        request(endpoint, query, true, (data => onload(target, type, endpoint, access(data))));
+        let graphQlQuery = {
+          query,
+          onload: data => onload(target, type, endpoint, access(data))
+        };
+        request(endpoint, graphQlQuery, true);
       }));
     }
-    async function checkElement(target, element, {currentSite = false, prepareUrl = url => url, urlSelector = currentSite ? () => decodeURI(window.location.href) : e => decodeURI(e.closest("a").href), codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = e => firstTextChild(e)?.textContent?.trim(), titleSelector = e => firstTextChild(e)?.textContent?.trim(), color = () => "green"}) {
+    async function checkElement(target, element, {prepareUrl = url => url, urlSelector = e => e.closest("a").href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = e => firstTextChild(e)?.textContent?.trim(), titleSelector = e => firstTextChild(e)?.textContent?.trim(), color = () => "green"}) {
       if (urlSelector && prepareUrl) {
         let url = prepareUrl(urlSelector(element));
         if (url) {
@@ -787,7 +806,7 @@
           await queryStash(url, ((...args) => prefixSymbol(element, ...args, color)), target, Type.Url, {
             stashIdEndpoint
           });
-        } else console.log(`No URL for ${target} found.`);
+        } else console.info(`No URL for ${target} found.`);
       }
       if (codeSelector) {
         let code = codeSelector(element);
@@ -796,7 +815,7 @@
           await queryStash(code, ((...args) => prefixSymbol(element, ...args, color)), target, Type.Code, {
             stashIdEndpoint
           });
-        } else console.log(`No Code for ${target} found.`);
+        } else console.info(`No Code for ${target} found.`);
       }
       if (stashIdSelector) {
         let id = stashIdSelector(element);
@@ -805,7 +824,7 @@
           await queryStash(id, ((...args) => prefixSymbol(element, ...args, color)), target, Type.StashId, {
             stashIdEndpoint
           });
-        } else console.log(`No StashId for ${target} found.`);
+        } else console.info(`No StashId for ${target} found.`);
       }
       if ([ Target.Performer, Target.Movie, Target.Studio, Target.Tag ].includes(target) && nameSelector) {
         let name = nameSelector(element);
@@ -816,7 +835,7 @@
           await queryStash(name, ((...args) => prefixSymbol(element, ...args, color)), target, Type.Name, {
             stashIdEndpoint
           });
-        } else if (name && ignore) console.log(`Ignore single name: ${name}`); else console.log(`No Name for ${target} found.`);
+        } else if (name && ignore) console.info(`Ignore single name: ${name}`); else console.info(`No Name for ${target} found.`);
       }
       if ([ Target.Scene, Target.Gallery ].includes(target) && titleSelector) {
         let title = titleSelector(element);
@@ -825,7 +844,7 @@
           await queryStash(title, ((...args) => prefixSymbol(element, ...args, color)), target, Type.Title, {
             stashIdEndpoint
           });
-        } else console.log(`No Title for ${target} found.`);
+        } else console.info(`No Title for ${target} found.`);
       }
     }
     function onAddition(selector, callback) {
@@ -849,10 +868,11 @@
       await initSettings();
       await initMenu();
       if (await isSiteBlocked()) {
-        console.log("Userscript is deactivated for this site. Activate in userscript menu.");
+        console.info("Userscript is deactivated for this site. Activate in userscript menu.");
         return;
       }
-      console.log("Running Stash Checker");
+      let currentSite = () => window.location.href;
+      console.info("Running Stash Checker");
       switch (window.location.host) {
        case "www.iwara.tv":
         {
@@ -864,7 +884,7 @@
           };
           check(Target.Scene, ".page-video__details > .text--h1", {
             observe: true,
-            currentSite: true,
+            urlSelector: currentSite,
             color,
             prepareUrl,
             codeSelector: () => window.location.pathname.match(codeRegex).at(0)
@@ -883,7 +903,7 @@
           let color = d => d.files.some((f => f.path.endsWith("_Source.mp4"))) ? "green" : "blue";
           check(Target.Scene, "h1.video-h1", {
             color,
-            currentSite: true,
+            urlSelector: currentSite,
             titleSelector: null
           });
           check(Target.Scene, "a h2.box-h2", {
@@ -898,7 +918,7 @@
           let color = d => d.files.some((f => f.path.endsWith("_Source.mp4"))) ? "green" : "blue";
           check(Target.Scene, "h1.show__h1", {
             color,
-            currentSite: true,
+            urlSelector: currentSite,
             titleSelector: null
           });
           check(Target.Scene, "h2.main__list-title", {
@@ -911,7 +931,7 @@
        case "coomer.su":
        case "kemono.su":
         check(Target.Scene, "h1.post__title", {
-          currentSite: true,
+          urlSelector: currentSite,
           titleSelector: null
         });
         check(Target.Scene, ".post-card > a[href*='/post/']", {
@@ -921,7 +941,7 @@
 
        case "adultanime.dbsearch.net":
         if (document.querySelector("article > section[id='info-table']") !== null) check(Target.Scene, "div[id='main-inner'] > article > h2", {
-          currentSite: true,
+          urlSelector: currentSite,
           codeSelector: _ => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
         });
         check(Target.Scene, "div.item-info > h4 > a, div.item-info > h5 > a");
@@ -929,7 +949,7 @@
 
        case "xslist.org":
         check(Target.Performer, "span[itemprop='name']", {
-          currentSite: true
+          urlSelector: currentSite
         });
         check(Target.Performer, "a[href*='/model/']");
         check(Target.Scene, "table#movices td > strong", {
@@ -945,9 +965,9 @@
 
        case "www.iafd.com":
         if (window.location.pathname.startsWith("/person.rme/perfid=")) check(Target.Performer, "h1", {
-          currentSite: true
+          urlSelector: currentSite
         }); else if (window.location.pathname.startsWith("/title.rme/id=")) check(Target.Scene, "h1", {
-          currentSite: true
+          urlSelector: currentSite
         });
         check(Target.Performer, "a[href*='/person.rme/perfid=']");
         check(Target.Scene, "a[href*='/title.rme/id=']");
@@ -961,12 +981,11 @@
           if (window.location.pathname.startsWith("/performers/")) {
             check(Target.Performer, "div.pl-4 > h2", {
               observe: true,
-              currentSite: true,
+              urlSelector: currentSite,
               stashIdSelector
             });
             check(Target.Performer, "div.pl-4 > h2", {
               observe: true,
-              currentSite: true,
               urlSelector: null,
               nameSelector: null,
               stashIdSelector,
@@ -975,12 +994,12 @@
           } else if (window.location.pathname.startsWith("/scenes/")) {
             check(Target.Scene, "div.flex.justify-between > h2", {
               observe: true,
-              currentSite: true,
+              urlSelector: currentSite,
               stashIdSelector
             });
             check(Target.Scene, "div.flex.justify-between > h2", {
               observe: true,
-              currentSite: true,
+              urlSelector: null,
               titleSelector: null,
               stashIdSelector,
               stashIdEndpoint
@@ -988,12 +1007,12 @@
           } else if (window.location.pathname.startsWith("/movies/")) {
             check(Target.Movie, "div.flex.justify-between > h2", {
               observe: true,
-              currentSite: true,
+              urlSelector: currentSite,
               stashIdSelector
             });
             check(Target.Movie, "div.flex.justify-between > h2", {
               observe: true,
-              currentSite: true,
+              urlSelector: null,
               nameSelector: null,
               stashIdSelector,
               stashIdEndpoint
@@ -1013,7 +1032,7 @@
 
        case "www.javlibrary.com":
         check(Target.Scene, "div[id='video_title']", {
-          currentSite: true,
+          urlSelector: currentSite,
           prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
           codeSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim(),
           titleSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim()
@@ -1032,7 +1051,7 @@
        case "r18.dev":
         check(Target.Scene, "#video-info > #title", {
           observe: true,
-          currentSite: true,
+          urlSelector: currentSite,
           codeSelector: _ => firstTextChild(document.querySelector("#dvd-id"))?.textContent?.trim()
         });
         check(Target.Scene, ".video-label > a[href*='/movies/detail/']", {
@@ -1044,7 +1063,7 @@
        case "www.minnano-av.com":
         if (/actress\d{1,6}/.test(window.location.pathname)) check(Target.Performer, "h1", {
           prepareUrl: url => url.split("?")[0],
-          currentSite: true
+          urlSelector: currentSite
         });
         check(Target.Performer, "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
           prepareUrl: url => url.split("?")[0]
@@ -1053,14 +1072,14 @@
 
        case "www.indexxx.com":
         check(Target.Performer, "h1[id='model-name']", {
-          currentSite: true
+          urlSelector: currentSite
         });
         check(Target.Performer, "a.modelLink[href*='https://www.indexxx.com/m/'] > span");
         break;
 
        case "www.thenude.com":
         check(Target.Performer, "span.model-name", {
-          currentSite: true
+          urlSelector: currentSite
         });
         check(Target.Performer, "a.model-name, a.model-title, a[data-img*='/models/']", {
           observe: true
@@ -1079,7 +1098,7 @@
 
        case "www.babepedia.com":
         check(Target.Performer, "h1#babename", {
-          currentSite: true
+          urlSelector: currentSite
         });
         check(Target.Performer, "a[href*='/babe/']", {
           observe: true
@@ -1094,7 +1113,7 @@
 
        case "shemalestardb.com":
         check(Target.Performer, "h2[id='star-name']", {
-          currentSite: true
+          urlSelector: currentSite
         });
         check(Target.Performer, "figcaption > a[href*='/stars/']");
         break;
@@ -1102,7 +1121,7 @@
        case "onlyfans.com":
         check(Target.Performer, "div.b-username > div.g-user-name", {
           observe: true,
-          currentSite: true
+          urlSelector: currentSite
         });
         check(Target.Performer, "a.b-username > div.g-user-name", {
           observe: true
@@ -1117,11 +1136,11 @@
 
        case "gayeroticvideoindex.com":
         if (window.location.pathname.startsWith("/performer/")) check(Target.Performer, "[id='data'] h1", {
-          currentSite: true
+          urlSelector: currentSite
         }); else if (window.location.pathname.startsWith("/episode/")) check(Target.Scene, "[id='data'] h1", {
-          currentSite: true
+          urlSelector: currentSite
         }); else if (window.location.pathname.startsWith("/video/")) check(Target.Movie, "[id='data'] h1", {
-          currentSite: true
+          urlSelector: currentSite
         });
         check(Target.Performer, "a[href*='performer/']", {
           observe: true
@@ -1141,7 +1160,6 @@
         let exclude = ":not(a[href$='/add']):not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
         if (window.location.pathname.startsWith("/scenes/")) check(Target.Scene, "div.scene-info.card h3 > span", {
           observe: true,
-          currentSite: true,
           urlSelector: null,
           stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
           titleSelector: null
@@ -1154,7 +1172,6 @@
         });
         if (window.location.pathname.startsWith("/performers/")) check(Target.Performer, "div.PerformerInfo div.card-header h3 > span", {
           observe: true,
-          currentSite: true,
           urlSelector: null,
           stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
           nameSelector: null
@@ -1167,7 +1184,6 @@
         });
         if (window.location.pathname.startsWith("/studios/")) check(Target.Studio, ".studio-title > h3 > span", {
           observe: true,
-          currentSite: true,
           urlSelector: null,
           stashIdSelector: () => window.location.href.replace(/^.*\/studios\//, "").split(/[?#]/)[0],
           nameSelector: null
@@ -1180,7 +1196,6 @@
         });
         if (window.location.pathname.startsWith("/tags/")) check(Target.Tag, ".MainContent > .NarrowPage h3 > span", {
           observe: true,
-          currentSite: true,
           urlSelector: null,
           stashIdSelector: () => window.location.href.replace(/^.*\/tags\//, "").split(/[?#]/)[0],
           nameSelector: null
@@ -1193,7 +1208,7 @@
         break;
 
        default:
-        console.log("No configuration for website found.");
+        console.warn("No configuration for website found.");
         break;
       }
     })();

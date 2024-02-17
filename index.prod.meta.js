@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Stash Checker
-// @description Add checkmarks to scenes/performers on porn websites that are present in your own Stash instance.
-// @version 0.9.3
+// @description Add checkmarks on porn websites to scenes/performers that are present in your own Stash instance.
+// @version 0.10.0
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
 // @match *://coomer.su/*
@@ -31,6 +31,7 @@
 // @match *://xslist.org/*
 // @connect localhost
 // @connect *
+// @downloadURL https://github.com/timo95/stash-checker/releases/latest/download/index.prod.user.js
 // @grant GM.xmlHttpRequest
 // @grant GM.getValue
 // @grant GM.setValue
@@ -41,4 +42,5 @@
 // @license MIT
 // @run-at document-end
 // @source https://github.com/timo95/stash-checker
+// @updateURL https://github.com/timo95/stash-checker/releases/latest/download/index.prod.meta.js
 // ==/UserScript==
