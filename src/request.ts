@@ -13,8 +13,9 @@ export async function request(
     if (batchQueries) {
         return addQuery(endpoint, query);
     } else {
-        let namedQuery: GraphQlQuery = {query: `q:${query.query}`, onload: (data: any) => query.onload(data.q), onerror: query.onerror}
-        return sendQuery(endpoint, namedQuery);
+        return sendQuery(endpoint, `q:${query.query}`)
+            .then((data: any) => query.onload(data.q))
+            .catch(query.onerror);
     }
 }
 
@@ -26,7 +27,8 @@ async function addQuery(
     if (!batchQuery) {
         // init new batch
         let timerHandle = window.setTimeout(() => {
-            sendQuery(endpoint, buildBatchQuery(endpoint, batchQueries.get(endpoint)));
+            let query = buildBatchQuery(endpoint, batchQueries.get(endpoint));
+            sendQuery(endpoint, query.query).then(query.onload).catch(query.onerror);
             batchQueries.delete(endpoint);
         }, batchTimeout)
         batchQuery = {
@@ -39,7 +41,8 @@ async function addQuery(
     if (batchQuery.queries.length >= maxBatchSize) {
         window.clearTimeout(batchQuery.timerHandle);
         batchQueries.delete(endpoint);
-        return sendQuery(endpoint, buildBatchQuery(endpoint, batchQuery));
+        let query = buildBatchQuery(endpoint, batchQuery)
+        return sendQuery(endpoint, query.query).then(query.onload).catch(query.onerror);
     } else {
         batchQueries.set(endpoint, batchQuery);
     }
@@ -65,45 +68,53 @@ function buildBatchQuery(endpoint: StashEndpoint, batchQuery: BatchQuery): Graph
 
 async function sendQuery(
     endpoint: StashEndpoint,
-    query: GraphQlQuery
-): Promise<void> {
-    GM.xmlHttpRequest({
-        method: "GET",
-        url: `${endpoint.url}?query={${encodeURIComponent(query.query)}}`,  // encode query (important for url and some titles)
-        headers: {
-            "Content-Type": "application/json",
-            ApiKey: endpoint.key,
-        },
-        onload: function (response) {
-            switch (response.status) {
-                case 200: {
-                    try {
-                        let r = JSON.parse(response.responseText)
-                        if ("errors" in r) {
-                            r.errors.forEach((e: any) => {
-                                console.error(`Stash returned "${e.extensions.code}" error: ${e.message}`)
-                                if (query.onerror) query.onerror(e.message);
-                            });
-                        } else {
-                            if (query.onload) query.onload(r.data);
+    query: string
+): Promise<any> {
+    return new Promise((resolve, reject) => {
+        GM.xmlHttpRequest({
+            method: "GET",
+            url: `${endpoint.url}?query={${encodeURIComponent(query)}}`,  // encode query (important for url and some titles)
+            headers: {
+                "Content-Type": "application/json",
+                ApiKey: endpoint.key,
+            },
+            onload: (response) => {
+                switch (response.status) {
+                    case 200: {
+                        try {
+                            let r = JSON.parse(response.responseText)
+                            if ("errors" in r) {
+                                r.errors.forEach((e: any) => {
+                                    console.error(`Stash returned "${e.extensions.code}" error: ${e.message}`)
+                                    reject(e.message);
+                                });
+                            } else {
+                                resolve(r.data)
+                            }
+                        } catch (e) {
+                            console.debug("Failed to parse response: " + response.responseText);
+                            reject(response.responseText);
                         }
-                    } catch (e) {
-                        console.debug("Failed to parse response: " + response.responseText);
-                        if (query.onerror) query.onerror(response.responseText);
+                        break;
                     }
-                    break;
+                    default: {
+                        console.debug(`Error: Response code ${statusMessage(response.status, response.statusText)}`);
+                        reject(response.responseText ?? statusMessage(response.status, response.statusText));
+                    }
                 }
-                default: {
-                    console.debug(`Error: Response code ${statusMessage(response.status, response.statusText)}`);
-                    if (query.onerror) query.onerror(response.responseText ?? statusMessage(response.status, response.statusText));
-                }
+            },
+            onerror: (response) => {
+                console.debug(response);
+                reject(response.responseText ?? statusMessage(response.status, response.statusText));
+            },
+            onabort() {
+                reject("aborted");
+            },
+            ontimeout() {
+                reject("timeout");
             }
-        },
-        onerror: function (response) {
-            console.debug(response)
-            if (query.onerror) query.onerror();
-        }
-    });
+        });
+    })
 }
 
 function statusMessage(status: number, statusText?: string): string {
