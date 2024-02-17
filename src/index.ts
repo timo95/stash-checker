@@ -15,14 +15,14 @@ import {Target} from "./dataTypes";
 
     // Stop, if site block is configured
     if (await isSiteBlocked()) {
-        console.log("Userscript is deactivated for this site. Activate in userscript menu.");
+        console.info("Userscript is deactivated for this site. Activate in userscript menu.");
         return;
     }
     
     let currentSite = () => window.location.href
 
     // Main area
-    console.log("Running Stash Checker")
+    console.info("Running Stash Checker")
     switch (window.location.host) {
         case "www.iwara.tv": {
             let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
@@ -269,7 +269,7 @@ import {Target} from "./dataTypes";
             }
             break;
         default:
-            console.log("No configuration for website found.");
+            console.warn("No configuration for website found.");
             break;
     }
 })();

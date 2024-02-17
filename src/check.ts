@@ -97,7 +97,7 @@ async function checkElement(
             console.debug(`URL: ${url}`);
             await queryStash(url, (...args) => prefixSymbol(element, ...args, color), target, Type.Url, {stashIdEndpoint});
         } else {
-            console.log(`No URL for ${target} found.`);
+            console.info(`No URL for ${target} found.`);
         }
     }
     if (codeSelector) {
@@ -106,7 +106,7 @@ async function checkElement(
             console.debug(`Code: ${code}`);
             await queryStash(code, (...args) => prefixSymbol(element, ...args, color), target, Type.Code, {stashIdEndpoint});
         } else {
-            console.log(`No Code for ${target} found.`);
+            console.info(`No Code for ${target} found.`);
         }
     }
     if (stashIdSelector) {
@@ -115,7 +115,7 @@ async function checkElement(
             console.debug(`StashId: ${id}`);
             await queryStash(id, (...args) => prefixSymbol(element, ...args, color), target, Type.StashId, {stashIdEndpoint});
         } else {
-            console.log(`No StashId for ${target} found.`);
+            console.info(`No StashId for ${target} found.`);
         }
     }
     if ([Target.Performer, Target.Movie, Target.Studio, Target.Tag].includes(target) && nameSelector) {
@@ -127,9 +127,9 @@ async function checkElement(
             console.debug(`Name: ${name}`);
             await queryStash(name, (...args) => prefixSymbol(element, ...args, color), target, Type.Name, {stashIdEndpoint});
         } else if (name && ignore) {
-            console.log(`Ignore single name: ${name}`)
+            console.info(`Ignore single name: ${name}`)
         } else {
-            console.log(`No Name for ${target} found.`);
+            console.info(`No Name for ${target} found.`);
         }
     }
     if ([Target.Scene, Target.Gallery].includes(target) && titleSelector) {
@@ -138,7 +138,7 @@ async function checkElement(
             console.debug(`Title: ${title}`);
             await queryStash(title, (...args) => prefixSymbol(element, ...args, color), target, Type.Title, {stashIdEndpoint});
         } else {
-            console.log(`No Title for ${target} found.`);
+            console.info(`No Title for ${target} found.`);
         }
     }
 }
