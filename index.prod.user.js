@@ -528,20 +528,14 @@
     const maxBatchSize = 100;
     let batchQueries = new Map;
     async function request(endpoint, query, batchQueries = false) {
-      if (batchQueries) return addQuery(endpoint, query); else {
-        let namedQuery = {
-          query: `q:${query.query}`,
-          onload: data => query.onload(data.q),
-          onerror: query.onerror
-        };
-        return sendQuery(endpoint, namedQuery);
-      }
+      if (batchQueries) return addQuery(endpoint, query); else return sendQuery(endpoint, `q:${query.query}`).then((data => query.onload(data.q))).catch(query.onerror);
     }
     async function addQuery(endpoint, query) {
       let batchQuery = batchQueries.get(endpoint);
       if (!batchQuery) {
         let timerHandle = window.setTimeout((() => {
-          sendQuery(endpoint, buildBatchQuery(endpoint, batchQueries.get(endpoint)));
+          let query = buildBatchQuery(endpoint, batchQueries.get(endpoint));
+          sendQuery(endpoint, query.query).then(query.onload).catch(query.onerror);
           batchQueries.delete(endpoint);
         }), batchTimeout);
         batchQuery = {
@@ -553,7 +547,8 @@
       if (batchQuery.queries.length >= maxBatchSize) {
         window.clearTimeout(batchQuery.timerHandle);
         batchQueries.delete(endpoint);
-        return sendQuery(endpoint, buildBatchQuery(endpoint, batchQuery));
+        let query = buildBatchQuery(endpoint, batchQuery);
+        return sendQuery(endpoint, query.query).then(query.onload).catch(query.onerror);
       } else batchQueries.set(endpoint, batchQuery);
     }
     function buildBatchQuery(endpoint, batchQuery) {
@@ -578,75 +573,89 @@
       };
     }
     async function sendQuery(endpoint, query) {
-      GM.xmlHttpRequest({
-        method: "GET",
-        url: `${endpoint.url}?query={${encodeURIComponent(query.query)}}`,
-        headers: {
-          "Content-Type": "application/json",
-          ApiKey: endpoint.key
-        },
-        onload: function(response) {
-          switch (response.status) {
-           case 200:
-            try {
-              let r = JSON.parse(response.responseText);
-              if ("errors" in r) r.errors.forEach((e => {
-                console.error(`Stash returned "${e.extensions.code}" error: ${e.message}`);
-                if (query.onerror) query.onerror(e.message);
-              })); else if (query.onload) query.onload(r.data);
-            } catch (e) {
-              void 0;
-              if (query.onerror) query.onerror(response.responseText);
-            }
-            break;
+      return new Promise(((resolve, reject) => {
+        GM.xmlHttpRequest({
+          method: "GET",
+          url: `${endpoint.url}?query={${encodeURIComponent(query)}}`,
+          headers: {
+            "Content-Type": "application/json",
+            ApiKey: endpoint.key
+          },
+          onload: response => {
+            switch (response.status) {
+             case 200:
+              try {
+                let r = JSON.parse(response.responseText);
+                if ("errors" in r) r.errors.forEach((e => {
+                  console.error(`Stash returned "${e.extensions.code}" error: ${e.message}`);
+                  reject(e.message);
+                })); else resolve(r.data);
+              } catch (e) {
+                void 0;
+                reject(response.responseText);
+              }
+              break;
 
-           default:
+             default:
+              void 0;
+              reject(response.responseText ?? statusMessage(response.status, response.statusText));
+            }
+          },
+          onerror: response => {
             void 0;
-            if (query.onerror) query.onerror(response.responseText ?? statusMessage(response.status, response.statusText));
+            reject(response.responseText ?? statusMessage(response.status, response.statusText));
+          },
+          onabort() {
+            reject("aborted");
+          },
+          ontimeout() {
+            reject("timeout");
           }
-        },
-        onerror: function(response) {
-          void 0;
-          if (query.onerror) query.onerror();
-        }
-      });
+        });
+      }));
     }
     function statusMessage(status, statusText) {
       if (statusText && statusText.trim() !== "") return `${status}: ${statusText}`; else return `${status}: ${friendlyHttpStatus.get(status)}`;
     }
     let friendlyHttpStatus = new Map([ [ 200, "OK" ], [ 201, "Created" ], [ 202, "Accepted" ], [ 203, "Non-Authoritative Information" ], [ 204, "No Content" ], [ 205, "Reset Content" ], [ 206, "Partial Content" ], [ 300, "Multiple Choices" ], [ 301, "Moved Permanently" ], [ 302, "Found" ], [ 303, "See Other" ], [ 304, "Not Modified" ], [ 305, "Use Proxy" ], [ 306, "Unused" ], [ 307, "Temporary Redirect" ], [ 400, "Bad Request" ], [ 401, "Unauthorized" ], [ 402, "Payment Required" ], [ 403, "Forbidden" ], [ 404, "Not Found" ], [ 405, "Method Not Allowed" ], [ 406, "Not Acceptable" ], [ 407, "Proxy Authentication Required" ], [ 408, "Request Timeout" ], [ 409, "Conflict" ], [ 410, "Gone" ], [ 411, "Length Required" ], [ 412, "Precondition Required" ], [ 413, "Request Entry Too Large" ], [ 414, "Request-URI Too Long" ], [ 415, "Unsupported Media Type" ], [ 416, "Requested Range Not Satisfiable" ], [ 417, "Expectation Failed" ], [ 418, "I'm a teapot" ], [ 429, "Too Many Requests" ], [ 500, "Internal Server Error" ], [ 501, "Not Implemented" ], [ 502, "Bad Gateway" ], [ 503, "Service Unavailable" ], [ 504, "Gateway Timeout" ], [ 505, "HTTP Version Not Supported" ] ]);
-    const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
-    let settingsModal;
-    let settings;
-    let stashEndpoints = [];
-    async function initMenu() {
-      GM.registerMenuCommand("Settings", openSettings, "s");
-      if (await isSiteBlocked()) GM.registerMenuCommand(`Activate for ${window.location.host}`, unblockSite, "a"); else GM.registerMenuCommand(`Deactivate for ${window.location.host}`, blockSite, "d");
-    }
-    async function initSettings() {
-      settingsModal = document.createElement("div");
+    function initSettings() {
+      let settingsModal = document.createElement("div");
+      settingsModal.id = "stashChecker-settingsModal";
       settingsModal.style.display = "none";
       settingsModal.classList.add("stashChecker", "modal");
-      settingsModal.addEventListener("click", (function(event) {
+      settingsModal.addEventListener("click", (event => {
         if (event.target === settingsModal) settingsModal.style.display = "none";
       }));
+      let settings = document.createElement("div");
+      settings.id = "stashChecker-settings";
+      settings.classList.add("stashChecker", "settings");
+      settingsModal.append(settings);
+      document.body.append(settingsModal);
+    }
+    function appendSettingsSection(...nodes) {
+      let settings = document.getElementById("stashChecker-settings");
+      settings.append(...nodes);
+    }
+    function openSettings() {
+      let settingsModal = document.getElementById("stashChecker-settingsModal");
+      settingsModal.style.display = "initial";
+    }
+    let stashEndpoints = [];
+    async function initEndpointSettings() {
       let defaultData = [ {
         name: "Localhost",
         url: "http://localhost:9999/graphql",
         key: ""
       } ];
       stashEndpoints = await getValue("stashEndpoints", defaultData);
-      settings = document.createElement("div");
-      settings.id = "stashChecker-settings";
-      settings.classList.add("stashChecker", "settings");
-      settings.innerHTML = "<h2>Stash Endpoints</h2>";
+      let heading = document.createElement("h2");
+      heading.innerHTML = "Stash Endpoints";
       let description = document.createElement("p");
       description.classList.add("stashChecker", "sub-heading");
       description.innerHTML = "The GraphQL endpoint URL can be generated by appending '/graphql' to your Stash base URL. The API key can be found on your security settings page. Leave the field empty, if none is required.";
-      settings.append(description);
-      settings.append(await initEndpoints());
-      settingsModal.append(settings);
-      document.body.append(settingsModal);
+      appendSettingsSection(heading);
+      appendSettingsSection(description);
+      appendSettingsSection(await initEndpoints());
       await updateEndpoints();
     }
     async function initEndpoints() {
@@ -713,20 +722,6 @@
       stashEndpoints.splice(index, 1);
       void setValue("stashEndpoints", stashEndpoints);
       await updateEndpoints();
-    }
-    async function isSiteBlocked() {
-      return await getValue(BLOCKED_SITE_KEY, false);
-    }
-    async function blockSite() {
-      await setValue(BLOCKED_SITE_KEY, true);
-      window.location.reload();
-    }
-    async function unblockSite() {
-      await deleteValue(BLOCKED_SITE_KEY);
-      window.location.reload();
-    }
-    async function openSettings() {
-      settingsModal.style.display = "initial";
     }
     async function getVersion(endpoint, element) {
       let onload = data => {
@@ -863,9 +858,26 @@
       if (observe) onAddition(elementSelector, (element => checkElement(target, element, checkConfig)));
       document.querySelectorAll(elementSelector).forEach((e => checkElement(target, e, checkConfig)));
     }
+    const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
+    async function initMenu() {
+      GM.registerMenuCommand("Settings", openSettings, "s");
+      if (await isSiteBlocked()) GM.registerMenuCommand(`Activate for ${window.location.host}`, unblockSite, "a"); else GM.registerMenuCommand(`Deactivate for ${window.location.host}`, blockSite, "d");
+    }
+    async function isSiteBlocked() {
+      return await getValue(BLOCKED_SITE_KEY, false);
+    }
+    async function blockSite() {
+      await setValue(BLOCKED_SITE_KEY, true);
+      window.location.reload();
+    }
+    async function unblockSite() {
+      await deleteValue(BLOCKED_SITE_KEY);
+      window.location.reload();
+    }
     (async function() {
       await initTooltip();
-      await initSettings();
+      initSettings();
+      await initEndpointSettings();
       await initMenu();
       if (await isSiteBlocked()) {
         console.info("Userscript is deactivated for this site. Activate in userscript menu.");
