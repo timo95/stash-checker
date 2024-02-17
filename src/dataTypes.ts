@@ -26,6 +26,23 @@ export interface StashQuery {
 }
 
 /**
+ * A batch collector of requests.
+ */
+export interface BatchQuery {
+    timerHandle: number,
+    requests: Request[],
+}
+
+/**
+ * A graphql query and result handlers.
+ */
+export interface Request {
+    query: string,
+    onload?: (data: any) => void,
+    onerror?: (message?: string) => void
+}
+
+/**
  * Entry types in Stash
  */
 export enum Target {

@@ -57,7 +57,7 @@ async function queryStash(
 
     // Get config values or wait for popup if it is not stored
     stashEndpoints.forEach((endpoint: StashEndpoint) => {
-        request(endpoint, query, true, (data: any) => onload(target, type, endpoint, access(data)));
+        request(endpoint, {query, onload: (data: any) => onload(target, type, endpoint, access(data))}, true);
     });
 }
 

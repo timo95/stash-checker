@@ -141,11 +141,13 @@ async function openSettings() {
 }
 
 async function getVersion(endpoint: StashEndpoint, element: HTMLElement) {
-    await request(endpoint, "version{version}", false, data => {
+    let onload = (data: any) => {
         element.innerHTML += `<span class="version"> (${data.version})</span>`
-    }, (message) => {
+    }
+    let onerror = (message?: string) => {
         let explanation = "no connection";
         if (message) explanation = message.length < 30 ? message?.trim() : "wrong path"
         element.innerHTML += `<span class="version"> (${explanation})</span>`
-    })
+    }
+    await request(endpoint, {query: "version{version}", onload, onerror})
 }

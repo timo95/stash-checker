@@ -1,35 +1,26 @@
-import {StashEndpoint} from "./dataTypes";
+import {BatchQuery, Request, StashEndpoint} from "./dataTypes";
 
-const batchTimeout = 1;
+const batchTimeout = 10;
 const maxBatchSize = 100;
-
-interface BatchQuery {
-    timerHandle: number,
-    queries: string[],
-    onload: (((data: any) => void) | undefined)[],
-    onerror: (((message?: string) => void) | undefined)[],
-}
 
 let batchQueries: Map<StashEndpoint, BatchQuery> = new Map();
 
 export async function request(
     endpoint: StashEndpoint,
-    query: string, batchRequest: boolean,
-    onload?: (data: any) => void,
-    onerror?: (message?: string) => void
+    request: Request,
+    batchRequest: boolean = false
 ): Promise<void> {
     if (batchRequest) {
-        return addRequest(endpoint, query, onload, onerror);
+        return addRequest(endpoint, request);
     } else {
-        return sendRequest(endpoint, `q:${query}`, (data: any) => onload(data.q), onerror);
+        let namedRequest: Request = {query: `q:${request.query}`, onload: (data: any) => request.onload(data.q), onerror: request.onerror}
+        return sendRequest(endpoint, namedRequest);
     }
 }
 
 async function addRequest(
     endpoint: StashEndpoint,
-    query: string,
-    onload?: (data: any) => void,
-    onerror?: (response?: string) => void
+    request: Request
 ): Promise<void> {
     let batchQuery = batchQueries.get(endpoint)
     if (!batchQuery) {
@@ -40,17 +31,12 @@ async function addRequest(
         }, batchTimeout)
         batchQuery = {
             timerHandle,
-            queries: [],
-            onload: [],
-            onerror: [],
+            requests: [],
         };
     }
-    // new request
-    batchQuery.queries.push(query);
-    batchQuery.onload.push(onload);
-    batchQuery.onerror.push(onerror);
+    batchQuery.requests.push(request);
     // send or save
-    if (batchQuery.queries.length >= maxBatchSize) {
+    if (batchQuery.requests.length >= maxBatchSize) {
         window.clearTimeout(batchQuery.timerHandle);
         batchQueries.delete(endpoint);
         return batchRequest(endpoint, batchQuery);
@@ -60,32 +46,31 @@ async function addRequest(
 }
 
 async function batchRequest(endpoint: StashEndpoint, batchQuery: BatchQuery): Promise<void> {
-    let query = batchQuery.queries.map((query, index) => `q${index}:${query}`).join()
+    let query = batchQuery.requests.map((request, index) => `q${index}:${request.query}`).join()
     let onload = (data: any) => {
-        console.debug(`Received batch request response of size ${batchQuery.queries.length} from endpoint '${endpoint.name}'`)
-        batchQuery.onload.forEach((onload, index) => {
-            if (onload) onload(data[`q${index}`])
+        console.debug(`Received batch request response of size ${batchQuery.requests.length} from endpoint '${endpoint.name}'`)
+        batchQuery.requests.forEach((request, index) => {
+            if (request.onload) request.onload(data[`q${index}`])
         })
     }
     let onerror = (message?: string) => {
-        console.debug(`Received error for batch request of size ${batchQuery.queries.length} from endpoint '${endpoint.name}'`)
-        batchQuery.onerror.forEach((onerror) => {
-            if (onerror) onerror(message);
+        console.debug(`Received error for batch request of size ${batchQuery.requests.length} from endpoint '${endpoint.name}'`)
+        batchQuery.requests.forEach((request) => {
+            if (request.onerror) request.onerror(message);
         })
     }
-    console.info(`Sending batch request of size ${batchQuery.queries.length} to endpoint '${endpoint.name}'`)
-    return sendRequest(endpoint, query, onload, onerror);
+    console.info(`Sending batch request of size ${batchQuery.requests.length} to endpoint '${endpoint.name}'`)
+    let request: Request = {query, onload, onerror}
+    return sendRequest(endpoint, request);
 }
 
 async function sendRequest(
     endpoint: StashEndpoint,
-    query: string,
-    onload?: (data: any) => void,
-    onerror?: (message?: string) => void
+    request: Request
 ): Promise<void> {
     GM.xmlHttpRequest({
         method: "GET",
-        url: `${endpoint.url}?query={${encodeURIComponent(query)}}`,  // encode query (important for url and some titles)
+        url: `${endpoint.url}?query={${encodeURIComponent(request.query)}}`,  // encode query (important for url and some titles)
         headers: {
             "Content-Type": "application/json",
             ApiKey: endpoint.key,
@@ -98,26 +83,26 @@ async function sendRequest(
                         if ("errors" in r) {
                             r.errors.forEach((e: any) => {
                                 console.error(`Stash returned "${e.extensions.code}" error: ${e.message}`)
-                                if (onerror) onerror(e.message);
+                                if (request.onerror) request.onerror(e.message);
                             });
                         } else {
-                            if (onload) onload(r.data);
+                            if (request.onload) request.onload(r.data);
                         }
                     } catch (e) {
                         console.debug("Failed to parse response: " + response.responseText);
-                        if (onerror) onerror(response.responseText);
+                        if (request.onerror) request.onerror(response.responseText);
                     }
                     break;
                 }
                 default: {
                     console.debug(`Error: Response code ${statusMessage(response.status, response.statusText)}`);
-                    if (onerror) onerror(response.responseText ?? statusMessage(response.status, response.statusText));
+                    if (request.onerror) request.onerror(response.responseText ?? statusMessage(response.status, response.statusText));
                 }
             }
         },
         onerror: function (response) {
             console.debug(response)
-            if (onerror) onerror();
+            if (request.onerror) request.onerror();
         }
     });
 }
