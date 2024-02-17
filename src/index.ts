@@ -1,16 +1,16 @@
 import "./style/main.scss";
 import {check} from "./check";
-import {initMenu, initSettings, isSiteBlocked} from "./settings";
+import {initEndpointSettings} from "./settings/endpoints";
 import {initTooltip} from "./tooltipElement";
 import {firstTextChild} from "./utils";
 import {Target} from "./dataTypes";
+import {initSettingsElement} from "./settings/settingsElement";
+import {initMenu, isSiteBlocked} from "./settings/menu";
 
 (async function () {
-    // Create (invisible) tooltip window
     await initTooltip();
-    // Create (invisible) settings modal
-    await initSettings();
-    // Register menu items
+    initSettingsElement();
+    await initEndpointSettings();
     await initMenu();
 
     // Stop, if site block is configured

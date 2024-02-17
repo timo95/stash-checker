@@ -1,5 +1,5 @@
 import {prefixSymbol} from "./tooltip";
-import {stashEndpoints} from "./settings";
+import {stashEndpoints} from "./settings/endpoints";
 import {firstTextChild} from "./utils";
 import {CheckOptions, StashEndpoint, Target, Type} from "./dataTypes";
 import {request} from "./request";
