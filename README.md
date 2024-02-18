@@ -4,7 +4,8 @@ Stash Checker is an userscript for porn websites to check if a Scene/Performer i
 It shows a checkmark if an item was found in your Stash.
 Hovering over the checkmark gives you a tooltip with information about the item in your Stash.
 
-<img src="docs/assets/tooltip.png" alt="tooltip" width="500"/>
+<img src="docs/assets/tooltip-javlibrary.png" alt="tooltip javlibrary" title="JavLibrary" width="350"/>
+<img src="docs/assets/tooltip-stashdb.png" alt="tooltip stashdb" title="StashDB" width="350"/>
 
 ## Features
 
@@ -29,11 +30,11 @@ Click on the `Raw` button to import the script to Tampermonkey.
 
 Settings can be opened using the Tampermonkey dropdown menu.
 
-<img src="docs/assets/menu.png" alt="menu" width="200"/>
+<img src="docs/assets/menu.png" alt="menu" title="Tampermonkey Menu" width="200"/>
 
 Here you can edit the Stash URL and API key or add another Stash endpoint.
 
-<img src="docs/assets/settings.png" alt="settings" width="500"/>
+<img src="docs/assets/settings.png" alt="settings" title="Userscript Settings" width="500"/>
 
 ## Stash version compatibility
 
