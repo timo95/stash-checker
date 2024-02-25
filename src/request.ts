@@ -1,10 +1,12 @@
 import {BatchQuery, GraphQlQuery, StashEndpoint} from "./dataTypes";
 import {friendlyHttpStatus} from "./utils";
+import {JobQueue} from "./jobQueue";
 
 const batchTimeout = 10;
 const maxBatchSize = 100;
 
 let batchQueries: Map<StashEndpoint, BatchQuery> = new Map();
+let batchQueues: Map<StashEndpoint, JobQueue> = new Map();
 
 export async function request(
     endpoint: StashEndpoint,
@@ -26,29 +28,42 @@ async function addQuery(
     query: string
 ): Promise<any> {
     return new Promise((resolve, reject) => {
+        let batchQueue = batchQueues.get(endpoint);
+        if (!batchQueue) {
+            // Init new queue. Every queue gets initialized once and never deleted
+            batchQueue = new JobQueue(2)
+            batchQueues.set(endpoint, batchQueue)
+        }
+
         let batchQuery = batchQueries.get(endpoint)
         if (!batchQuery) {
-            // init new batch
+            // Init new batch collector
             let timerHandle = window.setTimeout(() => {
+                // Send batch after timeout and delete map entry
                 let query = buildBatchQuery(endpoint, batchQueries.get(endpoint));
-                sendQuery(endpoint, query.query).then(query.resolve).catch(query.reject);
+                batchQueue.enqueue(() => sendQuery(endpoint, query.query))
+                    .then(query.resolve)
+                    .catch(query.reject);
                 batchQueries.delete(endpoint);
             }, batchTimeout)
             batchQuery = {
                 timerHandle,
                 queries: [],
             };
+            batchQueries.set(endpoint, batchQuery);
         }
-        let graphQlQuery: GraphQlQuery = { query, resolve, reject }
-        batchQuery.queries.push(graphQlQuery);
-        // send or save
+
+        // Add new query to batch collector
+        batchQuery.queries.push({ query, resolve, reject });
+
         if (batchQuery.queries.length >= maxBatchSize) {
+            // Send full batch and delete map entry
             window.clearTimeout(batchQuery.timerHandle);
             batchQueries.delete(endpoint);
             let query = buildBatchQuery(endpoint, batchQuery)
-            return sendQuery(endpoint, query.query).then(query.resolve).catch(query.reject);
-        } else {
-            batchQueries.set(endpoint, batchQuery);
+            return batchQueue.enqueue(() => sendQuery(endpoint, query.query))
+                .then(query.resolve)
+                .catch(query.reject);
         }
     });
 }

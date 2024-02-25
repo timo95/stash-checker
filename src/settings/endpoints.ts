@@ -93,14 +93,14 @@ async function deleteEndpointListener(this: HTMLButtonElement) {
 }
 
 async function getVersion(endpoint: StashEndpoint, element: HTMLElement) {
-    let onload = (data: any) => {
+    let resolve = (data: any) => {
         element.innerHTML += `<span class="version"> (${data.version})</span>`
     }
-    let onerror = (message?: string) => {
+    let reject = (message?: string) => {
         let explanation = "no connection";
         if (message) explanation = message.length < 30 ? message?.trim() : "wrong URL"
         element.innerHTML += `<span class="version"> (${explanation})</span>`
     }
     await request(endpoint, "version{version}")
-        .then(onload).catch(onerror)
+        .then(resolve).catch(reject)
 }
