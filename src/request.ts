@@ -8,45 +8,49 @@ let batchQueries: Map<StashEndpoint, BatchQuery> = new Map();
 
 export async function request(
     endpoint: StashEndpoint,
-    query: GraphQlQuery,
+    query: string,
     batchQueries: boolean = false
-): Promise<void> {
+): Promise<any> {
     if (batchQueries) {
         return addQuery(endpoint, query);
     } else {
-        return sendQuery(endpoint, `q:${query.query}`)
-            .then((data: any) => query.onload(data.q))
-            .catch(query.onerror);
+        return new Promise((resolve, reject) => sendQuery(endpoint, `q:${query}`)
+            .then((data: any) => resolve(data.q))
+            .catch(reject)
+        );
     }
 }
 
 async function addQuery(
     endpoint: StashEndpoint,
-    query: GraphQlQuery
-): Promise<void> {
-    let batchQuery = batchQueries.get(endpoint)
-    if (!batchQuery) {
-        // init new batch
-        let timerHandle = window.setTimeout(() => {
-            let query = buildBatchQuery(endpoint, batchQueries.get(endpoint));
-            sendQuery(endpoint, query.query).then(query.onload).catch(query.onerror);
+    query: string
+): Promise<any> {
+    return new Promise((resolve, reject) => {
+        let batchQuery = batchQueries.get(endpoint)
+        if (!batchQuery) {
+            // init new batch
+            let timerHandle = window.setTimeout(() => {
+                let query = buildBatchQuery(endpoint, batchQueries.get(endpoint));
+                sendQuery(endpoint, query.query).then(query.onload).catch(query.onerror);
+                batchQueries.delete(endpoint);
+            }, batchTimeout)
+            batchQuery = {
+                timerHandle,
+                queries: [],
+            };
+        }
+        let graphQlQuery: GraphQlQuery = { query, onload: resolve, onerror: reject }
+        batchQuery.queries.push(graphQlQuery);
+        // send or save
+        if (batchQuery.queries.length >= maxBatchSize) {
+            window.clearTimeout(batchQuery.timerHandle);
             batchQueries.delete(endpoint);
-        }, batchTimeout)
-        batchQuery = {
-            timerHandle,
-            queries: [],
-        };
-    }
-    batchQuery.queries.push(query);
-    // send or save
-    if (batchQuery.queries.length >= maxBatchSize) {
-        window.clearTimeout(batchQuery.timerHandle);
-        batchQueries.delete(endpoint);
-        let query = buildBatchQuery(endpoint, batchQuery)
-        return sendQuery(endpoint, query.query).then(query.onload).catch(query.onerror);
-    } else {
-        batchQueries.set(endpoint, batchQuery);
-    }
+            let query = buildBatchQuery(endpoint, batchQuery)
+            return sendQuery(endpoint, query.query).then(query.onload).catch(query.onerror);
+        } else {
+            batchQueries.set(endpoint, batchQuery);
+        }
+    });
 }
 
 function buildBatchQuery(endpoint: StashEndpoint, batchQuery: BatchQuery): GraphQlQuery {
