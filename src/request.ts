@@ -31,7 +31,7 @@ async function addQuery(
             // init new batch
             let timerHandle = window.setTimeout(() => {
                 let query = buildBatchQuery(endpoint, batchQueries.get(endpoint));
-                sendQuery(endpoint, query.query).then(query.onload).catch(query.onerror);
+                sendQuery(endpoint, query.query).then(query.resolve).catch(query.reject);
                 batchQueries.delete(endpoint);
             }, batchTimeout)
             batchQuery = {
@@ -39,14 +39,14 @@ async function addQuery(
                 queries: [],
             };
         }
-        let graphQlQuery: GraphQlQuery = { query, onload: resolve, onerror: reject }
+        let graphQlQuery: GraphQlQuery = { query, resolve, reject }
         batchQuery.queries.push(graphQlQuery);
         // send or save
         if (batchQuery.queries.length >= maxBatchSize) {
             window.clearTimeout(batchQuery.timerHandle);
             batchQueries.delete(endpoint);
             let query = buildBatchQuery(endpoint, batchQuery)
-            return sendQuery(endpoint, query.query).then(query.onload).catch(query.onerror);
+            return sendQuery(endpoint, query.query).then(query.resolve).catch(query.reject);
         } else {
             batchQueries.set(endpoint, batchQuery);
         }
@@ -55,26 +55,27 @@ async function addQuery(
 
 function buildBatchQuery(endpoint: StashEndpoint, batchQuery: BatchQuery): GraphQlQuery {
     let query = batchQuery.queries.map((request, index) => `q${index}:${request.query}`).join()
-    let onload = (data: any) => {
+    let resolve = (data: any) => {
         console.debug(`Received batch query response of size ${batchQuery.queries.length} from endpoint '${endpoint.name}'`)
         batchQuery.queries.forEach((request, index) => {
-            if (request.onload) request.onload(data[`q${index}`])
+            if (request.resolve) request.resolve(data[`q${index}`])
         })
     }
-    let onerror = (message?: string) => {
+    let reject = (message?: string) => {
         console.debug(`Received error for batch query of size ${batchQuery.queries.length} from endpoint '${endpoint.name}'`)
         batchQuery.queries.forEach((request) => {
-            if (request.onerror) request.onerror(message);
+            if (request.reject) request.reject(message);
         })
     }
-    console.info(`Sending batch query of size ${batchQuery.queries.length} to endpoint '${endpoint.name}'`)
-    return {query, onload, onerror};
+    console.info(`Build batch query of size ${batchQuery.queries.length} for endpoint '${endpoint.name}'`)
+    return {query, resolve, reject};
 }
 
 async function sendQuery(
     endpoint: StashEndpoint,
     query: string
 ): Promise<any> {
+    console.debug(`Sending query to endpoint '${endpoint.name}'`);
     return new Promise((resolve, reject) => {
         GM.xmlHttpRequest({
             method: "GET",

@@ -38,8 +38,8 @@ export interface BatchQuery {
  */
 export interface GraphQlQuery {
     query: string,
-    onload?: (data: any) => void,
-    onerror?: (message?: string) => void
+    resolve?: (data: any) => void,
+    reject?: (message?: string) => void
 }
 
 /**
