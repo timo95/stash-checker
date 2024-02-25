@@ -98,7 +98,7 @@ async function getVersion(endpoint: StashEndpoint, element: HTMLElement) {
     }
     let onerror = (message?: string) => {
         let explanation = "no connection";
-        if (message) explanation = message.length < 30 ? message?.trim() : "wrong path"
+        if (message) explanation = message.length < 30 ? message?.trim() : "wrong URL"
         element.innerHTML += `<span class="version"> (${explanation})</span>`
     }
     await request(endpoint, {query: "version{version}", onload, onerror})
