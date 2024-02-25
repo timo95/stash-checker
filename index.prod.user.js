@@ -405,6 +405,7 @@
       }
       return bytes.toFixed(2) + label;
     }
+    let friendlyHttpStatus = new Map([ [ 200, "OK" ], [ 201, "Created" ], [ 202, "Accepted" ], [ 203, "Non-Authoritative Information" ], [ 204, "No Content" ], [ 205, "Reset Content" ], [ 206, "Partial Content" ], [ 300, "Multiple Choices" ], [ 301, "Moved Permanently" ], [ 302, "Found" ], [ 303, "See Other" ], [ 304, "Not Modified" ], [ 305, "Use Proxy" ], [ 306, "Unused" ], [ 307, "Temporary Redirect" ], [ 400, "Bad Request" ], [ 401, "Unauthorized" ], [ 402, "Payment Required" ], [ 403, "Forbidden" ], [ 404, "Not Found" ], [ 405, "Method Not Allowed" ], [ 406, "Not Acceptable" ], [ 407, "Proxy Authentication Required" ], [ 408, "Request Timeout" ], [ 409, "Conflict" ], [ 410, "Gone" ], [ 411, "Length Required" ], [ 412, "Precondition Required" ], [ 413, "Request Entry Too Large" ], [ 414, "Request-URI Too Long" ], [ 415, "Unsupported Media Type" ], [ 416, "Requested Range Not Satisfiable" ], [ 417, "Expectation Failed" ], [ 418, "I'm a teapot" ], [ 429, "Too Many Requests" ], [ 500, "Internal Server Error" ], [ 501, "Not Implemented" ], [ 502, "Bad Gateway" ], [ 503, "Service Unavailable" ], [ 504, "Gateway Timeout" ], [ 505, "HTTP Version Not Supported" ] ]);
     const typeToString = new Map([ [ Type.Url, "URL" ], [ Type.Code, "Code" ], [ Type.StashId, "StashId" ], [ Type.Name, "Name" ], [ Type.Title, "Title" ] ]);
     function getExistingSymbol(element) {
       if (element.getAttribute("data-type") === "stash-symbol") return element; else return Array.from(element.childNodes).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n)).map(getExistingSymbol).find((n => n));
@@ -524,55 +525,108 @@
     async function deleteValue(key) {
       return GM.deleteValue(key);
     }
+    var Status;
+    (function(Status) {
+      Status[Status["WAITING"] = 0] = "WAITING";
+      Status[Status["RUNNING"] = 1] = "RUNNING";
+      Status[Status["FINISHED"] = 2] = "FINISHED";
+    })(Status || (Status = {}));
+    class JobQueue {
+      constructor(parallel = 1) {
+        this.queue = [];
+        this.parallel = parallel;
+      }
+      enqueue(job) {
+        return new Promise(((resolve, reject) => {
+          this.queue.push({
+            job,
+            resolve,
+            reject,
+            status: Status.WAITING
+          });
+          this.dequeue();
+        }));
+      }
+      dequeue() {
+        let job = this.queue.find(((job, index) => index < this.parallel && job.status === Status.WAITING));
+        if (job) {
+          job.status = Status.RUNNING;
+          void 0;
+          job.job().then(job.resolve).catch(job.reject).finally((() => {
+            job.status = Status.FINISHED;
+            this.queue = this.queue.filter((job => job.status !== Status.FINISHED));
+            void 0;
+            this.dequeue();
+          }));
+        }
+      }
+      length() {
+        return this.queue.length;
+      }
+    }
     const batchTimeout = 10;
     const maxBatchSize = 100;
     let batchQueries = new Map;
+    let batchQueues = new Map;
     async function request(endpoint, query, batchQueries = false) {
-      if (batchQueries) return addQuery(endpoint, query); else return sendQuery(endpoint, `q:${query.query}`).then((data => query.onload(data.q))).catch(query.onerror);
+      if (batchQueries) return addQuery(endpoint, query); else return new Promise(((resolve, reject) => sendQuery(endpoint, `q:${query}`).then((data => resolve(data.q))).catch(reject)));
     }
     async function addQuery(endpoint, query) {
-      let batchQuery = batchQueries.get(endpoint);
-      if (!batchQuery) {
-        let timerHandle = window.setTimeout((() => {
-          let query = buildBatchQuery(endpoint, batchQueries.get(endpoint));
-          sendQuery(endpoint, query.query).then(query.onload).catch(query.onerror);
+      return new Promise(((resolve, reject) => {
+        let batchQueue = batchQueues.get(endpoint);
+        if (!batchQueue) {
+          batchQueue = new JobQueue(2);
+          batchQueues.set(endpoint, batchQueue);
+        }
+        let batchQuery = batchQueries.get(endpoint);
+        if (!batchQuery) {
+          let timerHandle = window.setTimeout((() => {
+            let query = buildBatchQuery(endpoint, batchQueries.get(endpoint));
+            batchQueue.enqueue((() => sendQuery(endpoint, query.query))).then(query.resolve).catch(query.reject);
+            batchQueries.delete(endpoint);
+          }), batchTimeout);
+          batchQuery = {
+            timerHandle,
+            queries: []
+          };
+          batchQueries.set(endpoint, batchQuery);
+        }
+        batchQuery.queries.push({
+          query,
+          resolve,
+          reject
+        });
+        if (batchQuery.queries.length >= maxBatchSize) {
+          window.clearTimeout(batchQuery.timerHandle);
           batchQueries.delete(endpoint);
-        }), batchTimeout);
-        batchQuery = {
-          timerHandle,
-          queries: []
-        };
-      }
-      batchQuery.queries.push(query);
-      if (batchQuery.queries.length >= maxBatchSize) {
-        window.clearTimeout(batchQuery.timerHandle);
-        batchQueries.delete(endpoint);
-        let query = buildBatchQuery(endpoint, batchQuery);
-        return sendQuery(endpoint, query.query).then(query.onload).catch(query.onerror);
-      } else batchQueries.set(endpoint, batchQuery);
+          let query = buildBatchQuery(endpoint, batchQuery);
+          return batchQueue.enqueue((() => sendQuery(endpoint, query.query))).then(query.resolve).catch(query.reject);
+        }
+      }));
     }
     function buildBatchQuery(endpoint, batchQuery) {
       let query = batchQuery.queries.map(((request, index) => `q${index}:${request.query}`)).join();
-      let onload = data => {
+      let resolve = data => {
         void 0;
         batchQuery.queries.forEach(((request, index) => {
-          if (request.onload) request.onload(data[`q${index}`]);
+          if (request.resolve) request.resolve(data[`q${index}`]);
         }));
       };
-      let onerror = message => {
+      let reject = message => {
         void 0;
         batchQuery.queries.forEach((request => {
-          if (request.onerror) request.onerror(message);
+          if (request.reject) request.reject(message);
         }));
       };
-      console.info(`Sending batch query of size ${batchQuery.queries.length} to endpoint '${endpoint.name}'`);
+      console.info(`Build batch query of size ${batchQuery.queries.length} for endpoint '${endpoint.name}'`);
       return {
         query,
-        onload,
-        onerror
+        resolve,
+        reject
       };
     }
     async function sendQuery(endpoint, query) {
+      void 0;
       return new Promise(((resolve, reject) => {
         GM.xmlHttpRequest({
           method: "GET",
@@ -617,7 +671,6 @@
     function statusMessage(status, statusText) {
       if (statusText && statusText.trim() !== "") return `${status}: ${statusText}`; else return `${status}: ${friendlyHttpStatus.get(status)}`;
     }
-    let friendlyHttpStatus = new Map([ [ 200, "OK" ], [ 201, "Created" ], [ 202, "Accepted" ], [ 203, "Non-Authoritative Information" ], [ 204, "No Content" ], [ 205, "Reset Content" ], [ 206, "Partial Content" ], [ 300, "Multiple Choices" ], [ 301, "Moved Permanently" ], [ 302, "Found" ], [ 303, "See Other" ], [ 304, "Not Modified" ], [ 305, "Use Proxy" ], [ 306, "Unused" ], [ 307, "Temporary Redirect" ], [ 400, "Bad Request" ], [ 401, "Unauthorized" ], [ 402, "Payment Required" ], [ 403, "Forbidden" ], [ 404, "Not Found" ], [ 405, "Method Not Allowed" ], [ 406, "Not Acceptable" ], [ 407, "Proxy Authentication Required" ], [ 408, "Request Timeout" ], [ 409, "Conflict" ], [ 410, "Gone" ], [ 411, "Length Required" ], [ 412, "Precondition Required" ], [ 413, "Request Entry Too Large" ], [ 414, "Request-URI Too Long" ], [ 415, "Unsupported Media Type" ], [ 416, "Requested Range Not Satisfiable" ], [ 417, "Expectation Failed" ], [ 418, "I'm a teapot" ], [ 429, "Too Many Requests" ], [ 500, "Internal Server Error" ], [ 501, "Not Implemented" ], [ 502, "Bad Gateway" ], [ 503, "Service Unavailable" ], [ 504, "Gateway Timeout" ], [ 505, "HTTP Version Not Supported" ] ]);
     function initSettingsWindow() {
       let settingsModal = document.createElement("div");
       settingsModal.id = "stashChecker-settingsModal";
@@ -732,19 +785,15 @@
       await updateEndpoints(getSettingsSection("endpoints"));
     }
     async function getVersion(endpoint, element) {
-      let onload = data => {
+      let resolve = data => {
         element.innerHTML += `<span class="version"> (${data.version})</span>`;
       };
-      let onerror = message => {
+      let reject = message => {
         let explanation = "no connection";
-        if (message) explanation = message.length < 30 ? message?.trim() : "wrong path";
+        if (message) explanation = message.length < 30 ? message?.trim() : "wrong URL";
         element.innerHTML += `<span class="version"> (${explanation})</span>`;
       };
-      await request(endpoint, {
-        query: "version{version}",
-        onload,
-        onerror
-      });
+      await request(endpoint, "version{version}").then(resolve).catch(reject);
     }
     async function queryStash(queryString, onload, target, type, {stashIdEndpoint}) {
       let criterion;
@@ -794,11 +843,7 @@
         return;
       }
       stashEndpoints.forEach((endpoint => {
-        let graphQlQuery = {
-          query,
-          onload: data => onload(target, type, endpoint, access(data))
-        };
-        request(endpoint, graphQlQuery, true);
+        request(endpoint, query, true).then((data => onload(target, type, endpoint, access(data))));
       }));
     }
     async function checkElement(target, element, {prepareUrl = url => url, urlSelector = e => e.closest("a").href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = e => firstTextChild(e)?.textContent?.trim(), titleSelector = e => firstTextChild(e)?.textContent?.trim(), color = () => "green"}) {
