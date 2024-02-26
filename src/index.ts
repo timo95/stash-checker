@@ -62,11 +62,12 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
             break;
         }
         case "coomer.su":
-        case "kemono.su":
+        case "kemono.su": {
             check(Target.Scene, "h1.post__title", {urlSelector: currentSite, titleSelector: null});
             check(Target.Scene, ".post-card > a[href*='/post/']", {titleSelector: null});
             break;
-        case "adultanime.dbsearch.net":
+        }
+        case "adultanime.dbsearch.net": {
             if (document.querySelector("article > section[id='info-table']") !== null) {
                 check(Target.Scene, "div[id='main-inner'] > article > h2", {
                     urlSelector: currentSite,
@@ -75,7 +76,8 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
             }
             check(Target.Scene, "div.item-info > h4 > a, div.item-info > h5 > a");
             break;
-        case "xslist.org":
+        }
+        case "xslist.org": {
             check(Target.Performer, "span[itemprop='name']", {urlSelector: currentSite});
             check(Target.Performer, "a[href*='/model/']");
             check(Target.Scene, "table#movices td > strong", {
@@ -84,6 +86,7 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
                 titleSelector: null,
             });
             break;
+        }
         case "www.animecharactersdatabase.com":
             check(Target.Performer, "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
             break;
@@ -96,6 +99,28 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
             check(Target.Performer, "a[href*='/person.rme/perfid=']");
             check(Target.Scene, "a[href*='/title.rme/id=']");
             check(Target.Studio, "a[href*='/studio.rme/studio=']");
+            break;
+        }
+        case "javdb.com": {
+            check(Target.Scene, ".video-detail > h2", {
+                urlSelector: currentSite,
+                titleSelector: e => e.querySelector("strong.current-title")?.textContent?.trim(),
+                codeSelector: _ => {
+                    let xpath = document.evaluate("//div/strong[text()='ID:']/following-sibling::span[1]//text()", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null)
+                    return xpath.iterateNext().textContent + xpath.iterateNext()?.textContent
+                },
+            });
+            if (window.location.pathname.startsWith("/v/")) {
+                check(Target.Scene, "a[href^='/v/'] > .video-number", {
+                    titleSelector: e => e.parentElement.getAttribute("title")?.trim(),
+                    codeSelector: e => e.textContent?.trim(),
+                })
+            } else {
+                check(Target.Scene, "a[href^='/v/'] > .video-title", {
+                    titleSelector: e => e.parentElement.getAttribute("title")?.trim(),
+                    codeSelector: e => e.querySelector("strong")?.textContent?.trim(),
+                })
+            }
             break;
         }
         case "metadataapi.net": {
@@ -117,7 +142,7 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
             check(Target.Movie, "a[href^='https://metadataapi.net/movies/']", {observe: true});
             break;
         }
-        case "www.javlibrary.com":
+        case "www.javlibrary.com": {
             check(Target.Scene, "div[id='video_title']", {
                 urlSelector: currentSite,
                 prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
@@ -136,8 +161,9 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
                 titleSelector: e => firstTextChild(e)?.textContent?.trim()?.split(" ")[0],
             });
             break;
-        case "r18.dev":
-            check(Target.Scene,"#video-info > #title", {
+        }
+        case "r18.dev": {
+            check(Target.Scene, "#video-info > #title", {
                 observe: true,
                 urlSelector: currentSite,
                 codeSelector: _ => firstTextChild(document.querySelector("#dvd-id"))?.textContent?.trim(),
@@ -147,7 +173,8 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
                 codeSelector: e => firstTextChild(e)?.textContent?.trim(),
             });
             break;
-        case "www.minnano-av.com":
+        }
+        case "www.minnano-av.com": {
             if (/actress\d{1,6}/.test(window.location.pathname)) {
                 check(Target.Performer, "h1", {
                     prepareUrl: url => url.split("?")[0],
@@ -158,41 +185,57 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
                 prepareUrl: url => url.split("?")[0],
             });
             break;
-        case "www.indexxx.com":
+        }
+        case "www.indexxx.com": {
             check(Target.Performer, "h1[id='model-name']", {urlSelector: currentSite});
             check(Target.Performer, "a.modelLink[href*='https://www.indexxx.com/m/'] > span");
             break;
-        case "www.thenude.com":
+        }
+        case "www.thenude.com": {
             check(Target.Performer, "span.model-name", {urlSelector: currentSite});
             check(Target.Performer, "a.model-name, a.model-title, a[data-img*='/models/']", {observe: true});
             break;
-        case "www.data18.com":
-            check(Target.Scene, "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", {observe: true, titleSelector: null});
+        }
+        case "www.data18.com": {
+            check(Target.Scene, "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", {
+                observe: true,
+                titleSelector: e => e.getAttribute("title")?.trim()
+            });
+            check(Target.Movie, "a[href^='https://www.data18.com/movies/']:not([href*='#']):not([href$='/movies/series']):not([href$='/movies/showcases'])", {
+                observe: true,
+                nameSelector: e => e.getAttribute("title")?.trim()
+            });
             check(Target.Performer, "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])", {observe: true});
             break;
-        case "www.babepedia.com":
+        }
+        case "www.babepedia.com": {
             check(Target.Performer, "h1#babename", {urlSelector: currentSite});
             check(Target.Performer, "a[href*='/babe/']", {observe: true});
             break;
-        case "www.freeones.com":
+        }
+        case "www.freeones.com": {
             check(Target.Performer, "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
                 prepareUrl: url => url.replace(/\/feed$/, "").replace(/\/[a-z]{2}\//, "/")
             });
             break;
-        case "shemalestardb.com":
+        }
+        case "shemalestardb.com": {
             check(Target.Performer, "h2[id='star-name']", {urlSelector: currentSite});
             check(Target.Performer, "figcaption > a[href*='/stars/']");
             break;
-        case "onlyfans.com":
+        }
+        case "onlyfans.com": {
             check(Target.Performer, "div.b-username > div.g-user-name", {observe: true, urlSelector: currentSite});
             check(Target.Performer, "a.b-username > div.g-user-name", {observe: true});
             break;
-        case "www.pornteengirl.com":
+        }
+        case "www.pornteengirl.com": {
             check(Target.Performer, "a[href*='/model/']", {
-                 nameSelector: e => firstTextChild(e)?.textContent?.trim()?.replace(/\([^()]*\)$/, "")?.trimEnd()
+                nameSelector: e => firstTextChild(e)?.textContent?.trim()?.replace(/\([^()]*\)$/, "")?.trimEnd()
             });
             break;
-        case "gayeroticvideoindex.com":
+        }
+        case "gayeroticvideoindex.com": {
             if (window.location.pathname.startsWith("/performer/")) {
                 check(Target.Performer, "[id='data'] h1", {urlSelector: currentSite});
             } else if (window.location.pathname.startsWith("/episode/")) {
@@ -204,10 +247,11 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
             check(Target.Scene, "a[href*='episode/']", {observe: true});
             check(Target.Movie, "a[href*='video/']", {observe: true});
             break;
+        }
         case "fansdb.cc":
         case "fansdb.xyz":
         case "pmvstash.org":
-        case "stashdb.org":
+        case "stashdb.org": {
             // These buttons are only visible with edit permissions.
             let exclude = ":not(a[href$='/add']):not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
             if (window.location.pathname.startsWith("/scenes/")) {
@@ -268,6 +312,7 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
                 });
             }
             break;
+        }
         default:
             console.warn("No configuration for website found.");
             break;

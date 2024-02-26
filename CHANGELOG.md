@@ -2,6 +2,7 @@
 ## [1.0.0]
 
 - Add metadata for userscript auto-updates [#27]
+- Add support for javdb
 - Improve responsiveness for sites with many entries by queueing batch queries [#28]
 
 ## [0.9.3]
