@@ -23,9 +23,6 @@ You need a browser plugin like [Tampermonkey](https://www.tampermonkey.net/) to 
 The newest release of Stash Checker can be found in the release section to the right.
 Opening `index.prod.user.js` under `Assets` should prompt Tampermonkey to install the script.
 
-It also gets deployed to [this Gist](https://gist.github.com/timo95/562b9363d491e3ee281cb46944445fcd).
-Click on the `Raw` button to import the script to Tampermonkey.
-
 ## Settings
 
 Settings can be opened using the Tampermonkey dropdown menu.
@@ -35,12 +32,6 @@ Settings can be opened using the Tampermonkey dropdown menu.
 Here you can edit the Stash URL and API key or add another Stash endpoint.
 
 <img src="docs/assets/settings.png" alt="settings" title="Userscript Settings" width="500"/>
-
-## Stash version compatibility
-
-At the moment only the newest Stash versions are supported.
-For backwards compatibility, see this [feature request](https://github.com/timo95/stash-checker/issues/9).
-
 
 ## Troubleshooting
 
