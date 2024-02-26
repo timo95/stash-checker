@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Stash Checker
 // @description Add checkmarks on porn websites to scenes/performers that are present in your own Stash instance.
-// @version 0.10.0
+// @version 1.0.0
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
 // @match *://coomer.su/*
@@ -9,6 +9,7 @@
 // @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://gayeroticvideoindex.com/*
+// @match *://javdb.com/*
 // @match *://kemono.su/*
 // @match *://metadataapi.net/*
 // @match *://onlyfans.com/*
@@ -1039,6 +1040,24 @@
         check(Target.Studio, "a[href*='/studio.rme/studio=']");
         break;
 
+       case "javdb.com":
+        check(Target.Scene, ".video-detail > h2", {
+          urlSelector: currentSite,
+          titleSelector: e => e.querySelector("strong.current-title")?.textContent?.trim(),
+          codeSelector: _ => {
+            let xpath = document.evaluate("//div/strong[text()='ID:']/following-sibling::span[1]//text()", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+            return xpath.iterateNext().textContent + xpath.iterateNext()?.textContent;
+          }
+        });
+        if (window.location.pathname.startsWith("/v/")) check(Target.Scene, "a[href^='/v/'] > .video-number", {
+          titleSelector: e => e.parentElement.getAttribute("title")?.trim(),
+          codeSelector: e => e.textContent?.trim()
+        }); else check(Target.Scene, "a[href^='/v/'] > .video-title", {
+          titleSelector: e => e.parentElement.getAttribute("title")?.trim(),
+          codeSelector: e => e.querySelector("strong")?.textContent?.trim()
+        });
+        break;
+
        case "metadataapi.net":
         {
           let stashIdSelector = _ => document.evaluate("//div[text()='TPDB UUID']/following-sibling::div/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim();
@@ -1154,7 +1173,11 @@
        case "www.data18.com":
         check(Target.Scene, "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", {
           observe: true,
-          titleSelector: null
+          titleSelector: e => e.getAttribute("title")?.trim()
+        });
+        check(Target.Movie, "a[href^='https://www.data18.com/movies/']:not([href*='#']):not([href$='/movies/series']):not([href$='/movies/showcases'])", {
+          observe: true,
+          nameSelector: e => e.getAttribute("title")?.trim()
         });
         check(Target.Performer, "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])", {
           observe: true
@@ -1222,55 +1245,57 @@
        case "fansdb.xyz":
        case "pmvstash.org":
        case "stashdb.org":
-        let exclude = ":not(a[href$='/add']):not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
-        if (window.location.pathname.startsWith("/scenes/")) check(Target.Scene, "div.scene-info.card h3 > span", {
-          observe: true,
-          urlSelector: null,
-          stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
-          titleSelector: null
-        });
-        check(Target.Scene, `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
-          observe: true,
-          urlSelector: null,
-          stashIdSelector: e => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
-          titleSelector: null
-        });
-        if (window.location.pathname.startsWith("/performers/")) check(Target.Performer, "div.PerformerInfo div.card-header h3 > span", {
-          observe: true,
-          urlSelector: null,
-          stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
-          nameSelector: null
-        });
-        check(Target.Performer, `a[href^='/performers/']${exclude}, a[href^='https://${window.location.host}/performers/']${exclude}`, {
-          observe: true,
-          urlSelector: null,
-          stashIdSelector: e => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
-          nameSelector: null
-        });
-        if (window.location.pathname.startsWith("/studios/")) check(Target.Studio, ".studio-title > h3 > span", {
-          observe: true,
-          urlSelector: null,
-          stashIdSelector: () => window.location.href.replace(/^.*\/studios\//, "").split(/[?#]/)[0],
-          nameSelector: null
-        });
-        check(Target.Studio, `a[href^='/studios/']${exclude}, a[href^='https://${window.location.host}/studios/']${exclude}`, {
-          observe: true,
-          urlSelector: null,
-          stashIdSelector: e => e.closest("a")?.getAttribute("href")?.replace(/^.*\/studios\//, "")?.split(/[?#]/)[0],
-          nameSelector: null
-        });
-        if (window.location.pathname.startsWith("/tags/")) check(Target.Tag, ".MainContent > .NarrowPage h3 > span", {
-          observe: true,
-          urlSelector: null,
-          stashIdSelector: () => window.location.href.replace(/^.*\/tags\//, "").split(/[?#]/)[0],
-          nameSelector: null
-        }); else if (window.location.pathname === "/tags") check(Target.Tag, `a[href^='/tags/']${exclude}, a[href^='https://${window.location.host}/tags/']${exclude}`, {
-          observe: true,
-          urlSelector: null,
-          stashIdSelector: e => e.closest("a")?.getAttribute("href")?.replace(/^.*\/tags\//, "")?.split(/[?#]/)[0],
-          nameSelector: null
-        });
-        break;
+        {
+          let exclude = ":not(a[href$='/add']):not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
+          if (window.location.pathname.startsWith("/scenes/")) check(Target.Scene, "div.scene-info.card h3 > span", {
+            observe: true,
+            urlSelector: null,
+            stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
+            titleSelector: null
+          });
+          check(Target.Scene, `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
+            observe: true,
+            urlSelector: null,
+            stashIdSelector: e => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
+            titleSelector: null
+          });
+          if (window.location.pathname.startsWith("/performers/")) check(Target.Performer, "div.PerformerInfo div.card-header h3 > span", {
+            observe: true,
+            urlSelector: null,
+            stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
+            nameSelector: null
+          });
+          check(Target.Performer, `a[href^='/performers/']${exclude}, a[href^='https://${window.location.host}/performers/']${exclude}`, {
+            observe: true,
+            urlSelector: null,
+            stashIdSelector: e => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
+            nameSelector: null
+          });
+          if (window.location.pathname.startsWith("/studios/")) check(Target.Studio, ".studio-title > h3 > span", {
+            observe: true,
+            urlSelector: null,
+            stashIdSelector: () => window.location.href.replace(/^.*\/studios\//, "").split(/[?#]/)[0],
+            nameSelector: null
+          });
+          check(Target.Studio, `a[href^='/studios/']${exclude}, a[href^='https://${window.location.host}/studios/']${exclude}`, {
+            observe: true,
+            urlSelector: null,
+            stashIdSelector: e => e.closest("a")?.getAttribute("href")?.replace(/^.*\/studios\//, "")?.split(/[?#]/)[0],
+            nameSelector: null
+          });
+          if (window.location.pathname.startsWith("/tags/")) check(Target.Tag, ".MainContent > .NarrowPage h3 > span", {
+            observe: true,
+            urlSelector: null,
+            stashIdSelector: () => window.location.href.replace(/^.*\/tags\//, "").split(/[?#]/)[0],
+            nameSelector: null
+          }); else if (window.location.pathname === "/tags") check(Target.Tag, `a[href^='/tags/']${exclude}, a[href^='https://${window.location.host}/tags/']${exclude}`, {
+            observe: true,
+            urlSelector: null,
+            stashIdSelector: e => e.closest("a")?.getAttribute("href")?.replace(/^.*\/tags\//, "")?.split(/[?#]/)[0],
+            nameSelector: null
+          });
+          break;
+        }
 
        default:
         console.warn("No configuration for website found.");
