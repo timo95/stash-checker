@@ -63,7 +63,7 @@ function formatEntryData(target: Target, data: StashEntry[]): string {
         ["name", (name: any) => `<br>Name: ${name}`],
         ["favorite", () => "&emsp;&#10084;&#65039;"],
         ["disambiguation", (disambiguation: any) => ` <span style="color: grey">(${disambiguation})</span>`],
-        ["alias_list", (alias_list: any) => `<br>Aliases: ${alias_list.join(", ")}`],
+        ["alias_list", (alias_list: any) => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", ")}`],
         ["studio", (studio: any) => `<br>Studio: ${studio.name}`],
         ["code", (code: any) => `<br>Code: ${code}`],
         ["date", (date: any) => `<br>Date: ${date}`],
