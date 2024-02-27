@@ -5,6 +5,7 @@
 - Add support for javdb
 - Improve responsiveness for sites with many entries by queueing batch queries [#28]
 - Fix data18 performer overview page
+- Fix page change on Stash-box not detected [#25]
 
 ## [0.9.3]
 
