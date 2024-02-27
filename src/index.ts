@@ -205,7 +205,15 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
                 observe: true,
                 nameSelector: e => e.getAttribute("title")?.trim()
             });
-            check(Target.Performer, "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])", {observe: true});
+            let exclude = ":not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])"
+            check(Target.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {observe: true});
+            if (window.location.pathname === "/names/pornstars") {
+                check(Target.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
+                    observe: true,
+                    displaySelector: e => e.parentElement.querySelector("div"),
+                    nameSelector: e => e.getAttribute("title")
+                })
+            }
             break;
         }
         case "www.babepedia.com": {
