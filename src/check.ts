@@ -68,6 +68,7 @@ async function queryStash(
  *
  * @param target
  * @param element
+ * @param elementSelector
  * @param prepareUrl
  * @param urlSelector
  * @param codeSelector
@@ -81,6 +82,7 @@ async function checkElement(
     target: Target,
     element: Element,
     {
+        displaySelector = (e: Element) => e,
         prepareUrl = url => url,
         urlSelector = (e: Element) => e.closest("a").href,
         codeSelector,
@@ -93,27 +95,30 @@ async function checkElement(
 ) {
     if (urlSelector && prepareUrl) {
         let url = prepareUrl(urlSelector(element));
-        if (url) {
+        let displayElement = displaySelector(element)
+        if (displayElement && url) {
             console.debug(`URL: ${url}`);
-            await queryStash(url, (...args) => prefixSymbol(element, ...args, color), target, Type.Url, {stashIdEndpoint});
+            await queryStash(url, (...args) => prefixSymbol(displayElement, ...args, color), target, Type.Url, {stashIdEndpoint});
         } else {
             console.info(`No URL for ${target} found.`);
         }
     }
     if (codeSelector) {
         let code = codeSelector(element);
-        if (code) {
+        let displayElement = displaySelector(element)
+        if (displayElement && code) {
             console.debug(`Code: ${code}`);
-            await queryStash(code, (...args) => prefixSymbol(element, ...args, color), target, Type.Code, {stashIdEndpoint});
+            await queryStash(code, (...args) => prefixSymbol(displayElement, ...args, color), target, Type.Code, {stashIdEndpoint});
         } else {
             console.info(`No Code for ${target} found.`);
         }
     }
     if (stashIdSelector) {
         let id = stashIdSelector(element);
-        if (id) {
+        let displayElement = displaySelector(element)
+        if (displayElement && id) {
             console.debug(`StashId: ${id}`);
-            await queryStash(id, (...args) => prefixSymbol(element, ...args, color), target, Type.StashId, {stashIdEndpoint});
+            await queryStash(id, (...args) => prefixSymbol(displayElement, ...args, color), target, Type.StashId, {stashIdEndpoint});
         } else {
             console.info(`No StashId for ${target} found.`);
         }
@@ -123,9 +128,10 @@ async function checkElement(
         // Do not use single performer names
         let nameCount = name?.split(/\s+/)?.length
         let ignore = target === Target.Performer && nameCount === 1
-        if (name && !ignore) {
+        let displayElement = displaySelector(element)
+        if (displayElement && name && !ignore) {
             console.debug(`Name: ${name}`);
-            await queryStash(name, (...args) => prefixSymbol(element, ...args, color), target, Type.Name, {stashIdEndpoint});
+            await queryStash(name, (...args) => prefixSymbol(displayElement, ...args, color), target, Type.Name, {stashIdEndpoint});
         } else if (name && ignore) {
             console.info(`Ignore single name: ${name}`)
         } else {
@@ -134,9 +140,10 @@ async function checkElement(
     }
     if ([Target.Scene, Target.Gallery].includes(target) && titleSelector) {
         let title = titleSelector(element);
-        if (title) {
+        let displayElement = displaySelector(element)
+        if (displayElement && title) {
             console.debug(`Title: ${title}`);
-            await queryStash(title, (...args) => prefixSymbol(element, ...args, color), target, Type.Title, {stashIdEndpoint});
+            await queryStash(title, (...args) => prefixSymbol(displayElement, ...args, color), target, Type.Title, {stashIdEndpoint});
         } else {
             console.info(`No Title for ${target} found.`);
         }

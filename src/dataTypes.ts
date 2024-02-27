@@ -74,6 +74,7 @@ export type Selector = (e: Element) => string;
  * Configure queries for an entry.
  */
 export interface CheckOptions {
+    displaySelector?: (e: Element) => Element;
     urlSelector?: Selector;
     prepareUrl?: (url: string) => string;
     codeSelector?: Selector;
