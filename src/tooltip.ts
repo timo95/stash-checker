@@ -42,6 +42,10 @@ function formatFileData(files: any[]): string {
     ).join("");
 }
 
+function formatTagPill(tag: {id: string, name: string}): string {
+    return `<span class='stashChecker tag'>${tag.name}</span>`;
+}
+
 function matchQuality(matchQuality: number): string {
     let color;
     if (matchQuality == 1) color = "rgb(0,100,0)";
@@ -63,10 +67,11 @@ function formatEntryData(target: Target, data: StashEntry[]): string {
         ["name", (name: any) => `<br>Name: ${name}`],
         ["favorite", () => "&emsp;&#10084;&#65039;"],
         ["disambiguation", (disambiguation: any) => ` <span style="color: grey">(${disambiguation})</span>`],
-        ["alias_list", (alias_list: any) => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", ")}`],
+        ["alias_list", (alias_list: any) => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", <wbr>")}`],
         ["studio", (studio: any) => `<br>Studio: ${studio.name}`],
         ["code", (code: any) => `<br>Code: ${code}`],
         ["date", (date: any) => `<br>Date: ${date}`],
+        ["tags", (tags: any) => tags.length === 0 ? "" : `<br>Tags: ${tags.map(formatTagPill).join("<wbr>")}`],
         ["files", (files: any) => `${formatFileData(files)}`],
     ];
     return data.map((entry: any) => "<hr>" + propertyStrings

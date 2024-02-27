@@ -28,15 +28,15 @@ async function queryStash(
     // Build query
     switch (target) {
         case Target.Scene:
-            query = `findScenes(scene_filter:{${criterion}}){scenes{id,title,code,studio{name},date,files{path,duration,video_codec,width,height,size,bit_rate}}}`;
+            query = `findScenes(scene_filter:{${criterion}}){scenes{id,title,code,studio{name},date,tags{id,name},files{path,duration,video_codec,width,height,size,bit_rate}}}`;
             access = (d) => d.scenes;
             break;
         case Target.Performer:
-            query = `findPerformers(performer_filter:{${criterion}}){performers{id,name,disambiguation,alias_list,favorite}}`;
+            query = `findPerformers(performer_filter:{${criterion}}){performers{id,name,disambiguation,alias_list,favorite,tags{id,name}}}`;
             access = (d) => d.performers;
             break;
         case Target.Gallery:
-            query = `findGalleries(gallery_filter:{${criterion}}){galleries{id,title,date,files{path}}}`;
+            query = `findGalleries(gallery_filter:{${criterion}}){galleries{id,title,date,tags{id,name},files{path}}}`;
             access = (d) => d.galleries;
             break;
         case Target.Movie:

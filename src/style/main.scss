@@ -44,12 +44,22 @@
     border-radius: 0.5rem;
     padding: 0.5rem;
     margin-top: -0.5rem;
+    max-width: 50rem;
 }
 
 .stashChecker.file {
     margin: 0.5rem;
     padding: 0.5rem;
     background-color: var(--stash-checker-color-card);
+}
+
+.stashChecker.tag {
+    white-space: nowrap;
+    line-height: 1.5rem;
+    margin-right: 0.5rem;
+    padding: 0 0.5rem;
+    background-color: var(--stash-checker-color-card);
+    border-radius: 0.5rem;
 }
 
 .stashChecker.modal {
