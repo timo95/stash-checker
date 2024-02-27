@@ -424,7 +424,7 @@
       return queries.map((query => `${matchQuality(query.matchQuality)} ${query.endpoint} (Matched: ${query.types.map((type => typeToString.get(type))).join(", ")}): ${entryLink(query.url, target, id)}`)).join("<br>");
     }
     function formatEntryData(target, data) {
-      let propertyStrings = [ [ "id", (id, queries) => `<br>${formatQueries(queries, target, id)}` ], [ "title", title => `<br>Title: ${title}` ], [ "name", name => `<br>Name: ${name}` ], [ "favorite", () => "&emsp;&#10084;&#65039;" ], [ "disambiguation", disambiguation => ` <span style="color: grey">(${disambiguation})</span>` ], [ "alias_list", alias_list => `<br>Aliases: ${alias_list.join(", ")}` ], [ "studio", studio => `<br>Studio: ${studio.name}` ], [ "code", code => `<br>Code: ${code}` ], [ "date", date => `<br>Date: ${date}` ], [ "files", files => `${formatFileData(files)}` ] ];
+      let propertyStrings = [ [ "id", (id, queries) => `<br>${formatQueries(queries, target, id)}` ], [ "title", title => `<br>Title: ${title}` ], [ "name", name => `<br>Name: ${name}` ], [ "favorite", () => "&emsp;&#10084;&#65039;" ], [ "disambiguation", disambiguation => ` <span style="color: grey">(${disambiguation})</span>` ], [ "alias_list", alias_list => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", ")}` ], [ "studio", studio => `<br>Studio: ${studio.name}` ], [ "code", code => `<br>Code: ${code}` ], [ "date", date => `<br>Date: ${date}` ], [ "files", files => `${formatFileData(files)}` ] ];
       return data.map((entry => "<hr>" + propertyStrings.filter((e => entry[e[0]])).map((e => e[1](entry[e[0]], entry["queries"]))).join(""))).join("");
     }
     function updateMatchQuality(queries, numQueries) {
@@ -847,30 +847,33 @@
         request(endpoint, query, true).then((data => onload(target, type, endpoint, access(data))));
       }));
     }
-    async function checkElement(target, element, {prepareUrl = url => url, urlSelector = e => e.closest("a").href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = e => firstTextChild(e)?.textContent?.trim(), titleSelector = e => firstTextChild(e)?.textContent?.trim(), color = () => "green"}) {
+    async function checkElement(target, element, {displaySelector = e => e, prepareUrl = url => url, urlSelector = e => e.closest("a").href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = e => firstTextChild(e)?.textContent?.trim(), titleSelector = e => firstTextChild(e)?.textContent?.trim(), color = () => "green"}) {
       if (urlSelector && prepareUrl) {
         let url = prepareUrl(urlSelector(element));
-        if (url) {
+        let displayElement = displaySelector(element);
+        if (displayElement && url) {
           void 0;
-          await queryStash(url, ((...args) => prefixSymbol(element, ...args, color)), target, Type.Url, {
+          await queryStash(url, ((...args) => prefixSymbol(displayElement, ...args, color)), target, Type.Url, {
             stashIdEndpoint
           });
         } else console.info(`No URL for ${target} found.`);
       }
       if (codeSelector) {
         let code = codeSelector(element);
-        if (code) {
+        let displayElement = displaySelector(element);
+        if (displayElement && code) {
           void 0;
-          await queryStash(code, ((...args) => prefixSymbol(element, ...args, color)), target, Type.Code, {
+          await queryStash(code, ((...args) => prefixSymbol(displayElement, ...args, color)), target, Type.Code, {
             stashIdEndpoint
           });
         } else console.info(`No Code for ${target} found.`);
       }
       if (stashIdSelector) {
         let id = stashIdSelector(element);
-        if (id) {
+        let displayElement = displaySelector(element);
+        if (displayElement && id) {
           void 0;
-          await queryStash(id, ((...args) => prefixSymbol(element, ...args, color)), target, Type.StashId, {
+          await queryStash(id, ((...args) => prefixSymbol(displayElement, ...args, color)), target, Type.StashId, {
             stashIdEndpoint
           });
         } else console.info(`No StashId for ${target} found.`);
@@ -879,18 +882,20 @@
         let name = nameSelector(element);
         let nameCount = name?.split(/\s+/)?.length;
         let ignore = target === Target.Performer && nameCount === 1;
-        if (name && !ignore) {
+        let displayElement = displaySelector(element);
+        if (displayElement && name && !ignore) {
           void 0;
-          await queryStash(name, ((...args) => prefixSymbol(element, ...args, color)), target, Type.Name, {
+          await queryStash(name, ((...args) => prefixSymbol(displayElement, ...args, color)), target, Type.Name, {
             stashIdEndpoint
           });
         } else if (name && ignore) console.info(`Ignore single name: ${name}`); else console.info(`No Name for ${target} found.`);
       }
       if ([ Target.Scene, Target.Gallery ].includes(target) && titleSelector) {
         let title = titleSelector(element);
-        if (title) {
+        let displayElement = displaySelector(element);
+        if (displayElement && title) {
           void 0;
-          await queryStash(title, ((...args) => prefixSymbol(element, ...args, color)), target, Type.Title, {
+          await queryStash(title, ((...args) => prefixSymbol(displayElement, ...args, color)), target, Type.Title, {
             stashIdEndpoint
           });
         } else console.info(`No Title for ${target} found.`);
@@ -1171,18 +1176,26 @@
         break;
 
        case "www.data18.com":
-        check(Target.Scene, "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", {
-          observe: true,
-          titleSelector: e => e.getAttribute("title")?.trim()
-        });
-        check(Target.Movie, "a[href^='https://www.data18.com/movies/']:not([href*='#']):not([href$='/movies/series']):not([href$='/movies/showcases'])", {
-          observe: true,
-          nameSelector: e => e.getAttribute("title")?.trim()
-        });
-        check(Target.Performer, "a[href^='https://www.data18.com/name/']:not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])", {
-          observe: true
-        });
-        break;
+        {
+          check(Target.Scene, "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", {
+            observe: true,
+            titleSelector: e => e.getAttribute("title")?.trim()
+          });
+          check(Target.Movie, "a[href^='https://www.data18.com/movies/']:not([href*='#']):not([href$='/movies/series']):not([href$='/movies/showcases'])", {
+            observe: true,
+            nameSelector: e => e.getAttribute("title")?.trim()
+          });
+          let exclude = ":not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])";
+          check(Target.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
+            observe: true
+          });
+          if (window.location.pathname === "/names/pornstars") check(Target.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
+            observe: true,
+            displaySelector: e => e.parentElement.querySelector("div"),
+            nameSelector: e => e.getAttribute("title")
+          });
+          break;
+        }
 
        case "www.babepedia.com":
         check(Target.Performer, "h1#babename", {
