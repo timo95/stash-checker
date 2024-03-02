@@ -3,6 +3,41 @@ import {stashEndpoints} from "./settings/endpoints";
 import {firstTextChild} from "./utils";
 import {CheckOptions, StashEndpoint, Target, Type} from "./dataTypes";
 import {request} from "./request";
+import {booleanOptions, OptionKey} from "./settings/general";
+
+enum DataFields {
+    id = "id",
+    code = "code",
+    name = "name",
+    disambiguation = "disambiguation",
+    aliasList = "alias_list",
+    title = "title",
+    studio = "studio{name}",
+    favorite = "favorite",
+    date = "date",
+    tags = "tags{id,name}",
+    files = "files{path,duration,video_codec,width,height,size,bit_rate}"
+}
+
+let supportedDataFields = new Map<Target, DataFields[]>([
+    [Target.Scene, [DataFields.id, DataFields.title, DataFields.code, DataFields.studio, DataFields.date, DataFields.tags, DataFields.files]],
+    [Target.Performer, [DataFields.id, DataFields.name, DataFields.disambiguation, DataFields.aliasList, DataFields.favorite, DataFields.tags]],
+    [Target.Gallery, [DataFields.id, DataFields.title, DataFields.date, DataFields.tags, DataFields.files]],
+    [Target.Movie, [DataFields.id, DataFields.name, DataFields.date]],
+    [Target.Studio,[DataFields.id, DataFields.name]],
+    [Target.Tag, [DataFields.id, DataFields.name]],
+]);
+
+function getDataFields(target: Target): string {
+    let supported = new Set(supportedDataFields.get(target)!)
+    if (!booleanOptions.get(OptionKey.showTags)) {
+        supported.delete(DataFields.tags)
+    }
+    if (!booleanOptions.get(OptionKey.showFiles)) {
+        supported.delete(DataFields.files)
+    }
+    return new Array(...supported).join(",")
+}
 
 async function queryStash(
     queryString: string,
@@ -28,33 +63,34 @@ async function queryStash(
     // Build query
     switch (target) {
         case Target.Scene:
-            query = `findScenes(scene_filter:{${criterion}}){scenes{id,title,code,studio{name},date,tags{id,name},files{path,duration,video_codec,width,height,size,bit_rate}}}`;
+            query = `findScenes(scene_filter:{${criterion}}){scenes{${getDataFields(target)}}}`;
             access = (d) => d.scenes;
             break;
         case Target.Performer:
-            query = `findPerformers(performer_filter:{${criterion}}){performers{id,name,disambiguation,alias_list,favorite,tags{id,name}}}`;
+            query = `findPerformers(performer_filter:{${criterion}}){performers{${getDataFields(target)}}}`;
             access = (d) => d.performers;
             break;
         case Target.Gallery:
-            query = `findGalleries(gallery_filter:{${criterion}}){galleries{id,title,date,tags{id,name},files{path}}}`;
+            query = `findGalleries(gallery_filter:{${criterion}}){galleries{${getDataFields(target)}}}`;
             access = (d) => d.galleries;
             break;
         case Target.Movie:
-            query = `findMovies(movie_filter:{${criterion}}){movies{id,name,date}}`;
+            query = `findMovies(movie_filter:{${criterion}}){movies{${getDataFields(target)}}}`;
             access = (d) => d.movies;
             break;
         case Target.Studio:
-            query = `findStudios(studio_filter:{${criterion}}){studios{id,name}}`;
+            query = `findStudios(studio_filter:{${criterion}}){studios{${getDataFields(target)}}}`;
             access = (d) => d.studios;
             break;
         case Target.Tag:
-            query = `findTags(tag_filter:{${criterion}}){tags{id,name}}`;
+            query = `findTags(tag_filter:{${criterion}}){tags{${getDataFields(target)}}}`;
             access = (d) => d.tags;
             break;
         default:
             return;
     }
 
+    console.log(query)
     // Get config values or wait for popup if it is not stored
     stashEndpoints.forEach((endpoint: StashEndpoint) => {
         request(endpoint, query, true)

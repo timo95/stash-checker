@@ -10,11 +10,15 @@
 export async function getValue<T>(key: string, defaultValue: T): Promise<T> {
     const text = await GM.getValue<string | undefined>(key, undefined);
     try {
-        return text === undefined ? defaultValue : JSON.parse(text) as T;
+        if (text === undefined) {
+            return Promise.resolve(defaultValue);
+        } else {
+            return Promise.resolve(JSON.parse(text, reviver));
+        }
     } catch (e: any) {
         console.warn("Failed to parse stored value. Delete stored key-value pair.")
         await deleteValue(key);
-        return defaultValue;
+        return Promise.resolve(defaultValue);
     }
 }
 
@@ -27,7 +31,7 @@ export async function getValue<T>(key: string, defaultValue: T): Promise<T> {
  * @param value value to be stored
  */
 export async function setValue<T>(key: string, value: T): Promise<void> {
-    return GM.setValue(key, JSON.stringify(value));
+    return GM.setValue(key, JSON.stringify(value, replacer));
 }
 
 /**
@@ -39,4 +43,24 @@ export async function setValue<T>(key: string, value: T): Promise<void> {
  */
 export async function deleteValue(key: string): Promise<void> {
     return GM.deleteValue(key);
+}
+
+function replacer(key: string, value: any) {
+    if(value instanceof Map) {
+        return {
+            dataType: 'Map',
+            value: Array.from(value.entries()), // or with spread: value: [...value]
+        };
+    } else {
+        return value;
+    }
+}
+
+function reviver(key: string, value: any) {
+    if(typeof value === 'object' && value !== null) {
+        if (value.dataType === 'Map') {
+            return new Map(value.value);
+        }
+    }
+    return value;
 }

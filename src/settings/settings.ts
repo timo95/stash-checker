@@ -24,6 +24,7 @@ export function newSettingsSection(id: string, title: string, description?: stri
     getSettings().append(section)
 
     let heading = document.createElement("h2")
+    heading.classList.add("stashChecker", "heading");
     heading.innerHTML = title;
     section.append(heading);
 
@@ -41,8 +42,8 @@ function getSettings(): HTMLElement {
     return document.getElementById("stashChecker-settings")!;
 }
 
-export function getSettingsSection(id: string): HTMLElement {
-    return document.getElementById(`stashChecker-settingsSection-${id}`)!;
+export function getSettingsSection(id: string): HTMLElement | null {
+    return document.getElementById(`stashChecker-settingsSection-${id}`);
 }
 
 export function openSettingsWindow() {

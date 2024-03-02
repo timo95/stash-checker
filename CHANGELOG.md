@@ -2,6 +2,8 @@
 ## [1.0.0]
 
 - Add metadata for userscript auto-updates [#27]
+- Add option to disable cross mark display
+- Add options to not include tags/files in toolbox [#22]
 - Add support for javdb
 - Improve responsiveness for sites with many entries by queueing batch queries [#28]
 - Fix data18 performer overview page

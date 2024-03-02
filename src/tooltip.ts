@@ -1,6 +1,7 @@
 import {StashEndpoint, StashEntry, StashQuery, Target, Type} from "./dataTypes";
 import {mouseoutListener, mouseoverListener} from "./tooltipElement";
-import {bytesToReadable, firstTextChild, entryLink, secondsToReadable} from "./utils";
+import {bytesToReadable, entryLink, firstTextChild, secondsToReadable} from "./utils";
+import {booleanOptions, OptionKey} from "./settings/general";
 
 const typeToString = new Map<Type, string>([
     [Type.Url, "URL"],
@@ -196,7 +197,9 @@ export function prefixSymbol(
     let tooltip = ""
     let targetReadable = target.charAt(0).toUpperCase() + target.slice(1);
     if (count === 0) {
-        symbol.textContent = "✗ ";
+        if (booleanOptions.get(OptionKey.showCrossMark)) {
+            symbol.textContent = "✗ ";
+        }
         symbol.style.color = "red";
         tooltip = `${targetReadable} not in Stash<br>`;
     } else if (count === 1) {

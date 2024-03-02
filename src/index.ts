@@ -6,10 +6,12 @@ import {firstTextChild} from "./utils";
 import {CheckOptions, Target} from "./dataTypes";
 import {initSettingsWindow} from "./settings/settings";
 import {initMenu, isSiteBlocked} from "./settings/menu";
+import {initGeneralSettings} from "./settings/general";
 
 (async function () {
     await initTooltip();
     initSettingsWindow();
+    await initGeneralSettings();
     await initEndpointSettings();
     await initMenu();
 
