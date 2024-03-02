@@ -383,7 +383,8 @@
       tooltipWindow.setAttribute("handle", handle.toString());
     }
     function firstTextChild(node) {
-      if (node.nodeType === Node.TEXT_NODE && node.textContent.match(/^[\s<>]*$/) === null) return node; else return Array.from(node.childNodes).filter((n => ![ "svg" ].includes(n.nodeName.toLowerCase()))).filter((n => n.nodeType === Node.ELEMENT_NODE ? n.getAttribute("data-type") !== "stash-symbol" : true)).map(firstTextChild).find((n => n));
+      if (!node) return node;
+      if (node.nodeType === Node.TEXT_NODE && node.textContent?.match(/^[\s<>]*$/) === null) return node; else return Array.from(node.childNodes).filter((n => ![ "svg" ].includes(n.nodeName.toLowerCase()))).filter((n => n.nodeType === Node.ELEMENT_NODE ? n.getAttribute("data-type") !== "stash-symbol" : true)).map(firstTextChild).find((n => n));
     }
     function entryLink(stashUrl, target, id) {
       let path;
@@ -487,7 +488,7 @@
         symbol.addEventListener("mouseover", mouseoverListener);
         symbol.addEventListener("mouseout", mouseoutListener);
         let text = firstTextChild(element);
-        if (text) text.parentNode.insertBefore(symbol, text); else return;
+        if (text) text.parentNode?.insertBefore(symbol, text); else return;
       }
       symbol.setAttribute("data-endpoints", JSON.stringify(endpoints));
       symbol.setAttribute("data-queries", JSON.stringify(queryTypes));
@@ -516,7 +517,7 @@
     async function getValue(key, defaultValue) {
       const text = await GM.getValue(key, void 0);
       try {
-        return text === void 0 ? Promise.resolve(defaultValue) : JSON.parse(text);
+        return text === void 0 ? defaultValue : JSON.parse(text);
       } catch (e) {
         console.warn("Failed to parse stored value. Delete stored key-value pair.");
         await deleteValue(key);
@@ -713,7 +714,7 @@
     }
     function openSettingsWindow() {
       let settingsModal = document.getElementById("stashChecker-settingsModal");
-      settingsModal.style.display = "initial";
+      if (settingsModal?.style?.display) settingsModal.style.display = "initial";
     }
     let stashEndpoints = [];
     async function initEndpointSettings() {
@@ -850,9 +851,10 @@
         request(endpoint, query, true).then((data => onload(target, type, endpoint, access(data))));
       }));
     }
-    async function checkElement(target, element, {displaySelector = e => e, prepareUrl = url => url, urlSelector = e => e.closest("a").href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = e => firstTextChild(e)?.textContent?.trim(), titleSelector = e => firstTextChild(e)?.textContent?.trim(), color = () => "green"}) {
+    async function checkElement(target, element, {displaySelector = e => e, prepareUrl = url => url, urlSelector = e => e.closest("a")?.href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = e => firstTextChild(e)?.textContent?.trim(), titleSelector = e => firstTextChild(e)?.textContent?.trim(), color = () => "green"}) {
       if (urlSelector && prepareUrl) {
-        let url = prepareUrl(urlSelector(element));
+        let selectedUrl = urlSelector(element);
+        let url = selectedUrl ? prepareUrl(selectedUrl) : selectedUrl;
         let displayElement = displaySelector(element);
         if (displayElement && url) {
           void 0;
@@ -908,7 +910,7 @@
       let exclude = ".stashChecker, .stashCheckerCheckmark";
       let observer = new MutationObserver((mutations => {
         let addedElements = mutations.flatMap((m => Array.from(m.addedNodes))).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n));
-        addedElements.filter((e => e.matches(selector))).concat(addedElements.flatMap((e => Array.from(e.querySelectorAll(selector))))).filter((e => !e.matches(exclude) && !e.parentElement.matches(exclude))).forEach(callback);
+        addedElements.filter((e => e.matches(selector))).concat(addedElements.flatMap((e => Array.from(e.querySelectorAll(selector))))).filter((e => !e.matches(exclude) && !e.parentElement?.matches(exclude))).forEach(callback);
       }));
       let body = document.querySelector("body");
       observer.observe(body, {
@@ -954,20 +956,21 @@
           let codeRegex = /(?<=video\/)([a-zA-Z0-9]+)(?=\/|$)/;
           let prepareUrl = url => {
             let match = url.match(codeRegex);
-            return url.substring(0, match.index + match.at(0).length);
+            let end = match?.index && match?.[0]?.length ? match?.index + match?.[0]?.length : match?.index;
+            return url.substring(0, end);
           };
           check(Target.Scene, ".page-video__details > .text--h1", {
             observe: true,
             urlSelector: currentSite,
             color,
             prepareUrl,
-            codeSelector: () => window.location.pathname.match(codeRegex).at(0)
+            codeSelector: () => window.location.pathname.match(codeRegex)?.[0]
           });
           check(Target.Scene, "a.videoTeaser__title", {
             observe: true,
             color,
             prepareUrl,
-            codeSelector: e => e.getAttribute("href").match(codeRegex).at(0)
+            codeSelector: e => e.getAttribute("href")?.match(codeRegex)?.[0]
           });
           break;
         }
@@ -1028,7 +1031,7 @@
         check(Target.Performer, "a[href*='/model/']");
         check(Target.Scene, "table#movices td > strong", {
           urlSelector: null,
-          codeSelector: e => e.textContent.trim(),
+          codeSelector: e => e.textContent?.trim(),
           titleSelector: null
         });
         break;
@@ -1054,14 +1057,16 @@
           titleSelector: e => e.querySelector("strong.current-title")?.textContent?.trim(),
           codeSelector: _ => {
             let xpath = document.evaluate("//div/strong[text()='ID:']/following-sibling::span[1]//text()", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-            return xpath.iterateNext().textContent + xpath.iterateNext()?.textContent;
+            let first = xpath.iterateNext()?.textContent;
+            let second = xpath.iterateNext()?.textContent;
+            return first && second ? first + second : first;
           }
         });
         if (window.location.pathname.startsWith("/v/")) check(Target.Scene, "a[href^='/v/'] > .video-number", {
-          titleSelector: e => e.parentElement.getAttribute("title")?.trim(),
+          titleSelector: e => e.parentElement?.title?.trim(),
           codeSelector: e => e.textContent?.trim()
         }); else check(Target.Scene, "a[href^='/v/'] > .video-title", {
-          titleSelector: e => e.parentElement.getAttribute("title")?.trim(),
+          titleSelector: e => e.parentElement?.title?.trim(),
           codeSelector: e => e.querySelector("strong")?.textContent?.trim()
         });
         break;
@@ -1126,8 +1131,8 @@
         check(Target.Scene, "div[id='video_title']", {
           urlSelector: currentSite,
           prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
-          codeSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim(),
-          titleSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim()
+          codeSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim(),
+          titleSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim()
         });
         check(Target.Scene, ".video a[href^='./?v=jav']", {
           prepareUrl: url => url.replace(/&.*$/, ""),
@@ -1194,7 +1199,7 @@
           });
           if (window.location.pathname === "/names/pornstars") check(Target.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
             observe: true,
-            displaySelector: e => e.parentElement.querySelector("div"),
+            displaySelector: e => e.parentElement?.querySelector("div"),
             nameSelector: e => e.getAttribute("title")
           });
           break;
@@ -1270,7 +1275,7 @@
             nameSelector: null
           };
           function findId(string) {
-            return string?.match(/\p{Hex}{8}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{12}/u)[0];
+            return string?.match(/\p{Hex}{8}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{12}/u)?.[0];
           }
           check(Target.Scene, "div.scene-info.card h3 > span", {
             ...stashBoxDefault,
