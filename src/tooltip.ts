@@ -13,7 +13,7 @@ const typeToString = new Map<Type, string>([
 /**
  * find existing symbol span recursively, undefined if none available
  */
-function getExistingSymbol(element: Element): HTMLSpanElement {
+function getExistingSymbol(element: Element): HTMLSpanElement | undefined {
     if (element.getAttribute("data-type") === "stash-symbol") {
         return element as HTMLSpanElement;
     } else {
@@ -102,11 +102,11 @@ function mergeData(target: StashEntry[], source: StashEntry[], numQueries: numbe
         if (mapTarget.has(key)) {
             // merge stash queries
             let sourceQueries: Map<string, StashQuery> = new Map(sourceValue["queries"].map((v: StashQuery) => [v.endpoint, v]))
-            let targetQueries: Map<string, StashQuery> = new Map(mapTarget.get(key)["queries"].map((v: StashQuery) => [v.endpoint, v]))
+            let targetQueries: Map<string, StashQuery> = new Map(mapTarget.get(key)!["queries"].map((v: StashQuery) => [v.endpoint, v]))
 
             sourceQueries.forEach((sourceQuery, key) => {
                 if (targetQueries.has(key)) {
-                    let targetQuery = targetQueries.get(key)
+                    let targetQuery = targetQueries.get(key)!
                     let typeSet = new Set(sourceQuery.types)
                     targetQuery.types.forEach(type => typeSet.add(type));
                     sourceQuery.types = [...typeSet].sort()
@@ -164,10 +164,10 @@ export function prefixSymbol(
     let symbol = getExistingSymbol(element)
     if (symbol) {
         // Merge new result with existing results
-        endpoints = [...new Set<string>(JSON.parse(symbol.getAttribute("data-endpoints"))).add(endpoint.name)].sort()
-        queryTypes = [...new Set<Type>(JSON.parse(symbol.getAttribute("data-queries"))).add(type)].sort()
-        data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data, queryTypes.length)
-        symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")) + 1).toString())
+        endpoints = [...new Set<string>(JSON.parse(symbol.getAttribute("data-endpoints")!)).add(endpoint.name)].sort()
+        queryTypes = [...new Set<Type>(JSON.parse(symbol.getAttribute("data-queries")!)).add(type)].sort()
+        data = mergeData(JSON.parse(symbol.getAttribute("data-data")!), data, queryTypes.length)
+        symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")!) + 1).toString())
     } else {
         // Create new symbol
         symbol = document.createElement("span");
@@ -181,7 +181,7 @@ export function prefixSymbol(
         let text = firstTextChild(element)
         if (text) {
             // If node contains text, insert symbol before the text
-            text.parentNode.insertBefore(symbol, text);
+            text.parentNode?.insertBefore(symbol, text);
         } else {
             return  // abort if no text in symbol
         }
@@ -208,7 +208,7 @@ export function prefixSymbol(
         tooltip = `${targetReadable} has duplicate matches<br>`;
     }
     // All used queries
-    tooltip += `Endpoints: ${endpoints.join(", ")}`
+    tooltip += `Endpoints: ${endpoints.join(", ")}` // TODO: separate different endpoint results
     tooltip += "<br>"
     tooltip += `Queries: ${queryTypes.map(type => typeToString.get(type)).join(", ")}`
     // List of results

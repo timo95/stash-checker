@@ -68,20 +68,20 @@ export enum Type {
 /**
  * A function to select a [Type] query parameter from a given element.
  */
-export type Selector = (e: Element) => string;
+export type Selector = (e: Element) => null | undefined | string;
 
 /**
  * Configure queries for an entry.
  */
 export interface CheckOptions {
-    displaySelector?: (e: Element) => Element;
-    urlSelector?: Selector;
-    prepareUrl?: (url: string) => string;
-    codeSelector?: Selector;
-    stashIdSelector?: Selector;
+    displaySelector?: (e: Element) => Element | null | undefined;
+    urlSelector?: Selector | null;
+    prepareUrl?: (url: string) => string | undefined;
+    codeSelector?: Selector | null;
+    stashIdSelector?: Selector | null;
     stashIdEndpoint?: string;
-    nameSelector?: Selector;
-    titleSelector?: Selector;
+    nameSelector?: Selector | null;
+    titleSelector?: Selector | null;
     color?: (data: any) => string;
     observe?: boolean;
 }

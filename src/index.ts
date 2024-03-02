@@ -31,7 +31,8 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
             // Cut URL after code off
             let prepareUrl = (url: String) => {
                 let match = url.match(codeRegex)
-                return url.substring(0, match.index + match.at(0).length)
+                let end = (match?.index && match?.[0]?.length) ? match?.index + match?.[0]?.length : match?.index
+                return url.substring(0, end)
             }
 
             check(Target.Scene, ".page-video__details > .text--h1", {
@@ -39,13 +40,13 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
                 urlSelector: currentSite,
                 color: color,
                 prepareUrl,
-                codeSelector: () => window.location.pathname.match(codeRegex).at(0)
+                codeSelector: () => window.location.pathname.match(codeRegex)?.[0]
             });
             check(Target.Scene, "a.videoTeaser__title", {
                 observe: true,
                 color: color,
                 prepareUrl,
-                codeSelector: (e: Element) => e.getAttribute("href").match(codeRegex).at(0)
+                codeSelector: (e: Element) => e.getAttribute("href")?.match(codeRegex)?.[0]
             });
             break;
         }
@@ -82,7 +83,7 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
             check(Target.Performer, "a[href*='/model/']");
             check(Target.Scene, "table#movices td > strong", {
                 urlSelector: null,
-                codeSelector: e => e.textContent.trim(),
+                codeSelector: e => e.textContent?.trim(),
                 titleSelector: null,
             });
             break;
@@ -107,17 +108,19 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
                 titleSelector: e => e.querySelector("strong.current-title")?.textContent?.trim(),
                 codeSelector: _ => {
                     let xpath = document.evaluate("//div/strong[text()='ID:']/following-sibling::span[1]//text()", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null)
-                    return xpath.iterateNext().textContent + xpath.iterateNext()?.textContent
+                    let first = xpath.iterateNext()?.textContent
+                    let second = xpath.iterateNext()?.textContent
+                    return (first && second) ? first + second : first
                 },
             });
             if (window.location.pathname.startsWith("/v/")) {
                 check(Target.Scene, "a[href^='/v/'] > .video-number", {
-                    titleSelector: e => e.parentElement.getAttribute("title")?.trim(),
+                    titleSelector: e => e.parentElement?.title?.trim(),
                     codeSelector: e => e.textContent?.trim(),
                 })
             } else {
                 check(Target.Scene, "a[href^='/v/'] > .video-title", {
-                    titleSelector: e => e.parentElement.getAttribute("title")?.trim(),
+                    titleSelector: e => e.parentElement?.title?.trim(),
                     codeSelector: e => e.querySelector("strong")?.textContent?.trim(),
                 })
             }
@@ -146,8 +149,8 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
             check(Target.Scene, "div[id='video_title']", {
                 urlSelector: currentSite,
                 prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
-                codeSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim(),
-                titleSelector: _ => document.querySelector("div[id='video_id'] td.text").textContent.trim(),
+                codeSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim(),
+                titleSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim(),
             });
             // generic video links
             check(Target.Scene, ".video a[href^='./?v=jav']", {
@@ -210,7 +213,7 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
             if (window.location.pathname === "/names/pornstars") {
                 check(Target.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
                     observe: true,
-                    displaySelector: e => e.parentElement.querySelector("div"),
+                    displaySelector: e => e.parentElement?.querySelector("div"),
                     nameSelector: e => e.getAttribute("title")
                 })
             }
@@ -268,8 +271,9 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
                 titleSelector: null,
                 nameSelector: null
             }
-            function findId(string?: string): string {
-                return string?.match(/\p{Hex}{8}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{12}/u)[0]
+            // noinspection Annotator
+            function findId(string?: string): undefined | string {
+                return string?.match(/\p{Hex}{8}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{12}/u)?.[0]
             }
 
             check(Target.Scene, "div.scene-info.card h3 > span", {
@@ -278,7 +282,7 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
             });
             check(Target.Scene, `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
                 ...stashBoxDefault,
-                stashIdSelector: (e: HTMLLinkElement) => findId(e.closest("a")?.href),
+                stashIdSelector: (e) => findId(e.closest("a")?.href),
             });
             check(Target.Performer, "div.PerformerInfo div.card-header h3 > span", {
                 ...stashBoxDefault,

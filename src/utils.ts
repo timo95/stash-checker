@@ -3,10 +3,13 @@ import {Target} from "./dataTypes";
 /**
  * recursive (dfs) first non empty text node child, undefined if none available
  */
-export function firstTextChild(node: Node): Node {
+export function firstTextChild(node?: Node | undefined | null): null | undefined | Node {
+    if (!node) {
+        return node;
+    }
     if (
         node.nodeType === Node.TEXT_NODE &&
-        node.textContent.match(/^[\s<>]*$/) === null  // exclude whitespace
+        node.textContent?.match(/^[\s<>]*$/) === null  // exclude whitespace, <, >
     ) {
         return node;
     } else {

@@ -28,7 +28,7 @@ async function updateEndpoints(container: Element) {
         let div = document.createElement("div");
         div.classList.add("stashChecker", "endpoint");
         div.innerHTML = `<div><h3>${endpoint.name}</h3><p>${endpoint.url}</p></div>`
-        getVersion(endpoint, div.querySelector("h3"))
+        getVersion(endpoint, div.querySelector("h3")!)
 
         let editButton = document.createElement("button");
         editButton.classList.add("stashChecker", "btn", "btn-primary")
@@ -73,7 +73,7 @@ async function addEndpointListener(this: HTMLButtonElement) {
 }
 
 async function editEndpointListener(this: HTMLButtonElement) {
-    let index = parseInt(this.getAttribute("data-index"));
+    let index = parseInt(this.getAttribute("data-index")!);
     let oldEndpoint: StashEndpoint = stashEndpoints[index];
 
     stashEndpoints[index] = {
@@ -86,7 +86,7 @@ async function editEndpointListener(this: HTMLButtonElement) {
 }
 
 async function deleteEndpointListener(this: HTMLButtonElement) {
-    let index = parseInt(this.getAttribute("data-index"));
+    let index = parseInt(this.getAttribute("data-index")!);
     stashEndpoints.splice(index, 1);
     void setValue("stashEndpoints", stashEndpoints);
     await updateEndpoints(getSettingsSection("endpoints"));

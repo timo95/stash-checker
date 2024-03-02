@@ -38,14 +38,16 @@ export function newSettingsSection(id: string, title: string, description?: stri
 }
 
 function getSettings(): HTMLElement {
-    return document.getElementById("stashChecker-settings");
+    return document.getElementById("stashChecker-settings")!;
 }
 
 export function getSettingsSection(id: string): HTMLElement {
-    return document.getElementById(`stashChecker-settingsSection-${id}`);
+    return document.getElementById(`stashChecker-settingsSection-${id}`)!;
 }
 
 export function openSettingsWindow() {
     let settingsModal = document.getElementById("stashChecker-settingsModal");
-    settingsModal.style.display = "initial";
+    if (settingsModal?.style?.display) {
+        settingsModal.style.display = "initial";
+    }
 }

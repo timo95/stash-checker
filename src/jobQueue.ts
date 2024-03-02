@@ -40,7 +40,7 @@ export class JobQueue {
             job.status = Status.RUNNING;
             console.debug(`Start job, remaining queue length: ${this.length()}`);
             job.job().then(job.resolve).catch(job.reject).finally(() => {
-                job.status = Status.FINISHED
+                job!.status = Status.FINISHED
                 // Remove finished job
                 this.queue = this.queue.filter((job) => job.status !== Status.FINISHED)
                 console.debug(`Finished job, remaining queue length: ${this.length()}`);

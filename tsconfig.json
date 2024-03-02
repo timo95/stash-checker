@@ -3,6 +3,7 @@
     "outDir": "./dist/",
     "esModuleInterop": true,
     "noImplicitAny": true,
+    "strict": true,
     "moduleResolution": "Node",
     "module": "ESNext",
     "target": "ES2021",

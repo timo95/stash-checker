@@ -40,8 +40,8 @@ async function addQuery(
             // Init new batch collector
             let timerHandle = window.setTimeout(() => {
                 // Send batch after timeout and delete map entry
-                let query = buildBatchQuery(endpoint, batchQueries.get(endpoint));
-                batchQueue.enqueue(() => sendQuery(endpoint, query.query))
+                let query = buildBatchQuery(endpoint, batchQueries.get(endpoint)!);
+                batchQueue!.enqueue(() => sendQuery(endpoint, query.query))
                     .then(query.resolve)
                     .catch(query.reject);
                 batchQueries.delete(endpoint);

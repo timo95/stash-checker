@@ -5,7 +5,7 @@ export async function initTooltip() {
     tooltipWindow.classList.add("stashChecker", "tooltip");
     tooltipWindow.id = "stashChecker-tooltipWindow";
     tooltipWindow.addEventListener("mouseover", function () {
-        let handle = parseInt(this.getAttribute("handle"));
+        let handle = parseInt(this.getAttribute("handle")!);
         window.clearTimeout(handle);
     });
     tooltipWindow.addEventListener("mouseout", function () {
@@ -17,13 +17,13 @@ export async function initTooltip() {
     document.body.append(tooltipWindow);
 }
 
-export function mouseoverListener() {
-    let tooltipWindow = document.getElementById("stashChecker-tooltipWindow");
-    let handle = parseInt(tooltipWindow.getAttribute("handle"));
+export function mouseoverListener(this: HTMLElement) {
+    let tooltipWindow = document.getElementById("stashChecker-tooltipWindow")!;
+    let handle = parseInt(tooltipWindow.getAttribute("handle")!);
     window.clearTimeout(handle);
     let margin = 10
     let symbolPos = this.getBoundingClientRect();
-    tooltipWindow.innerHTML = this.getAttribute("data-info");
+    tooltipWindow.innerHTML = this.getAttribute("data-info")!;
     tooltipWindow.style.display = "";
     // show tooltip above or below
     let north = tooltipWindow.clientHeight + margin < symbolPos.top
@@ -42,7 +42,7 @@ export function mouseoverListener() {
 }
 
 export function mouseoutListener() {
-    let tooltipWindow = document.getElementById("stashChecker-tooltipWindow");
+    let tooltipWindow = document.getElementById("stashChecker-tooltipWindow")!;
     let handle = window.setTimeout(function () {
         tooltipWindow.style.display = "none";
     }, 500);

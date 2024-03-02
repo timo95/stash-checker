@@ -7,10 +7,10 @@
  * @param key key used to store value
  * @param defaultValue optional default value
  */
-export async function getValue<T>(key: string, defaultValue?: T): Promise<T> {
-    const text = await GM.getValue<string>(key, undefined);
+export async function getValue<T>(key: string, defaultValue: T): Promise<T> {
+    const text = await GM.getValue<string | undefined>(key, undefined);
     try {
-        return text === undefined ? Promise.resolve(defaultValue) : JSON.parse(text) as T;
+        return text === undefined ? defaultValue : JSON.parse(text) as T;
     } catch (e: any) {
         console.warn("Failed to parse stored value. Delete stored key-value pair.")
         await deleteValue(key);
