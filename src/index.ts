@@ -3,7 +3,7 @@ import {check} from "./check";
 import {initEndpointSettings} from "./settings/endpoints";
 import {initTooltip} from "./tooltipElement";
 import {firstTextChild} from "./utils";
-import {Target} from "./dataTypes";
+import {CheckOptions, Target} from "./dataTypes";
 import {initSettingsWindow} from "./settings/settings";
 import {initMenu, isSiteBlocked} from "./settings/menu";
 
@@ -262,56 +262,51 @@ import {initMenu, isSiteBlocked} from "./settings/menu";
         case "stashdb.org": {
             // These buttons are only visible with edit permissions.
             let exclude = ":not(a[href$='/add']):not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
-            check(Target.Scene, "div.scene-info.card h3 > span", {
+            let stashBoxDefault: CheckOptions = {
                 observe: true,
                 urlSelector: null,
-                stashIdSelector: () => window.location.href.replace(/^.*\/scenes\//, "").split(/[?#]/)[0],
                 titleSelector: null,
+                nameSelector: null
+            }
+            function findId(string?: string): string {
+                return string?.match(/\p{Hex}{8}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{12}/u)[0]
+            }
+
+            check(Target.Scene, "div.scene-info.card h3 > span", {
+                ...stashBoxDefault,
+                stashIdSelector: () => findId(window.location.href),
             });
             check(Target.Scene, `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
-                observe: true,
-                urlSelector: null,
-                stashIdSelector: (e) => e.getAttribute("href")?.replace(/^.*\/scenes\//, "")?.split(/[?#]/)[0],
-                titleSelector: null,
+                ...stashBoxDefault,
+                stashIdSelector: (e: HTMLLinkElement) => findId(e.closest("a")?.href),
             });
             check(Target.Performer, "div.PerformerInfo div.card-header h3 > span", {
-                observe: true,
-                urlSelector: null,
-                stashIdSelector: () => window.location.href.replace(/^.*\/performers\//, "").split(/[?#]/)[0],
-                nameSelector: null,
+                ...stashBoxDefault,
+                stashIdSelector: () => findId(window.location.href),
             });
             check(Target.Performer, `a[href^='/performers/']${exclude}, a[href^='https://${window.location.host}/performers/']${exclude}`, {
-                observe: true,
-                urlSelector: null,
-                stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/performers\//, "")?.split(/[?#]/)[0],
-                nameSelector: null,
+                ...stashBoxDefault,
+                stashIdSelector: (e) => findId(e.closest("a")?.href),
             });
             check(Target.Studio, ".studio-title > h3 > span", {
-                observe: true,
-                urlSelector: null,
-                stashIdSelector: () => window.location.href.replace(/^.*\/studios\//, "").split(/[?#]/)[0],
-                nameSelector: null,
+                ...stashBoxDefault,
+                stashIdSelector: () => findId(window.location.href),
             });
             check(Target.Studio, `a[href^='/studios/']${exclude}, a[href^='https://${window.location.host}/studios/']${exclude}`, {
-                observe: true,
-                urlSelector: null,
-                stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/studios\//, "")?.split(/[?#]/)[0],
-                nameSelector: null,
+                ...stashBoxDefault,
+                stashIdSelector: (e) => findId(e.closest("a")?.href),
             });
-            check(Target.Tag, ".MainContent > .NarrowPage h3 > span", {
-                observe: true,
-                displaySelector: e => window.location.pathname.startsWith("/tags/") ? e : undefined,
-                urlSelector: null,
-                stashIdSelector: () => window.location.href.replace(/^.*\/tags\//, "").split(/[?#]/)[0],
-                nameSelector: null,
+            // Tag by StashId isn't supported by Stash yet
+            /*check(Target.Tag, ".MainContent > .NarrowPage h3 > span", {
+                ...stashBoxDefault,
+                displaySelector: e => window.location.pathname.startsWith("/tags/") ? e : undefined,  // only on tag page
+                stashIdSelector: () => findId(window.location.href),
             });
             check(Target.Tag, `a[href^='/tags/']${exclude}, a[href^='https://${window.location.host}/tags/']${exclude}`, {
-                observe: true,
-                displaySelector: e => window.location.pathname === "/tags" ? e : undefined,
-                urlSelector: null,
-                stashIdSelector: (e) => e.closest("a")?.getAttribute("href")?.replace(/^.*\/tags\//, "")?.split(/[?#]/)[0],
-                nameSelector: null,
-            });
+                ...stashBoxDefault,
+                displaySelector: e => window.location.pathname === "/tags" ? e : undefined,  // only on overview page
+                stashIdSelector: (e) => findId(e.closest("a")?.href),
+            });*/
             break;
         }
         default:
