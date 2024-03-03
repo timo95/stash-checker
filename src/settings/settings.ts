@@ -35,7 +35,12 @@ export function newSettingsSection(id: string, title: string, description?: stri
         section.append(text);
     }
 
-    return section
+    let body = document.createElement("div");
+    body.id = `stashChecker-settingsSectionBody-${id}`
+    body.classList.add("stashChecker", "settingsSectionBody");
+    section.append(body)
+
+    return body
 }
 
 function getSettings(): HTMLElement {
@@ -43,7 +48,7 @@ function getSettings(): HTMLElement {
 }
 
 export function getSettingsSection(id: string): HTMLElement | null {
-    return document.getElementById(`stashChecker-settingsSection-${id}`);
+    return document.getElementById(`stashChecker-settingsSectionBody-${id}`);
 }
 
 export function openSettingsWindow() {

@@ -1,6 +1,6 @@
 import {StashEndpoint, StashEntry, Target, Type} from "../dataTypes";
 import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "../utils";
-import {booleanOptions, OptionKey} from "../settings/general";
+import {booleanOptions, OptionKey, stringOptions} from "../settings/general";
 import {StashQuery, StashQueryClass} from "./stashQuery";
 import {mouseoutListener, mouseoverListener} from "./tooltipElement";
 
@@ -170,16 +170,16 @@ export function prefixSymbol(
     let targetReadable = target.charAt(0).toUpperCase() + target.slice(1);
     if (count === 0) {
         if (booleanOptions.get(OptionKey.showCrossMark)) {
-            symbol.textContent = "✗ ";
+            symbol.textContent = `${stringOptions.get(OptionKey.crossMark)!} `;
         }
         symbol.style.color = "red";
         tooltip = `${targetReadable} not in Stash<br>`;
     } else if(new Set(data.map(e => e.endpoint)).size < data.length) {
-        symbol.textContent = "! ";
+        symbol.textContent = `${stringOptions.get(OptionKey.dangerMark)!} `;
         symbol.style.color = "orange";
         tooltip = `${targetReadable} has duplicate matches<br>`;
     } else {
-        symbol.textContent = "✓ ";
+        symbol.textContent = `${stringOptions.get(OptionKey.checkMark)!} `;
         symbol.style.color = color(data[0]);
     }
     // All used queries
