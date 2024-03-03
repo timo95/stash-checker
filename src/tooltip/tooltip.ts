@@ -99,7 +99,7 @@ function mergeData(target: StashEntry[], source: StashEntry[]): StashEntry[] {
 }
 
 function entryKey(entry: StashEntry): string {
-    return `${entry.id}`;
+    return `${entry.endpoint}-${entry.id}`;
 }
 
 /**
@@ -174,13 +174,13 @@ export function prefixSymbol(
         }
         symbol.style.color = "red";
         tooltip = `${targetReadable} not in Stash<br>`;
-    } else if (count === 1) {
-        symbol.textContent = "✓ ";
-        symbol.style.color = color(data[0]);
-    } else {
+    } else if(new Set(data.map(e => e.endpoint)).size < data.length) {
         symbol.textContent = "! ";
         symbol.style.color = "orange";
         tooltip = `${targetReadable} has duplicate matches<br>`;
+    } else {
+        symbol.textContent = "✓ ";
+        symbol.style.color = color(data[0]);
     }
     // All used queries
     tooltip += `Endpoints: ${endpoints.join(", ")}`
