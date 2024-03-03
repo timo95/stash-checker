@@ -58,7 +58,7 @@
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(314);
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = __webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
       var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default());
-      ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-text-light: #989898 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-border-light: #989898 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --stash-checker-color-text: #e0e0e0 !important;\n    --stash-checker-color-text-light: #707070 !important;\n    --stash-checker-color-link-visited: #c7c7c7 !important;\n    --stash-checker-color-link-hover: #f2f2f2 !important;\n    --stash-checker-color-link-active: #039 !important;\n    --stash-checker-color-border: #5a5a5a !important;\n    --stash-checker-color-border-light: #707070 !important;\n    --stash-checker-color-bg: #202020 !important;\n    --stash-checker-color-card: #464646 !important;\n  }\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.sub-heading {\n  font-size: .8rem !important;\n  margin: .5rem 0 0 !important;\n}\n\n.stashChecker.tooltip {\n  z-index: 99999 !important;\n  position: fixed !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  margin-top: -0.5rem !important;\n  max-width: 50rem !important;\n}\n\n.stashChecker.file {\n  margin: .5rem !important;\n  padding: .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tag {\n  white-space: nowrap !important;\n  line-height: 1.5rem !important;\n  margin-right: .5rem !important;\n  padding: 0 .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n  border-radius: .5rem !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: hidden !important;\n  background-color: #000 !important;\n  background-color: rgba(0,0,0,.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 20vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  width: fit-content !important;\n  display: grid !important;\n  grid-gap: 1rem !important;\n}\n\n.stashChecker.settings sub-heading {\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settings .version {\n  color: var(--stash-checker-color-text-light) !important;\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settingsSection {\n  width: 35rem !important;\n}\n\n.stashChecker.endpoints {\n  display: flex !important;\n  flex-direction: column !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: stretch !important;\n}\n\n.stashChecker.endpoint {\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  padding: 1rem !important;\n  margin: .1rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint>button {\n  flex-grow: 0 !important;\n  margin-left: .5rem !important;\n}\n\n.stashChecker.endpoint>div {\n  flex-grow: 1 !important;\n}\n\n.stashChecker.endpoint>div>* {\n  margin: 0 !important;\n}\n\n.stashChecker.heading {\n  font-size: 1.5rem !important;\n  text-align: center !important;\n}\n\n.stashChecker fieldset {\n  border: .1rem solid var(--stash-checker-color-border-light) !important;\n  border-radius: .5rem !important;\n  margin: .5rem 0 .5rem 0 !important;\n  padding: .5rem !important;\n}\n\n.stashChecker legend {\n  float: unset !important;\n  width: auto !important;\n  height: auto !important;\n  margin-left: .5rem !important;\n  margin-bottom: 0 !important;\n  padding-left: .2rem !important;\n  padding-right: .2rem !important;\n  line-height: unset !important;\n  font-size: unset !important;\n}\n\n.stashChecker .option {\n  text-align: right !important;\n  margin: .5rem !important;\n}\n\n.stashChecker .option>input {\n  margin-left: .5rem !important;\n}\n\n.stashChecker>.matchQuality {\n  width: .8em !important;\n  height: .8em !important;\n  display: inline-block !important;\n  border-radius: 50% !important;\n}\n\n.stashChecker.btn {\n  display: inline-block !important;\n  font-weight: 400 !important;\n  color: #212529 !important;\n  text-align: center !important;\n  vertical-align: middle !important;\n  user-select: none !important;\n  background-color: rgba(0,0,0,0) !important;\n  border: 1px solid rgba(0,0,0,0) !important;\n  border-top-color: rgba(0,0,0,0) !important;\n  border-right-color: rgba(0,0,0,0) !important;\n  border-bottom-color: rgba(0,0,0,0) !important;\n  border-left-color: rgba(0,0,0,0) !important;\n  padding: .375rem .75rem !important;\n  font-size: 1rem !important;\n  line-height: 1.5 !important;\n  border-radius: .25rem !important;\n  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n}\n\n.stashChecker.btn:not(:disabled):not(.disabled) {\n  cursor: pointer !important;\n}\n\n.stashChecker.btn:hover {\n  color: #212529 !important;\n  text-decoration: none !important;\n}\n\n.stashChecker.btn-primary {\n  color: #fff !important;\n  background-color: #137cbd !important;\n  border-color: #137cbd !important;\n}\n\n.stashChecker.btn-primary:hover {\n  color: #fff !important;\n  background-color: #10659a !important;\n  border-color: #0e5e8f !important;\n}\n\n.stashChecker.btn-danger {\n  color: #fff !important;\n  background-color: #db3737 !important;\n  border-color: #db3737 !important;\n}\n\n.stashChecker.btn-danger:hover {\n  color: #fff !important;\n  background-color: #c82424 !important;\n  border-color: #bd2222 !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: .5rem !important;\n  margin-bottom: .5rem !important;\n  border-color: var(--stash-checker-color-card) !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tooltip hr+br {\n  display: none !important;\n}\n\n.stashChecker.file+br {\n  display: none !important;\n}\n\n.stashCheckerCheckmark {\n  font-size: inherit !important;\n}`, "" ]);
+      ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-text-light: #989898 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-border-light: #989898 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --stash-checker-color-text: #e0e0e0 !important;\n    --stash-checker-color-text-light: #707070 !important;\n    --stash-checker-color-link-visited: #c7c7c7 !important;\n    --stash-checker-color-link-hover: #f2f2f2 !important;\n    --stash-checker-color-link-active: #039 !important;\n    --stash-checker-color-border: #5a5a5a !important;\n    --stash-checker-color-border-light: #707070 !important;\n    --stash-checker-color-bg: #202020 !important;\n    --stash-checker-color-card: #464646 !important;\n  }\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.sub-heading {\n  font-size: .8rem !important;\n  margin: .5rem 0 .5rem !important;\n}\n\n.stashChecker.tooltip {\n  z-index: 99999 !important;\n  position: fixed !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  margin-top: -0.5rem !important;\n  max-width: 50rem !important;\n}\n\n.stashChecker.file {\n  margin: .5rem !important;\n  padding: .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tag {\n  white-space: nowrap !important;\n  line-height: 1.5rem !important;\n  margin-right: .5rem !important;\n  padding: 0 .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n  border-radius: .5rem !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: hidden !important;\n  background-color: #000 !important;\n  background-color: rgba(0,0,0,.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 20vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  width: fit-content !important;\n  display: grid !important;\n  gap: 1rem !important;\n}\n\n.stashChecker.settings sub-heading {\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settings .version {\n  color: var(--stash-checker-color-text-light) !important;\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settingsSection {\n  width: 35rem !important;\n}\n\n.stashChecker.settingsSectionBody {\n  width: 100% !important;\n  display: flex !important;\n  flex-flow: row wrap !important;\n  justify-content: flex-start !important;\n  align-items: flex-start !important;\n  gap: .5rem !important;\n}\n\n.stashChecker.endpoint {\n  width: 100% !important;\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  padding: 1rem !important;\n  margin: .1rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint>button {\n  flex-grow: 0 !important;\n  margin-left: .5rem !important;\n}\n\n.stashChecker.endpoint>div {\n  flex-grow: 1 !important;\n}\n\n.stashChecker.endpoint>div>* {\n  margin: 0 !important;\n}\n\n.stashChecker.heading {\n  font-size: 1.5rem !important;\n  text-align: center !important;\n}\n\n.stashChecker fieldset {\n  width: fit-content !important;\n  border: .1rem solid var(--stash-checker-color-border-light) !important;\n  border-radius: .5rem !important;\n  margin: .5rem 0 .5rem 0 !important;\n  padding: .5rem !important;\n  flex-grow: 1 !important;\n}\n\n.stashChecker legend {\n  float: unset !important;\n  width: auto !important;\n  height: auto !important;\n  margin-left: .5rem !important;\n  margin-bottom: 0 !important;\n  padding-left: .2rem !important;\n  padding-right: .2rem !important;\n  line-height: unset !important;\n  font-size: unset !important;\n}\n\n.stashChecker .option {\n  text-align: right !important;\n  margin: .5rem !important;\n}\n\n.stashChecker .option>input {\n  margin-left: .5rem !important;\n}\n\n.stashChecker>.matchQuality {\n  width: .8em !important;\n  height: .8em !important;\n  display: inline-block !important;\n  border-radius: 50% !important;\n}\n\n.stashChecker.btn {\n  display: inline-block !important;\n  font-weight: 400 !important;\n  color: #212529 !important;\n  text-align: center !important;\n  vertical-align: middle !important;\n  user-select: none !important;\n  background-color: rgba(0,0,0,0) !important;\n  border: 1px solid rgba(0,0,0,0) !important;\n  padding: .375rem .75rem !important;\n  font-size: 1rem !important;\n  line-height: 1.5 !important;\n  border-radius: .25rem !important;\n  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n}\n\n.stashChecker.btn:not(:disabled):not(.disabled) {\n  cursor: pointer !important;\n}\n\n.stashChecker.btn:hover {\n  color: #212529 !important;\n  text-decoration: none !important;\n}\n\n.stashChecker.btn-primary {\n  color: #fff !important;\n  background-color: #137cbd !important;\n  border-color: #137cbd !important;\n}\n\n.stashChecker.btn-primary:hover {\n  color: #fff !important;\n  background-color: #10659a !important;\n  border-color: #0e5e8f !important;\n}\n\n.stashChecker.btn-danger {\n  color: #fff !important;\n  background-color: #db3737 !important;\n  border-color: #db3737 !important;\n}\n\n.stashChecker.btn-danger:hover {\n  color: #fff !important;\n  background-color: #c82424 !important;\n  border-color: #bd2222 !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: .5rem !important;\n  margin-bottom: .5rem !important;\n  border-color: var(--stash-checker-color-border-light) !important;\n  background-color: var(--stash-checker-color-border-light) !important;\n}\n\n.stashChecker.tooltip hr+br {\n  display: none !important;\n}\n\n.stashChecker.file+br {\n  display: none !important;\n}\n\n.stashCheckerCheckmark {\n  font-size: inherit !important;\n}`, "" ]);
       const __WEBPACK_DEFAULT_EXPORT__ = ___CSS_LOADER_EXPORT___;
     },
     314: module => {
@@ -300,14 +300,14 @@
           __webpack_require__.d(__webpack_exports__, {
             z: () => check
           });
-          var _tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(719);
+          var _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(219);
           var _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(378);
           var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(185);
           var _dataTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(389);
           var _request__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(463);
           var _settings_general__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(44);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_general__WEBPACK_IMPORTED_MODULE_5__ ]);
-          [_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_general__WEBPACK_IMPORTED_MODULE_5__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_general__WEBPACK_IMPORTED_MODULE_5__ ]);
+          [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_general__WEBPACK_IMPORTED_MODULE_5__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           var DataFields;
           (function(DataFields) {
             DataFields["id"] = "id";
@@ -390,7 +390,7 @@
               let displayElement = displaySelector(element);
               if (displayElement && url) {
                 void 0;
-                await queryStash(url, ((...args) => (0, _tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Url, {
+                await queryStash(url, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Url, {
                   stashIdEndpoint
                 });
               } else console.info(`No URL for ${target} found.`);
@@ -400,7 +400,7 @@
               let displayElement = displaySelector(element);
               if (displayElement && code) {
                 void 0;
-                await queryStash(code, ((...args) => (0, _tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Code, {
+                await queryStash(code, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Code, {
                   stashIdEndpoint
                 });
               } else console.info(`No Code for ${target} found.`);
@@ -410,7 +410,7 @@
               let displayElement = displaySelector(element);
               if (displayElement && id) {
                 void 0;
-                await queryStash(id, ((...args) => (0, _tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.StashId, {
+                await queryStash(id, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.StashId, {
                   stashIdEndpoint
                 });
               } else console.info(`No StashId for ${target} found.`);
@@ -422,7 +422,7 @@
               let displayElement = displaySelector(element);
               if (displayElement && name && !ignore) {
                 void 0;
-                await queryStash(name, ((...args) => (0, _tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Name, {
+                await queryStash(name, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Name, {
                   stashIdEndpoint
                 });
               } else if (name && ignore) console.info(`Ignore single name: ${name}`); else console.info(`No Name for ${target} found.`);
@@ -432,7 +432,7 @@
               let displayElement = displaySelector(element);
               if (displayElement && title) {
                 void 0;
-                await queryStash(title, ((...args) => (0, _tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Title, {
+                await queryStash(title, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Title, {
                   stashIdEndpoint
                 });
               } else console.info(`No Title for ${target} found.`);
@@ -489,7 +489,7 @@
           var _style_main_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(432);
           var _check__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(464);
           var _settings_endpoints__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(378);
-          var _tooltipElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(359);
+          var _tooltip_tooltipElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(563);
           var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(185);
           var _dataTypes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(389);
           var _settings_settings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(59);
@@ -498,7 +498,7 @@
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _check__WEBPACK_IMPORTED_MODULE_1__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_2__, _settings_general__WEBPACK_IMPORTED_MODULE_6__ ]);
           [_check__WEBPACK_IMPORTED_MODULE_1__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_2__, _settings_general__WEBPACK_IMPORTED_MODULE_6__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           (async function() {
-            await (0, _tooltipElement__WEBPACK_IMPORTED_MODULE_7__.AA)();
+            await (0, _tooltip_tooltipElement__WEBPACK_IMPORTED_MODULE_7__.AA)();
             (0, _settings_settings__WEBPACK_IMPORTED_MODULE_8__.yD)();
             await (0, _settings_general__WEBPACK_IMPORTED_MODULE_6__.WA)();
             await (0, _settings_endpoints__WEBPACK_IMPORTED_MODULE_2__.P)();
@@ -1046,11 +1046,7 @@
           async function initEndpointSettings() {
             let description = "The GraphQL endpoint URL can be generated by appending '/graphql' to your Stash base URL. The API key can be found on your security settings page. Leave the field empty, if none is required.";
             let endpointSection = (0, _settings__WEBPACK_IMPORTED_MODULE_2__.Lc)("endpoints", "Stash Endpoints", description);
-            let endpoints = document.createElement("div");
-            endpoints.id = "stashChecker-endpoints";
-            endpoints.classList.add("stashChecker", "endpoints");
-            endpointSection.append(endpoints);
-            await updateEndpoints(endpoints);
+            await updateEndpoints(endpointSection);
           }
           async function updateEndpoints(container) {
             let endpointList = stashEndpoints.map(((endpoint, index) => {
@@ -1133,6 +1129,7 @@
           __webpack_require__.d(__webpack_exports__, {
             $k: () => booleanOptions,
             WA: () => initGeneralSettings,
+            i3: () => stringOptions,
             vw: () => OptionKey
           });
           var _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(59);
@@ -1142,14 +1139,19 @@
             OptionKey["showCrossMark"] = "showCrossMark";
             OptionKey["showTags"] = "showTags";
             OptionKey["showFiles"] = "showFiles";
+            OptionKey["checkMark"] = "checkMark";
+            OptionKey["crossMark"] = "crossMark";
+            OptionKey["dangerMark"] = "dangerMark";
           })(OptionKey || (OptionKey = {}));
-          const defaultOptions = new Map([ [ OptionKey.showCrossMark, true ], [ OptionKey.showTags, true ], [ OptionKey.showFiles, true ] ]);
-          const booleanOptions = await (0, _storage__WEBPACK_IMPORTED_MODULE_0__._W)("booleanOptions", defaultOptions);
+          const defaultBooleanOptions = new Map([ [ OptionKey.showCrossMark, true ], [ OptionKey.showTags, true ], [ OptionKey.showFiles, true ] ]);
+          const defaultStringOptions = new Map([ [ OptionKey.checkMark, "✓" ], [ OptionKey.crossMark, "✗" ], [ OptionKey.dangerMark, "!" ] ]);
+          const booleanOptions = await (0, _storage__WEBPACK_IMPORTED_MODULE_0__._W)("booleanOptions", defaultBooleanOptions);
+          const stringOptions = await (0, _storage__WEBPACK_IMPORTED_MODULE_0__._W)("stringOptions", defaultStringOptions);
           async function initGeneralSettings() {
             let generalSection = (0, _settings__WEBPACK_IMPORTED_MODULE_1__.Lc)("general", "General");
             let checkmarkSettings = document.createElement("fieldset");
             checkmarkSettings.innerHTML = "<legend>Checkmark</legend>";
-            checkmarkSettings.append(checkBox(OptionKey.showCrossMark, "Show cross mark"));
+            checkmarkSettings.append(checkBox(OptionKey.showCrossMark, "Show cross mark"), charBox(OptionKey.checkMark, "Check mark"), charBox(OptionKey.dangerMark, "Danger mark"), charBox(OptionKey.crossMark, "Cross mark"));
             generalSection.appendChild(checkmarkSettings);
             let tooltipSettings = document.createElement("fieldset");
             tooltipSettings.innerHTML = "<legend>Tooltip</legend>";
@@ -1163,10 +1165,30 @@
             inputElement.id = `stashChecker-checkBox-${key}`;
             inputElement.name = key;
             inputElement.type = "checkbox";
-            inputElement.checked = booleanOptions.get(key) ?? false;
-            inputElement.addEventListener("click", (() => {
+            inputElement.defaultChecked = booleanOptions.get(key) ?? false;
+            inputElement.addEventListener("input", (() => {
               booleanOptions.set(key, inputElement.checked);
               void (0, _storage__WEBPACK_IMPORTED_MODULE_0__.KY)("booleanOptions", booleanOptions);
+            }));
+            let labelElement = document.createElement("label");
+            labelElement.htmlFor = inputElement.id;
+            labelElement.innerHTML = label;
+            div.appendChild(labelElement);
+            div.appendChild(inputElement);
+            return div;
+          }
+          function charBox(key, label) {
+            let div = document.createElement("div");
+            div.classList.add("option");
+            let inputElement = document.createElement("input");
+            inputElement.id = `stashChecker-textBox-${key}`;
+            inputElement.name = key;
+            inputElement.type = "text";
+            inputElement.size = 4;
+            inputElement.defaultValue = stringOptions.get(key) ?? "";
+            inputElement.addEventListener("input", (() => {
+              stringOptions.set(key, inputElement.value);
+              void (0, _storage__WEBPACK_IMPORTED_MODULE_0__.KY)("stringOptions", stringOptions);
             }));
             let labelElement = document.createElement("label");
             labelElement.htmlFor = inputElement.id;
@@ -1241,13 +1263,17 @@
           text.innerHTML = description;
           section.append(text);
         }
-        return section;
+        let body = document.createElement("div");
+        body.id = `stashChecker-settingsSectionBody-${id}`;
+        body.classList.add("stashChecker", "settingsSectionBody");
+        section.append(body);
+        return body;
       }
       function getSettings() {
         return document.getElementById("stashChecker-settings");
       }
       function getSettingsSection(id) {
-        return document.getElementById(`stashChecker-settingsSection-${id}`);
+        return document.getElementById(`stashChecker-settingsSectionBody-${id}`);
       }
       function openSettingsWindow() {
         let settingsModal = document.getElementById("stashChecker-settingsModal");
@@ -1287,92 +1313,107 @@
         return value;
       }
     },
-    719: (module, __webpack_exports__, __webpack_require__) => {
+    657: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.d(__webpack_exports__, {
+        M: () => StashQueryClass
+      });
+      var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(185);
+      class StashQueryClass {
+        constructor(query) {
+          this.endpoint = query.endpoint;
+          this.baseUrl = query.baseUrl;
+          this.types = query.types;
+        }
+        addTypes(types) {
+          let typeSet = new Set(this.types);
+          types.forEach((type => typeSet.add(type)));
+          this.types = Array.from(typeSet).sort();
+        }
+        compareTo(query) {
+          return this.endpoint.localeCompare(query.endpoint);
+        }
+        toHtml(target, id, numQueries) {
+          let typesString = `(Matched: ${this.types.map((type => _utils__WEBPACK_IMPORTED_MODULE_0__.xG.get(type))).join(", ")})`;
+          return `${this.matchQualityHtml(numQueries)} ${this.endpoint} ${typesString}: ${(0, 
+          _utils__WEBPACK_IMPORTED_MODULE_0__.bM)(this.baseUrl, target, id)}`;
+        }
+        matchQualityHtml(numQueries) {
+          let matchQuality = this.types.length / numQueries;
+          let color;
+          if (matchQuality == 1) color = "rgb(0,100,0)"; else if (matchQuality > .5) color = "rgb(100,100,0)"; else color = "rgb(100,50,0)";
+          return `<span class="matchQuality" style="background-color: ${color}"></span>`;
+        }
+      }
+    },
+    219: (module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
             l: () => prefixSymbol
           });
-          var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
-          var _tooltipElement__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(359);
-          var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(185);
-          var _settings_general__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(44);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_general__WEBPACK_IMPORTED_MODULE_2__ ]);
-          _settings_general__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
-          const typeToString = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.Url, "URL" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.Code, "Code" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.StashId, "StashId" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.Name, "Name" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.Title, "Title" ] ]);
+          var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(185);
+          var _settings_general__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(44);
+          var _stashQuery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(657);
+          var _tooltipElement__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(563);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_general__WEBPACK_IMPORTED_MODULE_1__ ]);
+          _settings_general__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
           function getExistingSymbol(element) {
             if (element.getAttribute("data-type") === "stash-symbol") return element; else return Array.from(element.childNodes).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n)).map(getExistingSymbol).find((n => n));
           }
           function formatFileData(files) {
             let propertyStrings = [ [ "path", path => `Path: ${path}` ], [ "video_codec", video_codec => `<br>Codec: ${video_codec}` ], [ "width", width => ` (${width}` ], [ "height", height => `x${height})` ], [ "size", size => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${(0, 
-            _utils__WEBPACK_IMPORTED_MODULE_1__.$R)(size)}` ], [ "bit_rate", bit_rate => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(bit_rate / 1e6).toFixed(2)}Mbit/s` ], [ "duration", duration => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${(0, 
-            _utils__WEBPACK_IMPORTED_MODULE_1__.xr)(duration)}` ] ];
+            _utils__WEBPACK_IMPORTED_MODULE_0__.$R)(size)}` ], [ "bit_rate", bit_rate => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(bit_rate / 1e6).toFixed(2)}Mbit/s` ], [ "duration", duration => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${(0, 
+            _utils__WEBPACK_IMPORTED_MODULE_0__.xr)(duration)}` ] ];
             return files.map((file => "<div class='stashChecker file'>" + propertyStrings.filter((e => file[e[0]])).map((e => e[1](file[e[0]]))).join("") + "</div>")).join("");
           }
           function formatTagPill(tag) {
             return `<span class='stashChecker tag'>${tag.name}</span>`;
           }
-          function matchQuality(matchQuality) {
-            let color;
-            if (matchQuality == 1) color = "rgb(0,100,0)"; else if (matchQuality > .5) color = "rgb(100,100,0)"; else color = "rgb(100,50,0)";
-            return `<span class="matchQuality" style="background-color: ${color}"></span>`;
+          function formatQueries(queries, target, id, numQueries) {
+            return queries.map((query => new _stashQuery__WEBPACK_IMPORTED_MODULE_2__.M(query).toHtml(target, id, numQueries))).join("<br>");
           }
-          function formatQueries(queries, target, id) {
-            return queries.map((query => `${matchQuality(query.matchQuality)} ${query.endpoint} (Matched: ${query.types.map((type => typeToString.get(type))).join(", ")}): ${(0, 
-            _utils__WEBPACK_IMPORTED_MODULE_1__.bM)(query.url, target, id)}`)).join("<br>");
+          function formatEntryData(target, data, numQueries) {
+            let propertyStrings = [ [ "id", (id, queries) => `<br>${formatQueries(queries, target, id, numQueries)}` ], [ "title", title => `<br>Title: ${title}` ], [ "name", name => `<br>Name: ${name}` ], [ "favorite", () => "&emsp;&#10084;&#65039;" ], [ "disambiguation", disambiguation => ` <span style="color: grey">(${disambiguation})</span>` ], [ "alias_list", alias_list => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", <wbr>")}` ], [ "studio", studio => `<br>Studio: ${studio.name}` ], [ "code", code => `<br>Code: ${code}` ], [ "date", date => `<br>Date: ${date}` ], [ "tags", tags => tags.length === 0 ? "" : `<br>Tags: ${tags.map(formatTagPill).join("<wbr>")}` ], [ "files", files => `${formatFileData(files)}` ] ];
+            return data.map((entry => "<hr>" + propertyStrings.filter((e => entry[e[0]])).map((e => e[1](entry[e[0]], entry.queries))).join(""))).join("");
           }
-          function formatEntryData(target, data) {
-            let propertyStrings = [ [ "id", (id, queries) => `<br>${formatQueries(queries, target, id)}` ], [ "title", title => `<br>Title: ${title}` ], [ "name", name => `<br>Name: ${name}` ], [ "favorite", () => "&emsp;&#10084;&#65039;" ], [ "disambiguation", disambiguation => ` <span style="color: grey">(${disambiguation})</span>` ], [ "alias_list", alias_list => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", <wbr>")}` ], [ "studio", studio => `<br>Studio: ${studio.name}` ], [ "code", code => `<br>Code: ${code}` ], [ "date", date => `<br>Date: ${date}` ], [ "tags", tags => tags.length === 0 ? "" : `<br>Tags: ${tags.map(formatTagPill).join("<wbr>")}` ], [ "files", files => `${formatFileData(files)}` ] ];
-            return data.map((entry => "<hr>" + propertyStrings.filter((e => entry[e[0]])).map((e => e[1](entry[e[0]], entry["queries"]))).join(""))).join("");
-          }
-          function updateMatchQuality(queries, numQueries) {
-            return queries.map((query => {
-              query.matchQuality = query.types.length / numQueries;
-              return query;
-            }));
-          }
-          function mergeData(target, source, numQueries) {
-            let mapTarget = new Map(target.map((e => [ e.id, e ])));
-            let mapSource = new Map(source.map((e => [ e.id, e ])));
-            mapSource.forEach(((sourceValue, key) => {
+          function mergeData(target, source) {
+            let mapTarget = new Map(target.map((e => [ entryKey(e), e ])));
+            let mapSource = new Map(source.map((e => [ entryKey(e), e ])));
+            mapSource.forEach(((sourceEntry, key) => {
               if (mapTarget.has(key)) {
-                let sourceQueries = new Map(sourceValue["queries"].map((v => [ v.endpoint, v ])));
-                let targetQueries = new Map(mapTarget.get(key)["queries"].map((v => [ v.endpoint, v ])));
+                let sourceQueries = new Map(sourceEntry.queries.map((v => [ v.endpoint, v ])));
+                let targetQueries = new Map(mapTarget.get(key).queries.map((v => [ v.endpoint, v ])));
                 sourceQueries.forEach(((sourceQuery, key) => {
-                  if (targetQueries.has(key)) {
-                    let targetQuery = targetQueries.get(key);
-                    let typeSet = new Set(sourceQuery.types);
-                    targetQuery.types.forEach((type => typeSet.add(type)));
-                    sourceQuery.types = [ ...typeSet ].sort();
-                  }
+                  if (targetQueries.has(key)) new _stashQuery__WEBPACK_IMPORTED_MODULE_2__.M(sourceQuery).addTypes(targetQueries.get(key).types);
                   targetQueries.set(key, sourceQuery);
                 }));
-                sourceValue["queries"] = [ ...targetQueries.values() ].sort(((a, b) => a.endpoint.localeCompare(b.endpoint)));
+                sourceEntry.queries = Array.from(targetQueries.values()).map((q => new _stashQuery__WEBPACK_IMPORTED_MODULE_2__.M(q))).sort(((a, b) => a.compareTo(b)));
               }
-              mapTarget.set(key, sourceValue);
+              mapTarget.set(key, sourceEntry);
             }));
-            return Array.from(mapTarget.values()).map((datum => {
-              datum["queries"] = updateMatchQuality(datum["queries"], numQueries);
-              return datum;
-            }));
+            return Array.from(mapTarget.values());
+          }
+          function entryKey(entry) {
+            return `${entry.endpoint}-${entry.id}`;
           }
           function prefixSymbol(element, target, type, endpoint, data, color) {
             let endpoints = [ endpoint.name ];
             let queryTypes = [ type ];
+            let baseUrl = endpoint.url.replace(/\/graphql\/?$/, "");
             let query = {
               endpoint: endpoint.name,
-              url: endpoint.url.replace(/\/graphql\/?$/, ""),
-              types: queryTypes,
-              matchQuality: 1
+              baseUrl,
+              types: queryTypes
             };
             data.forEach((entry => {
-              entry["queries"] = [ query ];
+              entry.queries = [ query ];
+              entry.endpoint = endpoint.name;
             }));
             let symbol = getExistingSymbol(element);
             if (symbol) {
               endpoints = [ ...new Set(JSON.parse(symbol.getAttribute("data-endpoints"))).add(endpoint.name) ].sort();
               queryTypes = [ ...new Set(JSON.parse(symbol.getAttribute("data-queries"))).add(type) ].sort();
-              data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data, queryTypes.length);
+              data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data);
               symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")) + 1).toString());
             } else {
               symbol = document.createElement("span");
@@ -1381,7 +1422,7 @@
               symbol.setAttribute("data-count", "1");
               symbol.addEventListener("mouseover", _tooltipElement__WEBPACK_IMPORTED_MODULE_3__.sQ);
               symbol.addEventListener("mouseout", _tooltipElement__WEBPACK_IMPORTED_MODULE_3__._I);
-              let text = (0, _utils__WEBPACK_IMPORTED_MODULE_1__.Yz)(element);
+              let text = (0, _utils__WEBPACK_IMPORTED_MODULE_0__.Yz)(element);
               if (text) text.parentNode?.insertBefore(symbol, text); else return;
             }
             symbol.setAttribute("data-endpoints", JSON.stringify(endpoints));
@@ -1391,21 +1432,21 @@
             let tooltip = "";
             let targetReadable = target.charAt(0).toUpperCase() + target.slice(1);
             if (count === 0) {
-              if (_settings_general__WEBPACK_IMPORTED_MODULE_2__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.showCrossMark)) symbol.textContent = "✗ ";
+              if (_settings_general__WEBPACK_IMPORTED_MODULE_1__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_1__.vw.showCrossMark)) symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_1__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_1__.vw.crossMark)} `;
               symbol.style.color = "red";
               tooltip = `${targetReadable} not in Stash<br>`;
-            } else if (count === 1) {
-              symbol.textContent = "✓ ";
-              symbol.style.color = color(data[0]);
-            } else {
-              symbol.textContent = "! ";
+            } else if (new Set(data.map((e => e.endpoint))).size < data.length) {
+              symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_1__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_1__.vw.dangerMark)} `;
               symbol.style.color = "orange";
               tooltip = `${targetReadable} has duplicate matches<br>`;
+            } else {
+              symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_1__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_1__.vw.checkMark)} `;
+              symbol.style.color = color(data[0]);
             }
             tooltip += `Endpoints: ${endpoints.join(", ")}`;
             tooltip += "<br>";
-            tooltip += `Queries: ${queryTypes.map((type => typeToString.get(type))).join(", ")}`;
-            tooltip += formatEntryData(target, data);
+            tooltip += `Queries: ${queryTypes.map((type => _utils__WEBPACK_IMPORTED_MODULE_0__.xG.get(type))).join(", ")}`;
+            tooltip += formatEntryData(target, data, queryTypes.length);
             symbol.setAttribute("data-info", tooltip);
           }
           __webpack_async_result__();
@@ -1414,7 +1455,7 @@
         }
       }));
     },
-    359: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+    563: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
         AA: () => initTooltip,
         _I: () => mouseoutListener,
@@ -1463,8 +1504,10 @@
         Yz: () => firstTextChild,
         bM: () => entryLink,
         iy: () => friendlyHttpStatus,
+        xG: () => typeToString,
         xr: () => secondsToReadable
       });
+      var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
       function firstTextChild(node) {
         if (!node) return node;
         if (node.nodeType === Node.TEXT_NODE && node.textContent?.match(/^[\s<>]*$/) === null) return node; else return Array.from(node.childNodes).filter((n => ![ "svg" ].includes(n.nodeName.toLowerCase()))).filter((n => n.nodeType === Node.ELEMENT_NODE ? n.getAttribute("data-type") !== "stash-symbol" : true)).map(firstTextChild).find((n => n));
@@ -1491,6 +1534,7 @@
         return bytes.toFixed(2) + label;
       }
       let friendlyHttpStatus = new Map([ [ 200, "OK" ], [ 201, "Created" ], [ 202, "Accepted" ], [ 203, "Non-Authoritative Information" ], [ 204, "No Content" ], [ 205, "Reset Content" ], [ 206, "Partial Content" ], [ 300, "Multiple Choices" ], [ 301, "Moved Permanently" ], [ 302, "Found" ], [ 303, "See Other" ], [ 304, "Not Modified" ], [ 305, "Use Proxy" ], [ 306, "Unused" ], [ 307, "Temporary Redirect" ], [ 400, "Bad Request" ], [ 401, "Unauthorized" ], [ 402, "Payment Required" ], [ 403, "Forbidden" ], [ 404, "Not Found" ], [ 405, "Method Not Allowed" ], [ 406, "Not Acceptable" ], [ 407, "Proxy Authentication Required" ], [ 408, "Request Timeout" ], [ 409, "Conflict" ], [ 410, "Gone" ], [ 411, "Length Required" ], [ 412, "Precondition Required" ], [ 413, "Request Entry Too Large" ], [ 414, "Request-URI Too Long" ], [ 415, "Unsupported Media Type" ], [ 416, "Requested Range Not Satisfiable" ], [ 417, "Expectation Failed" ], [ 418, "I'm a teapot" ], [ 429, "Too Many Requests" ], [ 500, "Internal Server Error" ], [ 501, "Not Implemented" ], [ 502, "Bad Gateway" ], [ 503, "Service Unavailable" ], [ 504, "Gateway Timeout" ], [ 505, "HTTP Version Not Supported" ] ]);
+      const typeToString = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.Url, "URL" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.Code, "Code" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.StashId, "StashId" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.Name, "Name" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.Title, "Title" ] ]);
     }
   };
   var __webpack_module_cache__ = {};
