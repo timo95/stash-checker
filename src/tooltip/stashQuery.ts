@@ -8,7 +8,7 @@ export interface StashQuery {
 }
 
 /**
- * An aggregation of queries for the same entry.
+ * Queries per entry and endpoint.
  */
 export class StashQueryClass implements StashQuery {
     endpoint: string;
@@ -24,7 +24,7 @@ export class StashQueryClass implements StashQuery {
     addTypes(types: Type[]): void {
         let typeSet = new Set(this.types)
         types.forEach(type => typeSet.add(type));
-        this.types = [...typeSet].sort()
+        this.types = Array.from(typeSet).sort()
     }
 
     compareTo(query: StashQueryClass): number {
