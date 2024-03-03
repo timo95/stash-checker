@@ -6,6 +6,7 @@
 - Add options to not include tags/files in toolbox [#22]
 - Add support for javdb
 - Improve responsiveness for sites with many entries by queueing batch queries [#28]
+- Separate tooltip entries per endpoint
 - Fix data18 performer overview page
 - Fix page change on Stash-box not detected [#25]
 
