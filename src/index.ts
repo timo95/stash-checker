@@ -1,7 +1,7 @@
 import "./style/main.scss";
 import {check} from "./check";
 import {initEndpointSettings} from "./settings/endpoints";
-import {initTooltip} from "./tooltipElement";
+import {initTooltip} from "./tooltip/tooltipElement";
 import {firstTextChild} from "./utils";
 import {CheckOptions, Target} from "./dataTypes";
 import {initSettingsWindow} from "./settings/settings";

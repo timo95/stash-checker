@@ -1,15 +1,8 @@
-import {StashEndpoint, StashEntry, StashQuery, Target, Type} from "./dataTypes";
+import {StashEndpoint, StashEntry, Target, Type} from "../dataTypes";
+import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "../utils";
+import {booleanOptions, OptionKey} from "../settings/general";
+import {StashQuery, StashQueryClass} from "./stashQuery";
 import {mouseoutListener, mouseoverListener} from "./tooltipElement";
-import {bytesToReadable, entryLink, firstTextChild, secondsToReadable} from "./utils";
-import {booleanOptions, OptionKey} from "./settings/general";
-
-const typeToString = new Map<Type, string>([
-    [Type.Url, "URL"],
-    [Type.Code, "Code"],
-    [Type.StashId, "StashId"],
-    [Type.Name, "Name"],
-    [Type.Title, "Title"],
-]);
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -47,23 +40,13 @@ function formatTagPill(tag: {id: string, name: string}): string {
     return `<span class='stashChecker tag'>${tag.name}</span>`;
 }
 
-function matchQuality(matchQuality: number): string {
-    let color;
-    if (matchQuality == 1) color = "rgb(0,100,0)";
-    else if (matchQuality > 0.5) color = "rgb(100,100,0)";
-    else color = "rgb(100,50,0)";
-    return `<span class="matchQuality" style="background-color: ${color}"></span>`;
+function formatQueries(queries: StashQuery[], target: Target, id: string, numQueries: number): string {
+    return queries.map(query => new StashQueryClass(query).toHtml(target, id, numQueries)).join("<br>");
 }
 
-function formatQueries(queries: StashQuery[], target: Target, id: string): string {
-    return queries.map(query =>
-        `${matchQuality(query.matchQuality)} ${query.endpoint} (Matched: ${query.types.map(type => typeToString.get(type)).join(", ")}): ${entryLink(query.url, target, id)}`
-    ).join("<br>");
-}
-
-function formatEntryData(target: Target, data: StashEntry[]): string {
+function formatEntryData(target: Target, data: StashEntry[], numQueries: number): string {
     let propertyStrings: [string, (v: any, queries: StashQuery[]) => string][] = [
-        ["id", (id: any, queries: StashQuery[]) => `<br>${formatQueries(queries, target, id)}`],
+        ["id", (id: any, queries: StashQuery[]) => `<br>${formatQueries(queries, target, id, numQueries)}`],
         ["title", (title: any) => `<br>Title: ${title}`],
         ["name", (name: any) => `<br>Name: ${name}`],
         ["favorite", () => "&emsp;&#10084;&#65039;"],
@@ -77,16 +60,9 @@ function formatEntryData(target: Target, data: StashEntry[]): string {
     ];
     return data.map((entry: any) => "<hr>" + propertyStrings
         .filter((e) => entry[e[0]])
-        .map((e) => e[1](entry[e[0]], entry["queries"]))
+        .map((e) => e[1](entry[e[0]], entry.queries))
         .join("")
     ).join("");
-}
-
-function updateMatchQuality(queries: StashQuery[], numQueries: number): StashQuery[] {
-    return queries.map(query => {
-        query.matchQuality = query.types.length / numQueries;
-        return query;
-    })
 }
 
 /**
@@ -94,37 +70,36 @@ function updateMatchQuality(queries: StashQuery[], numQueries: number): StashQue
  *
  * @param target
  * @param source
- * @param numQueries
  */
-function mergeData(target: StashEntry[], source: StashEntry[], numQueries: number): StashEntry[] {
-    let mapTarget: Map<string, StashEntry> = new Map(target.map(e => [e.id, e]))
-    let mapSource: Map<string, StashEntry> = new Map(source.map(e => [e.id, e]))
-    mapSource.forEach((sourceValue, key) => {
+function mergeData(target: StashEntry[], source: StashEntry[]): StashEntry[] {
+    // Identify results by endpoint + id, merge identical ones
+    let mapTarget: Map<string, StashEntry> = new Map(target.map(e => [entryKey(e), e]))
+    let mapSource: Map<string, StashEntry> = new Map(source.map(e => [entryKey(e), e]))
+    mapSource.forEach((sourceEntry, key) => {
         if (mapTarget.has(key)) {
-            // merge stash queries
-            let sourceQueries: Map<string, StashQuery> = new Map(sourceValue["queries"].map((v: StashQuery) => [v.endpoint, v]))
-            let targetQueries: Map<string, StashQuery> = new Map(mapTarget.get(key)!["queries"].map((v: StashQuery) => [v.endpoint, v]))
+            // Merge "queries"; Create maps: endpoint -> query
+            let sourceQueries: Map<string, StashQuery> = new Map(sourceEntry.queries.map((v: StashQuery) => [v.endpoint, v]))
+            let targetQueries: Map<string, StashQuery> = new Map(mapTarget.get(key)!.queries.map((v: StashQuery) => [v.endpoint, v]))
 
             sourceQueries.forEach((sourceQuery, key) => {
                 if (targetQueries.has(key)) {
-                    let targetQuery = targetQueries.get(key)!
-                    let typeSet = new Set(sourceQuery.types)
-                    targetQuery.types.forEach(type => typeSet.add(type));
-                    sourceQuery.types = [...typeSet].sort()
+                    new StashQueryClass(sourceQuery).addTypes(targetQueries.get(key)!.types)
                 }
                 targetQueries.set(key, sourceQuery)
             });
 
             // Sort and add new value
-            sourceValue["queries"] = [...targetQueries.values()].sort((a, b) => a.endpoint.localeCompare(b.endpoint))
+            sourceEntry.queries = Array.from(targetQueries.values())
+                .map(q => new StashQueryClass(q))
+                .sort((a, b) => a.compareTo(b))
         }
-        mapTarget.set(key, sourceValue)
+        mapTarget.set(key, sourceEntry)
     });
-    // Update match quality
-    return Array.from(mapTarget.values()).map(datum => {
-        datum["queries"] = updateMatchQuality(datum["queries"], numQueries)
-        return datum
-    })
+    return Array.from(mapTarget.values());
+}
+
+function entryKey(entry: StashEntry): string {
+    return `${entry.id}`;
 }
 
 /**
@@ -150,15 +125,12 @@ export function prefixSymbol(
     let endpoints = [endpoint.name]
     let queryTypes = [type]
     // Specific query for this result
-    let query: StashQuery = {
-        endpoint: endpoint.name,
-        url: endpoint.url.replace(/\/graphql\/?$/, ""),
-        types: queryTypes,
-        matchQuality: 1
-    }
-    // Add query for each found entry
+    let baseUrl = endpoint.url.replace(/\/graphql\/?$/, "")
+    let query: StashQuery = { endpoint: endpoint.name, baseUrl, types: queryTypes }
+    // Add query and endpoint to each new entry
     data.forEach((entry: StashEntry) => {
-        entry["queries"] = [query]
+        entry.queries = [query]
+        entry.endpoint = endpoint.name
     });
 
     // Look for existing check symbol
@@ -167,7 +139,7 @@ export function prefixSymbol(
         // Merge new result with existing results
         endpoints = [...new Set<string>(JSON.parse(symbol.getAttribute("data-endpoints")!)).add(endpoint.name)].sort()
         queryTypes = [...new Set<Type>(JSON.parse(symbol.getAttribute("data-queries")!)).add(type)].sort()
-        data = mergeData(JSON.parse(symbol.getAttribute("data-data")!), data, queryTypes.length)
+        data = mergeData(JSON.parse(symbol.getAttribute("data-data")!), data)
         symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")!) + 1).toString())
     } else {
         // Create new symbol
@@ -211,11 +183,11 @@ export function prefixSymbol(
         tooltip = `${targetReadable} has duplicate matches<br>`;
     }
     // All used queries
-    tooltip += `Endpoints: ${endpoints.join(", ")}` // TODO: separate different endpoint results
+    tooltip += `Endpoints: ${endpoints.join(", ")}`
     tooltip += "<br>"
     tooltip += `Queries: ${queryTypes.map(type => typeToString.get(type)).join(", ")}`
     // List of results
-    tooltip += formatEntryData(target, data)
+    tooltip += formatEntryData(target, data, queryTypes.length)
 
     // Store tooltip content on symbol
     symbol.setAttribute("data-info", tooltip)

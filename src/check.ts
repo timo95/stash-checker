@@ -1,4 +1,4 @@
-import {prefixSymbol} from "./tooltip";
+import {prefixSymbol} from "./tooltip/tooltip";
 import {stashEndpoints} from "./settings/endpoints";
 import {firstTextChild} from "./utils";
 import {CheckOptions, StashEndpoint, Target, Type} from "./dataTypes";

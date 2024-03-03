@@ -1,4 +1,4 @@
-import {Target} from "./dataTypes";
+import {Target, Type} from "./dataTypes";
 
 /**
  * recursive (dfs) first non empty text node child, undefined if none available
@@ -96,4 +96,12 @@ export let friendlyHttpStatus: Map<number, string> = new Map([
     [503, "Service Unavailable"],
     [504, "Gateway Timeout"],
     [505, "HTTP Version Not Supported"],
+]);
+
+export const typeToString = new Map<Type, string>([
+    [Type.Url, "URL"],
+    [Type.Code, "Code"],
+    [Type.StashId, "StashId"],
+    [Type.Name, "Name"],
+    [Type.Title, "Title"],
 ]);

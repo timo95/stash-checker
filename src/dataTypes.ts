@@ -16,16 +16,6 @@ export interface StashEntry {
 }
 
 /**
- * An aggregation of queries for the same entry.
- */
-export interface StashQuery {
-    endpoint: string;
-    url: string;
-    types: Type[];
-    matchQuality: number;
-}
-
-/**
  * A batch collector of requests.
  */
 export interface BatchQuery {
