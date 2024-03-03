@@ -3,6 +3,7 @@
 
 - Add metadata for userscript auto-updates [#27]
 - Add option to disable cross mark display
+- Add option to set custom icons [#21]
 - Add options to not include tags/files in toolbox [#22]
 - Add support for javdb
 - Improve responsiveness for sites with many entries by queueing batch queries [#28]
