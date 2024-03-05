@@ -329,17 +329,17 @@
             if (!_settings_general__WEBPACK_IMPORTED_MODULE_5__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_5__.vw.showFiles)) supported.delete(DataFields.files);
             return new Array(...supported).join(",");
           }
-          async function queryStash(queryString, onload, target, type, {stashIdEndpoint}) {
+          async function queryStash(queryString, onload, target, type, stashIdEndpoint) {
             let criterion;
             let query;
             let access = d => d;
             switch (type) {
              case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.StashId:
-              criterion = `stash_id_endpoint:{endpoint:"${stashIdEndpoint}",stash_id:"${queryString}",modifier:EQUALS}`;
+              criterion = `stash_id_endpoint:{endpoint:"${encodeURIComponent(stashIdEndpoint)}",stash_id:"${encodeURIComponent(queryString)}",modifier:EQUALS}`;
               break;
 
              default:
-              criterion = `${type}:{value:"${queryString}",modifier:EQUALS}`;
+              criterion = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}`;
               break;
             }
             switch (target) {
@@ -377,63 +377,50 @@
               return;
             }
             _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__.I.forEach((endpoint => {
-              (0, _request__WEBPACK_IMPORTED_MODULE_4__.E)(endpoint, query, true).then((data => onload(target, type, endpoint, access(data))));
+              (0, _request__WEBPACK_IMPORTED_MODULE_4__.E)(endpoint, query, false).then((data => onload(target, type, endpoint, access(data))));
             }));
           }
           async function checkElement(target, element, {displaySelector = e => e, prepareUrl = url => url, urlSelector = e => e.closest("a")?.href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = e => (0, 
           _utils__WEBPACK_IMPORTED_MODULE_2__.Yz)(e)?.textContent?.trim(), titleSelector = e => (0, 
           _utils__WEBPACK_IMPORTED_MODULE_2__.Yz)(e)?.textContent?.trim(), color = () => "green"}) {
+            let displayElement = displaySelector(element);
+            if (!displayElement) return;
             if (urlSelector && prepareUrl) {
               let selectedUrl = urlSelector(element);
               let url = selectedUrl ? prepareUrl(selectedUrl) : selectedUrl;
-              let displayElement = displaySelector(element);
-              if (displayElement && url) {
+              if (url) {
                 void 0;
-                await queryStash(url, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Url, {
-                  stashIdEndpoint
-                });
+                await queryStash(url, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Url, stashIdEndpoint);
               } else console.info(`No URL for ${target} found.`);
             }
             if (codeSelector) {
               let code = codeSelector(element);
-              let displayElement = displaySelector(element);
-              if (displayElement && code) {
+              if (code) {
                 void 0;
-                await queryStash(code, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Code, {
-                  stashIdEndpoint
-                });
+                await queryStash(code, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Code, stashIdEndpoint);
               } else console.info(`No Code for ${target} found.`);
             }
             if (stashIdSelector) {
               let id = stashIdSelector(element);
-              let displayElement = displaySelector(element);
-              if (displayElement && id) {
+              if (id) {
                 void 0;
-                await queryStash(id, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.StashId, {
-                  stashIdEndpoint
-                });
+                await queryStash(id, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.StashId, stashIdEndpoint);
               } else console.info(`No StashId for ${target} found.`);
             }
             if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Performer, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Movie, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Tag ].includes(target) && nameSelector) {
               let name = nameSelector(element);
               let nameCount = name?.split(/\s+/)?.length;
               let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Performer && nameCount === 1;
-              let displayElement = displaySelector(element);
-              if (displayElement && name && !ignore) {
+              if (name && !ignore) {
                 void 0;
-                await queryStash(name, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Name, {
-                  stashIdEndpoint
-                });
+                await queryStash(name, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Name, stashIdEndpoint);
               } else if (name && ignore) console.info(`Ignore single name: ${name}`); else console.info(`No Name for ${target} found.`);
             }
             if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Scene, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Gallery ].includes(target) && titleSelector) {
               let title = titleSelector(element);
-              let displayElement = displaySelector(element);
-              if (displayElement && title) {
+              if (title) {
                 void 0;
-                await queryStash(title, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Title, {
-                  stashIdEndpoint
-                });
+                await queryStash(title, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Title, stashIdEndpoint);
               } else console.info(`No Title for ${target} found.`);
             }
           }
@@ -634,46 +621,48 @@
               {
                 let stashIdSelector = _ => document.querySelector("div[name='UUID'] > div > div.flex")?.textContent?.trim();
                 let stashIdEndpoint = "https://api.theporndb.net/graphql";
-                if (window.location.pathname.startsWith("/performers/")) {
-                  (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "div.pl-4 > h2", {
-                    observe: true,
-                    urlSelector: currentSite,
-                    stashIdSelector
-                  });
-                  (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "div.pl-4 > h2", {
-                    observe: true,
-                    urlSelector: null,
-                    nameSelector: null,
-                    stashIdSelector,
-                    stashIdEndpoint
-                  });
-                } else if (window.location.pathname.startsWith("/scenes/")) {
-                  (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "div.flex.justify-between > h2", {
-                    observe: true,
-                    urlSelector: currentSite,
-                    stashIdSelector
-                  });
-                  (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "div.flex.justify-between > h2", {
-                    observe: true,
-                    urlSelector: null,
-                    titleSelector: null,
-                    stashIdSelector,
-                    stashIdEndpoint
-                  });
-                } else if (window.location.pathname.startsWith("/movies/")) {
-                  (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "div.flex.justify-between > h2", {
-                    observe: true,
-                    urlSelector: currentSite,
-                    stashIdSelector
-                  });
-                  (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "div.flex.justify-between > h2", {
-                    observe: true,
-                    urlSelector: null,
-                    nameSelector: null,
-                    stashIdSelector,
-                    stashIdEndpoint
-                  });
-                }
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "div.pl-4 > h2", {
+                  observe: true,
+                  displaySelector: e => window.location.pathname.startsWith("/performers/") ? e : null,
+                  urlSelector: currentSite,
+                  stashIdSelector
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "div.pl-4 > h2", {
+                  observe: true,
+                  displaySelector: e => window.location.pathname.startsWith("/performers/") ? e : null,
+                  urlSelector: null,
+                  nameSelector: null,
+                  stashIdSelector,
+                  stashIdEndpoint
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "div.flex.justify-between > h2", {
+                  observe: true,
+                  displaySelector: e => window.location.pathname.startsWith("/scenes/") || window.location.pathname.startsWith("/jav/") ? e : null,
+                  urlSelector: currentSite,
+                  stashIdSelector
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "div.flex.justify-between > h2", {
+                  observe: true,
+                  displaySelector: e => window.location.pathname.startsWith("/scenes/") || window.location.pathname.startsWith("/jav/") ? e : null,
+                  urlSelector: null,
+                  titleSelector: null,
+                  stashIdSelector,
+                  stashIdEndpoint
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "div.flex.justify-between > h2", {
+                  observe: true,
+                  displaySelector: e => window.location.pathname.startsWith("/movies/") ? e : null,
+                  urlSelector: currentSite,
+                  stashIdSelector
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "div.flex.justify-between > h2", {
+                  observe: true,
+                  displaySelector: e => window.location.pathname.startsWith("/movies/") ? e : null,
+                  urlSelector: null,
+                  nameSelector: null,
+                  stashIdSelector,
+                  stashIdEndpoint
+                });
                 (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href^='https://theporndb.net/performers/']", {
                   observe: true
                 });
@@ -984,7 +973,7 @@
         return new Promise(((resolve, reject) => {
           GM.xmlHttpRequest({
             method: "GET",
-            url: `${endpoint.url}?query={${encodeURIComponent(query)}}`,
+            url: `${endpoint.url}?query={${query}}`,
             headers: {
               "Content-Type": "application/json",
               ApiKey: endpoint.key
@@ -1383,7 +1372,11 @@
                 let sourceQueries = new Map(sourceEntry.queries.map((v => [ v.endpoint, v ])));
                 let targetQueries = new Map(mapTarget.get(key).queries.map((v => [ v.endpoint, v ])));
                 sourceQueries.forEach(((sourceQuery, key) => {
-                  if (targetQueries.has(key)) new _stashQuery__WEBPACK_IMPORTED_MODULE_2__.M(sourceQuery).addTypes(targetQueries.get(key).types);
+                  if (targetQueries.has(key)) {
+                    let s = new _stashQuery__WEBPACK_IMPORTED_MODULE_2__.M(sourceQuery);
+                    s.addTypes(targetQueries.get(key).types);
+                    sourceQuery = s;
+                  }
                   targetQueries.set(key, sourceQuery);
                 }));
                 sourceEntry.queries = Array.from(targetQueries.values()).map((q => new _stashQuery__WEBPACK_IMPORTED_MODULE_2__.M(q))).sort(((a, b) => a.compareTo(b)));
