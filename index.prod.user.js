@@ -376,7 +376,6 @@
              default:
               return;
             }
-            console.log(query);
             _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__.I.forEach((endpoint => {
               (0, _request__WEBPACK_IMPORTED_MODULE_4__.E)(endpoint, query, true).then((data => onload(target, type, endpoint, access(data))));
             }));
@@ -633,7 +632,7 @@
 
              case "theporndb.net":
               {
-                let stashIdSelector = _ => document.evaluate("//div[text()='TPDB UUID']/following-sibling::div/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim();
+                let stashIdSelector = _ => document.querySelector("div[name='UUID'] > div > div.flex")?.textContent?.trim();
                 let stashIdEndpoint = "https://api.theporndb.net/graphql";
                 if (window.location.pathname.startsWith("/performers/")) {
                   (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "div.pl-4 > h2", {
