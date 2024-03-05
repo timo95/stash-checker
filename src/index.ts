@@ -128,10 +128,10 @@ import {initGeneralSettings} from "./settings/general";
             }
             break;
         }
-        case "metadataapi.net": {
+        case "theporndb.net": {
             let stashIdSelector = (_: Element) => document.evaluate("//div[text()='TPDB UUID']/following-sibling::div/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim();
             // Alternative endpoint url. Query both the default and this one.
-            let stashIdEndpoint = "https://api.metadataapi.net/graphql";
+            let stashIdEndpoint = "https://api.theporndb.net/graphql";
             if (window.location.pathname.startsWith("/performers/")) {
                 check(Target.Performer, "div.pl-4 > h2", {observe: true, urlSelector: currentSite, stashIdSelector});
                 check(Target.Performer, "div.pl-4 > h2", {observe: true, urlSelector: null, nameSelector: null, stashIdSelector, stashIdEndpoint});
@@ -142,9 +142,9 @@ import {initGeneralSettings} from "./settings/general";
                 check(Target.Movie, "div.flex.justify-between > h2", {observe: true, urlSelector: currentSite, stashIdSelector});
                 check(Target.Movie, "div.flex.justify-between > h2", {observe: true, urlSelector: null, nameSelector: null, stashIdSelector, stashIdEndpoint});
             }
-            check(Target.Performer, "a[href^='https://metadataapi.net/performers/']", {observe: true});
-            check(Target.Scene, "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", {observe: true});
-            check(Target.Movie, "a[href^='https://metadataapi.net/movies/']", {observe: true});
+            check(Target.Performer, "a[href^='https://theporndb.net/performers/']", {observe: true});
+            check(Target.Scene, "a[href^='https://theporndb.net/scenes/'], a[href^='https://theporndb.net/jav/']", {observe: true});
+            check(Target.Movie, "a[href^='https://theporndb.net/movies/']", {observe: true});
             break;
         }
         case "www.javlibrary.com": {

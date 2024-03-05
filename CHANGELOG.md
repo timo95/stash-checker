@@ -8,6 +8,7 @@
 - Add support for javdb
 - Improve responsiveness for sites with many entries by queueing batch queries [#28]
 - Separate tooltip entries per endpoint
+- Update TPDB to new site
 - Fix data18 performer overview page
 - Fix page change on Stash-box not detected [#25]
 
