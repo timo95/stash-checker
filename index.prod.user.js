@@ -11,13 +11,13 @@
 // @match *://gayeroticvideoindex.com/*
 // @match *://javdb.com/*
 // @match *://kemono.su/*
-// @match *://metadataapi.net/*
 // @match *://onlyfans.com/*
 // @match *://oreno3d.com/*
 // @match *://pmvstash.org/*
 // @match *://r18.dev/*
 // @match *://shemalestardb.com/*
 // @match *://stashdb.org/*
+// @match *://theporndb.net/*
 // @match *://www.animecharactersdatabase.com/*
 // @match *://www.babepedia.com/*
 // @match *://www.data18.com/*
@@ -631,10 +631,10 @@
               });
               break;
 
-             case "metadataapi.net":
+             case "theporndb.net":
               {
                 let stashIdSelector = _ => document.evaluate("//div[text()='TPDB UUID']/following-sibling::div/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim();
-                let stashIdEndpoint = "https://api.metadataapi.net/graphql";
+                let stashIdEndpoint = "https://api.theporndb.net/graphql";
                 if (window.location.pathname.startsWith("/performers/")) {
                   (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "div.pl-4 > h2", {
                     observe: true,
@@ -675,13 +675,13 @@
                     stashIdEndpoint
                   });
                 }
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href^='https://metadataapi.net/performers/']", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href^='https://theporndb.net/performers/']", {
                   observe: true
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "a[href^='https://metadataapi.net/scenes/'], a[href^='https://metadataapi.net/jav/']", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "a[href^='https://theporndb.net/scenes/'], a[href^='https://theporndb.net/jav/']", {
                   observe: true
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "a[href^='https://metadataapi.net/movies/']", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "a[href^='https://theporndb.net/movies/']", {
                   observe: true
                 });
                 break;

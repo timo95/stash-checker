@@ -11,13 +11,13 @@
 // @match *://gayeroticvideoindex.com/*
 // @match *://javdb.com/*
 // @match *://kemono.su/*
-// @match *://metadataapi.net/*
 // @match *://onlyfans.com/*
 // @match *://oreno3d.com/*
 // @match *://pmvstash.org/*
 // @match *://r18.dev/*
 // @match *://shemalestardb.com/*
 // @match *://stashdb.org/*
+// @match *://theporndb.net/*
 // @match *://www.animecharactersdatabase.com/*
 // @match *://www.babepedia.com/*
 // @match *://www.data18.com/*
