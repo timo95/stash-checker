@@ -129,7 +129,7 @@ import {initGeneralSettings} from "./settings/general";
             break;
         }
         case "theporndb.net": {
-            let stashIdSelector = (_: Element) => document.evaluate("//div[text()='TPDB UUID']/following-sibling::div/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim();
+            let stashIdSelector = (_: Element) => document.querySelector("div[name='UUID'] > div > div.flex")?.textContent?.trim();
             // Alternative endpoint url. Query both the default and this one.
             let stashIdEndpoint = "https://api.theporndb.net/graphql";
             if (window.location.pathname.startsWith("/performers/")) {
