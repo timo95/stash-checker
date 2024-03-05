@@ -83,7 +83,9 @@ function mergeData(target: StashEntry[], source: StashEntry[]): StashEntry[] {
 
             sourceQueries.forEach((sourceQuery, key) => {
                 if (targetQueries.has(key)) {
-                    new StashQueryClass(sourceQuery).addTypes(targetQueries.get(key)!.types)
+                    let s = new StashQueryClass(sourceQuery)
+                    s.addTypes(targetQueries.get(key)!.types)
+                    sourceQuery = s
                 }
                 targetQueries.set(key, sourceQuery)
             });
