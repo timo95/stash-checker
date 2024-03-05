@@ -132,16 +132,48 @@ import {initGeneralSettings} from "./settings/general";
             let stashIdSelector = (_: Element) => document.querySelector("div[name='UUID'] > div > div.flex")?.textContent?.trim();
             // Alternative endpoint url. Query both the default and this one.
             let stashIdEndpoint = "https://api.theporndb.net/graphql";
-            if (window.location.pathname.startsWith("/performers/")) {
-                check(Target.Performer, "div.pl-4 > h2", {observe: true, urlSelector: currentSite, stashIdSelector});
-                check(Target.Performer, "div.pl-4 > h2", {observe: true, urlSelector: null, nameSelector: null, stashIdSelector, stashIdEndpoint});
-            } else if (window.location.pathname.startsWith("/scenes/")) {
-                check(Target.Scene, "div.flex.justify-between > h2", {observe: true, urlSelector: currentSite, stashIdSelector});
-                check(Target.Scene, "div.flex.justify-between > h2", {observe: true, urlSelector: null, titleSelector: null, stashIdSelector, stashIdEndpoint});
-            } else if (window.location.pathname.startsWith("/movies/")) {
-                check(Target.Movie, "div.flex.justify-between > h2", {observe: true, urlSelector: currentSite, stashIdSelector});
-                check(Target.Movie, "div.flex.justify-between > h2", {observe: true, urlSelector: null, nameSelector: null, stashIdSelector, stashIdEndpoint});
-            }
+            check(Target.Performer, "div.pl-4 > h2", {
+                observe: true,
+                displaySelector: e => window.location.pathname.startsWith("/performers/") ? e : null,
+                urlSelector: currentSite,
+                stashIdSelector
+            });
+            check(Target.Performer, "div.pl-4 > h2", {
+                observe: true,
+                displaySelector: e => window.location.pathname.startsWith("/performers/") ? e : null,
+                urlSelector: null,
+                nameSelector: null,
+                stashIdSelector,
+                stashIdEndpoint
+            });
+            check(Target.Scene, "div.flex.justify-between > h2", {
+                observe: true,
+                displaySelector: e => window.location.pathname.startsWith("/scenes/") || window.location.pathname.startsWith("/jav/") ? e : null,
+                urlSelector: currentSite,
+                stashIdSelector
+            });
+            check(Target.Scene, "div.flex.justify-between > h2", {
+                observe: true,
+                displaySelector: e => window.location.pathname.startsWith("/scenes/") || window.location.pathname.startsWith("/jav/") ? e : null,
+                urlSelector: null,
+                titleSelector: null,
+                stashIdSelector,
+                stashIdEndpoint
+            });
+            check(Target.Movie, "div.flex.justify-between > h2", {
+                observe: true,
+                displaySelector: e => window.location.pathname.startsWith("/movies/") ? e : null,
+                urlSelector: currentSite,
+                stashIdSelector
+            });
+            check(Target.Movie, "div.flex.justify-between > h2", {
+                observe: true,
+                displaySelector: e => window.location.pathname.startsWith("/movies/") ? e : null,
+                urlSelector: null,
+                nameSelector: null,
+                stashIdSelector,
+                stashIdEndpoint
+            });
             check(Target.Performer, "a[href^='https://theporndb.net/performers/']", {observe: true});
             check(Target.Scene, "a[href^='https://theporndb.net/scenes/'], a[href^='https://theporndb.net/jav/']", {observe: true});
             check(Target.Movie, "a[href^='https://theporndb.net/movies/']", {observe: true});

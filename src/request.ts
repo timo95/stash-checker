@@ -94,7 +94,7 @@ async function sendQuery(
     return new Promise((resolve, reject) => {
         GM.xmlHttpRequest({
             method: "GET",
-            url: `${endpoint.url}?query={${encodeURIComponent(query)}}`,  // encode query (important for url and some titles)
+            url: `${endpoint.url}?query={${query}}`,  // encode query (important for url and some titles)
             headers: {
                 "Content-Type": "application/json",
                 ApiKey: endpoint.key,
@@ -119,7 +119,7 @@ async function sendQuery(
                         break;
                     }
                     default: {
-                        console.debug(`Error: Response code ${statusMessage(response.status, response.statusText)}`);
+                        console.debug(`Error: Response code ${statusMessage(response.status, response.statusText)} for query: ${query}`);
                         reject(response.responseText ?? statusMessage(response.status, response.statusText));
                     }
                 }
