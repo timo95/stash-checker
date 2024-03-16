@@ -21,6 +21,10 @@ export function firstTextChild(node?: Node | undefined | null): null | undefined
     }
 }
 
+export function firstText(node?: Node | undefined | null): string | undefined {
+    return firstTextChild(node)?.textContent?.trim()
+}
+
 export function entryLink(stashUrl: string, target: Target, id: string): string {
     let path
     if (target == "gallery") {

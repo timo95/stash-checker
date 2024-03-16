@@ -1,6 +1,6 @@
 import {prefixSymbol} from "./tooltip/tooltip";
 import {stashEndpoints} from "./settings/endpoints";
-import {firstTextChild} from "./utils";
+import {firstText} from "./utils";
 import {CheckOptions, StashEndpoint, Target, Type} from "./dataTypes";
 import {request} from "./request";
 import {booleanOptions, OptionKey} from "./settings/general";
@@ -123,8 +123,8 @@ async function checkElement(
         codeSelector,
         stashIdSelector,
         stashIdEndpoint = `https://${window.location.host}/graphql`,
-        nameSelector = e => firstTextChild(e)?.textContent?.trim(),
-        titleSelector = e => firstTextChild(e)?.textContent?.trim(),
+        nameSelector = firstText,
+        titleSelector = firstText,
         color = () => "green",
     }: CheckOptions
 ) {

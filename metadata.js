@@ -21,6 +21,7 @@ export default {
         "*://kemono.su/*",
         "*://onlyfans.com/*",
         "*://oreno3d.com/*",
+        "*://pmvhaven.com/*",
         "*://pmvstash.org/*",
         "*://r18.dev/*",
         "*://shemalestardb.com/*",

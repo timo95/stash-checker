@@ -2,7 +2,7 @@ import "./style/main.scss";
 import {check} from "./check";
 import {initEndpointSettings} from "./settings/endpoints";
 import {initTooltip} from "./tooltip/tooltipElement";
-import {firstTextChild} from "./utils";
+import {firstText} from "./utils";
 import {CheckOptions, Target} from "./dataTypes";
 import {initSettingsWindow} from "./settings/settings";
 import {initMenu, isSiteBlocked} from "./settings/menu";
@@ -194,8 +194,8 @@ import {initGeneralSettings} from "./settings/general";
             // best reviews
             check(Target.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
                 prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
-                codeSelector: e => firstTextChild(e)?.textContent?.trim()?.split(" ")[0],
-                titleSelector: e => firstTextChild(e)?.textContent?.trim()?.split(" ")[0],
+                codeSelector: e => firstText(e)?.split(" ")[0],
+                titleSelector: e => firstText(e)?.split(" ")[0],
             });
             break;
         }
@@ -203,11 +203,11 @@ import {initGeneralSettings} from "./settings/general";
             check(Target.Scene, "#video-info > #title", {
                 observe: true,
                 urlSelector: currentSite,
-                codeSelector: _ => firstTextChild(document.querySelector("#dvd-id"))?.textContent?.trim(),
+                codeSelector: _ => firstText(document.querySelector("#dvd-id")),
             });
             check(Target.Scene, ".video-label > a[href*='/movies/detail/']", {
                 observe: true,
-                codeSelector: e => firstTextChild(e)?.textContent?.trim(),
+                codeSelector: firstText,
             });
             break;
         }
@@ -276,7 +276,7 @@ import {initGeneralSettings} from "./settings/general";
         }
         case "www.pornteengirl.com": {
             check(Target.Performer, "a[href*='/model/']", {
-                nameSelector: e => firstTextChild(e)?.textContent?.trim()?.replace(/\([^()]*\)$/, "")?.trimEnd()
+                nameSelector: e => firstText(e)?.replace(/\([^()]*\)$/, "")?.trimEnd()
             });
             break;
         }
@@ -291,6 +291,21 @@ import {initGeneralSettings} from "./settings/general";
             check(Target.Performer, "a[href*='performer/']", {observe: true});
             check(Target.Scene, "a[href*='episode/']", {observe: true});
             check(Target.Movie, "a[href*='video/']", {observe: true});
+            break;
+        }
+        case "pmvhaven.com": {
+            check(Target.Scene, "h1.pl-2", {
+                observe: true,
+                displaySelector: e => window.location.pathname.startsWith("/video/") ? e : null,
+                urlSelector: currentSite
+            });
+            check(Target.Scene, "a[href^='/video/'] .v-card-text", {observe: true,});
+            check(Target.Studio, ".v-card-title", {
+                observe: true,
+                displaySelector: e => window.location.pathname.startsWith("/creator/") ? e : null,
+                urlSelector: currentSite
+            });
+            check(Target.Studio, "a[href^='/creator/'] .v-chip__content", {observe: true,});
             break;
         }
         case "fansdb.cc":
@@ -337,12 +352,12 @@ import {initGeneralSettings} from "./settings/general";
             // Tag by StashId isn't supported by Stash yet
             /*check(Target.Tag, ".MainContent > .NarrowPage h3 > span", {
                 ...stashBoxDefault,
-                displaySelector: e => window.location.pathname.startsWith("/tags/") ? e : undefined,  // only on tag page
+                displaySelector: e => window.location.pathname.startsWith("/tags/") ? e : null,  // only on tag page
                 stashIdSelector: () => findId(window.location.href),
             });
             check(Target.Tag, `a[href^='/tags/']${exclude}, a[href^='https://${window.location.host}/tags/']${exclude}`, {
                 ...stashBoxDefault,
-                displaySelector: e => window.location.pathname === "/tags" ? e : undefined,  // only on overview page
+                displaySelector: e => window.location.pathname === "/tags" ? e : null,  // only on overview page
                 stashIdSelector: (e) => findId(e.closest("a")?.href),
             });*/
             break;
