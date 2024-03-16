@@ -13,6 +13,7 @@
 // @match *://kemono.su/*
 // @match *://onlyfans.com/*
 // @match *://oreno3d.com/*
+// @match *://pmvhaven.com/*
 // @match *://pmvstash.org/*
 // @match *://r18.dev/*
 // @match *://shemalestardb.com/*

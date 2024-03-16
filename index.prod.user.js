@@ -13,6 +13,7 @@
 // @match *://kemono.su/*
 // @match *://onlyfans.com/*
 // @match *://oreno3d.com/*
+// @match *://pmvhaven.com/*
 // @match *://pmvstash.org/*
 // @match *://r18.dev/*
 // @match *://shemalestardb.com/*
@@ -380,9 +381,7 @@
               (0, _request__WEBPACK_IMPORTED_MODULE_4__.E)(endpoint, query, false).then((data => onload(target, type, endpoint, access(data))));
             }));
           }
-          async function checkElement(target, element, {displaySelector = e => e, prepareUrl = url => url, urlSelector = e => e.closest("a")?.href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = e => (0, 
-          _utils__WEBPACK_IMPORTED_MODULE_2__.Yz)(e)?.textContent?.trim(), titleSelector = e => (0, 
-          _utils__WEBPACK_IMPORTED_MODULE_2__.Yz)(e)?.textContent?.trim(), color = () => "green"}) {
+          async function checkElement(target, element, {displaySelector = e => e, prepareUrl = url => url, urlSelector = e => e.closest("a")?.href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = _utils__WEBPACK_IMPORTED_MODULE_2__.ou, titleSelector = _utils__WEBPACK_IMPORTED_MODULE_2__.ou, color = () => "green"}) {
             let displayElement = displaySelector(element);
             if (!displayElement) return;
             if (urlSelector && prepareUrl) {
@@ -688,8 +687,8 @@
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
                 prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
-                codeSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.Yz)(e)?.textContent?.trim()?.split(" ")[0],
-                titleSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.Yz)(e)?.textContent?.trim()?.split(" ")[0]
+                codeSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)?.split(" ")[0],
+                titleSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)?.split(" ")[0]
               });
               break;
 
@@ -697,11 +696,11 @@
               (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "#video-info > #title", {
                 observe: true,
                 urlSelector: currentSite,
-                codeSelector: _ => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.Yz)(document.querySelector("#dvd-id"))?.textContent?.trim()
+                codeSelector: _ => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(document.querySelector("#dvd-id"))
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, ".video-label > a[href*='/movies/detail/']", {
                 observe: true,
-                codeSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.Yz)(e)?.textContent?.trim()
+                codeSelector: _utils__WEBPACK_IMPORTED_MODULE_3__.ou
               });
               break;
 
@@ -787,7 +786,7 @@
 
              case "www.pornteengirl.com":
               (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href*='/model/']", {
-                nameSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.Yz)(e)?.textContent?.trim()?.replace(/\([^()]*\)$/, "")?.trimEnd()
+                nameSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)?.replace(/\([^()]*\)$/, "")?.trimEnd()
               });
               break;
 
@@ -806,6 +805,25 @@
                 observe: true
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "a[href*='video/']", {
+                observe: true
+              });
+              break;
+
+             case "pmvhaven.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "h1.pl-2", {
+                observe: true,
+                displaySelector: e => window.location.pathname.startsWith("/video/") ? e : null,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "a[href^='/video/'] .v-card-text", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Studio, ".v-card-title", {
+                observe: true,
+                displaySelector: e => window.location.pathname.startsWith("/creator/") ? e : null,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Studio, "a[href^='/creator/'] .v-chip__content", {
                 observe: true
               });
               break;
@@ -1496,6 +1514,7 @@
         Yz: () => firstTextChild,
         bM: () => entryLink,
         iy: () => friendlyHttpStatus,
+        ou: () => firstText,
         xG: () => typeToString,
         xr: () => secondsToReadable
       });
@@ -1503,6 +1522,9 @@
       function firstTextChild(node) {
         if (!node) return node;
         if (node.nodeType === Node.TEXT_NODE && node.textContent?.match(/^[\s<>]*$/) === null) return node; else return Array.from(node.childNodes).filter((n => ![ "svg" ].includes(n.nodeName.toLowerCase()))).filter((n => n.nodeType === Node.ELEMENT_NODE ? n.getAttribute("data-type") !== "stash-symbol" : true)).map(firstTextChild).find((n => n));
+      }
+      function firstText(node) {
+        return firstTextChild(node)?.textContent?.trim();
       }
       function entryLink(stashUrl, target, id) {
         let path;
