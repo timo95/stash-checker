@@ -1,44 +1,40 @@
 import {prefixSymbol} from "./tooltip/tooltip";
 import {stashEndpoints} from "./settings/endpoints";
 import {firstText} from "./utils";
-import {CheckOptions, StashEndpoint, Target, Type} from "./dataTypes";
+import {CheckOptions, DataField, StashEndpoint, Target, Type} from "./dataTypes";
 import {request} from "./request";
 import {booleanOptions, OptionKey} from "./settings/general";
 
-export enum DataFields {
-    id = "id",
-    code = "code",
-    name = "name",
-    disambiguation = "disambiguation",
-    aliasList = "alias_list",
-    title = "title",
-    studio = "studio{name}",
-    favorite = "favorite",
-    date = "date",
-    birthdate = "birthdate",
-    height = "height_cm",
-    tags = "tags{id,name}",
-    files = "files{path,duration,video_codec,width,height,size,bit_rate}"
-}
+const supportedDataFields = new Map<Target, DataField[]>([
+    [Target.Scene, [DataField.Id, DataField.Title, DataField.Studio, DataField.Code, DataField.Date, DataField.Tags, DataField.Files]],
+    [Target.Performer, [DataField.Id, DataField.Name, DataField.Disambiguation, DataField.Favorite, DataField.AliasList, DataField.Birthdate, DataField.HeightCm, DataField.Tags]],
+    [Target.Gallery, [DataField.Id, DataField.Title, DataField.Date, DataField.Tags, DataField.Files]],
+    [Target.Movie, [DataField.Id, DataField.Name, DataField.Date]],
+    [Target.Studio,[DataField.Id, DataField.Name]],
+    [Target.Tag, [DataField.Id, DataField.Name]],
+]);
 
-let supportedDataFields = new Map<Target, DataFields[]>([
-    [Target.Scene, [DataFields.id, DataFields.title, DataFields.code, DataFields.studio, DataFields.date, DataFields.tags, DataFields.files]],
-    [Target.Performer, [DataFields.id, DataFields.name, DataFields.disambiguation, DataFields.aliasList, DataFields.favorite, DataFields.birthdate, DataFields.height, DataFields.tags]],
-    [Target.Gallery, [DataFields.id, DataFields.title, DataFields.date, DataFields.tags, DataFields.files]],
-    [Target.Movie, [DataFields.id, DataFields.name, DataFields.date]],
-    [Target.Studio,[DataFields.id, DataFields.name]],
-    [Target.Tag, [DataFields.id, DataFields.name]],
+const supportedSubDataFields = new Map<DataField, DataField[]>([
+    [DataField.Studio, [DataField.Name]],
+    [DataField.Tags, [DataField.Id, DataField.Name]],
+    [DataField.Files, [DataField.Path, DataField.VideoCodec, DataField.Width, DataField.Height, DataField.Size, DataField.BitRate, DataField.Duration]],
 ]);
 
 function getDataFields(target: Target): string {
-    let supported = new Set(supportedDataFields.get(target)!)
+    let supported = new Set(supportedDataFields.get(target) ?? [])
     if (!booleanOptions.get(OptionKey.showTags)) {
-        supported.delete(DataFields.tags)
+        supported.delete(DataField.Tags)
     }
     if (!booleanOptions.get(OptionKey.showFiles)) {
-        supported.delete(DataFields.files)
+        supported.delete(DataField.Files)
     }
-    return new Array(...supported).join(",")
+    return Array.from(supported).map(field => field + getSubDataFields(field)).join(",")
+}
+
+function getSubDataFields(field: DataField): string {
+    let supported = supportedSubDataFields.get(field) ?? []
+    let string = supported.join(",")
+    return string === "" ? "" : `{${string}}`
 }
 
 async function queryStash(

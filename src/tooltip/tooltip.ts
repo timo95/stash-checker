@@ -1,9 +1,8 @@
-import {StashEndpoint, StashEntry, Target, Type} from "../dataTypes";
+import {DataField, StashEndpoint, StashEntry, Target, Type} from "../dataTypes";
 import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "../utils";
 import {booleanOptions, OptionKey, stringOptions} from "../settings/general";
 import {StashQuery, StashQueryClass} from "./stashQuery";
 import {mouseoutListener, mouseoverListener} from "./tooltipElement";
-import {DataFields} from "../check";
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -22,13 +21,13 @@ function getExistingSymbol(element: Element): HTMLSpanElement | undefined {
 
 function formatFileData(files: any[]): string {
     let propertyStrings: [string, (v: any) => string][] = [
-        ["path", (path: any) => `Path: ${path}`],
-        ["video_codec", (video_codec: any) => `<br>Codec: ${video_codec}`],
-        ["width", (width: any) => ` (${width}`],
-        ["height", (height: any) => `x${height})`],
-        ["size", (size: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${bytesToReadable(size)}`],
-        ["bit_rate", (bit_rate: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(bit_rate / 1000000).toFixed(2)}Mbit/s`],
-        ["duration", (duration: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(duration)}`],
+        [DataField.Path, (path: any) => `Path: ${path}`],
+        [DataField.VideoCodec, (video_codec: any) => `<br>Codec: ${video_codec}`],
+        [DataField.Width, (width: any) => ` (${width}`],
+        [DataField.Height, (height: any) => `x${height})`],
+        [DataField.Size, (size: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${bytesToReadable(size)}`],
+        [DataField.BitRate, (bit_rate: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(bit_rate / 1000000).toFixed(2)}Mbit/s`],
+        [DataField.Duration, (duration: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(duration)}`],
     ];
     return files.map((file: any) => "<div class='stashChecker file'>" + propertyStrings
         .filter(e => file[e[0]])
@@ -45,27 +44,28 @@ function formatQueries(queries: StashQuery[], target: Target, id: string, numQue
     return queries.map(query => new StashQueryClass(query).toHtml(target, id, numQueries)).join("<br>");
 }
 
+const propertyStrings: Map<string, (datum: any, queries: StashQuery[], target: Target, numQueries: number) => string> = new Map([
+    [DataField.Id, (id: any, queries: StashQuery[], target: Target, numQueries: number) => `<br>${formatQueries(queries, target, id, numQueries)}`],
+    [DataField.Title, (title: any) => `<br>Title: ${title}`],
+    [DataField.Name, (name: any) => `<br>Name: ${name}`],
+    [DataField.Favorite, () => "&emsp;&#10084;&#65039;"],
+    [DataField.Disambiguation, (disambiguation: any) => ` <span style="color: grey">(${disambiguation})</span>`],
+    [DataField.AliasList, (alias_list: any) => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", <wbr>")}`],
+    [DataField.Studio, (studio: any) => `<br>Studio: ${studio.name}`],
+    [DataField.Code, (code: any) => `<br>Code: ${code}`],
+    [DataField.Date, (date: any) => `<br>Date: ${date}`],
+    [DataField.Birthdate, (birthdate: any) => `<br>Birthdate: ${birthdate}`],
+    [DataField.HeightCm, (height: any) => `<br>Height: ${height} cm`],
+    [DataField.Tags, (tags: any) => tags.length === 0 ? "" : `<br>Tags: ${tags.map(formatTagPill).join("<wbr>")}`],
+    [DataField.Files, (files: any) => `${formatFileData(files)}`],
+]);
+
 function formatEntryData(target: Target, data: StashEntry[], numQueries: number): string {
-    let propertyStrings: [string, (v: any, queries: StashQuery[]) => string][] = [
-        [DataFields.id, (id: any, queries: StashQuery[]) => `<br>${formatQueries(queries, target, id, numQueries)}`],
-        [DataFields.title, (title: any) => `<br>Title: ${title}`],
-        [DataFields.name, (name: any) => `<br>Name: ${name}`],
-        [DataFields.favorite, () => "&emsp;&#10084;&#65039;"],
-        [DataFields.disambiguation, (disambiguation: any) => ` <span style="color: grey">(${disambiguation})</span>`],
-        [DataFields.aliasList, (alias_list: any) => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", <wbr>")}`],
-        [DataFields.studio, (studio: any) => `<br>Studio: ${studio.name}`],
-        [DataFields.code, (code: any) => `<br>Code: ${code}`],
-        [DataFields.date, (date: any) => `<br>Date: ${date}`],
-        [DataFields.birthdate, (birthdate: any) => `<br>Birthdate: ${birthdate}`],
-        [DataFields.height, (height: any) => `<br>Height: ${height} cm`],
-        [DataFields.tags, (tags: any) => tags.length === 0 ? "" : `<br>Tags: ${tags.map(formatTagPill).join("<wbr>")}`],
-        [DataFields.files, (files: any) => `${formatFileData(files)}`],
-    ];
-    return data.map((entry: any) => "<hr>" + propertyStrings
-        .filter((e) => entry[e[0]])
-        .map((e) => e[1](entry[e[0]], entry.queries))
-        .join("")
-    ).join("");
+    return data.map((entry: StashEntry) => "<hr>" + Object.entries(entry)
+        .map(([key, value]: [string, any]) => value ? propertyStrings.get(key)?.(value, entry.queries, target, numQueries) : undefined)
+        .filter(s => s)
+        .join(""))
+        .join("");
 }
 
 /**

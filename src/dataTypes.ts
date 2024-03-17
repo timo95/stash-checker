@@ -33,6 +33,32 @@ export interface GraphQlQuery {
 }
 
 /**
+ * Possible fields of the returned data object
+ */
+export enum DataField {
+    Id = "id",
+    Code = "code",
+    Name = "name",
+    Disambiguation = "disambiguation",
+    AliasList = "alias_list",
+    Title = "title",
+    Studio = "studio",
+    Favorite = "favorite",
+    Date = "date",
+    Birthdate = "birthdate",
+    HeightCm = "height_cm",
+    Tags = "tags",
+    Files = "files",
+    Path = "path",
+    Duration = "duration",
+    VideoCodec = "video_codec",
+    Width = "width",
+    Height = "height",
+    Size = "size",
+    BitRate = "bit_rate",
+}
+
+/**
  * Entry types in Stash
  */
 export enum Target {
