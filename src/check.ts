@@ -34,7 +34,7 @@ function getDataFields(target: Target): string {
 function getSubDataFields(field: DataField): string {
     let supported = supportedSubDataFields.get(field) ?? []
     let string = supported.join(",")
-    return string === "" ? "" : `{${string}}`
+    return string ? `{${string}}` : ""
 }
 
 async function queryStash(

@@ -1,3 +1,4 @@
+import {StashQuery} from "./tooltip/stashQuery";
 
 /**
  * Represents a Stash GraphQL endpoint.
@@ -11,9 +12,12 @@ export type StashEndpoint = {
 /**
  * Return type of GraphQL queries representing an entry.
  */
-export interface StashEntry {
-    [key: string]: any;
-}
+export type StashEntry = {
+    [key in DataField]: any;
+} & {
+    queries: StashQuery[];
+    endpoint: string;
+};
 
 /**
  * A batch collector of requests.
@@ -33,7 +37,7 @@ export interface GraphQlQuery {
 }
 
 /**
- * Possible fields of the returned data object
+ * Possible fields and subfields of the returned data
  */
 export enum DataField {
     Id = "id",

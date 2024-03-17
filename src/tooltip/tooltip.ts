@@ -41,31 +41,30 @@ function formatTagPill(tag: {id: string, name: string}): string {
 }
 
 function formatQueries(queries: StashQuery[], target: Target, id: string, numQueries: number): string {
-    return queries.map(query => new StashQueryClass(query).toHtml(target, id, numQueries)).join("<br>");
+    return queries.map((query: StashQuery) => new StashQueryClass(query).toHtml(target, id, numQueries)).join("<br>");
 }
 
 const propertyStrings: Map<string, (datum: any, queries: StashQuery[], target: Target, numQueries: number) => string> = new Map([
-    [DataField.Id, (id: any, queries: StashQuery[], target: Target, numQueries: number) => `<br>${formatQueries(queries, target, id, numQueries)}`],
-    [DataField.Title, (title: any) => `<br>Title: ${title}`],
-    [DataField.Name, (name: any) => `<br>Name: ${name}`],
+    [DataField.Id, (id: string, queries: StashQuery[], target: Target, numQueries: number) => `<br>${formatQueries(queries, target, id, numQueries)}`],
+    [DataField.Title, (title: string) => `<br>Title: ${title}`],
+    [DataField.Name, (name: string) => `<br>Name: ${name}`],
     [DataField.Favorite, () => "&emsp;&#10084;&#65039;"],
-    [DataField.Disambiguation, (disambiguation: any) => ` <span style="color: grey">(${disambiguation})</span>`],
-    [DataField.AliasList, (alias_list: any) => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", <wbr>")}`],
-    [DataField.Studio, (studio: any) => `<br>Studio: ${studio.name}`],
-    [DataField.Code, (code: any) => `<br>Code: ${code}`],
-    [DataField.Date, (date: any) => `<br>Date: ${date}`],
-    [DataField.Birthdate, (birthdate: any) => `<br>Birthdate: ${birthdate}`],
+    [DataField.Disambiguation, (disambiguation: string) => ` <span style="color: grey">(${disambiguation})</span>`],
+    [DataField.AliasList, (aliasList: any) => aliasList.length === 0 ? "" : `<br>Aliases: ${aliasList.join(", <wbr>")}`],
+    [DataField.Studio, (studio: any) => `<br>Studio: ${studio[DataField.Name]}`],
+    [DataField.Code, (code: string) => `<br>Code: ${code}`],
+    [DataField.Date, (date: string) => `<br>Date: ${date}`],
+    [DataField.Birthdate, (birthdate: string) => `<br>Birthdate: ${birthdate}`],
     [DataField.HeightCm, (height: any) => `<br>Height: ${height} cm`],
     [DataField.Tags, (tags: any) => tags.length === 0 ? "" : `<br>Tags: ${tags.map(formatTagPill).join("<wbr>")}`],
     [DataField.Files, (files: any) => `${formatFileData(files)}`],
 ]);
 
-function formatEntryData(target: Target, data: StashEntry[], numQueries: number): string {
-    return data.map((entry: StashEntry) => "<hr>" + Object.entries(entry)
+function formatEntryData(entry: StashEntry, target: Target, numQueries: number): string {
+    return "<hr>" + Object.entries(entry)
         .map(([key, value]: [string, any]) => value ? propertyStrings.get(key)?.(value, entry.queries, target, numQueries) : undefined)
         .filter(s => s)
-        .join(""))
-        .join("");
+        .join("")
 }
 
 /**
@@ -81,8 +80,8 @@ function mergeData(target: StashEntry[], source: StashEntry[]): StashEntry[] {
     mapSource.forEach((sourceEntry, key) => {
         if (mapTarget.has(key)) {
             // Merge "queries"; Create maps: endpoint -> query
-            let sourceQueries: Map<string, StashQuery> = new Map(sourceEntry.queries.map((v: StashQuery) => [v.endpoint, v]))
-            let targetQueries: Map<string, StashQuery> = new Map(mapTarget.get(key)!.queries.map((v: StashQuery) => [v.endpoint, v]))
+            let sourceQueries: Map<string, StashQuery> = new Map(sourceEntry.queries.map(v => [v.endpoint, v]))
+            let targetQueries: Map<string, StashQuery> = new Map(mapTarget.get(key)!.queries.map(v => [v.endpoint, v]))
 
             sourceQueries.forEach((sourceQuery, key) => {
                 if (targetQueries.has(key)) {
@@ -192,7 +191,7 @@ export function prefixSymbol(
     tooltip += "<br>"
     tooltip += `Queries: ${queryTypes.map(type => typeToString.get(type)).join(", ")}`
     // List of results
-    tooltip += formatEntryData(target, data, queryTypes.length)
+    tooltip += data.map(entry => formatEntryData(entry, target, queryTypes.length)).join("")
 
     // Store tooltip content on symbol
     symbol.setAttribute("data-info", tooltip)
