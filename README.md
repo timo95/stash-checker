@@ -18,7 +18,7 @@ Hovering over the checkmark gives you a tooltip with information about the item 
 
 ## Installation
 
-You need a browser plugin like [Tampermonkey](https://www.tampermonkey.net/) to run userscripts.
+You need a browser plugin like [Tampermonkey](https://www.tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/) to run userscripts.
 
 The newest release of Stash Checker can be found in the release section to the right.
 Opening `index.prod.user.js` under `Assets` should prompt Tampermonkey to install the script.
@@ -35,13 +35,18 @@ Here you can edit the Stash URL and API key or add another Stash endpoint.
 
 ## Troubleshooting
 
-### My Stash endpoint shows `no connection`
+### Stash endpoint shows `no connection`
 
 - Check for the correct URL. It should include the scheme (`http`/`https`) at the beginning and end with `/graphql`.
 - Check the API key. Leave the field empty, if none is required.
 - Tampermonkey may block the connection. Make sure, that the domain is whitelisted in the Tampermonkey settings.
 - Firefox's "HTTPS only mode" can block a connection, if the URL uses `http` but does not include `localhost`. The whitelist doesn't help, you have to deactivate the feature.
 - Some websites can block connections due to a strict Content-Security-Policy-Header (CSP). Change Tampermonkey settings to remove this header.
+
+### Stash endpoint shows `wrong URL`
+
+- Check for the correct URL. It should include the scheme (`http`/`https`) at the beginning and end with `/graphql`.
+- Some users had problems with Tampermonkey which got fixed by switching to Violentmonkey.
 
 ## Development
 
