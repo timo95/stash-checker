@@ -4,8 +4,9 @@
 - Add metadata for userscript auto-updates [#27]
 - Add option to disable cross mark display
 - Add option to set custom icons [#21]
-- Add options to not include tags/files in toolbox [#22]
-- Add support websites: javdb, pmvhaven
+- Add tags, birthdate, height to tooltip [#4]
+- Add options to not include tags/files in tooltip [#22]
+- Add support for websites: javdb, pmvhaven
 - Improve responsiveness for sites with many entries by queueing batch queries [#28]
 - Separate tooltip entries per endpoint
 - Update TPDB to new site

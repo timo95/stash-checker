@@ -3,6 +3,7 @@ import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "
 import {booleanOptions, OptionKey, stringOptions} from "../settings/general";
 import {StashQuery, StashQueryClass} from "./stashQuery";
 import {mouseoutListener, mouseoverListener} from "./tooltipElement";
+import {DataFields} from "../check";
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -46,17 +47,19 @@ function formatQueries(queries: StashQuery[], target: Target, id: string, numQue
 
 function formatEntryData(target: Target, data: StashEntry[], numQueries: number): string {
     let propertyStrings: [string, (v: any, queries: StashQuery[]) => string][] = [
-        ["id", (id: any, queries: StashQuery[]) => `<br>${formatQueries(queries, target, id, numQueries)}`],
-        ["title", (title: any) => `<br>Title: ${title}`],
-        ["name", (name: any) => `<br>Name: ${name}`],
-        ["favorite", () => "&emsp;&#10084;&#65039;"],
-        ["disambiguation", (disambiguation: any) => ` <span style="color: grey">(${disambiguation})</span>`],
-        ["alias_list", (alias_list: any) => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", <wbr>")}`],
-        ["studio", (studio: any) => `<br>Studio: ${studio.name}`],
-        ["code", (code: any) => `<br>Code: ${code}`],
-        ["date", (date: any) => `<br>Date: ${date}`],
-        ["tags", (tags: any) => tags.length === 0 ? "" : `<br>Tags: ${tags.map(formatTagPill).join("<wbr>")}`],
-        ["files", (files: any) => `${formatFileData(files)}`],
+        [DataFields.id, (id: any, queries: StashQuery[]) => `<br>${formatQueries(queries, target, id, numQueries)}`],
+        [DataFields.title, (title: any) => `<br>Title: ${title}`],
+        [DataFields.name, (name: any) => `<br>Name: ${name}`],
+        [DataFields.favorite, () => "&emsp;&#10084;&#65039;"],
+        [DataFields.disambiguation, (disambiguation: any) => ` <span style="color: grey">(${disambiguation})</span>`],
+        [DataFields.aliasList, (alias_list: any) => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", <wbr>")}`],
+        [DataFields.studio, (studio: any) => `<br>Studio: ${studio.name}`],
+        [DataFields.code, (code: any) => `<br>Code: ${code}`],
+        [DataFields.date, (date: any) => `<br>Date: ${date}`],
+        [DataFields.birthdate, (birthdate: any) => `<br>Birthdate: ${birthdate}`],
+        [DataFields.height, (height: any) => `<br>Height: ${height} cm`],
+        [DataFields.tags, (tags: any) => tags.length === 0 ? "" : `<br>Tags: ${tags.map(formatTagPill).join("<wbr>")}`],
+        [DataFields.files, (files: any) => `${formatFileData(files)}`],
     ];
     return data.map((entry: any) => "<hr>" + propertyStrings
         .filter((e) => entry[e[0]])

@@ -5,7 +5,7 @@ import {CheckOptions, StashEndpoint, Target, Type} from "./dataTypes";
 import {request} from "./request";
 import {booleanOptions, OptionKey} from "./settings/general";
 
-enum DataFields {
+export enum DataFields {
     id = "id",
     code = "code",
     name = "name",
@@ -15,13 +15,15 @@ enum DataFields {
     studio = "studio{name}",
     favorite = "favorite",
     date = "date",
+    birthdate = "birthdate",
+    height = "height_cm",
     tags = "tags{id,name}",
     files = "files{path,duration,video_codec,width,height,size,bit_rate}"
 }
 
 let supportedDataFields = new Map<Target, DataFields[]>([
     [Target.Scene, [DataFields.id, DataFields.title, DataFields.code, DataFields.studio, DataFields.date, DataFields.tags, DataFields.files]],
-    [Target.Performer, [DataFields.id, DataFields.name, DataFields.disambiguation, DataFields.aliasList, DataFields.favorite, DataFields.tags]],
+    [Target.Performer, [DataFields.id, DataFields.name, DataFields.disambiguation, DataFields.aliasList, DataFields.favorite, DataFields.birthdate, DataFields.height, DataFields.tags]],
     [Target.Gallery, [DataFields.id, DataFields.title, DataFields.date, DataFields.tags, DataFields.files]],
     [Target.Movie, [DataFields.id, DataFields.name, DataFields.date]],
     [Target.Studio,[DataFields.id, DataFields.name]],
