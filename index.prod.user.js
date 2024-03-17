@@ -309,33 +309,25 @@
           var _settings_general__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(44);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_general__WEBPACK_IMPORTED_MODULE_5__ ]);
           [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_general__WEBPACK_IMPORTED_MODULE_5__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
-          var DataFields;
-          (function(DataFields) {
-            DataFields["id"] = "id";
-            DataFields["code"] = "code";
-            DataFields["name"] = "name";
-            DataFields["disambiguation"] = "disambiguation";
-            DataFields["aliasList"] = "alias_list";
-            DataFields["title"] = "title";
-            DataFields["studio"] = "studio{name}";
-            DataFields["favorite"] = "favorite";
-            DataFields["date"] = "date";
-            DataFields["tags"] = "tags{id,name}";
-            DataFields["files"] = "files{path,duration,video_codec,width,height,size,bit_rate}";
-          })(DataFields || (DataFields = {}));
-          let supportedDataFields = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Scene, [ DataFields.id, DataFields.title, DataFields.code, DataFields.studio, DataFields.date, DataFields.tags, DataFields.files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Performer, [ DataFields.id, DataFields.name, DataFields.disambiguation, DataFields.aliasList, DataFields.favorite, DataFields.tags ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Gallery, [ DataFields.id, DataFields.title, DataFields.date, DataFields.tags, DataFields.files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Movie, [ DataFields.id, DataFields.name, DataFields.date ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Studio, [ DataFields.id, DataFields.name ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Tag, [ DataFields.id, DataFields.name ] ] ]);
+          const supportedDataFields = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Scene, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Title, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Code, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Disambiguation, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Favorite, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.AliasList, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Birthdate, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.HeightCm, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Gallery, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Title, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ] ]);
+          const supportedSubDataFields = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Studio, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Path, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.VideoCodec, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Width, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Height, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Size, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.BitRate, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Duration ] ] ]);
           function getDataFields(target) {
-            let supported = new Set(supportedDataFields.get(target));
-            if (!_settings_general__WEBPACK_IMPORTED_MODULE_5__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_5__.vw.showTags)) supported.delete(DataFields.tags);
-            if (!_settings_general__WEBPACK_IMPORTED_MODULE_5__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_5__.vw.showFiles)) supported.delete(DataFields.files);
-            return new Array(...supported).join(",");
+            let supported = new Set(supportedDataFields.get(target) ?? []);
+            if (!_settings_general__WEBPACK_IMPORTED_MODULE_5__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_5__.vw.showTags)) supported.delete(_dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags);
+            if (!_settings_general__WEBPACK_IMPORTED_MODULE_5__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_5__.vw.showFiles)) supported.delete(_dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files);
+            return Array.from(supported).map((field => field + getSubDataFields(field))).join(",");
+          }
+          function getSubDataFields(field) {
+            let supported = supportedSubDataFields.get(field) ?? [];
+            let string = supported.join(",");
+            return string === "" ? "" : `{${string}}`;
           }
           async function queryStash(queryString, onload, target, type, stashIdEndpoint) {
             let criterion;
             let query;
             let access = d => d;
             switch (type) {
-             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.StashId:
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.StashId:
               criterion = `stash_id_endpoint:{endpoint:"${encodeURIComponent(stashIdEndpoint)}",stash_id:"${encodeURIComponent(queryString)}",modifier:EQUALS}`;
               break;
 
@@ -344,32 +336,32 @@
               break;
             }
             switch (target) {
-             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Scene:
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Scene:
               query = `findScenes(scene_filter:{${criterion}}){scenes{${getDataFields(target)}}}`;
               access = d => d.scenes;
               break;
 
-             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Performer:
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer:
               query = `findPerformers(performer_filter:{${criterion}}){performers{${getDataFields(target)}}}`;
               access = d => d.performers;
               break;
 
-             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Gallery:
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Gallery:
               query = `findGalleries(gallery_filter:{${criterion}}){galleries{${getDataFields(target)}}}`;
               access = d => d.galleries;
               break;
 
-             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Movie:
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie:
               query = `findMovies(movie_filter:{${criterion}}){movies{${getDataFields(target)}}}`;
               access = d => d.movies;
               break;
 
-             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Studio:
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio:
               query = `findStudios(studio_filter:{${criterion}}){studios{${getDataFields(target)}}}`;
               access = d => d.studios;
               break;
 
-             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Tag:
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag:
               query = `findTags(tag_filter:{${criterion}}){tags{${getDataFields(target)}}}`;
               access = d => d.tags;
               break;
@@ -389,37 +381,37 @@
               let url = selectedUrl ? prepareUrl(selectedUrl) : selectedUrl;
               if (url) {
                 void 0;
-                await queryStash(url, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Url, stashIdEndpoint);
+                await queryStash(url, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Url, stashIdEndpoint);
               } else console.info(`No URL for ${target} found.`);
             }
             if (codeSelector) {
               let code = codeSelector(element);
               if (code) {
                 void 0;
-                await queryStash(code, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Code, stashIdEndpoint);
+                await queryStash(code, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Code, stashIdEndpoint);
               } else console.info(`No Code for ${target} found.`);
             }
             if (stashIdSelector) {
               let id = stashIdSelector(element);
               if (id) {
                 void 0;
-                await queryStash(id, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.StashId, stashIdEndpoint);
+                await queryStash(id, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.StashId, stashIdEndpoint);
               } else console.info(`No StashId for ${target} found.`);
             }
-            if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Performer, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Movie, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Tag ].includes(target) && nameSelector) {
+            if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag ].includes(target) && nameSelector) {
               let name = nameSelector(element);
               let nameCount = name?.split(/\s+/)?.length;
-              let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Performer && nameCount === 1;
+              let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer && nameCount === 1;
               if (name && !ignore) {
                 void 0;
-                await queryStash(name, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Name, stashIdEndpoint);
+                await queryStash(name, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Name, stashIdEndpoint);
               } else if (name && ignore) console.info(`Ignore single name: ${name}`); else console.info(`No Name for ${target} found.`);
             }
-            if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Scene, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.W.Gallery ].includes(target) && titleSelector) {
+            if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Scene, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Gallery ].includes(target) && titleSelector) {
               let title = titleSelector(element);
               if (title) {
                 void 0;
-                await queryStash(title, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.Z.Title, stashIdEndpoint);
+                await queryStash(title, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Title, stashIdEndpoint);
               } else console.info(`No Title for ${target} found.`);
             }
           }
@@ -447,9 +439,33 @@
     },
     389: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
-        W: () => Target,
-        Z: () => Type
+        J7: () => DataField,
+        We: () => Target,
+        ZU: () => Type
       });
+      var DataField;
+      (function(DataField) {
+        DataField["Id"] = "id";
+        DataField["Code"] = "code";
+        DataField["Name"] = "name";
+        DataField["Disambiguation"] = "disambiguation";
+        DataField["AliasList"] = "alias_list";
+        DataField["Title"] = "title";
+        DataField["Studio"] = "studio";
+        DataField["Favorite"] = "favorite";
+        DataField["Date"] = "date";
+        DataField["Birthdate"] = "birthdate";
+        DataField["HeightCm"] = "height_cm";
+        DataField["Tags"] = "tags";
+        DataField["Files"] = "files";
+        DataField["Path"] = "path";
+        DataField["Duration"] = "duration";
+        DataField["VideoCodec"] = "video_codec";
+        DataField["Width"] = "width";
+        DataField["Height"] = "height";
+        DataField["Size"] = "size";
+        DataField["BitRate"] = "bit_rate";
+      })(DataField || (DataField = {}));
       var Target;
       (function(Target) {
         Target["Scene"] = "scene";
@@ -504,14 +520,14 @@
                   let end = match?.index && match?.[0]?.length ? match?.index + match?.[0]?.length : match?.index;
                   return url.substring(0, end);
                 };
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, ".page-video__details > .text--h1", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".page-video__details > .text--h1", {
                   observe: true,
                   urlSelector: currentSite,
                   color,
                   prepareUrl,
                   codeSelector: () => window.location.pathname.match(codeRegex)?.[0]
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "a.videoTeaser__title", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a.videoTeaser__title", {
                   observe: true,
                   color,
                   prepareUrl,
@@ -523,12 +539,12 @@
              case "oreno3d.com":
               {
                 let color = d => d.files.some((f => f.path.endsWith("_Source.mp4"))) ? "green" : "blue";
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "h1.video-h1", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h1.video-h1", {
                   color,
                   urlSelector: currentSite,
                   titleSelector: null
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "a h2.box-h2", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a h2.box-h2", {
                   color,
                   titleSelector: null
                 });
@@ -538,12 +554,12 @@
              case "erommdtube.com":
               {
                 let color = d => d.files.some((f => f.path.endsWith("_Source.mp4"))) ? "green" : "blue";
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "h1.show__h1", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h1.show__h1", {
                   color,
                   urlSelector: currentSite,
                   titleSelector: null
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "h2.main__list-title", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h2.main__list-title", {
                   color,
                   titleSelector: null
                 });
@@ -552,29 +568,29 @@
 
              case "coomer.su":
              case "kemono.su":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "h1.post__title", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h1.post__title", {
                 urlSelector: currentSite,
                 titleSelector: null
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, ".post-card > a[href*='/post/']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".post-card > a[href*='/post/']", {
                 titleSelector: null
               });
               break;
 
              case "adultanime.dbsearch.net":
-              if (document.querySelector("article > section[id='info-table']") !== null) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "div[id='main-inner'] > article > h2", {
+              if (document.querySelector("article > section[id='info-table']") !== null) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div[id='main-inner'] > article > h2", {
                 urlSelector: currentSite,
                 codeSelector: _ => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "div.item-info > h4 > a, div.item-info > h5 > a");
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div.item-info > h4 > a, div.item-info > h5 > a");
               break;
 
              case "xslist.org":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "span[itemprop='name']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "span[itemprop='name']", {
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href*='/model/']");
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "table#movices td > strong", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='/model/']");
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "table#movices td > strong", {
                 urlSelector: null,
                 codeSelector: e => e.textContent?.trim(),
                 titleSelector: null
@@ -582,22 +598,22 @@
               break;
 
              case "www.animecharactersdatabase.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
               break;
 
              case "www.iafd.com":
-              if (window.location.pathname.startsWith("/person.rme/perfid=")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "h1", {
+              if (window.location.pathname.startsWith("/person.rme/perfid=")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h1", {
                 urlSelector: currentSite
-              }); else if (window.location.pathname.startsWith("/title.rme/id=")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "h1", {
+              }); else if (window.location.pathname.startsWith("/title.rme/id=")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h1", {
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href*='/person.rme/perfid=']");
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "a[href*='/title.rme/id=']");
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Studio, "a[href*='/studio.rme/studio=']");
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='/person.rme/perfid=']");
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href*='/title.rme/id=']");
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, "a[href*='/studio.rme/studio=']");
               break;
 
              case "javdb.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, ".video-detail > h2", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".video-detail > h2", {
                 urlSelector: currentSite,
                 titleSelector: e => e.querySelector("strong.current-title")?.textContent?.trim(),
                 codeSelector: _ => {
@@ -607,10 +623,10 @@
                   return first && second ? first + second : first;
                 }
               });
-              if (window.location.pathname.startsWith("/v/")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "a[href^='/v/'] > .video-number", {
+              if (window.location.pathname.startsWith("/v/")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href^='/v/'] > .video-number", {
                 titleSelector: e => e.parentElement?.title?.trim(),
                 codeSelector: e => e.textContent?.trim()
-              }); else (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "a[href^='/v/'] > .video-title", {
+              }); else (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href^='/v/'] > .video-title", {
                 titleSelector: e => e.parentElement?.title?.trim(),
                 codeSelector: e => e.querySelector("strong")?.textContent?.trim()
               });
@@ -620,13 +636,13 @@
               {
                 let stashIdSelector = _ => document.querySelector("div[name='UUID'] > div > div.flex")?.textContent?.trim();
                 let stashIdEndpoint = "https://api.theporndb.net/graphql";
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "div.pl-4 > h2", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "div.pl-4 > h2", {
                   observe: true,
                   displaySelector: e => window.location.pathname.startsWith("/performers/") ? e : null,
                   urlSelector: currentSite,
                   stashIdSelector
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "div.pl-4 > h2", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "div.pl-4 > h2", {
                   observe: true,
                   displaySelector: e => window.location.pathname.startsWith("/performers/") ? e : null,
                   urlSelector: null,
@@ -634,13 +650,13 @@
                   stashIdSelector,
                   stashIdEndpoint
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "div.flex.justify-between > h2", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div.flex.justify-between > h2", {
                   observe: true,
                   displaySelector: e => window.location.pathname.startsWith("/scenes/") || window.location.pathname.startsWith("/jav/") ? e : null,
                   urlSelector: currentSite,
                   stashIdSelector
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "div.flex.justify-between > h2", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div.flex.justify-between > h2", {
                   observe: true,
                   displaySelector: e => window.location.pathname.startsWith("/scenes/") || window.location.pathname.startsWith("/jav/") ? e : null,
                   urlSelector: null,
@@ -648,13 +664,13 @@
                   stashIdSelector,
                   stashIdEndpoint
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "div.flex.justify-between > h2", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Movie, "div.flex.justify-between > h2", {
                   observe: true,
                   displaySelector: e => window.location.pathname.startsWith("/movies/") ? e : null,
                   urlSelector: currentSite,
                   stashIdSelector
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "div.flex.justify-between > h2", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Movie, "div.flex.justify-between > h2", {
                   observe: true,
                   displaySelector: e => window.location.pathname.startsWith("/movies/") ? e : null,
                   urlSelector: null,
@@ -662,30 +678,30 @@
                   stashIdSelector,
                   stashIdEndpoint
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href^='https://theporndb.net/performers/']", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href^='https://theporndb.net/performers/']", {
                   observe: true
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "a[href^='https://theporndb.net/scenes/'], a[href^='https://theporndb.net/jav/']", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href^='https://theporndb.net/scenes/'], a[href^='https://theporndb.net/jav/']", {
                   observe: true
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "a[href^='https://theporndb.net/movies/']", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Movie, "a[href^='https://theporndb.net/movies/']", {
                   observe: true
                 });
                 break;
               }
 
              case "www.javlibrary.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "div[id='video_title']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div[id='video_title']", {
                 urlSelector: currentSite,
                 prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
                 codeSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim(),
                 titleSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim()
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, ".video a[href^='./?v=jav']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".video a[href^='./?v=jav']", {
                 prepareUrl: url => url.replace(/&.*$/, ""),
                 codeSelector: e => e.querySelector("div.id")?.textContent?.trim()
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
                 prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
                 codeSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)?.split(" ")[0],
                 titleSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)?.split(" ")[0]
@@ -693,58 +709,58 @@
               break;
 
              case "r18.dev":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "#video-info > #title", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "#video-info > #title", {
                 observe: true,
                 urlSelector: currentSite,
                 codeSelector: _ => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(document.querySelector("#dvd-id"))
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, ".video-label > a[href*='/movies/detail/']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".video-label > a[href*='/movies/detail/']", {
                 observe: true,
                 codeSelector: _utils__WEBPACK_IMPORTED_MODULE_3__.ou
               });
               break;
 
              case "www.minnano-av.com":
-              if (/actress\d{1,6}/.test(window.location.pathname)) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "h1", {
+              if (/actress\d{1,6}/.test(window.location.pathname)) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h1", {
                 prepareUrl: url => url.split("?")[0],
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
                 prepareUrl: url => url.split("?")[0]
               });
               break;
 
              case "www.indexxx.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "h1[id='model-name']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h1[id='model-name']", {
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a.modelLink[href*='https://www.indexxx.com/m/'] > span");
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a.modelLink[href*='https://www.indexxx.com/m/'] > span");
               break;
 
              case "www.thenude.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "span.model-name", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "span.model-name", {
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a.model-name, a.model-title, a[data-img*='/models/']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a.model-name, a.model-title, a[data-img*='/models/']", {
                 observe: true
               });
               break;
 
              case "www.data18.com":
               {
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", {
                   observe: true,
                   titleSelector: e => e.getAttribute("title")?.trim()
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "a[href^='https://www.data18.com/movies/']:not([href*='#']):not([href$='/movies/series']):not([href$='/movies/showcases'])", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Movie, "a[href^='https://www.data18.com/movies/']:not([href*='#']):not([href$='/movies/series']):not([href$='/movies/showcases'])", {
                   observe: true,
                   nameSelector: e => e.getAttribute("title")?.trim()
                 });
                 let exclude = ":not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])";
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
                   observe: true
                 });
-                if (window.location.pathname === "/names/pornstars") (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
+                if (window.location.pathname === "/names/pornstars") (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
                   observe: true,
                   displaySelector: e => e.parentElement?.querySelector("div"),
                   nameSelector: e => e.getAttribute("title")
@@ -753,77 +769,77 @@
               }
 
              case "www.babepedia.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "h1#babename", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h1#babename", {
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href*='/babe/']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='/babe/']", {
                 observe: true
               });
               break;
 
              case "www.freeones.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
                 prepareUrl: url => url.replace(/\/feed$/, "").replace(/\/[a-z]{2}\//, "/")
               });
               break;
 
              case "shemalestardb.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "h2[id='star-name']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h2[id='star-name']", {
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "figcaption > a[href*='/stars/']");
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "figcaption > a[href*='/stars/']");
               break;
 
              case "onlyfans.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "div.b-username > div.g-user-name", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "div.b-username > div.g-user-name", {
                 observe: true,
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a.b-username > div.g-user-name", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a.b-username > div.g-user-name", {
                 observe: true
               });
               break;
 
              case "www.pornteengirl.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href*='/model/']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='/model/']", {
                 nameSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)?.replace(/\([^()]*\)$/, "")?.trimEnd()
               });
               break;
 
              case "gayeroticvideoindex.com":
-              if (window.location.pathname.startsWith("/performer/")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "[id='data'] h1", {
+              if (window.location.pathname.startsWith("/performer/")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "[id='data'] h1", {
                 urlSelector: currentSite
-              }); else if (window.location.pathname.startsWith("/episode/")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "[id='data'] h1", {
+              }); else if (window.location.pathname.startsWith("/episode/")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "[id='data'] h1", {
                 urlSelector: currentSite
-              }); else if (window.location.pathname.startsWith("/video/")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "[id='data'] h1", {
+              }); else if (window.location.pathname.startsWith("/video/")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Movie, "[id='data'] h1", {
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "a[href*='performer/']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='performer/']", {
                 observe: true
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "a[href*='episode/']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href*='episode/']", {
                 observe: true
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Movie, "a[href*='video/']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Movie, "a[href*='video/']", {
                 observe: true
               });
               break;
 
              case "pmvhaven.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "h1.pl-2", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h1.pl-2", {
                 observe: true,
                 displaySelector: e => window.location.pathname.startsWith("/video/") ? e : null,
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "a[href^='/video/'] .v-card-text", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href^='/video/'] .v-card-text", {
                 observe: true
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Studio, ".v-card-title", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, ".v-card-title", {
                 observe: true,
                 displaySelector: e => window.location.pathname.startsWith("/creator/") ? e : null,
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Studio, "a[href^='/creator/'] .v-chip__content", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, "a[href^='/creator/'] .v-chip__content", {
                 observe: true
               });
               break;
@@ -843,27 +859,27 @@
                 function findId(string) {
                   return string?.match(/\p{Hex}{8}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{12}/u)?.[0];
                 }
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, "div.scene-info.card h3 > span", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div.scene-info.card h3 > span", {
                   ...stashBoxDefault,
                   stashIdSelector: () => findId(window.location.href)
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Scene, `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
                   ...stashBoxDefault,
                   stashIdSelector: e => findId(e.closest("a")?.href)
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, "div.PerformerInfo div.card-header h3 > span", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "div.PerformerInfo div.card-header h3 > span", {
                   ...stashBoxDefault,
                   stashIdSelector: () => findId(window.location.href)
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Performer, `a[href^='/performers/']${exclude}, a[href^='https://${window.location.host}/performers/']${exclude}`, {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, `a[href^='/performers/']${exclude}, a[href^='https://${window.location.host}/performers/']${exclude}`, {
                   ...stashBoxDefault,
                   stashIdSelector: e => findId(e.closest("a")?.href)
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Studio, ".studio-title > h3 > span", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, ".studio-title > h3 > span", {
                   ...stashBoxDefault,
                   stashIdSelector: () => findId(window.location.href)
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.W.Studio, `a[href^='/studios/']${exclude}, a[href^='https://${window.location.host}/studios/']${exclude}`, {
+                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, `a[href^='/studios/']${exclude}, a[href^='https://${window.location.host}/studios/']${exclude}`, {
                   ...stashBoxDefault,
                   stashIdSelector: e => findId(e.closest("a")?.href)
                 });
@@ -1357,30 +1373,31 @@
           __webpack_require__.d(__webpack_exports__, {
             l: () => prefixSymbol
           });
-          var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(185);
-          var _settings_general__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(44);
-          var _stashQuery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(657);
-          var _tooltipElement__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(563);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_general__WEBPACK_IMPORTED_MODULE_1__ ]);
-          _settings_general__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+          var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
+          var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(185);
+          var _settings_general__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(44);
+          var _stashQuery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(657);
+          var _tooltipElement__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(563);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_general__WEBPACK_IMPORTED_MODULE_2__ ]);
+          _settings_general__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
           function getExistingSymbol(element) {
             if (element.getAttribute("data-type") === "stash-symbol") return element; else return Array.from(element.childNodes).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n)).map(getExistingSymbol).find((n => n));
           }
           function formatFileData(files) {
-            let propertyStrings = [ [ "path", path => `Path: ${path}` ], [ "video_codec", video_codec => `<br>Codec: ${video_codec}` ], [ "width", width => ` (${width}` ], [ "height", height => `x${height})` ], [ "size", size => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${(0, 
-            _utils__WEBPACK_IMPORTED_MODULE_0__.$R)(size)}` ], [ "bit_rate", bit_rate => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(bit_rate / 1e6).toFixed(2)}Mbit/s` ], [ "duration", duration => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${(0, 
-            _utils__WEBPACK_IMPORTED_MODULE_0__.xr)(duration)}` ] ];
+            let propertyStrings = [ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Path, path => `Path: ${path}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.VideoCodec, video_codec => `<br>Codec: ${video_codec}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Width, width => ` (${width}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Height, height => `x${height})` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Size, size => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${(0, 
+            _utils__WEBPACK_IMPORTED_MODULE_1__.$R)(size)}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.BitRate, bit_rate => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(bit_rate / 1e6).toFixed(2)}Mbit/s` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Duration, duration => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${(0, 
+            _utils__WEBPACK_IMPORTED_MODULE_1__.xr)(duration)}` ] ];
             return files.map((file => "<div class='stashChecker file'>" + propertyStrings.filter((e => file[e[0]])).map((e => e[1](file[e[0]]))).join("") + "</div>")).join("");
           }
           function formatTagPill(tag) {
             return `<span class='stashChecker tag'>${tag.name}</span>`;
           }
           function formatQueries(queries, target, id, numQueries) {
-            return queries.map((query => new _stashQuery__WEBPACK_IMPORTED_MODULE_2__.M(query).toHtml(target, id, numQueries))).join("<br>");
+            return queries.map((query => new _stashQuery__WEBPACK_IMPORTED_MODULE_3__.M(query).toHtml(target, id, numQueries))).join("<br>");
           }
+          const propertyStrings = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Id, (id, queries, target, numQueries) => `<br>${formatQueries(queries, target, id, numQueries)}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Title, title => `<br>Title: ${title}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Name, name => `<br>Name: ${name}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Favorite, () => "&emsp;&#10084;&#65039;" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Disambiguation, disambiguation => ` <span style="color: grey">(${disambiguation})</span>` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.AliasList, alias_list => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", <wbr>")}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Studio, studio => `<br>Studio: ${studio.name}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Code, code => `<br>Code: ${code}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Date, date => `<br>Date: ${date}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Birthdate, birthdate => `<br>Birthdate: ${birthdate}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.HeightCm, height => `<br>Height: ${height} cm` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Tags, tags => tags.length === 0 ? "" : `<br>Tags: ${tags.map(formatTagPill).join("<wbr>")}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Files, files => `${formatFileData(files)}` ] ]);
           function formatEntryData(target, data, numQueries) {
-            let propertyStrings = [ [ "id", (id, queries) => `<br>${formatQueries(queries, target, id, numQueries)}` ], [ "title", title => `<br>Title: ${title}` ], [ "name", name => `<br>Name: ${name}` ], [ "favorite", () => "&emsp;&#10084;&#65039;" ], [ "disambiguation", disambiguation => ` <span style="color: grey">(${disambiguation})</span>` ], [ "alias_list", alias_list => alias_list.length === 0 ? "" : `<br>Aliases: ${alias_list.join(", <wbr>")}` ], [ "studio", studio => `<br>Studio: ${studio.name}` ], [ "code", code => `<br>Code: ${code}` ], [ "date", date => `<br>Date: ${date}` ], [ "tags", tags => tags.length === 0 ? "" : `<br>Tags: ${tags.map(formatTagPill).join("<wbr>")}` ], [ "files", files => `${formatFileData(files)}` ] ];
-            return data.map((entry => "<hr>" + propertyStrings.filter((e => entry[e[0]])).map((e => e[1](entry[e[0]], entry.queries))).join(""))).join("");
+            return data.map((entry => "<hr>" + Object.entries(entry).map((([key, value]) => value ? propertyStrings.get(key)?.(value, entry.queries, target, numQueries) : void 0)).filter((s => s)).join(""))).join("");
           }
           function mergeData(target, source) {
             let mapTarget = new Map(target.map((e => [ entryKey(e), e ])));
@@ -1391,13 +1408,13 @@
                 let targetQueries = new Map(mapTarget.get(key).queries.map((v => [ v.endpoint, v ])));
                 sourceQueries.forEach(((sourceQuery, key) => {
                   if (targetQueries.has(key)) {
-                    let s = new _stashQuery__WEBPACK_IMPORTED_MODULE_2__.M(sourceQuery);
+                    let s = new _stashQuery__WEBPACK_IMPORTED_MODULE_3__.M(sourceQuery);
                     s.addTypes(targetQueries.get(key).types);
                     sourceQuery = s;
                   }
                   targetQueries.set(key, sourceQuery);
                 }));
-                sourceEntry.queries = Array.from(targetQueries.values()).map((q => new _stashQuery__WEBPACK_IMPORTED_MODULE_2__.M(q))).sort(((a, b) => a.compareTo(b)));
+                sourceEntry.queries = Array.from(targetQueries.values()).map((q => new _stashQuery__WEBPACK_IMPORTED_MODULE_3__.M(q))).sort(((a, b) => a.compareTo(b)));
               }
               mapTarget.set(key, sourceEntry);
             }));
@@ -1430,9 +1447,9 @@
               symbol.classList.add("stashCheckerCheckmark");
               symbol.setAttribute("data-type", "stash-symbol");
               symbol.setAttribute("data-count", "1");
-              symbol.addEventListener("mouseover", _tooltipElement__WEBPACK_IMPORTED_MODULE_3__.sQ);
-              symbol.addEventListener("mouseout", _tooltipElement__WEBPACK_IMPORTED_MODULE_3__._I);
-              let text = (0, _utils__WEBPACK_IMPORTED_MODULE_0__.Yz)(element);
+              symbol.addEventListener("mouseover", _tooltipElement__WEBPACK_IMPORTED_MODULE_4__.sQ);
+              symbol.addEventListener("mouseout", _tooltipElement__WEBPACK_IMPORTED_MODULE_4__._I);
+              let text = (0, _utils__WEBPACK_IMPORTED_MODULE_1__.Yz)(element);
               if (text) text.parentNode?.insertBefore(symbol, text); else return;
             }
             symbol.setAttribute("data-endpoints", JSON.stringify(endpoints));
@@ -1442,20 +1459,20 @@
             let tooltip = "";
             let targetReadable = target.charAt(0).toUpperCase() + target.slice(1);
             if (count === 0) {
-              if (_settings_general__WEBPACK_IMPORTED_MODULE_1__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_1__.vw.showCrossMark)) symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_1__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_1__.vw.crossMark)} `;
+              if (_settings_general__WEBPACK_IMPORTED_MODULE_2__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.showCrossMark)) symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.crossMark)} `;
               symbol.style.color = "red";
               tooltip = `${targetReadable} not in Stash<br>`;
             } else if (new Set(data.map((e => e.endpoint))).size < data.length) {
-              symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_1__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_1__.vw.dangerMark)} `;
+              symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.dangerMark)} `;
               symbol.style.color = "orange";
               tooltip = `${targetReadable} has duplicate matches<br>`;
             } else {
-              symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_1__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_1__.vw.checkMark)} `;
+              symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.checkMark)} `;
               symbol.style.color = color(data[0]);
             }
             tooltip += `Endpoints: ${endpoints.join(", ")}`;
             tooltip += "<br>";
-            tooltip += `Queries: ${queryTypes.map((type => _utils__WEBPACK_IMPORTED_MODULE_0__.xG.get(type))).join(", ")}`;
+            tooltip += `Queries: ${queryTypes.map((type => _utils__WEBPACK_IMPORTED_MODULE_1__.xG.get(type))).join(", ")}`;
             tooltip += formatEntryData(target, data, queryTypes.length);
             symbol.setAttribute("data-info", tooltip);
           }
@@ -1548,7 +1565,7 @@
         return bytes.toFixed(2) + label;
       }
       let friendlyHttpStatus = new Map([ [ 200, "OK" ], [ 201, "Created" ], [ 202, "Accepted" ], [ 203, "Non-Authoritative Information" ], [ 204, "No Content" ], [ 205, "Reset Content" ], [ 206, "Partial Content" ], [ 300, "Multiple Choices" ], [ 301, "Moved Permanently" ], [ 302, "Found" ], [ 303, "See Other" ], [ 304, "Not Modified" ], [ 305, "Use Proxy" ], [ 306, "Unused" ], [ 307, "Temporary Redirect" ], [ 400, "Bad Request" ], [ 401, "Unauthorized" ], [ 402, "Payment Required" ], [ 403, "Forbidden" ], [ 404, "Not Found" ], [ 405, "Method Not Allowed" ], [ 406, "Not Acceptable" ], [ 407, "Proxy Authentication Required" ], [ 408, "Request Timeout" ], [ 409, "Conflict" ], [ 410, "Gone" ], [ 411, "Length Required" ], [ 412, "Precondition Required" ], [ 413, "Request Entry Too Large" ], [ 414, "Request-URI Too Long" ], [ 415, "Unsupported Media Type" ], [ 416, "Requested Range Not Satisfiable" ], [ 417, "Expectation Failed" ], [ 418, "I'm a teapot" ], [ 429, "Too Many Requests" ], [ 500, "Internal Server Error" ], [ 501, "Not Implemented" ], [ 502, "Bad Gateway" ], [ 503, "Service Unavailable" ], [ 504, "Gateway Timeout" ], [ 505, "HTTP Version Not Supported" ] ]);
-      const typeToString = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.Url, "URL" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.Code, "Code" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.StashId, "StashId" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.Name, "Name" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Z.Title, "Title" ] ]);
+      const typeToString = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Url, "URL" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Code, "Code" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.StashId, "StashId" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Name, "Name" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Title, "Title" ] ]);
     }
   };
   var __webpack_module_cache__ = {};
