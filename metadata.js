@@ -27,6 +27,7 @@ export default {
         "*://shemalestardb.com/*",
         "*://stashdb.org/*",
         "*://theporndb.net/*",
+        "*://www.adultfilmdatabase.com/*",
         "*://www.animecharactersdatabase.com/*",
         "*://www.babepedia.com/*",
         "*://www.data18.com/*",

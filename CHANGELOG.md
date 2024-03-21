@@ -6,7 +6,7 @@
 - Add option to set custom icons [#21]
 - Add tags, birthdate, height to tooltip [#4]
 - Add options to not include tags/files in tooltip [#22]
-- Add support for websites: javdb, pmvhaven, xcity.jp
+- Add support for websites: javdb, pmvhaven, xcity.jp, adultfilmdatabase
 - Improve responsiveness for sites with many entries by queueing batch queries [#28]
 - Separate tooltip entries per endpoint
 - Update TPDB to new site

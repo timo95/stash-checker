@@ -273,6 +273,27 @@ import {initGeneralSettings} from "./settings/general";
             }
             break;
         }
+        case "www.adultfilmdatabase.com": {
+            check(Target.Performer, "h1.w3-opacity", {
+                displaySelector: e => window.location.pathname.startsWith("/actor/") ? e : null,
+                urlSelector: currentSite
+            });
+            check(Target.Scene, "h1[itemprop='name']", {urlSelector: currentSite});
+            check(Target.Studio, "h1.w3-opacity", {
+                displaySelector: e => window.location.pathname.startsWith("/studio/") ? e : null,
+                urlSelector: currentSite
+            });
+            check(Target.Studio, "a[href^='/studio/']", {observe: true});
+            check(Target.Performer, "a[href^='/actor/']", {
+                observe: true,
+                displaySelector: e => firstText(e) === "as performer" ? null : e
+            });
+            check(Target.Scene, "a[href^='/video/']", {
+                observe: true,
+                titleSelector: e => e.getAttribute("title")?.trim() ?? firstText(e)
+            });
+            break;
+        }
         case "www.babepedia.com": {
             check(Target.Performer, "h1#babename", {urlSelector: currentSite});
             check(Target.Performer, "a[href*='/babe/']", {observe: true});
