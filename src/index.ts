@@ -74,10 +74,10 @@ import {initGeneralSettings} from "./settings/general";
             if (document.querySelector("article > section[id='info-table']") !== null) {
                 check(Target.Scene, "div[id='main-inner'] > article > h2", {
                     urlSelector: currentSite,
-                    codeSelector: (_) => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
+                    codeSelector: _ => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
                 });
             }
-            check(Target.Scene, "div.item-info > h4 > a, div.item-info > h5 > a");
+            check(Target.Scene, "div.item-info > :is(h4, h5) > a");
             break;
         }
         case "xcity.jp": {
@@ -245,7 +245,7 @@ import {initGeneralSettings} from "./settings/general";
         }
         case "www.indexxx.com": {
             check(Target.Performer, "h1[id='model-name']", {urlSelector: currentSite});
-            check(Target.Performer, "a.modelLink[href*='https://www.indexxx.com/m/'] > span");
+            check(Target.Performer, "a.modelLink[href^='https://www.indexxx.com/m/'] > span");
             break;
         }
         case "www.thenude.com": {
