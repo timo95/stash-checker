@@ -30,6 +30,7 @@
 // @match *://www.minnano-av.com/*
 // @match *://www.pornteengirl.com/*
 // @match *://www.thenude.com/*
+// @match *://xcity.jp/*
 // @match *://xslist.org/*
 // @connect localhost
 // @connect *
@@ -370,7 +371,7 @@
               return;
             }
             _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__.I.forEach((endpoint => {
-              (0, _request__WEBPACK_IMPORTED_MODULE_4__.E)(endpoint, query, false).then((data => onload(target, type, endpoint, access(data))));
+              (0, _request__WEBPACK_IMPORTED_MODULE_4__.E)(endpoint, query, true).then((data => onload(target, type, endpoint, access(data))));
             }));
           }
           async function checkElement(target, element, {displaySelector = e => e, prepareUrl = url => url, urlSelector = e => e.closest("a")?.href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = _utils__WEBPACK_IMPORTED_MODULE_2__.ou, titleSelector = _utils__WEBPACK_IMPORTED_MODULE_2__.ou, color = () => "green"}) {
@@ -401,7 +402,8 @@
             if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag ].includes(target) && nameSelector) {
               let name = nameSelector(element);
               let nameCount = name?.split(/\s+/)?.length;
-              let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer && nameCount === 1;
+              let kanji = name ? /[\u4e00-\u9faf\u3400-\u4dbf]/.test(name) : false;
+              let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer && nameCount === 1 && !kanji;
               if (name && !ignore) {
                 void 0;
                 await queryStash(name, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Name, stashIdEndpoint);
@@ -583,6 +585,28 @@
                 codeSelector: _ => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div.item-info > h4 > a, div.item-info > h5 > a");
+              break;
+
+             case "xcity.jp":
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "#program_detail_title", {
+                urlSelector: currentSite,
+                codeSelector: _ => document.getElementById("hinban")?.textContent
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".x-itemBox", {
+                observe: true,
+                displaySelector: e => e.querySelector(".x-itemBox-title"),
+                urlSelector: e => e.querySelector("a")?.href,
+                prepareUrl: url => url.split("&")[0],
+                titleSelector: e => e.querySelector("a")?.title
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "#avidolDetails", {
+                urlSelector: currentSite,
+                prepareUrl: url => url.split(/[?&]/)[0],
+                nameSelector: e => e.querySelector(".photo img")?.getAttribute("alt") ?? (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href^='/idol/detail/'][href$='/']", {
+                observe: true
+              });
               break;
 
              case "xslist.org":

@@ -30,6 +30,7 @@
 // @match *://www.minnano-av.com/*
 // @match *://www.pornteengirl.com/*
 // @match *://www.thenude.com/*
+// @match *://xcity.jp/*
 // @match *://xslist.org/*
 // @connect localhost
 // @connect *
