@@ -38,6 +38,7 @@ export default {
         "*://www.minnano-av.com/*",
         "*://www.pornteengirl.com/*",
         "*://www.thenude.com/*",
+        "*://xcity.jp/*",
         "*://xslist.org/*",
     ],
     require: [],

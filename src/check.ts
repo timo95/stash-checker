@@ -90,7 +90,7 @@ async function queryStash(
 
     // Get config values or wait for popup if it is not stored
     stashEndpoints.forEach((endpoint: StashEndpoint) => {
-        request(endpoint, query, false)
+        request(endpoint, query, true)
             .then((data: any) => onload(target, type, endpoint, access(data)));
     });
 }
@@ -163,7 +163,8 @@ async function checkElement(
         let name = nameSelector(element);
         // Do not use single performer names
         let nameCount = name?.split(/\s+/)?.length
-        let ignore = target === Target.Performer && nameCount === 1
+        let kanji = name ? /[\u4e00-\u9faf\u3400-\u4dbf]/.test(name) : false
+        let ignore = target === Target.Performer && nameCount === 1 && !kanji
         if (name && !ignore) {
             console.debug(`Name: ${name}`);
             await queryStash(name, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Name, stashIdEndpoint);

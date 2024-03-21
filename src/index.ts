@@ -80,6 +80,26 @@ import {initGeneralSettings} from "./settings/general";
             check(Target.Scene, "div.item-info > h4 > a, div.item-info > h5 > a");
             break;
         }
+        case "xcity.jp": {
+            check(Target.Scene, "#program_detail_title", {
+                urlSelector: currentSite,
+                codeSelector: _ => document.getElementById("hinban")?.textContent
+            });
+            check(Target.Scene, ".x-itemBox", {
+                observe: true,
+                displaySelector: e => e.querySelector(".x-itemBox-title"),
+                urlSelector: e => e.querySelector("a")?.href,
+                prepareUrl: url => url.split("&")[0],
+                titleSelector: e => e.querySelector("a")?.title
+            });
+            check(Target.Performer, "#avidolDetails", {
+                urlSelector: currentSite,
+                prepareUrl: url => url.split(/[?&]/)[0],
+                nameSelector: e => e.querySelector(".photo img")?.getAttribute("alt") ?? firstText(e)
+            });
+            check(Target.Performer, "a[href^='/idol/detail/'][href$='/']", {observe: true});
+            break;
+        }
         case "xslist.org": {
             check(Target.Performer, "span[itemprop='name']", {urlSelector: currentSite});
             check(Target.Performer, "a[href*='/model/']");
