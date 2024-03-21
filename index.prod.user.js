@@ -19,6 +19,7 @@
 // @match *://shemalestardb.com/*
 // @match *://stashdb.org/*
 // @match *://theporndb.net/*
+// @match *://www.adultfilmdatabase.com/*
 // @match *://www.animecharactersdatabase.com/*
 // @match *://www.babepedia.com/*
 // @match *://www.data18.com/*
@@ -791,6 +792,31 @@
                 });
                 break;
               }
+
+             case "www.adultfilmdatabase.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h1.w3-opacity", {
+                displaySelector: e => window.location.pathname.startsWith("/actor/") ? e : null,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h1[itemprop='name']", {
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, "h1.w3-opacity", {
+                displaySelector: e => window.location.pathname.startsWith("/studio/") ? e : null,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, "a[href^='/studio/']", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href^='/actor/']", {
+                observe: true,
+                displaySelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e) === "as performer" ? null : e
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href^='/video/']", {
+                observe: true,
+                titleSelector: e => e.getAttribute("title")?.trim() ?? (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)
+              });
+              break;
 
              case "www.babepedia.com":
               (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h1#babename", {
