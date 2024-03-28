@@ -472,20 +472,20 @@
       })(DataField || (DataField = {}));
       var Target;
       (function(Target) {
-        Target["Scene"] = "scene";
-        Target["Performer"] = "performer";
         Target["Gallery"] = "gallery";
         Target["Movie"] = "movie";
+        Target["Performer"] = "performer";
+        Target["Scene"] = "scene";
         Target["Studio"] = "studio";
         Target["Tag"] = "tag";
       })(Target || (Target = {}));
       var Type;
       (function(Type) {
-        Type["Url"] = "url";
         Type["Code"] = "code";
-        Type["StashId"] = "stash_id";
         Type["Name"] = "name";
+        Type["StashId"] = "stash_id";
         Type["Title"] = "title";
+        Type["Url"] = "url";
       })(Type || (Type = {}));
     },
     156: (module, __unused_webpack___webpack_exports__, __webpack_require__) => {
@@ -1434,11 +1434,12 @@
           function getExistingSymbol(element) {
             if (element.getAttribute("data-type") === "stash-symbol") return element; else return Array.from(element.childNodes).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n)).map(getExistingSymbol).find((n => n));
           }
-          function formatFileData(files) {
-            let propertyStrings = [ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Path, path => `Path: ${path}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.VideoCodec, video_codec => `<br>Codec: ${video_codec}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Width, width => ` (${width}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Height, height => `x${height})` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Size, size => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${(0, 
-            _utils__WEBPACK_IMPORTED_MODULE_1__.$R)(size)}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.BitRate, bit_rate => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(bit_rate / 1e6).toFixed(2)}Mbit/s` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Duration, duration => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${(0, 
-            _utils__WEBPACK_IMPORTED_MODULE_1__.xr)(duration)}` ] ];
-            return files.map((file => "<div class='stashChecker file'>" + propertyStrings.filter((e => file[e[0]])).map((e => e[1](file[e[0]]))).join("") + "</div>")).join("");
+          const propertyStrings = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Aliases, aliases => aliases.length === 0 ? "" : `<br>Aliases: ${aliases.join(", <wbr>")}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.AliasList, aliasList => aliasList.length === 0 ? "" : `<br>Aliases: ${aliasList.join(", <wbr>")}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Birthdate, birthdate => `<br>Birthdate: ${birthdate}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.BitRate, bit_rate => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(bit_rate / 1e6).toFixed(2)}Mbit/s` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Code, code => `<br>Code: ${code}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Date, date => `<br>Date: ${date}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Disambiguation, disambiguation => ` <span style="color: grey">(${disambiguation})</span>` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Duration, duration => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${(0, 
+          _utils__WEBPACK_IMPORTED_MODULE_1__.xr)(duration)}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Favorite, () => "&emsp;&#10084;&#65039;" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Files, (files, queries, target, numQueries) => `${files.map((file => formatFileData(file, queries, target, numQueries))).join("")}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Height, height => `x${height})` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.HeightCm, height => `<br>Height: ${height} cm` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Id, (id, queries, target, numQueries) => `<br>${formatQueries(queries, target, id, numQueries)}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Name, name => `<br>Name: ${name}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Path, path => `Path: ${path}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Size, size => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${(0, 
+          _utils__WEBPACK_IMPORTED_MODULE_1__.$R)(size)}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Studio, studio => `<br>Studio: ${studio[_dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Name]}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Tags, tags => tags.length === 0 ? "" : `<br>Tags: ${tags.map(formatTagPill).join("<wbr>")}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Title, title => `<br>Title: ${title}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.VideoCodec, video_codec => `<br>Codec: ${video_codec}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Width, width => ` (${width}` ] ]);
+          function formatFileData(file, queries, target, numQueries) {
+            let text = Object.entries(file).map((([key, value]) => value ? propertyStrings.get(key)?.(value, queries, target, numQueries) : void 0)).filter((s => s)).join("");
+            return `<div class='stashChecker file'>${text}</div>`;
           }
           function formatTagPill(tag) {
             return `<span class='stashChecker tag'>${tag.name}</span>`;
@@ -1446,7 +1447,6 @@
           function formatQueries(queries, target, id, numQueries) {
             return queries.map((query => new _stashQuery__WEBPACK_IMPORTED_MODULE_3__.M(query).toHtml(target, id, numQueries))).join("<br>");
           }
-          const propertyStrings = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Id, (id, queries, target, numQueries) => `<br>${formatQueries(queries, target, id, numQueries)}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Title, title => `<br>Title: ${title}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Name, name => `<br>Name: ${name}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Favorite, () => "&emsp;&#10084;&#65039;" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Disambiguation, disambiguation => ` <span style="color: grey">(${disambiguation})</span>` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Aliases, aliases => aliases.length === 0 ? "" : `<br>Aliases: ${aliases.join(", <wbr>")}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.AliasList, aliasList => aliasList.length === 0 ? "" : `<br>Aliases: ${aliasList.join(", <wbr>")}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Studio, studio => `<br>Studio: ${studio[_dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Name]}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Code, code => `<br>Code: ${code}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Date, date => `<br>Date: ${date}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Birthdate, birthdate => `<br>Birthdate: ${birthdate}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.HeightCm, height => `<br>Height: ${height} cm` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Tags, tags => tags.length === 0 ? "" : `<br>Tags: ${tags.map(formatTagPill).join("<wbr>")}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Files, files => `${formatFileData(files)}` ] ]);
           function formatEntryData(entry, target, numQueries) {
             return "<hr>" + Object.entries(entry).map((([key, value]) => value ? propertyStrings.get(key)?.(value, entry.queries, target, numQueries) : void 0)).filter((s => s)).join("");
           }
