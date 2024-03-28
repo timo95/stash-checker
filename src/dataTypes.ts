@@ -13,11 +13,15 @@ export type StashEndpoint = {
  * Return type of GraphQL queries representing an entry.
  */
 export type StashEntry = {
-    [key in DataField]: any;
+    [key in DataField]: any | StashFile[];
 } & {
     queries: StashQuery[];
     endpoint: string;
 };
+
+export type StashFile = {
+    [key in DataField]: any;
+}
 
 /**
  * A batch collector of requests.
@@ -67,10 +71,10 @@ export enum DataField {
  * Entry types in Stash
  */
 export enum Target {
-    Scene = "scene",
-    Performer = "performer",
     Gallery = "gallery",
     Movie = "movie",
+    Performer = "performer",
+    Scene = "scene",
     Studio = "studio",
     Tag = "tag",
 }
@@ -79,11 +83,11 @@ export enum Target {
  * Ways to query for an entry
  */
 export enum Type {
-    Url = "url",
     Code = "code",
-    StashId = "stash_id",
     Name = "name",
+    StashId = "stash_id",
     Title = "title",
+    Url = "url",
 }
 
 /**
