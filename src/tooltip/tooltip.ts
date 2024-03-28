@@ -50,6 +50,7 @@ const propertyStrings: Map<string, (datum: any, queries: StashQuery[], target: T
     [DataField.Name, (name: string) => `<br>Name: ${name}`],
     [DataField.Favorite, () => "&emsp;&#10084;&#65039;"],
     [DataField.Disambiguation, (disambiguation: string) => ` <span style="color: grey">(${disambiguation})</span>`],
+    [DataField.Aliases, (aliases: any) => aliases.length === 0 ? "" : `<br>Aliases: ${aliases.join(", <wbr>")}`],
     [DataField.AliasList, (aliasList: any) => aliasList.length === 0 ? "" : `<br>Aliases: ${aliasList.join(", <wbr>")}`],
     [DataField.Studio, (studio: any) => `<br>Studio: ${studio[DataField.Name]}`],
     [DataField.Code, (code: string) => `<br>Code: ${code}`],

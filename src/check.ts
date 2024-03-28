@@ -10,7 +10,7 @@ const supportedDataFields = new Map<Target, DataField[]>([
     [Target.Performer, [DataField.Id, DataField.Name, DataField.Disambiguation, DataField.Favorite, DataField.AliasList, DataField.Birthdate, DataField.HeightCm, DataField.Tags]],
     [Target.Gallery, [DataField.Id, DataField.Title, DataField.Date, DataField.Tags, DataField.Files]],
     [Target.Movie, [DataField.Id, DataField.Name, DataField.Date]],
-    [Target.Studio,[DataField.Id, DataField.Name]],
+    [Target.Studio,[DataField.Id, DataField.Name, DataField.Aliases]],
     [Target.Tag, [DataField.Id, DataField.Name]],
 ]);
 
