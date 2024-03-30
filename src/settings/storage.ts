@@ -1,4 +1,10 @@
 
+export enum StorageKey {
+    BooleanOptions = "booleanOptions",
+    StashEndpoints = "stashEndpoints",
+    StringOptions = "stringOptions",
+}
+
 /**
  * Get value of type T from storage. Deletes stored key-value pair, if it fails to parse the value.
  *

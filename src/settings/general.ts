@@ -1,5 +1,5 @@
 import {buttonDanger, getSettingsSection, newSettingsSection} from "./settings";
-import {getValue, setValue} from "./storage";
+import {getValue, setValue, StorageKey} from "./storage";
 
 export enum OptionKey {
     showCrossMark = "showCrossMark",
@@ -22,8 +22,8 @@ const defaultStringOptions = new Map([
     [OptionKey.warningMark, "!"]
 ]);
 
-export const booleanOptions: Map<OptionKey, boolean> = await getValue("booleanOptions", defaultBooleanOptions)
-export const stringOptions: Map<OptionKey, string> = await getValue("stringOptions", defaultStringOptions)
+export const booleanOptions: Map<OptionKey, boolean> = await getValue(StorageKey.BooleanOptions, defaultBooleanOptions)
+export const stringOptions: Map<OptionKey, string> = await getValue(StorageKey.StringOptions, defaultStringOptions)
 
 export async function initGeneralSettings() {
     let generalSection = newSettingsSection("general", "General")
@@ -64,9 +64,9 @@ function fieldSet(id: string, label: string) {
 
 function resetToDefault() {
     defaultBooleanOptions.forEach((value, key) => booleanOptions.set(key, value));
-    void setValue("booleanOptions", booleanOptions)
+    void setValue(StorageKey.BooleanOptions, booleanOptions)
     defaultStringOptions.forEach((value, key) => stringOptions.set(key, value));
-    void setValue("stringOptions", stringOptions)
+    void setValue(StorageKey.StringOptions, stringOptions)
     let generalSection = getSettingsSection("general")!
     populateGeneralSection(generalSection)
 }
@@ -82,7 +82,7 @@ function checkBox(key: OptionKey, label: string): HTMLElement {
     inputElement.defaultChecked = booleanOptions.get(key) ?? false
     inputElement.addEventListener("input", () => {
         booleanOptions.set(key, inputElement.checked)
-        void setValue("booleanOptions", booleanOptions)
+        void setValue(StorageKey.BooleanOptions, booleanOptions)
     });
 
     let labelElement: HTMLLabelElement = document.createElement("label")
@@ -106,7 +106,7 @@ function charBox(key: OptionKey, label: string): HTMLElement {
     inputElement.defaultValue = stringOptions.get(key) ?? ""
     inputElement.addEventListener("input", () => {
         stringOptions.set(key, inputElement.value)
-        void setValue("stringOptions", stringOptions)
+        void setValue(StorageKey.StringOptions, stringOptions)
     });
 
     let labelElement: HTMLLabelElement = document.createElement("label")
