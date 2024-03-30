@@ -1,13 +1,18 @@
 
 ## [1.0.0]
 
+### New Features
 - Add metadata for userscript auto-updates [#27]
 - Add option to disable cross mark display
-- Add option to set custom icons [#21]
+- Add option to set custom symbol icons [#21]
 - Add tags, birthdate, height to tooltip [#4]
 - Add options to not include tags/files in tooltip [#22]
+- Add matching statistics to settings [#32]
 - Add support for websites: javdb, pmvhaven, xcity.jp, adultfilmdatabase
+
+### Improvements / Fixes
 - Improve responsiveness for sites with many entries by queueing batch queries [#28]
+- Rerun queries when closing settings modal [#31]
 - Separate tooltip entries per endpoint
 - Update TPDB to new site
 - Fix data18 performer overview page
