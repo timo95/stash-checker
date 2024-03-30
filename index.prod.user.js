@@ -61,7 +61,7 @@
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(314);
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = __webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
       var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default());
-      ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-text-light: #989898 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-border-light: #989898 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --stash-checker-color-text: #e0e0e0 !important;\n    --stash-checker-color-text-light: #707070 !important;\n    --stash-checker-color-link-visited: #c7c7c7 !important;\n    --stash-checker-color-link-hover: #f2f2f2 !important;\n    --stash-checker-color-link-active: #039 !important;\n    --stash-checker-color-border: #5a5a5a !important;\n    --stash-checker-color-border-light: #707070 !important;\n    --stash-checker-color-bg: #202020 !important;\n    --stash-checker-color-card: #464646 !important;\n  }\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.sub-heading {\n  font-size: .8rem !important;\n  margin: .5rem 0 .5rem !important;\n}\n\n.stashChecker.tooltip {\n  z-index: 99999 !important;\n  position: fixed !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  margin-top: -0.5rem !important;\n  max-width: 60rem !important;\n}\n\n.stashChecker.file {\n  margin: .5rem !important;\n  padding: .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tag {\n  white-space: nowrap !important;\n  line-height: 1.5rem !important;\n  margin-right: .5rem !important;\n  padding: 0 .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n  border-radius: .5rem !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: hidden !important;\n  background-color: #000 !important;\n  background-color: rgba(0,0,0,.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 20vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  width: fit-content !important;\n  display: grid !important;\n  gap: 1rem !important;\n}\n\n.stashChecker.settings sub-heading {\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settings .version {\n  color: var(--stash-checker-color-text-light) !important;\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settingsSection {\n  width: 35rem !important;\n}\n\n.stashChecker.settingsSectionBody {\n  width: 100% !important;\n  display: flex !important;\n  flex-flow: row wrap !important;\n  justify-content: flex-start !important;\n  align-items: flex-start !important;\n  gap: .5rem !important;\n}\n\n.stashChecker.endpoint {\n  width: 100% !important;\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  padding: 1rem !important;\n  margin: .1rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint>button {\n  flex-grow: 0 !important;\n  margin-left: .5rem !important;\n}\n\n.stashChecker.endpoint>div {\n  flex-grow: 1 !important;\n}\n\n.stashChecker.endpoint>div>* {\n  margin: 0 !important;\n}\n\n.stashChecker.heading {\n  font-size: 1.5rem !important;\n  text-align: center !important;\n}\n\n.stashChecker fieldset {\n  width: fit-content !important;\n  border: .1rem solid var(--stash-checker-color-border-light) !important;\n  border-radius: .5rem !important;\n  margin: .5rem 0 .5rem 0 !important;\n  padding: .5rem !important;\n  flex-grow: 1 !important;\n}\n\n.stashChecker legend {\n  float: unset !important;\n  width: auto !important;\n  height: auto !important;\n  margin-left: .5rem !important;\n  margin-bottom: 0 !important;\n  padding-left: .2rem !important;\n  padding-right: .2rem !important;\n  line-height: unset !important;\n  font-size: unset !important;\n}\n\n.stashChecker .option {\n  text-align: right !important;\n  margin: .5rem !important;\n}\n\n.stashChecker .option>input {\n  margin-left: .5rem !important;\n}\n\n.stashChecker>.matchQuality {\n  width: .8em !important;\n  height: .8em !important;\n  display: inline-block !important;\n  border-radius: 50% !important;\n}\n\n.stashChecker.btn {\n  display: inline-block !important;\n  font-weight: 400 !important;\n  color: #212529 !important;\n  text-align: center !important;\n  vertical-align: middle !important;\n  user-select: none !important;\n  background-color: rgba(0,0,0,0) !important;\n  border: 1px solid rgba(0,0,0,0) !important;\n  padding: .375rem .75rem !important;\n  font-size: 1rem !important;\n  line-height: 1.5 !important;\n  border-radius: .25rem !important;\n  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n}\n\n.stashChecker.btn:not(:disabled):not(.disabled) {\n  cursor: pointer !important;\n}\n\n.stashChecker.btn:hover {\n  color: #212529 !important;\n  text-decoration: none !important;\n}\n\n.stashChecker.btn-primary {\n  color: #fff !important;\n  background-color: #137cbd !important;\n  border-color: #137cbd !important;\n}\n\n.stashChecker.btn-primary:hover {\n  color: #fff !important;\n  background-color: #10659a !important;\n  border-color: #0e5e8f !important;\n}\n\n.stashChecker.btn-danger {\n  color: #fff !important;\n  background-color: #db3737 !important;\n  border-color: #db3737 !important;\n}\n\n.stashChecker.btn-danger:hover {\n  color: #fff !important;\n  background-color: #c82424 !important;\n  border-color: #bd2222 !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: .5rem !important;\n  margin-bottom: .5rem !important;\n  border-color: var(--stash-checker-color-border-light) !important;\n  background-color: var(--stash-checker-color-border-light) !important;\n}\n\n.stashChecker.tooltip hr+br {\n  display: none !important;\n}\n\n.stashChecker.file+br {\n  display: none !important;\n}\n\n.stashCheckerCheckmark {\n  font-size: inherit !important;\n}`, "" ]);
+      ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-text-light: #989898 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-border-light: #989898 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --stash-checker-color-text: #e0e0e0 !important;\n    --stash-checker-color-text-light: #707070 !important;\n    --stash-checker-color-link-visited: #c7c7c7 !important;\n    --stash-checker-color-link-hover: #f2f2f2 !important;\n    --stash-checker-color-link-active: #039 !important;\n    --stash-checker-color-border: #5a5a5a !important;\n    --stash-checker-color-border-light: #707070 !important;\n    --stash-checker-color-bg: #202020 !important;\n    --stash-checker-color-card: #464646 !important;\n  }\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.sub-heading {\n  font-size: .8rem !important;\n  margin: .5rem 0 .5rem !important;\n}\n\n.stashChecker.tooltip {\n  z-index: 99999 !important;\n  position: fixed !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  margin-top: -0.5rem !important;\n  max-width: 60rem !important;\n}\n\n.stashChecker.file {\n  margin: .5rem !important;\n  padding: .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tag {\n  white-space: nowrap !important;\n  line-height: 1.5rem !important;\n  margin-right: .5rem !important;\n  padding: 0 .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n  border-radius: .5rem !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: hidden !important;\n  background-color: #000 !important;\n  background-color: rgba(0,0,0,.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 20vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  width: fit-content !important;\n  display: grid !important;\n  gap: 1rem !important;\n}\n\n.stashChecker.settings sub-heading {\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settings .version {\n  color: var(--stash-checker-color-text-light) !important;\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settingsSection {\n  width: 35rem !important;\n}\n\n.stashChecker.settingsSectionBody {\n  width: 100% !important;\n  display: flex !important;\n  flex-flow: row wrap !important;\n  justify-content: flex-start !important;\n  align-items: flex-start !important;\n  gap: .5rem !important;\n}\n\n.stashChecker.endpoint {\n  width: 100% !important;\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  padding: 1rem !important;\n  margin: .1rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint>button {\n  flex-grow: 0 !important;\n  margin-left: .5rem !important;\n}\n\n.stashChecker.endpoint>div {\n  flex-grow: 1 !important;\n}\n\n.stashChecker.endpoint>div>* {\n  margin: 0 !important;\n}\n\n.stashChecker.heading {\n  font-size: 1.5rem !important;\n  text-align: center !important;\n}\n\n.stashChecker fieldset {\n  width: fit-content !important;\n  border: .1rem solid var(--stash-checker-color-border-light) !important;\n  border-radius: .5rem !important;\n  margin: .5rem 0 .5rem 0 !important;\n  padding: .5rem !important;\n  flex-grow: 1 !important;\n}\n\n.stashChecker legend {\n  float: unset !important;\n  width: auto !important;\n  height: auto !important;\n  margin-left: .5rem !important;\n  margin-bottom: 0 !important;\n  padding-left: .2rem !important;\n  padding-right: .2rem !important;\n  line-height: unset !important;\n  font-size: unset !important;\n}\n\n.stashChecker .option {\n  text-align: right !important;\n  margin: .5rem !important;\n}\n\n.stashChecker .option>input {\n  margin-left: .5rem !important;\n}\n\n.stashChecker>.matchQuality {\n  width: .8em !important;\n  height: .8em !important;\n  display: inline-block !important;\n  border-radius: 50% !important;\n}\n\n.stashChecker.btn {\n  display: inline-block !important;\n  font-weight: 400 !important;\n  color: #212529 !important;\n  text-align: center !important;\n  vertical-align: middle !important;\n  user-select: none !important;\n  background-color: rgba(0,0,0,0) !important;\n  border: 1px solid rgba(0,0,0,0) !important;\n  padding: .375rem .75rem !important;\n  font-size: 1rem !important;\n  line-height: 1.5 !important;\n  border-radius: .25rem !important;\n  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n}\n\n.stashChecker.btn:not(:disabled):not(.disabled) {\n  cursor: pointer !important;\n}\n\n.stashChecker.btn:hover {\n  color: #212529 !important;\n  text-decoration: none !important;\n}\n\n.stashChecker.btn-primary {\n  color: #fff !important;\n  background-color: #137cbd !important;\n  border-color: #137cbd !important;\n}\n\n.stashChecker.btn-primary:hover {\n  color: #fff !important;\n  background-color: #10659a !important;\n  border-color: #0e5e8f !important;\n}\n\n.stashChecker.btn-danger {\n  color: #fff !important;\n  background-color: #db3737 !important;\n  border-color: #db3737 !important;\n}\n\n.stashChecker.btn-danger:hover {\n  color: #fff !important;\n  background-color: #c82424 !important;\n  border-color: #bd2222 !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: .5rem !important;\n  margin-bottom: .5rem !important;\n  border-color: var(--stash-checker-color-border-light) !important;\n  background-color: var(--stash-checker-color-border-light) !important;\n}\n\n.stashChecker.tooltip hr+br {\n  display: none !important;\n}\n\n.stashChecker.file+br {\n  display: none !important;\n}\n\n.stashCheckerSymbol {\n  font-size: inherit !important;\n}`, "" ]);
       const __WEBPACK_DEFAULT_EXPORT__ = ___CSS_LOADER_EXPORT___;
     },
     314: module => {
@@ -309,6 +309,7 @@
           var _dataTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(389);
           var _request__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(463);
           var _settings_general__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(44);
+          var _observer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(648);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_general__WEBPACK_IMPORTED_MODULE_5__ ]);
           [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_general__WEBPACK_IMPORTED_MODULE_5__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           const supportedDataFields = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Scene, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Title, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Code, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Disambiguation, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Favorite, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.AliasList, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Birthdate, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.HeightCm, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Gallery, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Title, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Aliases ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ] ]);
@@ -418,20 +419,8 @@
               } else console.info(`No Title for ${target} found.`);
             }
           }
-          function onAddition(selector, callback) {
-            let exclude = ".stashChecker, .stashCheckerCheckmark";
-            let observer = new MutationObserver((mutations => {
-              let addedElements = mutations.flatMap((m => Array.from(m.addedNodes))).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n));
-              addedElements.filter((e => e.matches(selector))).concat(addedElements.flatMap((e => Array.from(e.querySelectorAll(selector))))).filter((e => !e.matches(exclude) && !e.parentElement?.matches(exclude))).forEach(callback);
-            }));
-            let body = document.querySelector("body");
-            observer.observe(body, {
-              childList: true,
-              subtree: true
-            });
-          }
           function check(target, elementSelector, {observe = false, ...checkConfig} = {}) {
-            if (observe) onAddition(elementSelector, (element => checkElement(target, element, checkConfig)));
+            if (observe) (0, _observer__WEBPACK_IMPORTED_MODULE_6__.C)(elementSelector, (element => checkElement(target, element, checkConfig)));
             document.querySelectorAll(elementSelector).forEach((e => checkElement(target, e, checkConfig)));
           }
           __webpack_async_result__();
@@ -492,461 +481,54 @@
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           var _style_main_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(432);
-          var _check__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(464);
-          var _settings_endpoints__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(378);
-          var _tooltip_tooltipElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(563);
-          var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(185);
-          var _dataTypes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(389);
-          var _settings_settings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(59);
-          var _settings_menu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(513);
-          var _settings_general__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(44);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _check__WEBPACK_IMPORTED_MODULE_1__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_2__, _settings_general__WEBPACK_IMPORTED_MODULE_6__ ]);
-          [_check__WEBPACK_IMPORTED_MODULE_1__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_2__, _settings_general__WEBPACK_IMPORTED_MODULE_6__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          var _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(378);
+          var _tooltip_tooltipElement__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(563);
+          var _settings_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(59);
+          var _settings_menu__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(513);
+          var _settings_general__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(44);
+          var _stashChecker__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(782);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_settings__WEBPACK_IMPORTED_MODULE_2__, _settings_menu__WEBPACK_IMPORTED_MODULE_3__, _settings_general__WEBPACK_IMPORTED_MODULE_4__, _stashChecker__WEBPACK_IMPORTED_MODULE_5__ ]);
+          [_settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_settings__WEBPACK_IMPORTED_MODULE_2__, _settings_menu__WEBPACK_IMPORTED_MODULE_3__, _settings_general__WEBPACK_IMPORTED_MODULE_4__, _stashChecker__WEBPACK_IMPORTED_MODULE_5__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           (async function() {
-            await (0, _tooltip_tooltipElement__WEBPACK_IMPORTED_MODULE_7__.AA)();
-            (0, _settings_settings__WEBPACK_IMPORTED_MODULE_8__.yD)();
-            await (0, _settings_general__WEBPACK_IMPORTED_MODULE_6__.WA)();
-            await (0, _settings_endpoints__WEBPACK_IMPORTED_MODULE_2__.P)();
-            await (0, _settings_menu__WEBPACK_IMPORTED_MODULE_5__.Q)();
-            if (await (0, _settings_menu__WEBPACK_IMPORTED_MODULE_5__.e)()) {
+            await (0, _tooltip_tooltipElement__WEBPACK_IMPORTED_MODULE_6__.AA)();
+            (0, _settings_settings__WEBPACK_IMPORTED_MODULE_2__.yD)();
+            await (0, _settings_general__WEBPACK_IMPORTED_MODULE_4__.WA)();
+            await (0, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__.P)();
+            await (0, _settings_menu__WEBPACK_IMPORTED_MODULE_3__.Q)();
+            if (await (0, _settings_menu__WEBPACK_IMPORTED_MODULE_3__.e)()) {
               console.info("Userscript is deactivated for this site. Activate in userscript menu.");
               return;
             }
-            let currentSite = () => window.location.href;
-            console.info("Running Stash Checker");
-            switch (window.location.host) {
-             case "www.iwara.tv":
-              {
-                let color = d => d.files.some((f => f.path.endsWith("_Source.mp4"))) ? "green" : "blue";
-                let codeRegex = /(?<=video\/)([a-zA-Z0-9]+)(?=\/|$)/;
-                let prepareUrl = url => {
-                  let match = url.match(codeRegex);
-                  let end = match?.index && match?.[0]?.length ? match?.index + match?.[0]?.length : match?.index;
-                  return url.substring(0, end);
-                };
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".page-video__details > .text--h1", {
-                  observe: true,
-                  urlSelector: currentSite,
-                  color,
-                  prepareUrl,
-                  codeSelector: () => window.location.pathname.match(codeRegex)?.[0]
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a.videoTeaser__title", {
-                  observe: true,
-                  color,
-                  prepareUrl,
-                  codeSelector: e => e.getAttribute("href")?.match(codeRegex)?.[0]
-                });
-                break;
-              }
-
-             case "oreno3d.com":
-              {
-                let color = d => d.files.some((f => f.path.endsWith("_Source.mp4"))) ? "green" : "blue";
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h1.video-h1", {
-                  color,
-                  urlSelector: currentSite,
-                  titleSelector: null
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a h2.box-h2", {
-                  color,
-                  titleSelector: null
-                });
-                break;
-              }
-
-             case "erommdtube.com":
-              {
-                let color = d => d.files.some((f => f.path.endsWith("_Source.mp4"))) ? "green" : "blue";
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h1.show__h1", {
-                  color,
-                  urlSelector: currentSite,
-                  titleSelector: null
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h2.main__list-title", {
-                  color,
-                  titleSelector: null
-                });
-                break;
-              }
-
-             case "coomer.su":
-             case "kemono.su":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h1.post__title", {
-                urlSelector: currentSite,
-                titleSelector: null
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".post-card > a[href*='/post/']", {
-                titleSelector: null
-              });
-              break;
-
-             case "adultanime.dbsearch.net":
-              if (document.querySelector("article > section[id='info-table']") !== null) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div[id='main-inner'] > article > h2", {
-                urlSelector: currentSite,
-                codeSelector: _ => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div.item-info > :is(h4, h5) > a");
-              break;
-
-             case "xcity.jp":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "#program_detail_title", {
-                urlSelector: currentSite,
-                codeSelector: _ => document.getElementById("hinban")?.textContent
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".x-itemBox", {
-                observe: true,
-                displaySelector: e => e.querySelector(".x-itemBox-title"),
-                urlSelector: e => e.querySelector("a")?.href,
-                prepareUrl: url => url.split("&")[0],
-                titleSelector: e => e.querySelector("a")?.title
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "#avidolDetails", {
-                urlSelector: currentSite,
-                prepareUrl: url => url.split(/[?&]/)[0],
-                nameSelector: e => e.querySelector(".photo img")?.getAttribute("alt") ?? (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href^='/idol/detail/'][href$='/']", {
-                observe: true
-              });
-              break;
-
-             case "xslist.org":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "span[itemprop='name']", {
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='/model/']");
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "table#movices td > strong", {
-                urlSelector: null,
-                codeSelector: e => e.textContent?.trim(),
-                titleSelector: null
-              });
-              break;
-
-             case "www.animecharactersdatabase.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
-              break;
-
-             case "www.iafd.com":
-              if (window.location.pathname.startsWith("/person.rme/perfid=")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h1", {
-                urlSelector: currentSite
-              }); else if (window.location.pathname.startsWith("/title.rme/id=")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h1", {
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='/person.rme/perfid=']");
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href*='/title.rme/id=']");
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, "a[href*='/studio.rme/studio=']");
-              break;
-
-             case "javdb.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".video-detail > h2", {
-                urlSelector: currentSite,
-                titleSelector: e => e.querySelector("strong.current-title")?.textContent?.trim(),
-                codeSelector: _ => {
-                  let xpath = document.evaluate("//div/strong[text()='ID:']/following-sibling::span[1]//text()", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-                  let first = xpath.iterateNext()?.textContent;
-                  let second = xpath.iterateNext()?.textContent;
-                  return first && second ? first + second : first;
-                }
-              });
-              if (window.location.pathname.startsWith("/v/")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href^='/v/'] > .video-number", {
-                titleSelector: e => e.parentElement?.title?.trim(),
-                codeSelector: e => e.textContent?.trim()
-              }); else (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href^='/v/'] > .video-title", {
-                titleSelector: e => e.parentElement?.title?.trim(),
-                codeSelector: e => e.querySelector("strong")?.textContent?.trim()
-              });
-              break;
-
-             case "theporndb.net":
-              {
-                let stashIdSelector = _ => document.querySelector("div[name='UUID'] > div > div.flex")?.textContent?.trim();
-                let stashIdEndpoint = "https://api.theporndb.net/graphql";
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "div.pl-4 > h2", {
-                  observe: true,
-                  displaySelector: e => window.location.pathname.startsWith("/performers/") ? e : null,
-                  urlSelector: currentSite,
-                  stashIdSelector
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "div.pl-4 > h2", {
-                  observe: true,
-                  displaySelector: e => window.location.pathname.startsWith("/performers/") ? e : null,
-                  urlSelector: null,
-                  nameSelector: null,
-                  stashIdSelector,
-                  stashIdEndpoint
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div.flex.justify-between > h2", {
-                  observe: true,
-                  displaySelector: e => window.location.pathname.startsWith("/scenes/") || window.location.pathname.startsWith("/jav/") ? e : null,
-                  urlSelector: currentSite,
-                  stashIdSelector
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div.flex.justify-between > h2", {
-                  observe: true,
-                  displaySelector: e => window.location.pathname.startsWith("/scenes/") || window.location.pathname.startsWith("/jav/") ? e : null,
-                  urlSelector: null,
-                  titleSelector: null,
-                  stashIdSelector,
-                  stashIdEndpoint
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Movie, "div.flex.justify-between > h2", {
-                  observe: true,
-                  displaySelector: e => window.location.pathname.startsWith("/movies/") ? e : null,
-                  urlSelector: currentSite,
-                  stashIdSelector
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Movie, "div.flex.justify-between > h2", {
-                  observe: true,
-                  displaySelector: e => window.location.pathname.startsWith("/movies/") ? e : null,
-                  urlSelector: null,
-                  nameSelector: null,
-                  stashIdSelector,
-                  stashIdEndpoint
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href^='https://theporndb.net/performers/']", {
-                  observe: true
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href^='https://theporndb.net/scenes/'], a[href^='https://theporndb.net/jav/']", {
-                  observe: true
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Movie, "a[href^='https://theporndb.net/movies/']", {
-                  observe: true
-                });
-                break;
-              }
-
-             case "www.javlibrary.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div[id='video_title']", {
-                urlSelector: currentSite,
-                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
-                codeSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim(),
-                titleSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim()
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".video a[href^='./?v=jav']", {
-                prepareUrl: url => url.replace(/&.*$/, ""),
-                codeSelector: e => e.querySelector("div.id")?.textContent?.trim()
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
-                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
-                codeSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)?.split(" ")[0],
-                titleSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)?.split(" ")[0]
-              });
-              break;
-
-             case "r18.dev":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "#video-info > #title", {
-                observe: true,
-                urlSelector: currentSite,
-                codeSelector: _ => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(document.querySelector("#dvd-id"))
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, ".video-label > a[href*='/movies/detail/']", {
-                observe: true,
-                codeSelector: _utils__WEBPACK_IMPORTED_MODULE_3__.ou
-              });
-              break;
-
-             case "www.minnano-av.com":
-              if (/actress\d{1,6}/.test(window.location.pathname)) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h1", {
-                prepareUrl: url => url.split("?")[0],
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
-                prepareUrl: url => url.split("?")[0]
-              });
-              break;
-
-             case "www.indexxx.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h1[id='model-name']", {
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a.modelLink[href^='https://www.indexxx.com/m/'] > span");
-              break;
-
-             case "www.thenude.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "span.model-name", {
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a.model-name, a.model-title, a[data-img*='/models/']", {
-                observe: true
-              });
-              break;
-
-             case "www.data18.com":
-              {
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", {
-                  observe: true,
-                  titleSelector: e => e.getAttribute("title")?.trim()
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Movie, "a[href^='https://www.data18.com/movies/']:not([href*='#']):not([href$='/movies/series']):not([href$='/movies/showcases'])", {
-                  observe: true,
-                  nameSelector: e => e.getAttribute("title")?.trim()
-                });
-                let exclude = ":not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])";
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
-                  observe: true
-                });
-                if (window.location.pathname === "/names/pornstars") (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
-                  observe: true,
-                  displaySelector: e => e.parentElement?.querySelector("div"),
-                  nameSelector: e => e.getAttribute("title")
-                });
-                break;
-              }
-
-             case "www.adultfilmdatabase.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h1.w3-opacity", {
-                displaySelector: e => window.location.pathname.startsWith("/actor/") ? e : null,
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h1[itemprop='name']", {
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, "h1.w3-opacity", {
-                displaySelector: e => window.location.pathname.startsWith("/studio/") ? e : null,
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, "a[href^='/studio/']", {
-                observe: true
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href^='/actor/']", {
-                observe: true,
-                displaySelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e) === "as performer" ? null : e
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href^='/video/']", {
-                observe: true,
-                titleSelector: e => e.getAttribute("title")?.trim() ?? (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)
-              });
-              break;
-
-             case "www.babepedia.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h1#babename", {
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='/babe/']", {
-                observe: true
-              });
-              break;
-
-             case "www.freeones.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
-                prepareUrl: url => url.replace(/\/feed$/, "").replace(/\/[a-z]{2}\//, "/")
-              });
-              break;
-
-             case "shemalestardb.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "h2[id='star-name']", {
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "figcaption > a[href*='/stars/']");
-              break;
-
-             case "onlyfans.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "div.b-username > div.g-user-name", {
-                observe: true,
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a.b-username > div.g-user-name", {
-                observe: true
-              });
-              break;
-
-             case "www.pornteengirl.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='/model/']", {
-                nameSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_3__.ou)(e)?.replace(/\([^()]*\)$/, "")?.trimEnd()
-              });
-              break;
-
-             case "gayeroticvideoindex.com":
-              if (window.location.pathname.startsWith("/performer/")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "[id='data'] h1", {
-                urlSelector: currentSite
-              }); else if (window.location.pathname.startsWith("/episode/")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "[id='data'] h1", {
-                urlSelector: currentSite
-              }); else if (window.location.pathname.startsWith("/video/")) (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Movie, "[id='data'] h1", {
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "a[href*='performer/']", {
-                observe: true
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href*='episode/']", {
-                observe: true
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Movie, "a[href*='video/']", {
-                observe: true
-              });
-              break;
-
-             case "pmvhaven.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "h1.pl-2", {
-                observe: true,
-                displaySelector: e => window.location.pathname.startsWith("/video/") ? e : null,
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "a[href^='/video/'] .v-card-text", {
-                observe: true
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, ".v-card-title", {
-                observe: true,
-                displaySelector: e => window.location.pathname.startsWith("/creator/") ? e : null,
-                urlSelector: currentSite
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, "a[href^='/creator/'] .v-chip__content", {
-                observe: true
-              });
-              break;
-
-             case "fansdb.cc":
-             case "fansdb.xyz":
-             case "pmvstash.org":
-             case "stashdb.org":
-              {
-                let exclude = ":not(a[href$='/add']):not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
-                let stashBoxDefault = {
-                  observe: true,
-                  urlSelector: null,
-                  titleSelector: null,
-                  nameSelector: null
-                };
-                function findId(string) {
-                  return string?.match(/\p{Hex}{8}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{12}/u)?.[0];
-                }
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, "div.scene-info.card h3 > span", {
-                  ...stashBoxDefault,
-                  stashIdSelector: () => findId(window.location.href)
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Scene, `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
-                  ...stashBoxDefault,
-                  stashIdSelector: e => findId(e.closest("a")?.href)
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, "div.PerformerInfo div.card-header h3 > span", {
-                  ...stashBoxDefault,
-                  stashIdSelector: () => findId(window.location.href)
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Performer, `a[href^='/performers/']${exclude}, a[href^='https://${window.location.host}/performers/']${exclude}`, {
-                  ...stashBoxDefault,
-                  stashIdSelector: e => findId(e.closest("a")?.href)
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, ".studio-title > h3 > span", {
-                  ...stashBoxDefault,
-                  stashIdSelector: () => findId(window.location.href)
-                });
-                (0, _check__WEBPACK_IMPORTED_MODULE_1__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_4__.We.Studio, `a[href^='/studios/']${exclude}, a[href^='https://${window.location.host}/studios/']${exclude}`, {
-                  ...stashBoxDefault,
-                  stashIdSelector: e => findId(e.closest("a")?.href)
-                });
-                break;
-              }
-
-             default:
-              console.warn("No configuration for website found.");
-              break;
-            }
+            (0, _stashChecker__WEBPACK_IMPORTED_MODULE_5__.C)();
           })();
           __webpack_async_result__();
         } catch (e) {
           __webpack_async_result__(e);
         }
       }));
+    },
+    648: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.d(__webpack_exports__, {
+        C: () => onAddition,
+        r: () => clearObservers
+      });
+      const observerList = [];
+      function onAddition(selector, callback) {
+        let exclude = ".stashChecker, .stashCheckerSymbol";
+        let observer = new MutationObserver((mutations => {
+          let addedElements = mutations.flatMap((m => Array.from(m.addedNodes))).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n));
+          addedElements.filter((e => e.matches(selector))).concat(addedElements.flatMap((e => Array.from(e.querySelectorAll(selector))))).filter((e => !e.matches(exclude) && !e.parentElement?.matches(exclude))).forEach(callback);
+        }));
+        let body = document.querySelector("body");
+        observer.observe(body, {
+          childList: true,
+          subtree: true
+        });
+        observerList.push(observer);
+      }
+      function clearObservers() {
+        while (observerList.length > 0) observerList.pop()?.disconnect();
+      }
     },
     463: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
@@ -1107,15 +689,17 @@
             I: () => stashEndpoints,
             P: () => initEndpointSettings
           });
-          var _storage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(613);
-          var _request__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(463);
+          var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(613);
+          var _request__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(463);
           var _settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(59);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_2__ ]);
+          _settings__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
           const defaultData = [ {
             name: "Localhost",
             url: "http://localhost:9999/graphql",
             key: ""
           } ];
-          const stashEndpoints = await (0, _storage__WEBPACK_IMPORTED_MODULE_1__._W)("stashEndpoints", defaultData);
+          const stashEndpoints = await (0, _storage__WEBPACK_IMPORTED_MODULE_0__._W)(_storage__WEBPACK_IMPORTED_MODULE_0__.Zg.StashEndpoints, defaultData);
           async function initEndpointSettings() {
             let description = "The GraphQL endpoint URL can be generated by appending '/graphql' to your Stash base URL. The API key can be found on your security settings page. Leave the field empty, if none is required.";
             let endpointSection = (0, _settings__WEBPACK_IMPORTED_MODULE_2__.Lc)("endpoints", "Stash Endpoints", description);
@@ -1127,29 +711,19 @@
               div.classList.add("stashChecker", "endpoint");
               div.innerHTML = `<div><h3>${endpoint.name}</h3><p>${endpoint.url}</p></div>`;
               getVersion(endpoint, div.querySelector("h3"));
-              let editButton = document.createElement("button");
-              editButton.classList.add("stashChecker", "btn", "btn-primary");
+              let editButton = (0, _settings__WEBPACK_IMPORTED_MODULE_2__.jr)("Edit", editEndpointListener);
               editButton.setAttribute("data-index", index.toString());
-              editButton.addEventListener("click", editEndpointListener);
-              editButton.innerHTML = "Edit";
               div.append(editButton);
-              let deleteButton = document.createElement("button");
-              deleteButton.classList.add("stashChecker", "btn", "btn-danger");
+              let deleteButton = (0, _settings__WEBPACK_IMPORTED_MODULE_2__.g8)("Delete", deleteEndpointListener);
               deleteButton.setAttribute("data-index", index.toString());
-              deleteButton.addEventListener("click", deleteEndpointListener);
-              deleteButton.innerHTML = "Delete";
               div.append(deleteButton);
               return div;
             }));
             let div = document.createElement("div");
             div.classList.add("stashChecker", "endpoint");
             div.innerHTML = "<div></div>";
+            div.append((0, _settings__WEBPACK_IMPORTED_MODULE_2__.jr)("Add", addEndpointListener));
             endpointList.push(div);
-            let addButton = document.createElement("button");
-            addButton.classList.add("stashChecker", "btn", "btn-primary");
-            addButton.addEventListener("click", addEndpointListener);
-            addButton.innerHTML = "Add";
-            div.append(addButton);
             container.replaceChildren(...endpointList);
           }
           async function addEndpointListener() {
@@ -1159,7 +733,7 @@
               key: prompt("API Key:")?.trim() ?? ""
             };
             stashEndpoints.push(newEndpoint);
-            void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)("stashEndpoints", stashEndpoints);
+            void (0, _storage__WEBPACK_IMPORTED_MODULE_0__.KY)(_storage__WEBPACK_IMPORTED_MODULE_0__.Zg.StashEndpoints, stashEndpoints);
             await updateEndpoints((0, _settings__WEBPACK_IMPORTED_MODULE_2__.zH)("endpoints"));
           }
           async function editEndpointListener() {
@@ -1170,13 +744,13 @@
               url: prompt("URL:", oldEndpoint.url)?.trim() ?? oldEndpoint.url,
               key: prompt("API Key:", oldEndpoint.key)?.trim() ?? oldEndpoint.key
             };
-            void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)("stashEndpoints", stashEndpoints);
+            void (0, _storage__WEBPACK_IMPORTED_MODULE_0__.KY)(_storage__WEBPACK_IMPORTED_MODULE_0__.Zg.StashEndpoints, stashEndpoints);
             await updateEndpoints((0, _settings__WEBPACK_IMPORTED_MODULE_2__.zH)("endpoints"));
           }
           async function deleteEndpointListener() {
             let index = parseInt(this.getAttribute("data-index"));
             stashEndpoints.splice(index, 1);
-            void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)("stashEndpoints", stashEndpoints);
+            void (0, _storage__WEBPACK_IMPORTED_MODULE_0__.KY)(_storage__WEBPACK_IMPORTED_MODULE_0__.Zg.StashEndpoints, stashEndpoints);
             await updateEndpoints((0, _settings__WEBPACK_IMPORTED_MODULE_2__.zH)("endpoints"));
           }
           async function getVersion(endpoint, element) {
@@ -1188,7 +762,7 @@
               if (message) explanation = message.length < 30 ? message?.trim() : "wrong URL";
               element.innerHTML += `<span class="version"> (${explanation})</span>`;
             };
-            await (0, _request__WEBPACK_IMPORTED_MODULE_0__.E)(endpoint, "version{version}").then(resolve).catch(reject);
+            await (0, _request__WEBPACK_IMPORTED_MODULE_1__.E)(endpoint, "version{version}").then(resolve).catch(reject);
           }
           __webpack_async_result__();
         } catch (e) {
@@ -1205,8 +779,10 @@
             i3: () => stringOptions,
             vw: () => OptionKey
           });
-          var _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(59);
-          var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(613);
+          var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(59);
+          var _storage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(613);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__ ]);
+          _settings__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
           var OptionKey;
           (function(OptionKey) {
             OptionKey["showCrossMark"] = "showCrossMark";
@@ -1214,22 +790,43 @@
             OptionKey["showFiles"] = "showFiles";
             OptionKey["checkMark"] = "checkMark";
             OptionKey["crossMark"] = "crossMark";
-            OptionKey["dangerMark"] = "dangerMark";
+            OptionKey["warningMark"] = "warningMark";
           })(OptionKey || (OptionKey = {}));
           const defaultBooleanOptions = new Map([ [ OptionKey.showCrossMark, true ], [ OptionKey.showTags, true ], [ OptionKey.showFiles, true ] ]);
-          const defaultStringOptions = new Map([ [ OptionKey.checkMark, "✓" ], [ OptionKey.crossMark, "✗" ], [ OptionKey.dangerMark, "!" ] ]);
-          const booleanOptions = await (0, _storage__WEBPACK_IMPORTED_MODULE_0__._W)("booleanOptions", defaultBooleanOptions);
-          const stringOptions = await (0, _storage__WEBPACK_IMPORTED_MODULE_0__._W)("stringOptions", defaultStringOptions);
+          const defaultStringOptions = new Map([ [ OptionKey.checkMark, "✓" ], [ OptionKey.crossMark, "✗" ], [ OptionKey.warningMark, "!" ] ]);
+          const booleanOptions = await (0, _storage__WEBPACK_IMPORTED_MODULE_1__._W)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.BooleanOptions, defaultBooleanOptions);
+          const stringOptions = await (0, _storage__WEBPACK_IMPORTED_MODULE_1__._W)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.StringOptions, defaultStringOptions);
           async function initGeneralSettings() {
-            let generalSection = (0, _settings__WEBPACK_IMPORTED_MODULE_1__.Lc)("general", "General");
-            let checkmarkSettings = document.createElement("fieldset");
-            checkmarkSettings.innerHTML = "<legend>Checkmark</legend>";
-            checkmarkSettings.append(checkBox(OptionKey.showCrossMark, "Show cross mark"), charBox(OptionKey.checkMark, "Check mark"), charBox(OptionKey.dangerMark, "Danger mark"), charBox(OptionKey.crossMark, "Cross mark"));
-            generalSection.appendChild(checkmarkSettings);
-            let tooltipSettings = document.createElement("fieldset");
-            tooltipSettings.innerHTML = "<legend>Tooltip</legend>";
+            let generalSection = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.Lc)("general", "General");
+            populateGeneralSection(generalSection);
+          }
+          function populateGeneralSection(generalSection) {
+            let symbolSettings = fieldSet("symbol-settings", "Symbol");
+            symbolSettings.append(checkBox(OptionKey.showCrossMark, "Show cross mark"), charBox(OptionKey.checkMark, "Check mark"), charBox(OptionKey.warningMark, "Duplicate mark"), charBox(OptionKey.crossMark, "Cross mark"));
+            generalSection.appendChild(symbolSettings);
+            let tooltipSettings = fieldSet("tooltip-settings", "Tooltip");
             tooltipSettings.append(checkBox(OptionKey.showTags, "Show tags"), checkBox(OptionKey.showFiles, "Show files"));
             generalSection.appendChild(tooltipSettings);
+            let defaultButton = fieldSet("default-button", "Default Settings");
+            let div = document.createElement("div");
+            div.classList.add("option");
+            div.appendChild((0, _settings__WEBPACK_IMPORTED_MODULE_0__.g8)("Reset", resetToDefault));
+            defaultButton.append(div);
+            generalSection.appendChild(defaultButton);
+          }
+          function fieldSet(id, label) {
+            let fieldSet = document.getElementById(`stashChecker-fieldset-${id}`) ?? document.createElement("fieldset");
+            fieldSet.id = `stashChecker-fieldset-${id}`;
+            fieldSet.innerHTML = `<legend>${label}</legend>`;
+            return fieldSet;
+          }
+          function resetToDefault() {
+            defaultBooleanOptions.forEach(((value, key) => booleanOptions.set(key, value)));
+            void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.BooleanOptions, booleanOptions);
+            defaultStringOptions.forEach(((value, key) => stringOptions.set(key, value)));
+            void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.StringOptions, stringOptions);
+            let generalSection = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.zH)("general");
+            populateGeneralSection(generalSection);
           }
           function checkBox(key, label) {
             let div = document.createElement("div");
@@ -1241,7 +838,7 @@
             inputElement.defaultChecked = booleanOptions.get(key) ?? false;
             inputElement.addEventListener("input", (() => {
               booleanOptions.set(key, inputElement.checked);
-              void (0, _storage__WEBPACK_IMPORTED_MODULE_0__.KY)("booleanOptions", booleanOptions);
+              void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.BooleanOptions, booleanOptions);
             }));
             let labelElement = document.createElement("label");
             labelElement.htmlFor = inputElement.id;
@@ -1261,7 +858,7 @@
             inputElement.defaultValue = stringOptions.get(key) ?? "";
             inputElement.addEventListener("input", (() => {
               stringOptions.set(key, inputElement.value);
-              void (0, _storage__WEBPACK_IMPORTED_MODULE_0__.KY)("stringOptions", stringOptions);
+              void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.StringOptions, stringOptions);
             }));
             let labelElement = document.createElement("label");
             labelElement.htmlFor = inputElement.id;
@@ -1276,89 +873,139 @@
         }
       }), 1);
     },
-    513: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-      __webpack_require__.d(__webpack_exports__, {
-        Q: () => initMenu,
-        e: () => isSiteBlocked
-      });
-      var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(59);
-      var _storage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(613);
-      const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
-      async function initMenu() {
-        GM.registerMenuCommand("Settings", _settings__WEBPACK_IMPORTED_MODULE_0__.YH, "s");
-        if (await isSiteBlocked()) GM.registerMenuCommand(`Activate for ${window.location.host}`, unblockSite, "a"); else GM.registerMenuCommand(`Deactivate for ${window.location.host}`, blockSite, "d");
-      }
-      async function isSiteBlocked() {
-        return await (0, _storage__WEBPACK_IMPORTED_MODULE_1__._W)(BLOCKED_SITE_KEY, false);
-      }
-      async function blockSite() {
-        await (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(BLOCKED_SITE_KEY, true);
-        window.location.reload();
-      }
-      async function unblockSite() {
-        await (0, _storage__WEBPACK_IMPORTED_MODULE_1__.Tc)(BLOCKED_SITE_KEY);
-        window.location.reload();
-      }
-    },
-    59: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-      __webpack_require__.d(__webpack_exports__, {
-        Lc: () => newSettingsSection,
-        YH: () => openSettingsWindow,
-        yD: () => initSettingsWindow,
-        zH: () => getSettingsSection
-      });
-      function initSettingsWindow() {
-        let settingsModal = document.createElement("div");
-        settingsModal.id = "stashChecker-settingsModal";
-        settingsModal.style.display = "none";
-        settingsModal.classList.add("stashChecker", "modal");
-        settingsModal.addEventListener("click", (event => {
-          if (event.target === settingsModal) settingsModal.style.display = "none";
-        }));
-        let settings = document.createElement("div");
-        settings.id = "stashChecker-settings";
-        settings.classList.add("stashChecker", "settings");
-        settingsModal.append(settings);
-        document.body.append(settingsModal);
-      }
-      function newSettingsSection(id, title, description) {
-        let section = document.createElement("div");
-        section.id = `stashChecker-settingsSection-${id}`;
-        section.classList.add("stashChecker", "settingsSection");
-        getSettings().append(section);
-        let heading = document.createElement("h2");
-        heading.classList.add("stashChecker", "heading");
-        heading.innerHTML = title;
-        section.append(heading);
-        if (description) {
-          let text = document.createElement("p");
-          text.classList.add("stashChecker", "sub-heading");
-          text.innerHTML = description;
-          section.append(text);
+    513: (module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
+        try {
+          __webpack_require__.d(__webpack_exports__, {
+            Q: () => initMenu,
+            e: () => isSiteBlocked
+          });
+          var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(59);
+          var _storage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(613);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__ ]);
+          _settings__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+          const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
+          async function initMenu() {
+            GM.registerMenuCommand("Settings", _settings__WEBPACK_IMPORTED_MODULE_0__.YH, "s");
+            if (await isSiteBlocked()) GM.registerMenuCommand(`Activate for ${window.location.host}`, unblockSite, "a"); else GM.registerMenuCommand(`Deactivate for ${window.location.host}`, blockSite, "d");
+          }
+          async function isSiteBlocked() {
+            return await (0, _storage__WEBPACK_IMPORTED_MODULE_1__._W)(BLOCKED_SITE_KEY, false);
+          }
+          async function blockSite() {
+            await (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(BLOCKED_SITE_KEY, true);
+            window.location.reload();
+          }
+          async function unblockSite() {
+            await (0, _storage__WEBPACK_IMPORTED_MODULE_1__.Tc)(BLOCKED_SITE_KEY);
+            window.location.reload();
+          }
+          __webpack_async_result__();
+        } catch (e) {
+          __webpack_async_result__(e);
         }
-        let body = document.createElement("div");
-        body.id = `stashChecker-settingsSectionBody-${id}`;
-        body.classList.add("stashChecker", "settingsSectionBody");
-        section.append(body);
-        return body;
-      }
-      function getSettings() {
-        return document.getElementById("stashChecker-settings");
-      }
-      function getSettingsSection(id) {
-        return document.getElementById(`stashChecker-settingsSectionBody-${id}`);
-      }
-      function openSettingsWindow() {
-        let settingsModal = document.getElementById("stashChecker-settingsModal");
-        if (settingsModal?.style?.display) settingsModal.style.display = "initial";
-      }
+      }));
+    },
+    59: (module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
+        try {
+          __webpack_require__.d(__webpack_exports__, {
+            Lc: () => newSettingsSection,
+            YH: () => openSettingsWindow,
+            g8: () => buttonDanger,
+            jr: () => buttonPrimary,
+            yD: () => initSettingsWindow,
+            zH: () => getSettingsSection
+          });
+          var _observer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(648);
+          var _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(219);
+          var _stashChecker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(782);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _stashChecker__WEBPACK_IMPORTED_MODULE_1__ ]);
+          [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _stashChecker__WEBPACK_IMPORTED_MODULE_1__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          function initSettingsWindow() {
+            let settingsModal = document.createElement("div");
+            settingsModal.id = "stashChecker-settingsModal";
+            settingsModal.style.display = "none";
+            settingsModal.classList.add("stashChecker", "modal");
+            settingsModal.addEventListener("click", closeSettingsWindow);
+            let settings = document.createElement("div");
+            settings.id = "stashChecker-settings";
+            settings.classList.add("stashChecker", "settings");
+            settingsModal.append(settings);
+            document.body.append(settingsModal);
+          }
+          function newSettingsSection(id, title, description) {
+            let section = document.createElement("div");
+            section.id = `stashChecker-settingsSection-${id}`;
+            section.classList.add("stashChecker", "settingsSection");
+            getSettings().append(section);
+            let heading = document.createElement("h2");
+            heading.classList.add("stashChecker", "heading");
+            heading.innerHTML = title;
+            section.append(heading);
+            if (description) {
+              let text = document.createElement("p");
+              text.classList.add("stashChecker", "sub-heading");
+              text.innerHTML = description;
+              section.append(text);
+            }
+            let body = document.createElement("div");
+            body.id = `stashChecker-settingsSectionBody-${id}`;
+            body.classList.add("stashChecker", "settingsSectionBody");
+            section.append(body);
+            return body;
+          }
+          function getSettings() {
+            return document.getElementById("stashChecker-settings");
+          }
+          function getSettingsSection(id) {
+            return document.getElementById(`stashChecker-settingsSectionBody-${id}`);
+          }
+          function openSettingsWindow() {
+            let settingsModal = document.getElementById("stashChecker-settingsModal");
+            if (settingsModal?.style?.display) settingsModal.style.display = "initial";
+          }
+          function closeSettingsWindow(event) {
+            if (event.target === this) {
+              this.style.display = "none";
+              (0, _observer__WEBPACK_IMPORTED_MODULE_2__.r)();
+              (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.T)();
+              (0, _stashChecker__WEBPACK_IMPORTED_MODULE_1__.C)();
+            }
+          }
+          function buttonPrimary(label, listener) {
+            let button = document.createElement("button");
+            button.classList.add("stashChecker", "btn", "btn-primary");
+            button.addEventListener("click", listener);
+            button.innerHTML = label;
+            return button;
+          }
+          function buttonDanger(label, listener) {
+            let button = document.createElement("button");
+            button.classList.add("stashChecker", "btn", "btn-danger");
+            button.addEventListener("click", listener);
+            button.innerHTML = label;
+            return button;
+          }
+          __webpack_async_result__();
+        } catch (e) {
+          __webpack_async_result__(e);
+        }
+      }));
     },
     613: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
         KY: () => setValue,
         Tc: () => deleteValue,
+        Zg: () => StorageKey,
         _W: () => getValue
       });
+      var StorageKey;
+      (function(StorageKey) {
+        StorageKey["BooleanOptions"] = "booleanOptions";
+        StorageKey["StashEndpoints"] = "stashEndpoints";
+        StorageKey["StringOptions"] = "stringOptions";
+      })(StorageKey || (StorageKey = {}));
       async function getValue(key, defaultValue) {
         const text = await GM.getValue(key, void 0);
         try {
@@ -1385,6 +1032,454 @@
         if (typeof value === "object" && value !== null) if (value.dataType === "Map") return new Map(value.value);
         return value;
       }
+    },
+    782: (module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
+        try {
+          __webpack_require__.d(__webpack_exports__, {
+            C: () => runStashChecker
+          });
+          var _check__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(464);
+          var _dataTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(389);
+          var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(185);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _check__WEBPACK_IMPORTED_MODULE_0__ ]);
+          _check__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+          function runStashChecker() {
+            console.info("Running Stash Checker");
+            let currentSite = () => window.location.href;
+            switch (window.location.host) {
+             case "www.iwara.tv":
+              {
+                let color = d => d.files.some((f => f.path.endsWith("_Source.mp4"))) ? "green" : "blue";
+                let codeRegex = /(?<=video\/)([a-zA-Z0-9]+)(?=\/|$)/;
+                let prepareUrl = url => {
+                  let match = url.match(codeRegex);
+                  let end = match?.index && match?.[0]?.length ? match?.index + match?.[0]?.length : match?.index;
+                  return url.substring(0, end);
+                };
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".page-video__details > .text--h1", {
+                  observe: true,
+                  urlSelector: currentSite,
+                  color,
+                  prepareUrl,
+                  codeSelector: () => window.location.pathname.match(codeRegex)?.[0]
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a.videoTeaser__title", {
+                  observe: true,
+                  color,
+                  prepareUrl,
+                  codeSelector: e => e.getAttribute("href")?.match(codeRegex)?.[0]
+                });
+                break;
+              }
+
+             case "oreno3d.com":
+              {
+                let color = d => d.files.some((f => f.path.endsWith("_Source.mp4"))) ? "green" : "blue";
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1.video-h1", {
+                  color,
+                  urlSelector: currentSite,
+                  titleSelector: null
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a h2.box-h2", {
+                  color,
+                  titleSelector: null
+                });
+                break;
+              }
+
+             case "erommdtube.com":
+              {
+                let color = d => d.files.some((f => f.path.endsWith("_Source.mp4"))) ? "green" : "blue";
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1.show__h1", {
+                  color,
+                  urlSelector: currentSite,
+                  titleSelector: null
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h2.main__list-title", {
+                  color,
+                  titleSelector: null
+                });
+                break;
+              }
+
+             case "coomer.su":
+             case "kemono.su":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1.post__title", {
+                urlSelector: currentSite,
+                titleSelector: null
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".post-card > a[href*='/post/']", {
+                titleSelector: null
+              });
+              break;
+
+             case "adultanime.dbsearch.net":
+              if (document.querySelector("article > section[id='info-table']") !== null) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div[id='main-inner'] > article > h2", {
+                urlSelector: currentSite,
+                codeSelector: _ => document.evaluate("//dt[text()='規格品番']/following-sibling::dd[1]/p/text()", document, null, XPathResult.STRING_TYPE, null)?.stringValue?.trim()
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div.item-info > :is(h4, h5) > a");
+              break;
+
+             case "xcity.jp":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "#program_detail_title", {
+                urlSelector: currentSite,
+                codeSelector: _ => document.getElementById("hinban")?.textContent
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".x-itemBox", {
+                observe: true,
+                displaySelector: e => e.querySelector(".x-itemBox-title"),
+                urlSelector: e => e.querySelector("a")?.href,
+                prepareUrl: url => url.split("&")[0],
+                titleSelector: e => e.querySelector("a")?.title
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "#avidolDetails", {
+                urlSelector: currentSite,
+                prepareUrl: url => url.split(/[?&]/)[0],
+                nameSelector: e => e.querySelector(".photo img")?.getAttribute("alt") ?? (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href^='/idol/detail/'][href$='/']", {
+                observe: true
+              });
+              break;
+
+             case "xslist.org":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "span[itemprop='name']", {
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/model/']");
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "table#movices td > strong", {
+                urlSelector: null,
+                codeSelector: e => e.textContent?.trim(),
+                titleSelector: null
+              });
+              break;
+
+             case "www.animecharactersdatabase.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
+              break;
+
+             case "www.iafd.com":
+              if (window.location.pathname.startsWith("/person.rme/perfid=")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1", {
+                urlSelector: currentSite
+              }); else if (window.location.pathname.startsWith("/title.rme/id=")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1", {
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/person.rme/perfid=']");
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href*='/title.rme/id=']");
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "a[href*='/studio.rme/studio=']");
+              break;
+
+             case "javdb.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".video-detail > h2", {
+                urlSelector: currentSite,
+                titleSelector: e => e.querySelector("strong.current-title")?.textContent?.trim(),
+                codeSelector: _ => {
+                  let xpath = document.evaluate("//div/strong[text()='ID:']/following-sibling::span[1]//text()", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+                  let first = xpath.iterateNext()?.textContent;
+                  let second = xpath.iterateNext()?.textContent;
+                  return first && second ? first + second : first;
+                }
+              });
+              if (window.location.pathname.startsWith("/v/")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href^='/v/'] > .video-number", {
+                titleSelector: e => e.parentElement?.title?.trim(),
+                codeSelector: e => e.textContent?.trim()
+              }); else (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href^='/v/'] > .video-title", {
+                titleSelector: e => e.parentElement?.title?.trim(),
+                codeSelector: e => e.querySelector("strong")?.textContent?.trim()
+              });
+              break;
+
+             case "theporndb.net":
+              {
+                let stashIdSelector = _ => document.querySelector("div[name='UUID'] > div > div.flex")?.textContent?.trim();
+                let stashIdEndpoint = "https://api.theporndb.net/graphql";
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "div.pl-4 > h2", {
+                  observe: true,
+                  displaySelector: e => window.location.pathname.startsWith("/performers/") ? e : null,
+                  urlSelector: currentSite,
+                  stashIdSelector
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "div.pl-4 > h2", {
+                  observe: true,
+                  displaySelector: e => window.location.pathname.startsWith("/performers/") ? e : null,
+                  urlSelector: null,
+                  nameSelector: null,
+                  stashIdSelector,
+                  stashIdEndpoint
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div.flex.justify-between > h2", {
+                  observe: true,
+                  displaySelector: e => window.location.pathname.startsWith("/scenes/") || window.location.pathname.startsWith("/jav/") ? e : null,
+                  urlSelector: currentSite,
+                  stashIdSelector
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div.flex.justify-between > h2", {
+                  observe: true,
+                  displaySelector: e => window.location.pathname.startsWith("/scenes/") || window.location.pathname.startsWith("/jav/") ? e : null,
+                  urlSelector: null,
+                  titleSelector: null,
+                  stashIdSelector,
+                  stashIdEndpoint
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Movie, "div.flex.justify-between > h2", {
+                  observe: true,
+                  displaySelector: e => window.location.pathname.startsWith("/movies/") ? e : null,
+                  urlSelector: currentSite,
+                  stashIdSelector
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Movie, "div.flex.justify-between > h2", {
+                  observe: true,
+                  displaySelector: e => window.location.pathname.startsWith("/movies/") ? e : null,
+                  urlSelector: null,
+                  nameSelector: null,
+                  stashIdSelector,
+                  stashIdEndpoint
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href^='https://theporndb.net/performers/']", {
+                  observe: true
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href^='https://theporndb.net/scenes/'], a[href^='https://theporndb.net/jav/']", {
+                  observe: true
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Movie, "a[href^='https://theporndb.net/movies/']", {
+                  observe: true
+                });
+                break;
+              }
+
+             case "www.javlibrary.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div[id='video_title']", {
+                urlSelector: currentSite,
+                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
+                codeSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim(),
+                titleSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim()
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".video a[href^='./?v=jav']", {
+                prepareUrl: url => url.replace(/&.*$/, ""),
+                codeSelector: e => e.querySelector("div.id")?.textContent?.trim()
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
+                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
+                codeSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.split(" ")[0],
+                titleSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.split(" ")[0]
+              });
+              break;
+
+             case "r18.dev":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "#video-info > #title", {
+                observe: true,
+                urlSelector: currentSite,
+                codeSelector: _ => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(document.querySelector("#dvd-id"))
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".video-label > a[href*='/movies/detail/']", {
+                observe: true,
+                codeSelector: _utils__WEBPACK_IMPORTED_MODULE_2__.ou
+              });
+              break;
+
+             case "www.minnano-av.com":
+              if (/actress\d{1,6}/.test(window.location.pathname)) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1", {
+                prepareUrl: url => url.split("?")[0],
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
+                prepareUrl: url => url.split("?")[0]
+              });
+              break;
+
+             case "www.indexxx.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1[id='model-name']", {
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a.modelLink[href^='https://www.indexxx.com/m/'] > span");
+              break;
+
+             case "www.thenude.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "span.model-name", {
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a.model-name, a.model-title, a[data-img*='/models/']", {
+                observe: true
+              });
+              break;
+
+             case "www.data18.com":
+              {
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href^='https://www.data18.com/scenes/']:not([href*='#'])", {
+                  observe: true,
+                  titleSelector: e => e.getAttribute("title")?.trim()
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Movie, "a[href^='https://www.data18.com/movies/']:not([href*='#']):not([href$='/movies/series']):not([href$='/movies/showcases'])", {
+                  observe: true,
+                  nameSelector: e => e.getAttribute("title")?.trim()
+                });
+                let exclude = ":not([href*='/pairings']):not([href*='/studio']):not([href*='/virtual-reality']):not([href*='/scenes']):not([href*='/movies']):not([href*='/tags']):not([title$=' Home'])";
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
+                  observe: true
+                });
+                if (window.location.pathname === "/names/pornstars") (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, `a[href^='https://www.data18.com/name/']${exclude}`, {
+                  observe: true,
+                  displaySelector: e => e.parentElement?.querySelector("div"),
+                  nameSelector: e => e.getAttribute("title")
+                });
+                break;
+              }
+
+             case "www.adultfilmdatabase.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1.w3-opacity", {
+                displaySelector: e => window.location.pathname.startsWith("/actor/") ? e : null,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1[itemprop='name']", {
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "h1.w3-opacity", {
+                displaySelector: e => window.location.pathname.startsWith("/studio/") ? e : null,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "a[href^='/studio/']", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href^='/actor/']", {
+                observe: true,
+                displaySelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e) === "as performer" ? null : e
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href^='/video/']", {
+                observe: true,
+                titleSelector: e => e.getAttribute("title")?.trim() ?? (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)
+              });
+              break;
+
+             case "www.babepedia.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1#babename", {
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/babe/']", {
+                observe: true
+              });
+              break;
+
+             case "www.freeones.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
+                prepareUrl: url => url.replace(/\/feed$/, "").replace(/\/[a-z]{2}\//, "/")
+              });
+              break;
+
+             case "shemalestardb.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h2[id='star-name']", {
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "figcaption > a[href*='/stars/']");
+              break;
+
+             case "onlyfans.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "div.b-username > div.g-user-name", {
+                observe: true,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a.b-username > div.g-user-name", {
+                observe: true
+              });
+              break;
+
+             case "www.pornteengirl.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/model/']", {
+                nameSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.replace(/\([^()]*\)$/, "")?.trimEnd()
+              });
+              break;
+
+             case "gayeroticvideoindex.com":
+              if (window.location.pathname.startsWith("/performer/")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "[id='data'] h1", {
+                urlSelector: currentSite
+              }); else if (window.location.pathname.startsWith("/episode/")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "[id='data'] h1", {
+                urlSelector: currentSite
+              }); else if (window.location.pathname.startsWith("/video/")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Movie, "[id='data'] h1", {
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='performer/']", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href*='episode/']", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Movie, "a[href*='video/']", {
+                observe: true
+              });
+              break;
+
+             case "pmvhaven.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1.pl-2", {
+                observe: true,
+                displaySelector: e => window.location.pathname.startsWith("/video/") ? e : null,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href^='/video/'] .v-card-text", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, ".v-card-title", {
+                observe: true,
+                displaySelector: e => window.location.pathname.startsWith("/creator/") ? e : null,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "a[href^='/creator/'] .v-chip__content", {
+                observe: true
+              });
+              break;
+
+             case "fansdb.cc":
+             case "fansdb.xyz":
+             case "pmvstash.org":
+             case "stashdb.org":
+              {
+                let exclude = ":not(a[href$='/add']):not(a[href$='/edit']):not(a[href$='/merge']):not(a[href$='/delete'])";
+                let stashBoxDefault = {
+                  observe: true,
+                  urlSelector: null,
+                  titleSelector: null,
+                  nameSelector: null
+                };
+                function findId(string) {
+                  return string?.match(/\p{Hex}{8}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{12}/u)?.[0];
+                }
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div.scene-info.card h3 > span", {
+                  ...stashBoxDefault,
+                  stashIdSelector: () => findId(window.location.href)
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
+                  ...stashBoxDefault,
+                  stashIdSelector: e => findId(e.closest("a")?.href)
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "div.PerformerInfo div.card-header h3 > span", {
+                  ...stashBoxDefault,
+                  stashIdSelector: () => findId(window.location.href)
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, `a[href^='/performers/']${exclude}, a[href^='https://${window.location.host}/performers/']${exclude}`, {
+                  ...stashBoxDefault,
+                  stashIdSelector: e => findId(e.closest("a")?.href)
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, ".studio-title > h3 > span", {
+                  ...stashBoxDefault,
+                  stashIdSelector: () => findId(window.location.href)
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, `a[href^='/studios/']${exclude}, a[href^='https://${window.location.host}/studios/']${exclude}`, {
+                  ...stashBoxDefault,
+                  stashIdSelector: e => findId(e.closest("a")?.href)
+                });
+                break;
+              }
+
+             default:
+              console.warn("No configuration for website found.");
+              break;
+            }
+          }
+          __webpack_async_result__();
+        } catch (e) {
+          __webpack_async_result__(e);
+        }
+      }));
     },
     657: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
@@ -1422,6 +1517,7 @@
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
+            T: () => clearSymbols,
             l: () => prefixSymbol
           });
           var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
@@ -1433,6 +1529,9 @@
           _settings_general__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
           function getExistingSymbol(element) {
             if (element.getAttribute("data-type") === "stash-symbol") return element; else return Array.from(element.childNodes).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n)).map(getExistingSymbol).find((n => n));
+          }
+          function clearSymbols() {
+            document.querySelectorAll(".stashCheckerSymbol").forEach((symbol => symbol.remove()));
           }
           const propertyStrings = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Aliases, aliases => aliases.length === 0 ? "" : `<br>Aliases: ${aliases.join(", <wbr>")}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.AliasList, aliasList => aliasList.length === 0 ? "" : `<br>Aliases: ${aliasList.join(", <wbr>")}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Birthdate, birthdate => `<br>Birthdate: ${birthdate}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.BitRate, bit_rate => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(bit_rate / 1e6).toFixed(2)}Mbit/s` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Code, code => `<br>Code: ${code}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Date, date => `<br>Date: ${date}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Disambiguation, disambiguation => ` <span style="color: grey">(${disambiguation})</span>` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Duration, duration => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${(0, 
           _utils__WEBPACK_IMPORTED_MODULE_1__.xr)(duration)}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Favorite, () => "&emsp;&#10084;&#65039;" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Files, (files, queries, target, numQueries) => `${files.map((file => formatFileData(file, queries, target, numQueries))).join("")}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Height, height => `x${height})` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.HeightCm, height => `<br>Height: ${height} cm` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Id, (id, queries, target, numQueries) => `<br>${formatQueries(queries, target, id, numQueries)}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Name, name => `<br>Name: ${name}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Path, path => `Path: ${path}` ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.J7.Size, size => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${(0, 
@@ -1474,6 +1573,15 @@
           function entryKey(entry) {
             return `${entry.endpoint}-${entry.id}`;
           }
+          function stashSymbol() {
+            let symbol = document.createElement("span");
+            symbol.classList.add("stashCheckerSymbol");
+            symbol.setAttribute("data-type", "stash-symbol");
+            symbol.setAttribute("data-count", "1");
+            symbol.addEventListener("mouseover", _tooltipElement__WEBPACK_IMPORTED_MODULE_4__.sQ);
+            symbol.addEventListener("mouseout", _tooltipElement__WEBPACK_IMPORTED_MODULE_4__._I);
+            return symbol;
+          }
           function prefixSymbol(element, target, type, endpoint, data, color) {
             let endpoints = [ endpoint.name ];
             let queryTypes = [ type ];
@@ -1494,12 +1602,7 @@
               data = mergeData(JSON.parse(symbol.getAttribute("data-data")), data);
               symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")) + 1).toString());
             } else {
-              symbol = document.createElement("span");
-              symbol.classList.add("stashCheckerCheckmark");
-              symbol.setAttribute("data-type", "stash-symbol");
-              symbol.setAttribute("data-count", "1");
-              symbol.addEventListener("mouseover", _tooltipElement__WEBPACK_IMPORTED_MODULE_4__.sQ);
-              symbol.addEventListener("mouseout", _tooltipElement__WEBPACK_IMPORTED_MODULE_4__._I);
+              symbol = stashSymbol();
               let text = (0, _utils__WEBPACK_IMPORTED_MODULE_1__.Yz)(element);
               if (text) text.parentNode?.insertBefore(symbol, text); else return;
             }
@@ -1514,7 +1617,7 @@
               symbol.style.color = "red";
               tooltip = `${targetReadable} not in Stash<br>`;
             } else if (new Set(data.map((e => e.endpoint))).size < data.length) {
-              symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.dangerMark)} `;
+              symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.warningMark)} `;
               symbol.style.color = "orange";
               tooltip = `${targetReadable} has duplicate matches<br>`;
             } else {
