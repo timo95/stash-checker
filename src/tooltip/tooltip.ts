@@ -178,7 +178,7 @@ export function prefixSymbol(
         symbol.style.color = "red";
         tooltip = `${targetReadable} not in Stash<br>`;
     } else if(new Set(data.map(e => e.endpoint)).size < data.length) {
-        symbol.textContent = `${stringOptions.get(OptionKey.dangerMark)!} `;
+        symbol.textContent = `${stringOptions.get(OptionKey.warningMark)!} `;
         symbol.style.color = "orange";
         tooltip = `${targetReadable} has duplicate matches<br>`;
     } else {

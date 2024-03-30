@@ -1,4 +1,4 @@
-import {newSettingsSection} from "./settings";
+import {buttonDanger, getSettingsSection, newSettingsSection} from "./settings";
 import {getValue, setValue} from "./storage";
 
 export enum OptionKey {
@@ -7,7 +7,7 @@ export enum OptionKey {
     showFiles = "showFiles",
     checkMark = "checkMark",
     crossMark = "crossMark",
-    dangerMark = "dangerMark",
+    warningMark = "warningMark",
 }
 
 const defaultBooleanOptions = new Map([
@@ -19,7 +19,7 @@ const defaultBooleanOptions = new Map([
 const defaultStringOptions = new Map([
     [OptionKey.checkMark, "✓"],
     [OptionKey.crossMark, "✗"],
-    [OptionKey.dangerMark, "!"]
+    [OptionKey.warningMark, "!"]
 ]);
 
 export const booleanOptions: Map<OptionKey, boolean> = await getValue("booleanOptions", defaultBooleanOptions)
@@ -27,24 +27,48 @@ export const stringOptions: Map<OptionKey, string> = await getValue("stringOptio
 
 export async function initGeneralSettings() {
     let generalSection = newSettingsSection("general", "General")
+    populateGeneralSection(generalSection)
+}
 
-    let checkmarkSettings = document.createElement("fieldset")
-    checkmarkSettings.innerHTML = "<legend>Checkmark</legend>"
-    checkmarkSettings.append(
+function populateGeneralSection(generalSection: HTMLElement) {
+    let symbolSettings = fieldSet("symbol-settings", "Symbol");
+    symbolSettings.append(
         checkBox(OptionKey.showCrossMark, "Show cross mark"),
         charBox(OptionKey.checkMark, "Check mark"),
-        charBox(OptionKey.dangerMark, "Danger mark"),
+        charBox(OptionKey.warningMark, "Duplicate mark"),
         charBox(OptionKey.crossMark, "Cross mark"),
     );
-    generalSection.appendChild(checkmarkSettings);
+    generalSection.appendChild(symbolSettings);
 
-    let tooltipSettings = document.createElement("fieldset")
-    tooltipSettings.innerHTML = "<legend>Tooltip</legend>"
+    let tooltipSettings = fieldSet("tooltip-settings", "Tooltip");
     tooltipSettings.append(
         checkBox(OptionKey.showTags, "Show tags"),
         checkBox(OptionKey.showFiles, "Show files"),
     );
     generalSection.appendChild(tooltipSettings);
+
+    let defaultButton = fieldSet("default-button", "Default Settings");
+    let div = document.createElement("div")
+    div.classList.add("option")
+    div.appendChild(buttonDanger("Reset", resetToDefault))
+    defaultButton.append(div);
+    generalSection.appendChild(defaultButton);
+}
+
+function fieldSet(id: string, label: string) {
+    let fieldSet = document.getElementById(`stashChecker-fieldset-${id}`) ?? document.createElement("fieldset")
+    fieldSet.id = `stashChecker-fieldset-${id}`
+    fieldSet.innerHTML = `<legend>${label}</legend>`;
+    return fieldSet
+}
+
+function resetToDefault() {
+    defaultBooleanOptions.forEach((value, key) => booleanOptions.set(key, value));
+    void setValue("booleanOptions", booleanOptions)
+    defaultStringOptions.forEach((value, key) => stringOptions.set(key, value));
+    void setValue("stringOptions", stringOptions)
+    let generalSection = getSettingsSection("general")!
+    populateGeneralSection(generalSection)
 }
 
 function checkBox(key: OptionKey, label: string): HTMLElement {

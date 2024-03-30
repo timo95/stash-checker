@@ -1,7 +1,7 @@
 import {getValue, setValue} from "./storage";
 import {request} from "../request";
 import {StashEndpoint} from "../dataTypes";
-import {getSettingsSection, newSettingsSection} from "./settings";
+import {buttonDanger, buttonPrimary, getSettingsSection, newSettingsSection} from "./settings";
 
 const defaultData: StashEndpoint[] = [{
     name: "Localhost",
@@ -24,18 +24,12 @@ async function updateEndpoints(container: Element) {
         div.innerHTML = `<div><h3>${endpoint.name}</h3><p>${endpoint.url}</p></div>`
         getVersion(endpoint, div.querySelector("h3")!)
 
-        let editButton = document.createElement("button");
-        editButton.classList.add("stashChecker", "btn", "btn-primary")
+        let editButton = buttonPrimary("Edit", editEndpointListener)
         editButton.setAttribute("data-index", index.toString());
-        editButton.addEventListener("click", editEndpointListener);
-        editButton.innerHTML = "Edit";
         div.append(editButton);
 
-        let deleteButton = document.createElement("button");
-        deleteButton.classList.add("stashChecker", "btn", "btn-danger")
+        let deleteButton = buttonDanger("Delete", deleteEndpointListener);
         deleteButton.setAttribute("data-index", index.toString());
-        deleteButton.addEventListener("click", deleteEndpointListener);
-        deleteButton.innerHTML = "Delete";
         div.append(deleteButton);
 
         return div;
@@ -44,13 +38,10 @@ async function updateEndpoints(container: Element) {
     let div = document.createElement("div");
     div.classList.add("stashChecker", "endpoint");
     div.innerHTML = "<div></div>"
+    div.append(
+        buttonPrimary("Add", addEndpointListener)
+    );
     endpointList.push(div)
-
-    let addButton = document.createElement("button");
-    addButton.classList.add("stashChecker", "btn", "btn-primary")
-    addButton.addEventListener("click", addEndpointListener);
-    addButton.innerHTML = "Add";
-    div.append(addButton);
 
     container.replaceChildren(...endpointList)
 }
