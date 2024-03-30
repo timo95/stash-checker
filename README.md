@@ -4,8 +4,7 @@ Stash Checker is an userscript for porn websites to check if a Scene/Performer i
 It shows a checkmark if an item was found in your Stash.
 Hovering over the checkmark gives you a tooltip with information about the item in your Stash.
 
-<img src="docs/assets/tooltip-javlibrary.png" alt="tooltip javlibrary" title="JavLibrary" width="350"/>
-<img src="docs/assets/tooltip-stashdb.png" alt="tooltip stashdb" title="StashDB" width="350"/>
+<img src="docs/assets/tooltip.png" alt="tooltip" title="StashDB" width="500"/>
 
 ## Features
 
