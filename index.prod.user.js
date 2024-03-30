@@ -518,10 +518,6 @@
             (0, _settings_general__WEBPACK_IMPORTED_MODULE_4__.WA)();
             await (0, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__.P)();
             await (0, _settings_menu__WEBPACK_IMPORTED_MODULE_3__.Q)();
-            if (await (0, _settings_menu__WEBPACK_IMPORTED_MODULE_3__.e)()) {
-              console.info("Userscript is deactivated for this site. Activate in userscript menu.");
-              return;
-            }
             (0, _stashChecker__WEBPACK_IMPORTED_MODULE_5__.C)();
           })();
           __webpack_async_result__();
@@ -1112,9 +1108,14 @@
           var _check__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(464);
           var _dataTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(389);
           var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(185);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _check__WEBPACK_IMPORTED_MODULE_0__ ]);
-          _check__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
-          function runStashChecker() {
+          var _settings_menu__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(513);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _check__WEBPACK_IMPORTED_MODULE_0__, _settings_menu__WEBPACK_IMPORTED_MODULE_3__ ]);
+          [_check__WEBPACK_IMPORTED_MODULE_0__, _settings_menu__WEBPACK_IMPORTED_MODULE_3__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          async function runStashChecker() {
+            if (await (0, _settings_menu__WEBPACK_IMPORTED_MODULE_3__.e)()) {
+              console.info("Userscript is deactivated for this site. Activate in userscript menu.");
+              return;
+            }
             console.info("Running Stash Checker");
             let currentSite = () => window.location.href;
             switch (window.location.host) {
