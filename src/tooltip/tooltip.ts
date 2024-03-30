@@ -19,6 +19,11 @@ function getExistingSymbol(element: Element): HTMLSpanElement | undefined {
     }
 }
 
+export function clearSymbols() {
+    document.querySelectorAll(".stashCheckerSymbol")
+        .forEach(symbol => symbol.remove())
+}
+
 const propertyStrings: Map<string, (datum: any, queries: StashQuery[], target: Target, numQueries: number) => string> = new Map([
     [DataField.Aliases, (aliases: any) => aliases.length === 0 ? "" : `<br>Aliases: ${aliases.join(", <wbr>")}`],
     [DataField.AliasList, (aliasList: any) => aliasList.length === 0 ? "" : `<br>Aliases: ${aliasList.join(", <wbr>")}`],
@@ -105,6 +110,16 @@ function entryKey(entry: StashEntry): string {
     return `${entry.endpoint}-${entry.id}`;
 }
 
+function stashSymbol(): HTMLSpanElement {
+    let symbol = document.createElement("span");
+    symbol.classList.add("stashCheckerSymbol");
+    symbol.setAttribute("data-type", "stash-symbol");
+    symbol.setAttribute("data-count", "1");
+    symbol.addEventListener("mouseover", mouseoverListener);
+    symbol.addEventListener("mouseout", mouseoutListener);
+    return symbol
+}
+
 /**
  * Prepends depending on the data the checkmark or cross to the selected element.
  * Also populates tooltip window.
@@ -145,15 +160,9 @@ export function prefixSymbol(
         data = mergeData(JSON.parse(symbol.getAttribute("data-data")!), data)
         symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")!) + 1).toString())
     } else {
-        // Create new symbol
-        symbol = document.createElement("span");
-        symbol.classList.add("stashCheckerCheckmark");
-        symbol.setAttribute("data-type", "stash-symbol");
-        symbol.setAttribute("data-count", "1");
-        symbol.addEventListener("mouseover", mouseoverListener);
-        symbol.addEventListener("mouseout", mouseoutListener);
-        // insert before first text because css selectors cannot select text nodes directly
+        // insert new symbol before first text because css selectors cannot select text nodes directly
         // it works with cases were non text elements (images) are inside the selected element
+        symbol = stashSymbol()
         let text = firstTextChild(element)
         if (text) {
             // If node contains text, insert symbol before the text

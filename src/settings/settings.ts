@@ -1,14 +1,13 @@
+import {clearObservers} from "../observer";
+import {clearSymbols} from "../tooltip/tooltip";
+import {runStashChecker} from "../stashChecker";
 
 export function initSettingsWindow() {
     let settingsModal = document.createElement("div");
     settingsModal.id = "stashChecker-settingsModal";
     settingsModal.style.display = "none";
     settingsModal.classList.add("stashChecker", "modal");
-    settingsModal.addEventListener("click", (event) => {
-        if (event.target === settingsModal) {
-            settingsModal.style.display = "none";
-        }
-    });
+    settingsModal.addEventListener("click", closeSettingsWindow);
 
     let settings = document.createElement("div");
     settings.id = "stashChecker-settings"
@@ -55,6 +54,15 @@ export function openSettingsWindow() {
     let settingsModal = document.getElementById("stashChecker-settingsModal");
     if (settingsModal?.style?.display) {
         settingsModal.style.display = "initial";
+    }
+}
+
+function closeSettingsWindow(this: HTMLElement, event: MouseEvent) {
+    if (event.target === this) {
+        this.style.display = "none";
+        clearObservers()
+        clearSymbols()
+        runStashChecker()
     }
 }
 

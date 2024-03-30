@@ -4,6 +4,7 @@ import {firstText} from "./utils";
 import {CheckOptions, DataField, StashEndpoint, Target, Type} from "./dataTypes";
 import {request} from "./request";
 import {booleanOptions, OptionKey} from "./settings/general";
+import {onAddition} from "./observer";
 
 const supportedDataFields = new Map<Target, DataField[]>([
     [Target.Scene, [DataField.Id, DataField.Title, DataField.Studio, DataField.Code, DataField.Date, DataField.Tags, DataField.Files]],
@@ -183,30 +184,6 @@ async function checkElement(
             console.info(`No Title for ${target} found.`);
         }
     }
-}
-
-/**
- * Run callback when a new element added to the document matches the selector.
- *
- * @param selector css selector string
- * @param callback callback function
- */
-function onAddition(selector: string, callback: (e: Element) => void) {
-    let exclude = ".stashChecker, .stashCheckerCheckmark"
-    // Run on each element addition
-    let observer = new MutationObserver((mutations) => {
-        let addedElements = mutations
-            .flatMap(m => Array.from(m.addedNodes))
-            .filter(n => n.nodeType === Node.ELEMENT_NODE)
-            .map(n => n as Element)
-        addedElements
-            .filter(e => e.matches(selector))
-            .concat(addedElements.flatMap(e => Array.from(e.querySelectorAll(selector))))
-            .filter(e => !e.matches(exclude) && !e.parentElement?.matches(exclude))
-            .forEach(callback);
-    });
-    let body = document.querySelector("body")!;
-    observer.observe(body, {childList: true, subtree: true});
 }
 
 /**
