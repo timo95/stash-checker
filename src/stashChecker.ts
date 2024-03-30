@@ -1,8 +1,15 @@
 import {check} from "./check";
 import {CheckOptions, Target} from "./dataTypes";
 import {firstText} from "./utils";
+import {isSiteBlocked} from "./settings/menu";
 
-export function runStashChecker() {
+export async function runStashChecker() {
+    // Stop, if site block is configured
+    if (await isSiteBlocked()) {
+        console.info("Userscript is deactivated for this site. Activate in userscript menu.");
+        return;
+    }
+
     console.info("Running Stash Checker")
     let currentSite = () => window.location.href
 
