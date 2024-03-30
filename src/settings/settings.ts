@@ -1,6 +1,7 @@
 import {clearObservers} from "../observer";
 import {clearSymbols} from "../tooltip/tooltip";
 import {runStashChecker} from "../stashChecker";
+import {updateStatistics} from "./statistics";
 
 export function initSettingsWindow() {
     let settingsModal = document.createElement("div");
@@ -53,6 +54,7 @@ export function getSettingsSection(id: string): HTMLElement | null {
 export function openSettingsWindow() {
     let settingsModal = document.getElementById("stashChecker-settingsModal");
     if (settingsModal?.style?.display) {
+        updateStatistics()
         settingsModal.style.display = "initial";
     }
 }

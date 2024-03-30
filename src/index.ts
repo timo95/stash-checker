@@ -5,11 +5,13 @@ import {initSettingsWindow} from "./settings/settings";
 import {initMenu, isSiteBlocked} from "./settings/menu";
 import {initGeneralSettings} from "./settings/general";
 import {runStashChecker} from "./stashChecker";
+import {initStatistics} from "./settings/statistics";
 
 (async function () {
     await initTooltip();
     initSettingsWindow();
-    await initGeneralSettings();
+    initStatistics();
+    initGeneralSettings();
     await initEndpointSettings();
     await initMenu();
 

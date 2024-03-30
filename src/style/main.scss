@@ -35,7 +35,8 @@
 
 .stashChecker.sub-heading {
     font-size: 0.8rem;
-    margin: 0.5rem 0 0.5rem;
+    text-align: center;
+    margin: 0 0 0.5rem;
 }
 
 .stashChecker.tooltip {
@@ -77,7 +78,7 @@
 }
 
 .stashChecker.settings {
-    margin: 20vh auto;
+    margin: 10vh auto;
     background-color: var(--stash-checker-color-bg);
     border: 0.1rem solid var(--stash-checker-color-border);
     border-radius: 0.5rem;

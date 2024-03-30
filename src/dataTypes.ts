@@ -67,6 +67,12 @@ export enum DataField {
     Width = "width",
 }
 
+export enum StashSymbol {
+    Check = "check",
+    Warning = "warning",
+    Cross = "cross",
+}
+
 /**
  * Entry types in Stash
  */
@@ -77,6 +83,17 @@ export enum Target {
     Scene = "scene",
     Studio = "studio",
     Tag = "tag",
+}
+
+export function readable(target: Target): string {
+    return target.charAt(0).toUpperCase() + target.slice(1);
+}
+
+export function readablePlural(target: Target): string {
+    switch (target) {
+        case Target.Gallery: return "Galleries";
+        default: return readable(target) + "s";
+    }
 }
 
 /**

@@ -1,4 +1,4 @@
-import {DataField, StashEndpoint, StashEntry, StashFile, Target, Type} from "../dataTypes";
+import {DataField, readable, StashEndpoint, StashEntry, StashFile, StashSymbol, Target, Type} from "../dataTypes";
 import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "../utils";
 import {booleanOptions, OptionKey, stringOptions} from "../settings/general";
 import {StashQuery, StashQueryClass} from "./stashQuery";
@@ -173,27 +173,32 @@ export function prefixSymbol(
     }
     // Store merged query results on symbol
     symbol.setAttribute("data-endpoints", JSON.stringify(endpoints))
+    symbol.setAttribute("data-target", target)
     symbol.setAttribute("data-queries", JSON.stringify(queryTypes))
     symbol.setAttribute("data-data", JSON.stringify(data))
 
     // Set symbol and tooltip content based on query results
     let count = data.length;
     let tooltip = ""
-    let targetReadable = target.charAt(0).toUpperCase() + target.slice(1);
+    let targetReadable = readable(target);
     if (count === 0) {
+        symbol.setAttribute("data-symbol", StashSymbol.Cross)
         if (booleanOptions.get(OptionKey.showCrossMark)) {
             symbol.textContent = `${stringOptions.get(OptionKey.crossMark)!} `;
         }
         symbol.style.color = "red";
         tooltip = `${targetReadable} not in Stash<br>`;
     } else if(new Set(data.map(e => e.endpoint)).size < data.length) {
+        symbol.setAttribute("data-symbol", StashSymbol.Warning)
         symbol.textContent = `${stringOptions.get(OptionKey.warningMark)!} `;
         symbol.style.color = "orange";
         tooltip = `${targetReadable} has duplicate matches<br>`;
     } else {
+        symbol.setAttribute("data-symbol", StashSymbol.Check)
         symbol.textContent = `${stringOptions.get(OptionKey.checkMark)!} `;
         symbol.style.color = color(data[0]);
     }
+
     // All used queries
     tooltip += `Endpoints: ${endpoints.join(", ")}`
     tooltip += "<br>"

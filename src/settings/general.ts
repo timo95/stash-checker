@@ -25,7 +25,7 @@ const defaultStringOptions = new Map([
 export const booleanOptions: Map<OptionKey, boolean> = await getValue(StorageKey.BooleanOptions, defaultBooleanOptions)
 export const stringOptions: Map<OptionKey, string> = await getValue(StorageKey.StringOptions, defaultStringOptions)
 
-export async function initGeneralSettings() {
+export function initGeneralSettings() {
     let generalSection = newSettingsSection("general", "General")
     populateGeneralSection(generalSection)
 }
