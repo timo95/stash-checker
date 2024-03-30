@@ -102,7 +102,7 @@ function charBox(key: OptionKey, label: string): HTMLElement {
     inputElement.id = `stashChecker-textBox-${key}`
     inputElement.name = key
     inputElement.type = "text"
-    inputElement.size = 4
+    inputElement.size = 2
     inputElement.defaultValue = stringOptions.get(key) ?? ""
     inputElement.addEventListener("input", () => {
         stringOptions.set(key, inputElement.value)
