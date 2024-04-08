@@ -36,6 +36,7 @@ export default {
         "*://www.indexxx.com/*",
         "*://www.iwara.tv/*",
         "*://www.javlibrary.com/*",
+        "*://www.manyvids.com/*",
         "*://www.minnano-av.com/*",
         "*://www.pornteengirl.com/*",
         "*://www.thenude.com/*",
