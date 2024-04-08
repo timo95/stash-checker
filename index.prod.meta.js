@@ -28,6 +28,7 @@
 // @match *://www.indexxx.com/*
 // @match *://www.iwara.tv/*
 // @match *://www.javlibrary.com/*
+// @match *://www.manyvids.com/*
 // @match *://www.minnano-av.com/*
 // @match *://www.pornteengirl.com/*
 // @match *://www.thenude.com/*

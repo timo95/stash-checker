@@ -28,6 +28,7 @@
 // @match *://www.indexxx.com/*
 // @match *://www.iwara.tv/*
 // @match *://www.javlibrary.com/*
+// @match *://www.manyvids.com/*
 // @match *://www.minnano-av.com/*
 // @match *://www.pornteengirl.com/*
 // @match *://www.thenude.com/*
@@ -1347,6 +1348,26 @@
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".video-label > a[href*='/movies/detail/']", {
                 observe: true,
                 codeSelector: _utils__WEBPACK_IMPORTED_MODULE_2__.ou
+              });
+              break;
+
+             case "www.manyvids.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "[class^='ProfileAboutMeUI_stageName_']", {
+                observe: true,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "[class^='VideoProfileCard_actions_'] a[href^='/Profile/'], [class^='CardCreatorHeaderUI_creatorInfo_'] a[href^='/Profile/']", {
+                observe: true,
+                prepareUrl: url => url.replace(/Store\/Videos$/, "")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1[class^='VideoMetaInfo_title_']", {
+                observe: true,
+                urlSelector: currentSite,
+                codeSelector: _ => window.location.pathname.split("/")[2]
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "[class^='VideoCardUI_videoTitle_'] a[href^='/Video/']", {
+                observe: true,
+                codeSelector: e => e.getAttribute("href")?.split("/")?.[2]
               });
               break;
 
