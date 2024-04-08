@@ -41,6 +41,7 @@
 
 .stashChecker.tooltip {
     z-index: 99999;
+    visibility: visible;
     position: fixed;
     background-color: var(--stash-checker-color-bg);
     border: 0.1rem solid var(--stash-checker-color-border);
@@ -164,6 +165,8 @@
 
 .stashChecker .option > input {
     margin-left: 0.5rem;
+    color: var(--stash-checker-color-text);
+    background-color: var(--stash-checker-color-bg);
 }
 
 .stashChecker .option > label {
