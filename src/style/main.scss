@@ -41,6 +41,7 @@
 
 .stashChecker.tooltip {
     visibility: visible;
+    position: inherit;
     background-color: var(--stash-checker-color-bg);
     border: 0.1rem solid var(--stash-checker-color-border);
     border-radius: 0.5rem;
