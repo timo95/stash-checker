@@ -19,6 +19,7 @@
 // @match *://shemalestardb.com/*
 // @match *://stashdb.org/*
 // @match *://theporndb.net/*
+// @match *://warashi-asian-pornstars.fr/*
 // @match *://www.adultfilmdatabase.com/*
 // @match *://www.animecharactersdatabase.com/*
 // @match *://www.babepedia.com/*

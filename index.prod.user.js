@@ -19,6 +19,7 @@
 // @match *://shemalestardb.com/*
 // @match *://stashdb.org/*
 // @match *://theporndb.net/*
+// @match *://warashi-asian-pornstars.fr/*
 // @match *://www.adultfilmdatabase.com/*
 // @match *://www.animecharactersdatabase.com/*
 // @match *://www.babepedia.com/*
@@ -3204,7 +3205,7 @@
             if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag ].includes(target) && nameSelector) {
               let name = nameSelector(element);
               let nameCount = name?.split(/\s+/)?.length;
-              let kanji = name ? /[\u4e00-\u9faf\u3400-\u4dbf]/.test(name) : false;
+              let kanji = name ? (0, _utils__WEBPACK_IMPORTED_MODULE_2__._t)(name) : false;
               let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer && nameCount === 1 && !kanji;
               if (name && !ignore) {
                 void 0;
@@ -4025,6 +4026,22 @@
               });
               break;
 
+             case "warashi-asian-pornstars.fr":
+              {
+                let nameSelector = e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.zW)(e).flatMap((s => s.split(" "))).map((s => s.trim())).filter((s => s && !(0, 
+                _utils__WEBPACK_IMPORTED_MODULE_2__._t)(s) && !(0, _utils__WEBPACK_IMPORTED_MODULE_2__.gS)(s))).map((s => (0, 
+                _utils__WEBPACK_IMPORTED_MODULE_2__.Sn)(s))).join(" ");
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "#pornostar-profil [itemprop='name']", {
+                  urlSelector: currentSite,
+                  nameSelector
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "figcaption a[href*='/s-2-0/'], figcaption a[href*='/s-3-0/']", {
+                  displaySelector: e => Array(null, "(read more)", "(lire la suite)").includes(e.textContent) ? null : e,
+                  nameSelector
+                });
+                break;
+              }
+
              case "www.animecharactersdatabase.com":
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
               break;
@@ -4511,17 +4528,17 @@
             let targetReadable = (0, _dataTypes__WEBPACK_IMPORTED_MODULE_0__.HD)(target);
             if (count === 0) {
               symbol.setAttribute("data-symbol", _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Wb.Cross);
-              if (_settings_general__WEBPACK_IMPORTED_MODULE_2__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.showCrossMark)) symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.crossMark)} `;
+              if (_settings_general__WEBPACK_IMPORTED_MODULE_2__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.showCrossMark)) symbol.innerHTML = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.crossMark)}&nbsp;`;
               symbol.style.color = "red";
               tooltip = `${targetReadable} not in Stash<br>`;
             } else if (new Set(data.map((e => e.endpoint))).size < data.length) {
               symbol.setAttribute("data-symbol", _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Wb.Warning);
-              symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.warningMark)} `;
+              symbol.innerHTML = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.warningMark)}&nbsp;`;
               symbol.style.color = "orange";
               tooltip = `${targetReadable} has duplicate matches<br>`;
             } else {
               symbol.setAttribute("data-symbol", _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Wb.Check);
-              symbol.textContent = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.checkMark)} `;
+              symbol.innerHTML = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.checkMark)}&nbsp;`;
               symbol.style.color = color(data[0]);
             }
             tooltip += `Endpoints: ${endpoints.join(", ")}`;
@@ -4543,12 +4560,16 @@
     185: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
         $R: () => bytesToReadable,
+        Sn: () => toTitleCase,
         Yz: () => firstTextChild,
+        _t: () => hasKanji,
         bM: () => entryLink,
+        gS: () => hasKana,
         iy: () => friendlyHttpStatus,
         ou: () => firstText,
         xG: () => typeToString,
-        xr: () => secondsToReadable
+        xr: () => secondsToReadable,
+        zW: () => allText
       });
       var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
       function firstTextChild(node) {
@@ -4557,6 +4578,10 @@
       }
       function firstText(node) {
         return firstTextChild(node)?.textContent?.trim();
+      }
+      function allText(node) {
+        let words = node ? Array.from(node.childNodes).flatMap((n => n.nodeType == Node.TEXT_NODE ? [ n.textContent ] : allText(n))).filter((s => s)) : [];
+        return words;
       }
       function entryLink(stashUrl, target, id) {
         let path;
@@ -4578,6 +4603,15 @@
           if (bytes < 1e3) break;
         }
         return bytes.toFixed(2) + label;
+      }
+      function hasKanji(text) {
+        return /[\u4e00-\u9faf\u3400-\u4dbf]/.test(text);
+      }
+      function hasKana(text) {
+        return /[\u3041-\u3096\u30a0-\u30ff\uff5f-\uff9f]/.test(text);
+      }
+      function toTitleCase(word) {
+        return word[0].toUpperCase() + word.slice(1).toLowerCase();
       }
       function interleave(array, between) {
         return array.flatMap((element => [ element, between.cloneNode(true) ])).slice(0, -1);
