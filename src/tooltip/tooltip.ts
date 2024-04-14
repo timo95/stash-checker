@@ -2,7 +2,7 @@ import {DataField, readable, StashEndpoint, StashEntry, StashFile, StashSymbol, 
 import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "../utils";
 import {booleanOptions, OptionKey, stringOptions} from "../settings/general";
 import {StashQuery, StashQueryClass} from "./stashQuery";
-import {mouseoutListener, mouseoverListener} from "./tooltipElement";
+import tippy, {ReferenceElement} from "tippy.js";
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -115,9 +115,16 @@ function stashSymbol(): HTMLSpanElement {
     symbol.classList.add("stashCheckerSymbol");
     symbol.setAttribute("data-type", "stash-symbol");
     symbol.setAttribute("data-count", "1");
-    symbol.addEventListener("mouseover", mouseoverListener);
-    symbol.addEventListener("mouseout", mouseoutListener);
-    return symbol
+    tippy(symbol, {
+        allowHTML: true,
+        interactive: true,
+        appendTo: document.body,
+        delay: [100, 300],
+        duration: [200, 200],
+        placement: "top",
+        maxWidth: "none",
+    });
+    return symbol;
 }
 
 /**
@@ -140,11 +147,11 @@ export function prefixSymbol(
     color: (data: StashEntry) => string
 ) {
     // All queries used here
-    let endpoints = [endpoint.name]
-    let queryTypes = [type]
+    let endpoints = [endpoint.name];
+    let queryTypes = [type];
     // Specific query for this result
-    let baseUrl = endpoint.url.replace(/\/graphql\/?$/, "")
-    let query: StashQuery = { endpoint: endpoint.name, baseUrl, types: queryTypes }
+    let baseUrl = endpoint.url.replace(/\/graphql\/?$/, "");
+    let query: StashQuery = { endpoint: endpoint.name, baseUrl, types: queryTypes };
     // Add query and endpoint to each new entry
     data.forEach((entry: StashEntry) => {
         entry.queries = [query]
@@ -152,60 +159,64 @@ export function prefixSymbol(
     });
 
     // Look for existing check symbol
-    let symbol = getExistingSymbol(element)
+    let symbol = getExistingSymbol(element);
     if (symbol) {
         // Merge new result with existing results
-        endpoints = [...new Set<string>(JSON.parse(symbol.getAttribute("data-endpoints")!)).add(endpoint.name)].sort()
-        queryTypes = [...new Set<Type>(JSON.parse(symbol.getAttribute("data-queries")!)).add(type)].sort()
-        data = mergeData(JSON.parse(symbol.getAttribute("data-data")!), data)
-        symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")!) + 1).toString())
+        endpoints = [...new Set<string>(JSON.parse(symbol.getAttribute("data-endpoints")!)).add(endpoint.name)].sort();
+        queryTypes = [...new Set<Type>(JSON.parse(symbol.getAttribute("data-queries")!)).add(type)].sort();
+        data = mergeData(JSON.parse(symbol.getAttribute("data-data")!), data);
+        symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")!) + 1).toString());
     } else {
         // insert new symbol before first text because css selectors cannot select text nodes directly
         // it works with cases were non text elements (images) are inside the selected element
-        symbol = stashSymbol()
-        let text = firstTextChild(element)
+        symbol = stashSymbol();
+        let text = firstTextChild(element);
         if (text) {
             // If node contains text, insert symbol before the text
             text.parentNode?.insertBefore(symbol, text);
         } else {
-            return  // abort if no text in symbol
+            return;  // abort if no text in symbol
         }
     }
     // Store merged query results on symbol
-    symbol.setAttribute("data-endpoints", JSON.stringify(endpoints))
-    symbol.setAttribute("data-target", target)
-    symbol.setAttribute("data-queries", JSON.stringify(queryTypes))
-    symbol.setAttribute("data-data", JSON.stringify(data))
+    symbol.setAttribute("data-endpoints", JSON.stringify(endpoints));
+    symbol.setAttribute("data-target", target);
+    symbol.setAttribute("data-queries", JSON.stringify(queryTypes));
+    symbol.setAttribute("data-data", JSON.stringify(data));
 
     // Set symbol and tooltip content based on query results
     let count = data.length;
-    let tooltip = ""
+    let tooltip = "";
     let targetReadable = readable(target);
     if (count === 0) {
-        symbol.setAttribute("data-symbol", StashSymbol.Cross)
+        symbol.setAttribute("data-symbol", StashSymbol.Cross);
         if (booleanOptions.get(OptionKey.showCrossMark)) {
             symbol.textContent = `${stringOptions.get(OptionKey.crossMark)!} `;
         }
         symbol.style.color = "red";
         tooltip = `${targetReadable} not in Stash<br>`;
     } else if(new Set(data.map(e => e.endpoint)).size < data.length) {
-        symbol.setAttribute("data-symbol", StashSymbol.Warning)
+        symbol.setAttribute("data-symbol", StashSymbol.Warning);
         symbol.textContent = `${stringOptions.get(OptionKey.warningMark)!} `;
         symbol.style.color = "orange";
         tooltip = `${targetReadable} has duplicate matches<br>`;
     } else {
-        symbol.setAttribute("data-symbol", StashSymbol.Check)
+        symbol.setAttribute("data-symbol", StashSymbol.Check);
         symbol.textContent = `${stringOptions.get(OptionKey.checkMark)!} `;
         symbol.style.color = color(data[0]);
     }
 
     // All used queries
-    tooltip += `Endpoints: ${endpoints.join(", ")}`
-    tooltip += "<br>"
-    tooltip += `Queries: ${queryTypes.map(type => typeToString.get(type)).join(", ")}`
+    tooltip += `Endpoints: ${endpoints.join(", ")}`;
+    tooltip += "<br>";
+    tooltip += `Queries: ${queryTypes.map(type => typeToString.get(type)).join(", ")}`;
     // List of results
-    tooltip += data.map(entry => formatEntryData(entry, target, queryTypes.length)).join("")
+    tooltip += data.map(entry => formatEntryData(entry, target, queryTypes.length)).join("");
 
-    // Store tooltip content on symbol
-    symbol.setAttribute("data-info", tooltip)
+    // Set tooltip content on symbol
+    let tooltipWindow = document.createElement("div");
+    tooltipWindow.classList.add("stashChecker", "tooltip");
+    tooltipWindow.innerHTML = tooltip;
+    tooltipWindow.tabIndex = 0;
+    (symbol as ReferenceElement)._tippy?.setContent(tooltipWindow);
 }

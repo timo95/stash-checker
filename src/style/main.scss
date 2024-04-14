@@ -40,14 +40,11 @@
 }
 
 .stashChecker.tooltip {
-    z-index: 99999;
     visibility: visible;
-    position: fixed;
     background-color: var(--stash-checker-color-bg);
     border: 0.1rem solid var(--stash-checker-color-border);
     border-radius: 0.5rem;
     padding: 0.5rem;
-    margin-top: -0.5rem;
     max-width: 60rem;
 }
 

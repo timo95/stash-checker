@@ -1,4 +1,9 @@
 
+## [1.1.0]
+
+- Add support for websites: manyvids
+- Use tippy.js for better tooltips
+
 ## [1.0.0]
 
 ### New Features
