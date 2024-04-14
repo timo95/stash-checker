@@ -118,7 +118,6 @@ export type Selector = (e: Element) => null | undefined | string;
 export interface CheckOptions {
     displaySelector?: (e: Element) => Element | null | undefined;
     urlSelector?: Selector | null;
-    prepareUrl?: (url: string) => string | undefined;
     codeSelector?: Selector | null;
     stashIdSelector?: Selector | null;
     stashIdEndpoint?: string;

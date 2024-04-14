@@ -73,8 +73,12 @@ export function hasKana(text: string): boolean {
     return /[\u3041-\u3096\u30a0-\u30ff\uff5f-\uff9f]/.test(text)
 }
 
-export function toTitleCase(word: string): string {
+export function capitalized(word: string): string {
     return word[0].toUpperCase() + word.slice(1).toLowerCase()
+}
+
+export function titleCase(text: string): string {
+    return text.split(" ").map(n => capitalized(n)).join(" ");
 }
 
 export function interleave<T extends Node>(array: T[], between: T): T[] {

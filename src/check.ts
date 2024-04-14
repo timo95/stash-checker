@@ -103,7 +103,6 @@ async function queryStash(
  * @param target
  * @param element
  * @param elementSelector
- * @param prepareUrl
  * @param urlSelector
  * @param codeSelector
  * @param stashIdSelector
@@ -117,7 +116,6 @@ async function checkElement(
     element: Element,
     {
         displaySelector = (e: Element) => e,
-        prepareUrl = url => url,
         urlSelector = (e: Element) => e.closest("a")?.href,
         codeSelector,
         stashIdSelector,
@@ -132,9 +130,8 @@ async function checkElement(
         return
     }
 
-    if (urlSelector && prepareUrl) {
-        let selectedUrl = urlSelector(element)
-        let url = selectedUrl ? prepareUrl(selectedUrl) : selectedUrl;
+    if (urlSelector) {
+        let url = urlSelector(element)
         if (url) {
             console.debug(`URL: ${url}`);
             await queryStash(url, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Url, stashIdEndpoint);

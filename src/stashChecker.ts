@@ -1,6 +1,6 @@
 import {check} from "./check";
 import {CheckOptions, Target} from "./dataTypes";
-import {allText, firstText, hasKana, hasKanji, toTitleCase} from "./utils";
+import {allText, firstText, hasKana, hasKanji, capitalized} from "./utils";
 import {isSiteBlocked} from "./settings/menu";
 
 export async function runStashChecker() {
@@ -12,6 +12,7 @@ export async function runStashChecker() {
 
     console.info("Running Stash Checker")
     let currentSite = () => window.location.href
+    let closestUrl = (e: Element) => e.closest("a")?.href
 
     switch (window.location.host) {
         case "www.iwara.tv": {
@@ -19,23 +20,22 @@ export async function runStashChecker() {
             // Video code in the URL
             let codeRegex = /(?<=video\/)([a-zA-Z0-9]+)(?=\/|$)/
             // Cut URL after code off
-            let prepareUrl = (url: String) => {
-                let match = url.match(codeRegex)
+            let prepareUrl = (url: String | undefined) => {
+                let match = url?.match(codeRegex)
                 let end = (match?.index && match?.[0]?.length) ? match?.index + match?.[0]?.length : match?.index
-                return url.substring(0, end)
+                return url?.substring(0, end)
             }
 
             check(Target.Scene, ".page-video__details > .text--h1", {
                 observe: true,
-                urlSelector: currentSite,
+                urlSelector: _ => prepareUrl(currentSite()),
                 color: color,
-                prepareUrl,
                 codeSelector: () => window.location.pathname.match(codeRegex)?.[0]
             });
             check(Target.Scene, "a.videoTeaser__title", {
                 observe: true,
+                urlSelector: e => prepareUrl(closestUrl(e)),
                 color: color,
-                prepareUrl,
                 codeSelector: (e: Element) => e.getAttribute("href")?.match(codeRegex)?.[0]
             });
             break;
@@ -76,13 +76,11 @@ export async function runStashChecker() {
             check(Target.Scene, ".x-itemBox", {
                 observe: true,
                 displaySelector: e => e.querySelector(".x-itemBox-title"),
-                urlSelector: e => e.querySelector("a")?.href,
-                prepareUrl: url => url.split("&")[0],
+                urlSelector: e => e.querySelector("a")?.href?.split("&")?.[0],
                 titleSelector: e => e.querySelector("a")?.title
             });
             check(Target.Performer, "#avidolDetails", {
-                urlSelector: currentSite,
-                prepareUrl: url => url.split(/[?&]/)[0],
+                urlSelector: _ => currentSite().split(/[?&]/)[0],
                 nameSelector: e => e.querySelector(".photo img")?.getAttribute("alt") ?? firstText(e)
             });
             check(Target.Performer, "a[href^='/idol/detail/'][href$='/']", {observe: true});
@@ -103,7 +101,7 @@ export async function runStashChecker() {
                 .flatMap(s => s.split(" "))
                 .map(s => s.trim())
                 .filter(s => s && !hasKanji(s) && !hasKana(s))
-                .map(s => toTitleCase(s))
+                .map(s => capitalized(s))
                 .join(" ");
 
             check(Target.Performer, "#pornostar-profil [itemprop='name']", {urlSelector: currentSite, nameSelector});
@@ -204,19 +202,18 @@ export async function runStashChecker() {
         }
         case "www.javlibrary.com": {
             check(Target.Scene, "div[id='video_title']", {
-                urlSelector: currentSite,
-                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
+                urlSelector: _ => currentSite().replace("videoreviews.php", "").replace(/&.*$/, ""),
                 codeSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim(),
                 titleSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim(),
             });
             // generic video links
             check(Target.Scene, ".video a[href^='./?v=jav']", {
-                prepareUrl: url => url.replace(/&.*$/, ""),
+                urlSelector: e => closestUrl(e)?.replace(/&.*$/, ""),
                 codeSelector: e => e.querySelector("div.id")?.textContent?.trim(),
             });
             // best reviews
             check(Target.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
-                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
+                urlSelector: e => closestUrl(e)?.replace("videoreviews.php", "").replace(/&.*$/, ""),
                 codeSelector: e => firstText(e)?.split(" ")[0],
                 titleSelector: e => firstText(e)?.split(" ")[0],
             });
@@ -241,7 +238,7 @@ export async function runStashChecker() {
             });
             check(Target.Studio, "[class^='VideoProfileCard_actions_'] a[href^='/Profile/'], [class^='CardCreatorHeaderUI_creatorInfo_'] a[href^='/Profile/']", {
                 observe: true,
-                prepareUrl: url => url.replace(/Store\/Videos$/, ""),
+                urlSelector: e => closestUrl(e)?.replace(/Store\/Videos$/, ""),
             });
             check(Target.Scene, "h1[class^='VideoMetaInfo_title_']", {
                 observe: true,
@@ -257,12 +254,11 @@ export async function runStashChecker() {
         case "www.minnano-av.com": {
             if (/actress\d{1,6}/.test(window.location.pathname)) {
                 check(Target.Performer, "h1", {
-                    prepareUrl: url => url.split("?")[0],
-                    urlSelector: currentSite,
+                    urlSelector: _ => currentSite().split("?")[0],
                 });
             }
             check(Target.Performer, "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
-                prepareUrl: url => url.split("?")[0],
+                urlSelector: e => closestUrl(e)?.split("?")?.[0],
             });
             break;
         }
@@ -324,7 +320,7 @@ export async function runStashChecker() {
         }
         case "www.freeones.com": {
             check(Target.Performer, "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
-                prepareUrl: url => url.replace(/\/feed$/, "").replace(/\/[a-z]{2}\//, "/")
+                urlSelector: e => closestUrl(e)?.replace(/\/feed$/, "").replace(/\/[a-z]{2}\//, "/")
             });
             break;
         }
@@ -391,38 +387,38 @@ export async function runStashChecker() {
 
             check(Target.Scene, "div.scene-info.card h3 > span", {
                 ...stashBoxDefault,
-                stashIdSelector: () => findId(window.location.href),
+                stashIdSelector: () => findId(currentSite()),
             });
-            check(Target.Scene, `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
+            check(Target.Scene, `a[href^='/scenes/']${exclude}, a[href^='https://${currentSite()}/scenes/']${exclude}`, {
                 ...stashBoxDefault,
-                stashIdSelector: (e) => findId(e.closest("a")?.href),
+                stashIdSelector: (e) => findId(closestUrl(e)),
             });
             check(Target.Performer, "div.PerformerInfo div.card-header h3 > span", {
                 ...stashBoxDefault,
-                stashIdSelector: () => findId(window.location.href),
+                stashIdSelector: () => findId(currentSite()),
             });
-            check(Target.Performer, `a[href^='/performers/']${exclude}, a[href^='https://${window.location.host}/performers/']${exclude}`, {
+            check(Target.Performer, `a[href^='/performers/']${exclude}, a[href^='https://${currentSite()}/performers/']${exclude}`, {
                 ...stashBoxDefault,
-                stashIdSelector: (e) => findId(e.closest("a")?.href),
+                stashIdSelector: (e) => findId(closestUrl(e)),
             });
             check(Target.Studio, ".studio-title > h3 > span", {
                 ...stashBoxDefault,
-                stashIdSelector: () => findId(window.location.href),
+                stashIdSelector: () => findId(currentSite()),
             });
-            check(Target.Studio, `a[href^='/studios/']${exclude}, a[href^='https://${window.location.host}/studios/']${exclude}`, {
+            check(Target.Studio, `a[href^='/studios/']${exclude}, a[href^='https://${currentSite()}/studios/']${exclude}`, {
                 ...stashBoxDefault,
-                stashIdSelector: (e) => findId(e.closest("a")?.href),
+                stashIdSelector: (e) => findId(closestUrl(e)),
             });
             // Tag by StashId isn't supported by Stash yet
             /*check(Target.Tag, ".MainContent > .NarrowPage h3 > span", {
                 ...stashBoxDefault,
                 displaySelector: e => window.location.pathname.startsWith("/tags/") ? e : null,  // only on tag page
-                stashIdSelector: () => findId(window.location.href),
+                stashIdSelector: () => findId(currentSite()),
             });
-            check(Target.Tag, `a[href^='/tags/']${exclude}, a[href^='https://${window.location.host}/tags/']${exclude}`, {
+            check(Target.Tag, `a[href^='/tags/']${exclude}, a[href^='https://${currentSite()}/tags/']${exclude}`, {
                 ...stashBoxDefault,
                 displaySelector: e => window.location.pathname === "/tags" ? e : null,  // only on overview page
-                stashIdSelector: (e) => findId(e.closest("a")?.href),
+                stashIdSelector: (e) => findId(closestUrl(e)),
             });*/
             break;
         }
