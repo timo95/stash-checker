@@ -3177,12 +3177,11 @@
               (0, _request__WEBPACK_IMPORTED_MODULE_4__.E)(endpoint, query, true).then((data => onload(target, type, endpoint, access(data))));
             }));
           }
-          async function checkElement(target, element, {displaySelector = e => e, prepareUrl = url => url, urlSelector = e => e.closest("a")?.href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = _utils__WEBPACK_IMPORTED_MODULE_2__.ou, titleSelector = _utils__WEBPACK_IMPORTED_MODULE_2__.ou, color = () => "green"}) {
+          async function checkElement(target, element, {displaySelector = e => e, urlSelector = e => e.closest("a")?.href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = _utils__WEBPACK_IMPORTED_MODULE_2__.ou, titleSelector = _utils__WEBPACK_IMPORTED_MODULE_2__.ou, color = () => "green"}) {
             let displayElement = displaySelector(element);
             if (!displayElement) return;
-            if (urlSelector && prepareUrl) {
-              let selectedUrl = urlSelector(element);
-              let url = selectedUrl ? prepareUrl(selectedUrl) : selectedUrl;
+            if (urlSelector) {
+              let url = urlSelector(element);
               if (url) {
                 void 0;
                 await queryStash(url, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, color)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Url, stashIdEndpoint);
@@ -3917,27 +3916,27 @@
             }
             console.info("Running Stash Checker");
             let currentSite = () => window.location.href;
+            let closestUrl = e => e.closest("a")?.href;
             switch (window.location.host) {
              case "www.iwara.tv":
               {
                 let color = d => d.files.some((f => f.path.endsWith("_Source.mp4"))) ? "green" : "blue";
                 let codeRegex = /(?<=video\/)([a-zA-Z0-9]+)(?=\/|$)/;
                 let prepareUrl = url => {
-                  let match = url.match(codeRegex);
+                  let match = url?.match(codeRegex);
                   let end = match?.index && match?.[0]?.length ? match?.index + match?.[0]?.length : match?.index;
-                  return url.substring(0, end);
+                  return url?.substring(0, end);
                 };
                 (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".page-video__details > .text--h1", {
                   observe: true,
-                  urlSelector: currentSite,
+                  urlSelector: _ => prepareUrl(currentSite()),
                   color,
-                  prepareUrl,
                   codeSelector: () => window.location.pathname.match(codeRegex)?.[0]
                 });
                 (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a.videoTeaser__title", {
                   observe: true,
+                  urlSelector: e => prepareUrl(closestUrl(e)),
                   color,
-                  prepareUrl,
                   codeSelector: e => e.getAttribute("href")?.match(codeRegex)?.[0]
                 });
                 break;
@@ -4000,13 +3999,11 @@
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".x-itemBox", {
                 observe: true,
                 displaySelector: e => e.querySelector(".x-itemBox-title"),
-                urlSelector: e => e.querySelector("a")?.href,
-                prepareUrl: url => url.split("&")[0],
+                urlSelector: e => e.querySelector("a")?.href?.split("&")?.[0],
                 titleSelector: e => e.querySelector("a")?.title
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "#avidolDetails", {
-                urlSelector: currentSite,
-                prepareUrl: url => url.split(/[?&]/)[0],
+                urlSelector: _ => currentSite().split(/[?&]/)[0],
                 nameSelector: e => e.querySelector(".photo img")?.getAttribute("alt") ?? (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href^='/idol/detail/'][href$='/']", {
@@ -4030,7 +4027,7 @@
               {
                 let nameSelector = e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.zW)(e).flatMap((s => s.split(" "))).map((s => s.trim())).filter((s => s && !(0, 
                 _utils__WEBPACK_IMPORTED_MODULE_2__._t)(s) && !(0, _utils__WEBPACK_IMPORTED_MODULE_2__.gS)(s))).map((s => (0, 
-                _utils__WEBPACK_IMPORTED_MODULE_2__.Sn)(s))).join(" ");
+                _utils__WEBPACK_IMPORTED_MODULE_2__.l2)(s))).join(" ");
                 (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "#pornostar-profil [itemprop='name']", {
                   urlSelector: currentSite,
                   nameSelector
@@ -4137,17 +4134,16 @@
 
              case "www.javlibrary.com":
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div[id='video_title']", {
-                urlSelector: currentSite,
-                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
+                urlSelector: _ => currentSite().replace("videoreviews.php", "").replace(/&.*$/, ""),
                 codeSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim(),
                 titleSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim()
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".video a[href^='./?v=jav']", {
-                prepareUrl: url => url.replace(/&.*$/, ""),
+                urlSelector: e => closestUrl(e)?.replace(/&.*$/, ""),
                 codeSelector: e => e.querySelector("div.id")?.textContent?.trim()
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
-                prepareUrl: url => url.replace("videoreviews.php", "").replace(/&.*$/, ""),
+                urlSelector: e => closestUrl(e)?.replace("videoreviews.php", "").replace(/&.*$/, ""),
                 codeSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.split(" ")[0],
                 titleSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.split(" ")[0]
               });
@@ -4172,7 +4168,7 @@
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "[class^='VideoProfileCard_actions_'] a[href^='/Profile/'], [class^='CardCreatorHeaderUI_creatorInfo_'] a[href^='/Profile/']", {
                 observe: true,
-                prepareUrl: url => url.replace(/Store\/Videos$/, "")
+                urlSelector: e => closestUrl(e)?.replace(/Store\/Videos$/, "")
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1[class^='VideoMetaInfo_title_']", {
                 observe: true,
@@ -4187,11 +4183,10 @@
 
              case "www.minnano-av.com":
               if (/actress\d{1,6}/.test(window.location.pathname)) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1", {
-                prepareUrl: url => url.split("?")[0],
-                urlSelector: currentSite
+                urlSelector: _ => currentSite().split("?")[0]
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
-                prepareUrl: url => url.split("?")[0]
+                urlSelector: e => closestUrl(e)?.split("?")?.[0]
               });
               break;
 
@@ -4269,7 +4264,7 @@
 
              case "www.freeones.com":
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href$='/feed'] [data-test='subject-name'], a[href$='/feed'] .profile-image + p", {
-                prepareUrl: url => url.replace(/\/feed$/, "").replace(/\/[a-z]{2}\//, "/")
+                urlSelector: e => closestUrl(e)?.replace(/\/feed$/, "").replace(/\/[a-z]{2}\//, "/")
               });
               break;
 
@@ -4351,27 +4346,27 @@
                 }
                 (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div.scene-info.card h3 > span", {
                   ...stashBoxDefault,
-                  stashIdSelector: () => findId(window.location.href)
+                  stashIdSelector: () => findId(currentSite())
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, `a[href^='/scenes/']${exclude}, a[href^='https://${window.location.host}/scenes/']${exclude}`, {
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, `a[href^='/scenes/']${exclude}, a[href^='https://${currentSite()}/scenes/']${exclude}`, {
                   ...stashBoxDefault,
-                  stashIdSelector: e => findId(e.closest("a")?.href)
+                  stashIdSelector: e => findId(closestUrl(e))
                 });
                 (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "div.PerformerInfo div.card-header h3 > span", {
                   ...stashBoxDefault,
-                  stashIdSelector: () => findId(window.location.href)
+                  stashIdSelector: () => findId(currentSite())
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, `a[href^='/performers/']${exclude}, a[href^='https://${window.location.host}/performers/']${exclude}`, {
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, `a[href^='/performers/']${exclude}, a[href^='https://${currentSite()}/performers/']${exclude}`, {
                   ...stashBoxDefault,
-                  stashIdSelector: e => findId(e.closest("a")?.href)
+                  stashIdSelector: e => findId(closestUrl(e))
                 });
                 (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, ".studio-title > h3 > span", {
                   ...stashBoxDefault,
-                  stashIdSelector: () => findId(window.location.href)
+                  stashIdSelector: () => findId(currentSite())
                 });
-                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, `a[href^='/studios/']${exclude}, a[href^='https://${window.location.host}/studios/']${exclude}`, {
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, `a[href^='/studios/']${exclude}, a[href^='https://${currentSite()}/studios/']${exclude}`, {
                   ...stashBoxDefault,
-                  stashIdSelector: e => findId(e.closest("a")?.href)
+                  stashIdSelector: e => findId(closestUrl(e))
                 });
                 break;
               }
@@ -4560,12 +4555,12 @@
     185: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
         $R: () => bytesToReadable,
-        Sn: () => toTitleCase,
         Yz: () => firstTextChild,
         _t: () => hasKanji,
         bM: () => entryLink,
         gS: () => hasKana,
         iy: () => friendlyHttpStatus,
+        l2: () => capitalized,
         ou: () => firstText,
         xG: () => typeToString,
         xr: () => secondsToReadable,
@@ -4610,8 +4605,11 @@
       function hasKana(text) {
         return /[\u3041-\u3096\u30a0-\u30ff\uff5f-\uff9f]/.test(text);
       }
-      function toTitleCase(word) {
+      function capitalized(word) {
         return word[0].toUpperCase() + word.slice(1).toLowerCase();
+      }
+      function titleCase(text) {
+        return text.split(" ").map((n => capitalized(n))).join(" ");
       }
       function interleave(array, between) {
         return array.flatMap((element => [ element, between.cloneNode(true) ])).slice(0, -1);
