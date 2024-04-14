@@ -191,18 +191,18 @@ export function prefixSymbol(
     if (count === 0) {
         symbol.setAttribute("data-symbol", StashSymbol.Cross);
         if (booleanOptions.get(OptionKey.showCrossMark)) {
-            symbol.textContent = `${stringOptions.get(OptionKey.crossMark)!} `;
+            symbol.innerHTML = `${stringOptions.get(OptionKey.crossMark)!}&nbsp;`;
         }
         symbol.style.color = "red";
         tooltip = `${targetReadable} not in Stash<br>`;
     } else if(new Set(data.map(e => e.endpoint)).size < data.length) {
         symbol.setAttribute("data-symbol", StashSymbol.Warning);
-        symbol.textContent = `${stringOptions.get(OptionKey.warningMark)!} `;
+        symbol.innerHTML = `${stringOptions.get(OptionKey.warningMark)!}&nbsp;`;
         symbol.style.color = "orange";
         tooltip = `${targetReadable} has duplicate matches<br>`;
     } else {
         symbol.setAttribute("data-symbol", StashSymbol.Check);
-        symbol.textContent = `${stringOptions.get(OptionKey.checkMark)!} `;
+        symbol.innerHTML = `${stringOptions.get(OptionKey.checkMark)!}&nbsp;`;
         symbol.style.color = color(data[0]);
     }
 

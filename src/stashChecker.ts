@@ -1,6 +1,6 @@
 import {check} from "./check";
 import {CheckOptions, Target} from "./dataTypes";
-import {firstText} from "./utils";
+import {allText, firstText, hasKana, hasKanji, toTitleCase} from "./utils";
 import {isSiteBlocked} from "./settings/menu";
 
 export async function runStashChecker() {
@@ -95,6 +95,21 @@ export async function runStashChecker() {
                 urlSelector: null,
                 codeSelector: e => e.textContent?.trim(),
                 titleSelector: null,
+            });
+            break;
+        }
+        case "warashi-asian-pornstars.fr": {
+            let nameSelector = (e: Element) => allText(e)
+                .flatMap(s => s.split(" "))
+                .map(s => s.trim())
+                .filter(s => s && !hasKanji(s) && !hasKana(s))
+                .map(s => toTitleCase(s))
+                .join(" ");
+
+            check(Target.Performer, "#pornostar-profil [itemprop='name']", {urlSelector: currentSite, nameSelector});
+            check(Target.Performer, "figcaption a[href*='/s-2-0/'], figcaption a[href*='/s-3-0/']", {
+                displaySelector: e => Array(null, "(read more)", "(lire la suite)").includes(e.textContent) ? null : e,
+                nameSelector
             });
             break;
         }

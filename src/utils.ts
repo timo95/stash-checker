@@ -25,6 +25,13 @@ export function firstText(node?: Node | undefined | null): string | undefined {
     return firstTextChild(node)?.textContent?.trim()
 }
 
+export function allText(node?: Node | undefined | null): string[] {
+    let words: any[] =  node ? Array.from(node.childNodes)
+        .flatMap(n => n.nodeType == Node.TEXT_NODE ? [n.textContent] : allText(n))
+        .filter((s: string | null) => s) : []
+    return words;
+}
+
 export function entryLink(stashUrl: string, target: Target, id: string): string {
     let path
     if (target == "gallery") {
@@ -56,6 +63,18 @@ export function bytesToReadable(bytes: number): string {
         }
     }
     return bytes.toFixed(2) + label;
+}
+
+export function hasKanji(text: string): boolean {
+    return /[\u4e00-\u9faf\u3400-\u4dbf]/.test(text)
+}
+
+export function hasKana(text: string): boolean {
+    return /[\u3041-\u3096\u30a0-\u30ff\uff5f-\uff9f]/.test(text)
+}
+
+export function toTitleCase(word: string): string {
+    return word[0].toUpperCase() + word.slice(1).toLowerCase()
 }
 
 export function interleave<T extends Node>(array: T[], between: T): T[] {

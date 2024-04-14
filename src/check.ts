@@ -1,6 +1,6 @@
 import {prefixSymbol} from "./tooltip/tooltip";
 import {stashEndpoints} from "./settings/endpoints";
-import {firstText} from "./utils";
+import {firstText, hasKanji} from "./utils";
 import {CheckOptions, DataField, StashEndpoint, Target, Type} from "./dataTypes";
 import {request} from "./request";
 import {booleanOptions, OptionKey} from "./settings/general";
@@ -164,7 +164,7 @@ async function checkElement(
         let name = nameSelector(element);
         // Do not use single performer names
         let nameCount = name?.split(/\s+/)?.length
-        let kanji = name ? /[\u4e00-\u9faf\u3400-\u4dbf]/.test(name) : false
+        let kanji = name ? hasKanji(name) : false
         let ignore = target === Target.Performer && nameCount === 1 && !kanji
         if (name && !ignore) {
             console.debug(`Name: ${name}`);

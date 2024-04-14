@@ -27,6 +27,7 @@ export default {
         "*://shemalestardb.com/*",
         "*://stashdb.org/*",
         "*://theporndb.net/*",
+        "*://warashi-asian-pornstars.fr/*",
         "*://www.adultfilmdatabase.com/*",
         "*://www.animecharactersdatabase.com/*",
         "*://www.babepedia.com/*",

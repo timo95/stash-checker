@@ -1,7 +1,7 @@
 
 ## [1.1.0]
 
-- Add support for websites: manyvids
+- Add support for websites: manyvids, warashi-asian-pornstars.fr
 - Use tippy.js for better tooltips
 
 ## [1.0.0]
