@@ -206,18 +206,28 @@ export async function runStashChecker() {
                 codeSelector: _ => document.querySelector("div#video_id td.text")?.textContent?.trim(),
                 titleSelector: _ => document.querySelector("div#video_id td.text")?.textContent?.trim(),
             });
-            // generic video links
-            check(Target.Scene, ".video a[href^='./?v=jav']", {
-                observe: true,
-                urlSelector: e => closestUrl(e)?.replace(/&.*$/, ""),
-                codeSelector: e => e.querySelector("div.id")?.textContent?.trim(),
-                titleSelector: e => e.querySelector("div.title")?.textContent?.trim() ?? firstText(e),
-            });
+            // generic video links as list view / thumbnail view
+            let searchParams = new URLSearchParams(window.location.search)
+            if (searchParams.has("list")) {
+                check(Target.Scene, ".video a[href^='./?v=jav'], .title a[href^='./?v=jav']", {
+                    observe: true,
+                    urlSelector: e => closestUrl(e)?.replace(/&.*$/, ""),
+                    codeSelector: e => e.getAttribute("title")?.split(" ", 1)?.[0],
+                    titleSelector: e => e.getAttribute("title")?.replace(/^\S*\s/, ""),
+                });
+            } else {
+                check(Target.Scene, ".video a[href^='./?v=jav']", {
+                    observe: true,
+                    urlSelector: e => closestUrl(e)?.replace(/&.*$/, ""),
+                    codeSelector: e => e.querySelector("div.id")?.textContent?.trim(),
+                    titleSelector: e => e.querySelector("div.title")?.textContent?.trim() ?? firstText(e),
+                });
+            }
             // best reviews
             check(Target.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
                 urlSelector: e => closestUrl(e)?.replace("videoreviews.php", "").replace(/&.*$/, ""),
-                codeSelector: e => firstText(e)?.split(" ")[0],
-                titleSelector: e => firstText(e)?.split(" ")[0],
+                codeSelector: e => firstText(e)?.split(" ")?.[0],
+                titleSelector: e => firstText(e)?.replace(/^\S*\s/, ""),
             });
             break;
         }
