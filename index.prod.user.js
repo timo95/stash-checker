@@ -4194,7 +4194,9 @@
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1[id='model-name']", {
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a.modelLink[href^='https://www.indexxx.com/m/'] > span");
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[class^='modelLink'][href*='/m/'] > span", {
+                observe: true
+              });
               break;
 
              case "www.thenude.com":
