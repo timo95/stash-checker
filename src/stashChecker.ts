@@ -264,7 +264,7 @@ export async function runStashChecker() {
         }
         case "www.indexxx.com": {
             check(Target.Performer, "h1[id='model-name']", {urlSelector: currentSite});
-            check(Target.Performer, "a.modelLink[href^='https://www.indexxx.com/m/'] > span");
+            check(Target.Performer, "a[class^='modelLink'][href*='/m/'] > span", {observe: true});
             break;
         }
         case "www.thenude.com": {
