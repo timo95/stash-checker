@@ -4133,21 +4133,31 @@
               }
 
              case "www.javlibrary.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div[id='video_title']", {
-                urlSelector: _ => currentSite().replace("videoreviews.php", "").replace(/&.*$/, ""),
-                codeSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim(),
-                titleSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim()
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".video a[href^='./?v=jav']", {
-                urlSelector: e => closestUrl(e)?.replace(/&.*$/, ""),
-                codeSelector: e => e.querySelector("div.id")?.textContent?.trim()
-              });
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
-                urlSelector: e => closestUrl(e)?.replace("videoreviews.php", "").replace(/&.*$/, ""),
-                codeSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.split(" ")[0],
-                titleSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.split(" ")[0]
-              });
-              break;
+              {
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div#video_title", {
+                  urlSelector: _ => currentSite().replace("videoreviews.php", "").replace(/&.*$/, ""),
+                  codeSelector: _ => document.querySelector("div#video_id td.text")?.textContent?.trim(),
+                  titleSelector: _ => document.querySelector("div#video_id td.text")?.textContent?.trim()
+                });
+                let searchParams = new URLSearchParams(window.location.search);
+                if (searchParams.has("list")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".video a[href^='./?v=jav'], .title a[href^='./?v=jav']", {
+                  observe: true,
+                  urlSelector: e => closestUrl(e)?.replace(/&.*$/, ""),
+                  codeSelector: e => e.getAttribute("title")?.split(" ", 1)?.[0],
+                  titleSelector: e => e.getAttribute("title")?.replace(/^\S*\s/, "")
+                }); else (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".video a[href^='./?v=jav']", {
+                  observe: true,
+                  urlSelector: e => closestUrl(e)?.replace(/&.*$/, ""),
+                  codeSelector: e => e.querySelector("div.id")?.textContent?.trim(),
+                  titleSelector: e => e.querySelector("div.title")?.textContent?.trim() ?? (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
+                  urlSelector: e => closestUrl(e)?.replace("videoreviews.php", "").replace(/&.*$/, ""),
+                  codeSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.split(" ")?.[0],
+                  titleSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.replace(/^\S*\s/, "")
+                });
+                break;
+              }
 
              case "r18.dev":
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "#video-info > #title", {
