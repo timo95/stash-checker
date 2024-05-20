@@ -201,15 +201,17 @@ export async function runStashChecker() {
             break;
         }
         case "www.javlibrary.com": {
-            check(Target.Scene, "div[id='video_title']", {
+            check(Target.Scene, "div#video_title", {
                 urlSelector: _ => currentSite().replace("videoreviews.php", "").replace(/&.*$/, ""),
-                codeSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim(),
-                titleSelector: _ => document.querySelector("div[id='video_id'] td.text")?.textContent?.trim(),
+                codeSelector: _ => document.querySelector("div#video_id td.text")?.textContent?.trim(),
+                titleSelector: _ => document.querySelector("div#video_id td.text")?.textContent?.trim(),
             });
             // generic video links
             check(Target.Scene, ".video a[href^='./?v=jav']", {
+                observe: true,
                 urlSelector: e => closestUrl(e)?.replace(/&.*$/, ""),
                 codeSelector: e => e.querySelector("div.id")?.textContent?.trim(),
+                titleSelector: e => e.querySelector("div.title")?.textContent?.trim() ?? firstText(e),
             });
             // best reviews
             check(Target.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
