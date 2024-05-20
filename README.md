@@ -24,7 +24,7 @@ Opening `index.prod.user.js` under `Assets` should prompt Tampermonkey to instal
 
 ## Settings
 
-Settings can be opened using the Tampermonkey dropdown menu.
+Settings can be opened on any supported website using the Tampermonkey dropdown menu.
 
 <img src="docs/assets/menu.png" alt="menu" title="Tampermonkey Menu" width="200"/>
 
