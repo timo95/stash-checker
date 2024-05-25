@@ -3602,6 +3602,7 @@
           _settings__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
           var OptionKey;
           (function(OptionKey) {
+            OptionKey["showCheckMark"] = "showCheckMark";
             OptionKey["showCrossMark"] = "showCrossMark";
             OptionKey["showTags"] = "showTags";
             OptionKey["showFiles"] = "showFiles";
@@ -3609,7 +3610,7 @@
             OptionKey["crossMark"] = "crossMark";
             OptionKey["warningMark"] = "warningMark";
           })(OptionKey || (OptionKey = {}));
-          const defaultBooleanOptions = new Map([ [ OptionKey.showCrossMark, true ], [ OptionKey.showTags, true ], [ OptionKey.showFiles, true ] ]);
+          const defaultBooleanOptions = new Map([ [ OptionKey.showCheckMark, true ], [ OptionKey.showCrossMark, true ], [ OptionKey.showTags, true ], [ OptionKey.showFiles, true ] ]);
           const defaultStringOptions = new Map([ [ OptionKey.checkMark, "✓" ], [ OptionKey.crossMark, "✗" ], [ OptionKey.warningMark, "!" ] ]);
           const booleanOptions = await (0, _storage__WEBPACK_IMPORTED_MODULE_1__._W)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.BooleanOptions, defaultBooleanOptions);
           const stringOptions = await (0, _storage__WEBPACK_IMPORTED_MODULE_1__._W)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.StringOptions, defaultStringOptions);
@@ -3619,7 +3620,7 @@
           }
           function populateGeneralSection(generalSection) {
             let symbolSettings = fieldSet("symbol-settings", "Symbol");
-            symbolSettings.append(checkBox(OptionKey.showCrossMark, "Show cross mark"), charBox(OptionKey.checkMark, "Check mark"), charBox(OptionKey.warningMark, "Duplicate mark"), charBox(OptionKey.crossMark, "Cross mark"));
+            symbolSettings.append(checkBox(OptionKey.showCheckMark, "Show check mark"), checkBox(OptionKey.showCrossMark, "Show cross mark"), charBox(OptionKey.checkMark, "Check mark"), charBox(OptionKey.warningMark, "Duplicate mark"), charBox(OptionKey.crossMark, "Cross mark"));
             generalSection.appendChild(symbolSettings);
             let tooltipSettings = fieldSet("tooltip-settings", "Tooltip");
             tooltipSettings.append(checkBox(OptionKey.showTags, "Show tags"), checkBox(OptionKey.showFiles, "Show files"));
@@ -3652,7 +3653,7 @@
             inputElement.id = `stashChecker-checkBox-${key}`;
             inputElement.name = key;
             inputElement.type = "checkbox";
-            inputElement.defaultChecked = booleanOptions.get(key) ?? false;
+            inputElement.defaultChecked = booleanOptions.get(key) ?? defaultBooleanOptions.get(key) ?? false;
             inputElement.addEventListener("input", (() => {
               booleanOptions.set(key, inputElement.checked);
               void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.BooleanOptions, booleanOptions);
@@ -3672,7 +3673,7 @@
             inputElement.name = key;
             inputElement.type = "text";
             inputElement.size = 2;
-            inputElement.defaultValue = stringOptions.get(key) ?? "";
+            inputElement.defaultValue = stringOptions.get(key) ?? defaultStringOptions.get(key) ?? "";
             inputElement.addEventListener("input", (() => {
               stringOptions.set(key, inputElement.value);
               void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.StringOptions, stringOptions);
@@ -4545,7 +4546,7 @@
               tooltip = `${targetReadable} has duplicate matches<br>`;
             } else {
               symbol.setAttribute("data-symbol", _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Wb.Check);
-              symbol.innerHTML = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.checkMark)}&nbsp;`;
+              if (_settings_general__WEBPACK_IMPORTED_MODULE_2__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.showCheckMark)) symbol.innerHTML = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.checkMark)}&nbsp;`;
               symbol.style.color = color(data[0]);
             }
             tooltip += `Endpoints: ${endpoints.join(", ")}`;
