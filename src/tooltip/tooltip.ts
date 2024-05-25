@@ -202,7 +202,9 @@ export function prefixSymbol(
         tooltip = `${targetReadable} has duplicate matches<br>`;
     } else {
         symbol.setAttribute("data-symbol", StashSymbol.Check);
-        symbol.innerHTML = `${stringOptions.get(OptionKey.checkMark)!}&nbsp;`;
+        if (booleanOptions.get(OptionKey.showCheckMark)) {
+            symbol.innerHTML = `${stringOptions.get(OptionKey.checkMark)!}&nbsp;`;
+        }
         symbol.style.color = color(data[0]);
     }
 

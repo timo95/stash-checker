@@ -2,6 +2,7 @@ import {buttonDanger, getSettingsSection, newSettingsSection} from "./settings";
 import {getValue, setValue, StorageKey} from "./storage";
 
 export enum OptionKey {
+    showCheckMark = "showCheckMark",
     showCrossMark = "showCrossMark",
     showTags = "showTags",
     showFiles = "showFiles",
@@ -11,6 +12,7 @@ export enum OptionKey {
 }
 
 const defaultBooleanOptions = new Map([
+    [OptionKey.showCheckMark, true],
     [OptionKey.showCrossMark, true],
     [OptionKey.showTags, true],
     [OptionKey.showFiles, true]
@@ -33,6 +35,7 @@ export function initGeneralSettings() {
 function populateGeneralSection(generalSection: HTMLElement) {
     let symbolSettings = fieldSet("symbol-settings", "Symbol");
     symbolSettings.append(
+        checkBox(OptionKey.showCheckMark, "Show check mark"),
         checkBox(OptionKey.showCrossMark, "Show cross mark"),
         charBox(OptionKey.checkMark, "Check mark"),
         charBox(OptionKey.warningMark, "Duplicate mark"),
@@ -79,7 +82,7 @@ function checkBox(key: OptionKey, label: string): HTMLElement {
     inputElement.id = `stashChecker-checkBox-${key}`
     inputElement.name = key
     inputElement.type = "checkbox"
-    inputElement.defaultChecked = booleanOptions.get(key) ?? false
+    inputElement.defaultChecked = booleanOptions.get(key) ?? defaultBooleanOptions.get(key) ?? false
     inputElement.addEventListener("input", () => {
         booleanOptions.set(key, inputElement.checked)
         void setValue(StorageKey.BooleanOptions, booleanOptions)
@@ -103,7 +106,7 @@ function charBox(key: OptionKey, label: string): HTMLElement {
     inputElement.name = key
     inputElement.type = "text"
     inputElement.size = 2
-    inputElement.defaultValue = stringOptions.get(key) ?? ""
+    inputElement.defaultValue = stringOptions.get(key) ?? defaultStringOptions.get(key) ?? ""
     inputElement.addEventListener("input", () => {
         stringOptions.set(key, inputElement.value)
         void setValue(StorageKey.StringOptions, stringOptions)

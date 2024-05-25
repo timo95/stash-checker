@@ -2,6 +2,7 @@
 ## [1.1.0]
 
 - Add support for websites: manyvids, warashi-asian-pornstars.fr
+- Add showCheckMark setting
 - Use tippy.js for better tooltips
 - Fix indexxx performer search results
 
