@@ -39,6 +39,7 @@ const propertyStrings: Map<string, (datum: any, queries: StashQuery[], target: T
     [DataField.HeightCm, (height: any) => `<br>Height: ${height} cm`],
     [DataField.Id, (id: string, queries: StashQuery[], target: Target, numQueries: number) => `<br>${formatQueries(queries, target, id, numQueries)}`],
     [DataField.Name, (name: string) => `<br>Name: ${name}`],
+    [DataField.Organized, (organized: any) => organized ? `&emsp;&#128230;` : ""],
     [DataField.Path, (path: string) => `Path: ${path}`],
     [DataField.Size, (size: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Size: ${bytesToReadable(size)}`],
     [DataField.Studio, (studio: any) => `<br>Studio: ${studio[DataField.Name]}`],

@@ -7,7 +7,7 @@ import {booleanOptions, OptionKey} from "./settings/general";
 import {onAddition} from "./observer";
 
 const supportedDataFields = new Map<Target, DataField[]>([
-    [Target.Scene, [DataField.Id, DataField.Title, DataField.Studio, DataField.Code, DataField.Date, DataField.Tags, DataField.Files]],
+    [Target.Scene, [DataField.Id, DataField.Title, DataField.Organized, DataField.Studio, DataField.Code, DataField.Date, DataField.Tags, DataField.Files]],
     [Target.Performer, [DataField.Id, DataField.Name, DataField.Disambiguation, DataField.Favorite, DataField.AliasList, DataField.Birthdate, DataField.HeightCm, DataField.Tags]],
     [Target.Gallery, [DataField.Id, DataField.Title, DataField.Date, DataField.Tags, DataField.Files]],
     [Target.Movie, [DataField.Id, DataField.Name, DataField.Date]],

@@ -3,6 +3,7 @@
 
 - Add support for websites: manyvids, warashi-asian-pornstars.fr
 - Add showCheckMark setting
+- Add organized flag to tooltip
 - Use tippy.js for better tooltips
 - Fix indexxx performer search results
 

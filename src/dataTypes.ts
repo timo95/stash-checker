@@ -58,6 +58,7 @@ export enum DataField {
     HeightCm = "height_cm",
     Id = "id",
     Name = "name",
+    Organized = "organized",
     Path = "path",
     Size = "size",
     Studio = "studio",
