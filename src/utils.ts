@@ -85,6 +85,12 @@ export function interleave<T extends Node>(array: T[], between: T): T[] {
     return array.flatMap(element => [element, between.cloneNode(true) as T]).slice(0, -1)
 }
 
+export function moveIndex<T>(list: T[], oldIndex: number, newIndex: number) {
+    let moved = list.splice(oldIndex, 1)[0];
+    list.splice(newIndex, 0, moved);
+    return list;
+}
+
 export let friendlyHttpStatus: Map<number, string> = new Map([
     [200, "OK"],
     [201, "Created"],

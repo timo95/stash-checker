@@ -1,6 +1,7 @@
 
 export enum StorageKey {
     BooleanOptions = "booleanOptions",
+    CustomDisplayRules = "customDisplayRules",
     StashEndpoints = "stashEndpoints",
     StringOptions = "stringOptions",
 }
@@ -9,9 +10,6 @@ export enum StorageKey {
  * Get value of type T from storage. Deletes stored key-value pair, if it fails to parse the value.
  *
  * Implementation of storage differs between userscript and browser extension.
- *
- * @param key key used to store value
- * @param defaultValue optional default value
  */
 export async function getValue<T>(key: string, defaultValue: T): Promise<T> {
     const text = await GM.getValue<string | undefined>(key, undefined);
@@ -32,9 +30,6 @@ export async function getValue<T>(key: string, defaultValue: T): Promise<T> {
  * Write value of type T to storage.
  *
  * Implementation of storage differs between userscript and browser extension.
- *
- * @param key key used to store value
- * @param value value to be stored
  */
 export async function setValue<T>(key: string, value: T): Promise<void> {
     return GM.setValue(key, JSON.stringify(value, replacer));
@@ -44,8 +39,6 @@ export async function setValue<T>(key: string, value: T): Promise<void> {
  * Delete key-value pair from storage.
  *
  * Implementation of storage differs between userscript and browser extension.
- *
- * @param key key used to store value
  */
 export async function deleteValue(key: string): Promise<void> {
     return GM.deleteValue(key);

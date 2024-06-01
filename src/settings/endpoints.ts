@@ -8,6 +8,7 @@ const defaultData: StashEndpoint[] = [{
     url: "http://localhost:9999/graphql",
     key: "",
 }];
+
 export const stashEndpoints: StashEndpoint[] = await getValue<StashEndpoint[]>(StorageKey.StashEndpoints, defaultData);
 
 export async function initEndpointSettings() {

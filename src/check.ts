@@ -1,10 +1,11 @@
 import {prefixSymbol} from "./tooltip/tooltip";
 import {stashEndpoints} from "./settings/endpoints";
 import {firstText, hasKanji} from "./utils";
-import {CheckOptions, CustomRule, DataField, StashEndpoint, Target, Type} from "./dataTypes";
+import {CheckOptions, CustomDisplayRule, DataField, DisplayOptions, StashEndpoint, Target, Type} from "./dataTypes";
 import {request} from "./request";
 import {booleanOptions, OptionKey} from "./settings/general";
 import {onAddition} from "./observer";
+import {customDisplayRules} from "./settings/display";
 
 const supportedDataFields = new Map<Target, DataField[]>([
     [Target.Scene, [DataField.Id, DataField.Title, DataField.Organized, DataField.Studio, DataField.Code, DataField.Date, DataField.Tags, DataField.Files]],
@@ -105,6 +106,7 @@ async function checkElement(
     target: Target,
     element: Element,
     customFilter: string,
+    display: DisplayOptions,
     {
         displaySelector = (e: Element) => e,
         urlSelector = (e: Element) => e.closest("a")?.href,
@@ -113,7 +115,6 @@ async function checkElement(
         stashIdEndpoint = `https://${window.location.host}/graphql`,
         nameSelector = firstText,
         titleSelector = firstText,
-        color = "green",
     }: CheckOptions
 ) {
     let displayElement = displaySelector(element)
@@ -125,7 +126,7 @@ async function checkElement(
         let url = urlSelector(element)
         if (url) {
             console.debug(`URL: ${url}`);
-            await queryStash(url, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Url, customFilter, stashIdEndpoint);
+            await queryStash(url, (...args) => prefixSymbol(displayElement!, ...args, display), target, Type.Url, customFilter, stashIdEndpoint);
         } else {
             console.info(`No URL for ${target} found.`);
         }
@@ -134,7 +135,7 @@ async function checkElement(
         let code = codeSelector(element);
         if (code) {
             console.debug(`Code: ${code}`);
-            await queryStash(code, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Code, customFilter, stashIdEndpoint);
+            await queryStash(code, (...args) => prefixSymbol(displayElement!, ...args, display), target, Type.Code, customFilter, stashIdEndpoint);
         } else {
             console.info(`No Code for ${target} found.`);
         }
@@ -143,7 +144,7 @@ async function checkElement(
         let id = stashIdSelector(element);
         if (id) {
             console.debug(`StashId: ${id}`);
-            await queryStash(id, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.StashId, customFilter, stashIdEndpoint);
+            await queryStash(id, (...args) => prefixSymbol(displayElement!, ...args, display), target, Type.StashId, customFilter, stashIdEndpoint);
         } else {
             console.info(`No StashId for ${target} found.`);
         }
@@ -156,7 +157,7 @@ async function checkElement(
         let ignore = target === Target.Performer && nameCount === 1 && !kanji
         if (name && !ignore) {
             console.debug(`Name: ${name}`);
-            await queryStash(name, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Name, customFilter, stashIdEndpoint);
+            await queryStash(name, (...args) => prefixSymbol(displayElement!, ...args, display), target, Type.Name, customFilter, stashIdEndpoint);
         } else if (name && ignore) {
             console.info(`Ignore single name: ${name}`)
         } else {
@@ -167,22 +168,15 @@ async function checkElement(
         let title = titleSelector(element);
         if (title) {
             console.debug(`Title: ${title}`);
-            await queryStash(title, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Title, customFilter, stashIdEndpoint);
+            await queryStash(title, (...args) => prefixSymbol(displayElement!, ...args, display), target, Type.Title, customFilter, stashIdEndpoint);
         } else {
             console.info(`No Title for ${target} found.`);
         }
     }
 }
 
-// TODO: settings with a site pattern/regex (powerful and easy to verify - isActive indicator)
-// TODO: escape inputs
-const customRulesMap: Map<Target, CustomRule[]> = new Map([
-    [Target.Scene, [{filter: "organized:true", color: "purple"}, {filter: "file_count:{value:1,modifier:GREATER_THAN}", color: "brown"}]],
-    [Target.Studio, [{filter: "scene_count:{value:5,modifier:GREATER_THAN}", color: "purple"}]]
-]);
-
-function getCustomRules(target: Target): CustomRule[] {
-    return []//customRulesMap.get(target) ?? []
+function getCustomRules(target: Target): CustomDisplayRule[] {
+    return customDisplayRules.get(target) ?? []
 }
 
 /**
@@ -216,12 +210,12 @@ function checkWithCustomRules(
     for (let i = 0; i < customRules.length; i++) {
         let rule = customRules[i]
         let notFilters = customRules.slice(0, i).map(rule => rule.filter)
-        void checkElement(target, element, combineFilters([rule.filter], notFilters), {color: rule.color, ...checkConfig})
+        void checkElement(target, element, combineFilters([rule.filter], notFilters), rule.display, checkConfig)
     }
     // default excluding all rules
     let notFilters = customRules.map(rule => rule.filter)
     console.log("default")
-    void checkElement(target, element, combineFilters([], notFilters), checkConfig)
+    void checkElement(target, element, combineFilters([], notFilters), {color: "green"}, checkConfig)
 }
 
 /**

@@ -17,7 +17,7 @@ export async function runStashChecker() {
     switch (window.location.host) {
         case "www.iwara.tv": {
             // TODO translate to graphql filter
-            let color = "green"//(d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
+            //(d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
             // Video code in the URL
             let codeRegex = /(?<=video\/)([a-zA-Z0-9]+)(?=\/|$)/
             // Cut URL after code off
@@ -30,27 +30,25 @@ export async function runStashChecker() {
             check(Target.Scene, ".page-video__details > .text--h1", {
                 observe: true,
                 urlSelector: _ => prepareUrl(currentSite()),
-                color: color,
                 codeSelector: () => window.location.pathname.match(codeRegex)?.[0]
             });
             check(Target.Scene, "a.videoTeaser__title", {
                 observe: true,
                 urlSelector: e => prepareUrl(closestUrl(e)),
-                color: color,
                 codeSelector: (e: Element) => e.getAttribute("href")?.match(codeRegex)?.[0]
             });
             break;
         }
         case "oreno3d.com": {
-            let color = "green"//(d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
-            check(Target.Scene, "h1.video-h1", {color: color, urlSelector: currentSite, titleSelector: null});
-            check(Target.Scene, "a h2.box-h2", {color: color, titleSelector: null});
+            //(d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
+            check(Target.Scene, "h1.video-h1", {urlSelector: currentSite, titleSelector: null});
+            check(Target.Scene, "a h2.box-h2", {titleSelector: null});
             break;
         }
         case "erommdtube.com": {
-            let color = "green"//(d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
-            check(Target.Scene, "h1.show__h1", {color: color, urlSelector: currentSite, titleSelector: null});
-            check(Target.Scene, "h2.main__list-title", {color: color, titleSelector: null});
+            //(d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
+            check(Target.Scene, "h1.show__h1", {urlSelector: currentSite, titleSelector: null});
+            check(Target.Scene, "h2.main__list-title", {titleSelector: null});
             break;
         }
         case "coomer.su":

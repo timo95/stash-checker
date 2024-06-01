@@ -64,7 +64,7 @@ function closeSettingsWindow(this: HTMLElement, event: MouseEvent) {
         this.style.display = "none";
         clearObservers()
         clearSymbols()
-        runStashChecker()
+        void runStashChecker()
     }
 }
 

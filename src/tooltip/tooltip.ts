@@ -1,4 +1,14 @@
-import {DataField, readable, StashEndpoint, StashEntry, StashFile, StashSymbol, Target, Type} from "../dataTypes";
+import {
+    DataField,
+    DisplayOptions,
+    readable,
+    StashEndpoint,
+    StashEntry,
+    StashFile,
+    StashSymbol,
+    Target,
+    Type
+} from "../dataTypes";
 import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "../utils";
 import {booleanOptions, OptionKey, stringOptions} from "../settings/general";
 import {StashQuery, StashQueryClass} from "./stashQuery";
@@ -74,9 +84,6 @@ function formatEntryData(entry: StashEntry, target: Target, numQueries: number):
 
 /**
  * Similar to object.assign(), but also merges the children of the objects.
- *
- * @param target
- * @param source
  */
 function mergeData(target: StashEntry[], source: StashEntry[]): StashEntry[] {
     // Identify results by endpoint + id, merge identical ones
@@ -131,13 +138,6 @@ function stashSymbol(): HTMLSpanElement {
 /**
  * Prepends depending on the data the checkmark or cross to the selected element.
  * Also populates tooltip window.
- *
- * @param element
- * @param target
- * @param data
- * @param endpoint
- * @param type
- * @param color
  */
 export function prefixSymbol(
     element: Element,
@@ -145,7 +145,7 @@ export function prefixSymbol(
     type: Type,
     endpoint: StashEndpoint,
     data: StashEntry[],
-    color: string
+    display: DisplayOptions,
 ) {
     // All queries used here
     let endpoints = [endpoint.name];
@@ -153,11 +153,11 @@ export function prefixSymbol(
     // Specific query for this result
     let baseUrl = endpoint.url.replace(/\/graphql\/?$/, "");
     let query: StashQuery = { endpoint: endpoint.name, baseUrl, types: queryTypes };
-    // Add query, endpoint and color to each new entry
+    // Add query, endpoint and display options to each new entry
     data.forEach((entry: StashEntry) => {
         entry.queries = [query]
         entry.endpoint = endpoint.name
-        entry.color = color
+        entry.display = display
     });
 
     // Look for existing check symbol
@@ -207,7 +207,7 @@ export function prefixSymbol(
         if (booleanOptions.get(OptionKey.showCheckMark)) {
             symbol.innerHTML = `${stringOptions.get(OptionKey.checkMark)!}&nbsp;`;
         }
-        symbol.style.color = data[0].color;
+        symbol.style.color = data[0].display.color;
     }
 
     // All used queries

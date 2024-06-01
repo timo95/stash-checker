@@ -156,6 +156,21 @@
     font-size: unset;
 }
 
+.stashChecker table,
+.stashChecker thead,
+.stashChecker tbody,
+.stashChecker tr,
+.stashChecker th,
+.stashChecker td {
+    border-collapse: collapse;
+    border: 0.1rem solid var(--stash-checker-color-border);
+    padding: 0.2rem;
+}
+
+.stashChecker .center {
+    text-align: center;
+}
+
 .stashChecker .option {
     text-align: right;
     margin: 0.5rem;
