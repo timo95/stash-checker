@@ -1,7 +1,7 @@
 import {prefixSymbol} from "./tooltip/tooltip";
 import {stashEndpoints} from "./settings/endpoints";
 import {firstText, hasKanji} from "./utils";
-import {CheckOptions, DataField, StashEndpoint, Target, Type} from "./dataTypes";
+import {CheckOptions, CustomRule, DataField, StashEndpoint, Target, Type} from "./dataTypes";
 import {request} from "./request";
 import {booleanOptions, OptionKey} from "./settings/general";
 import {onAddition} from "./observer";
@@ -43,46 +43,47 @@ async function queryStash(
     onload: (target: Target, type: Type, endpoint: StashEndpoint, data: any[]) => any,
     target: Target,
     type: Type,
+    customFilter: string,
     stashIdEndpoint: string
 ) {
-    let criterion: string;
+    let filter: string;
     let query: string;
     let access = (d: any) => d;
 
     // Build filter
     switch (type) {
         case Type.StashId:
-            criterion = `stash_id_endpoint:{endpoint:"${encodeURIComponent(stashIdEndpoint)}",stash_id:"${encodeURIComponent(queryString)}",modifier:EQUALS}`;
+            filter = `stash_id_endpoint:{endpoint:"${encodeURIComponent(stashIdEndpoint)}",stash_id:"${encodeURIComponent(queryString)}",modifier:EQUALS}${customFilter}`;
             break;
         default:
-            criterion = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}`;
+            filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
             break;
     }
 
     // Build query
     switch (target) {
         case Target.Scene:
-            query = `findScenes(scene_filter:{${criterion}}){scenes{${getDataFields(target)}}}`;
+            query = `findScenes(scene_filter:{${filter}}){scenes{${getDataFields(target)}}}`;
             access = (d) => d.scenes;
             break;
         case Target.Performer:
-            query = `findPerformers(performer_filter:{${criterion}}){performers{${getDataFields(target)}}}`;
+            query = `findPerformers(performer_filter:{${filter}}){performers{${getDataFields(target)}}}`;
             access = (d) => d.performers;
             break;
         case Target.Gallery:
-            query = `findGalleries(gallery_filter:{${criterion}}){galleries{${getDataFields(target)}}}`;
+            query = `findGalleries(gallery_filter:{${filter}}){galleries{${getDataFields(target)}}}`;
             access = (d) => d.galleries;
             break;
         case Target.Movie:
-            query = `findMovies(movie_filter:{${criterion}}){movies{${getDataFields(target)}}}`;
+            query = `findMovies(movie_filter:{${filter}}){movies{${getDataFields(target)}}}`;
             access = (d) => d.movies;
             break;
         case Target.Studio:
-            query = `findStudios(studio_filter:{${criterion}}){studios{${getDataFields(target)}}}`;
+            query = `findStudios(studio_filter:{${filter}}){studios{${getDataFields(target)}}}`;
             access = (d) => d.studios;
             break;
         case Target.Tag:
-            query = `findTags(tag_filter:{${criterion}}){tags{${getDataFields(target)}}}`;
+            query = `findTags(tag_filter:{${filter}}){tags{${getDataFields(target)}}}`;
             access = (d) => d.tags;
             break;
         default:
@@ -91,7 +92,7 @@ async function queryStash(
 
     // Get config values or wait for popup if it is not stored
     stashEndpoints.forEach((endpoint: StashEndpoint) => {
-        request(endpoint, query, true)
+        request(endpoint, query, false)  // TODO
             .then((data: any) => onload(target, type, endpoint, access(data)));
     });
 }
@@ -99,21 +100,11 @@ async function queryStash(
 /**
  * For a given element query stash with each configured query.
  * Default selectors for most queries are defined here.
- *
- * @param target
- * @param element
- * @param elementSelector
- * @param urlSelector
- * @param codeSelector
- * @param stashIdSelector
- * @param stashIdEndpoint
- * @param nameSelector
- * @param titleSelector
- * @param color
  */
 async function checkElement(
     target: Target,
     element: Element,
+    customFilter: string,
     {
         displaySelector = (e: Element) => e,
         urlSelector = (e: Element) => e.closest("a")?.href,
@@ -122,7 +113,7 @@ async function checkElement(
         stashIdEndpoint = `https://${window.location.host}/graphql`,
         nameSelector = firstText,
         titleSelector = firstText,
-        color = () => "green",
+        color = "green",
     }: CheckOptions
 ) {
     let displayElement = displaySelector(element)
@@ -134,7 +125,7 @@ async function checkElement(
         let url = urlSelector(element)
         if (url) {
             console.debug(`URL: ${url}`);
-            await queryStash(url, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Url, stashIdEndpoint);
+            await queryStash(url, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Url, customFilter, stashIdEndpoint);
         } else {
             console.info(`No URL for ${target} found.`);
         }
@@ -143,7 +134,7 @@ async function checkElement(
         let code = codeSelector(element);
         if (code) {
             console.debug(`Code: ${code}`);
-            await queryStash(code, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Code, stashIdEndpoint);
+            await queryStash(code, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Code, customFilter, stashIdEndpoint);
         } else {
             console.info(`No Code for ${target} found.`);
         }
@@ -152,7 +143,7 @@ async function checkElement(
         let id = stashIdSelector(element);
         if (id) {
             console.debug(`StashId: ${id}`);
-            await queryStash(id, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.StashId, stashIdEndpoint);
+            await queryStash(id, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.StashId, customFilter, stashIdEndpoint);
         } else {
             console.info(`No StashId for ${target} found.`);
         }
@@ -165,7 +156,7 @@ async function checkElement(
         let ignore = target === Target.Performer && nameCount === 1 && !kanji
         if (name && !ignore) {
             console.debug(`Name: ${name}`);
-            await queryStash(name, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Name, stashIdEndpoint);
+            await queryStash(name, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Name, customFilter, stashIdEndpoint);
         } else if (name && ignore) {
             console.info(`Ignore single name: ${name}`)
         } else {
@@ -176,11 +167,61 @@ async function checkElement(
         let title = titleSelector(element);
         if (title) {
             console.debug(`Title: ${title}`);
-            await queryStash(title, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Title, stashIdEndpoint);
+            await queryStash(title, (...args) => prefixSymbol(displayElement!, ...args, color), target, Type.Title, customFilter, stashIdEndpoint);
         } else {
             console.info(`No Title for ${target} found.`);
         }
     }
+}
+
+// TODO: settings with a site pattern/regex (powerful and easy to verify - isActive indicator)
+// TODO: escape inputs
+const customRulesMap: Map<Target, CustomRule[]> = new Map([
+    [Target.Scene, [{filter: "organized:true", color: "purple"}, {filter: "file_count:{value:1,modifier:GREATER_THAN}", color: "brown"}]],
+    [Target.Studio, [{filter: "scene_count:{value:5,modifier:GREATER_THAN}", color: "purple"}]]
+]);
+
+function getCustomRules(target: Target): CustomRule[] {
+    return []//customRulesMap.get(target) ?? []
+}
+
+/**
+ * Combine filters with AND/NOT/OR recursively
+ * Flat list has too many restrictions (no duplicate filter types, no AND / OR / NOT in the same filter)
+ */
+function combineFilters(customAndFilters: string[], customNotFilters: string[]): string {
+    let andFilter = customAndFilters.map(f => ",AND:{" + f).join()
+    let notFilter = customNotFilters.length == 0 ? "" : ",NOT:{" + customNotFilters.join(",OR:{")
+    let closing = "}".repeat(customAndFilters.length + customNotFilters.length)
+    return andFilter + notFilter + closing
+}
+
+/**
+ * Resolves custom rules. Lower index equates to higher priority.
+ *
+ * Example: List of 3 custom rules results in these 4 query filters
+ * 0 -> 0
+ * 1 -> NOT 0 && 1
+ * 2 -> NOT 0 && NOT 1 && 2
+ * default -> NOT 0 && NOT 1 && NOT 2
+ */
+function checkWithCustomRules(
+    target: Target,
+    element: Element,
+    checkConfig: CheckOptions
+) {
+    let customRules = getCustomRules(target)
+
+    // filter for each rule
+    for (let i = 0; i < customRules.length; i++) {
+        let rule = customRules[i]
+        let notFilters = customRules.slice(0, i).map(rule => rule.filter)
+        void checkElement(target, element, combineFilters([rule.filter], notFilters), {color: rule.color, ...checkConfig})
+    }
+    // default excluding all rules
+    let notFilters = customRules.map(rule => rule.filter)
+    console.log("default")
+    void checkElement(target, element, combineFilters([], notFilters), checkConfig)
 }
 
 /**
@@ -197,8 +238,8 @@ export function check(
     // Run query on addition of new elements fitting the selector
     if (observe) {
         onAddition(elementSelector, (element: Element) =>
-            checkElement(target, element, checkConfig)
+            checkWithCustomRules(target, element, checkConfig)
         );
     }
-    document.querySelectorAll(elementSelector).forEach((e) => checkElement(target, e, checkConfig));
+    document.querySelectorAll(elementSelector).forEach((e) => checkWithCustomRules(target, e, checkConfig));
 }

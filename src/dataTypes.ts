@@ -17,6 +17,7 @@ export type StashEntry = {
 } & {
     queries: StashQuery[];
     endpoint: string;
+    color: string;
 };
 
 export type StashFile = {
@@ -37,7 +38,12 @@ export interface BatchQuery {
 export interface GraphQlQuery {
     query: string,
     resolve?: (data: any) => void,
-    reject?: (message?: string) => void
+    reject?: (message?: string) => void,
+}
+
+export interface CustomRule {
+    filter: string,
+    color: string,
 }
 
 /**
@@ -124,6 +130,6 @@ export interface CheckOptions {
     stashIdEndpoint?: string;
     nameSelector?: Selector | null;
     titleSelector?: Selector | null;
-    color?: (data: any) => string;
+    color?: string;
     observe?: boolean;
 }

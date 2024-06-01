@@ -16,7 +16,8 @@ export async function runStashChecker() {
 
     switch (window.location.host) {
         case "www.iwara.tv": {
-            let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
+            // TODO translate to graphql filter
+            let color = "green"//(d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
             // Video code in the URL
             let codeRegex = /(?<=video\/)([a-zA-Z0-9]+)(?=\/|$)/
             // Cut URL after code off
@@ -41,13 +42,13 @@ export async function runStashChecker() {
             break;
         }
         case "oreno3d.com": {
-            let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
+            let color = "green"//(d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
             check(Target.Scene, "h1.video-h1", {color: color, urlSelector: currentSite, titleSelector: null});
             check(Target.Scene, "a h2.box-h2", {color: color, titleSelector: null});
             break;
         }
         case "erommdtube.com": {
-            let color = (d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
+            let color = "green"//(d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
             check(Target.Scene, "h1.show__h1", {color: color, urlSelector: currentSite, titleSelector: null});
             check(Target.Scene, "h2.main__list-title", {color: color, titleSelector: null});
             break;

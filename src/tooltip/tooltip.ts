@@ -145,7 +145,7 @@ export function prefixSymbol(
     type: Type,
     endpoint: StashEndpoint,
     data: StashEntry[],
-    color: (data: StashEntry) => string
+    color: string
 ) {
     // All queries used here
     let endpoints = [endpoint.name];
@@ -153,10 +153,11 @@ export function prefixSymbol(
     // Specific query for this result
     let baseUrl = endpoint.url.replace(/\/graphql\/?$/, "");
     let query: StashQuery = { endpoint: endpoint.name, baseUrl, types: queryTypes };
-    // Add query and endpoint to each new entry
+    // Add query, endpoint and color to each new entry
     data.forEach((entry: StashEntry) => {
         entry.queries = [query]
         entry.endpoint = endpoint.name
+        entry.color = color
     });
 
     // Look for existing check symbol
@@ -206,7 +207,7 @@ export function prefixSymbol(
         if (booleanOptions.get(OptionKey.showCheckMark)) {
             symbol.innerHTML = `${stringOptions.get(OptionKey.checkMark)!}&nbsp;`;
         }
-        symbol.style.color = color(data[0]);
+        symbol.style.color = data[0].color;
     }
 
     // All used queries
