@@ -17,6 +17,7 @@ export default {
         "*://fansdb.cc/*",
         "*://fansdb.xyz/*",
         "*://gayeroticvideoindex.com/*",
+        "*://hobby.porn/*",
         "*://javdb.com/*",
         "*://kemono.su/*",
         "*://onlyfans.com/*",
