@@ -40,6 +40,7 @@ export default {
         "*://www.javlibrary.com/*",
         "*://www.manyvids.com/*",
         "*://www.minnano-av.com/*",
+        "*://www.pornhub.com/*",
         "*://www.pornteengirl.com/*",
         "*://www.thenude.com/*",
         "*://xcity.jp/*",

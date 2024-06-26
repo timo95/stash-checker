@@ -345,6 +345,24 @@ export async function runStashChecker() {
             });
             break;
         }
+        case "www.pornhub.com": {
+            check(Target.Performer, "[class*='pcVideoListItem'] a[href*='/model/'], [class*='pcVideoListItem'] a[href*='/pornstar/']");
+            check(Target.Performer, "h1[itemprop='name']", { urlSelector: currentSite });
+            check(Target.Performer, "span.pornStarName.performerCardName, div.userCardNameBlock, span.usernameBadgesWrapper", { 
+                urlSelector: e => closestUrl(e),
+                nameSelector: e => e.textContent?.trim()
+            });
+            check(Target.Performer, "div.modelVideosTitle, div.subHeaderOverrite > h2", {
+                urlSelector: currentSite,
+                nameSelector: e => firstText(e)?.split("'s")?.[0].trim()
+            });
+            check(Target.Studio, "[class*='pcVideoListItem'] a[href*='/channels/']");
+            check(Target.Studio, "[id='channelsProfile'] h1", { urlSelector: currentSite });
+            check(Target.Scene, "div.videoUList span.title a[href*='/view_video.php?viewkey=']", { observe: true });
+            check(Target.Scene, "h1.title", { urlSelector: currentSite })
+            check(Target.Scene, "[class*='pcVideoListItem'] span.title a[href*='/view_video.php?viewkey=']", { observe: true })
+            break;
+        }
         case "www.babepedia.com": {
             check(Target.Performer, "h1#babename", {urlSelector: currentSite});
             check(Target.Performer, "a[href*='/babe/']", {observe: true});
