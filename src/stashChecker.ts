@@ -324,6 +324,39 @@ export async function runStashChecker() {
             });
             break;
         }
+        case "hobby.porn": {
+            check(Target.Performer, "a[href*='/model/']:not([href*='modelInfo'])", {
+                urlSelector: e => closestUrl(e)?.match(/\/model\/[^\/]+\/\d+$/)?.[0],
+                nameSelector: e => firstText(e)?.replace("porn", "")?.replace("videos", "")?.trim()
+            });
+            check(Target.Performer, "h1", { nameSelector: e => firstText(e)?.replace("Free Amateur Porn - Hobby.porn", "").split("porn videos")?.[0].trim()});
+            check(Target.Performer, "#tab_info > div.model-info > div > b");
+            check(Target.Scene, "h1[itemprop='name']", {urlSelector: currentSite, titleSelector: firstText});
+            check(Target.Scene, "div[class*='item item-video item-lozad'] a[href*='hobby.porn/video/'] div.title-holder", {
+                observe: true,
+                urlSelector: closestUrl,
+                titleSelector: e => e.textContent?.trim()
+            });
+            break;
+        }
+        case "www.pornhub.com": {
+            check(Target.Performer, "[class*='pcVideoListItem'] a[href*='/model/'], [class*='pcVideoListItem'] a[href*='/pornstar/']");
+            check(Target.Performer, "h1[itemprop='name']", { urlSelector: currentSite });
+            check(Target.Performer, "span.pornStarName.performerCardName, div.userCardNameBlock, span.usernameBadgesWrapper", { 
+                urlSelector: closestUrl,
+                nameSelector: e => e.textContent?.trim()
+            });
+            check(Target.Performer, "div.modelVideosTitle, div.subHeaderOverrite > h2", {
+                urlSelector: currentSite,
+                nameSelector: e => firstText(e)?.split("'s")?.[0].trim()
+            });
+            check(Target.Studio, "[class*='pcVideoListItem'] a[href*='/channels/']");
+            check(Target.Studio, "[id='channelsProfile'] h1", { urlSelector: currentSite });
+            check(Target.Scene, "div.videoUList span.title a[href*='/view_video.php?viewkey=']", { observe: true });
+            check(Target.Scene, "h1.title", { urlSelector: currentSite })
+            check(Target.Scene, "[class*='pcVideoListItem'] span.title a[href*='/view_video.php?viewkey=']", { observe: true })
+            break;
+        }
         case "www.babepedia.com": {
             check(Target.Performer, "h1#babename", {urlSelector: currentSite});
             check(Target.Performer, "a[href*='/babe/']", {observe: true});
