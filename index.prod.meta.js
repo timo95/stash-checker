@@ -9,6 +9,7 @@
 // @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://gayeroticvideoindex.com/*
+// @match *://hobby.porn/*
 // @match *://javdb.com/*
 // @match *://kemono.su/*
 // @match *://onlyfans.com/*
@@ -31,6 +32,7 @@
 // @match *://www.javlibrary.com/*
 // @match *://www.manyvids.com/*
 // @match *://www.minnano-av.com/*
+// @match *://www.pornhub.com/*
 // @match *://www.pornteengirl.com/*
 // @match *://www.thenude.com/*
 // @match *://xcity.jp/*
