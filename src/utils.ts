@@ -15,10 +15,25 @@ export function firstTextChild(node?: Node | undefined | null): null | undefined
     } else {
         return Array.from(node.childNodes)
             .filter(n => !["svg"].includes(n.nodeName.toLowerCase()))  // element tag exceptions
-            .filter(n => n.nodeType === Node.ELEMENT_NODE ? (n as Element).getAttribute("data-type") !== "stash-symbol" : true)  // exclude checkmark
+            .filter(n => asElement(n)?.getAttribute("data-type") !== "stash-symbol")  // exclude checkmark
+            .filter(n => isElement(n) ? !isHidden(n as Element) : true)  // exclude hidden elements
             .map(firstTextChild)
             .find(n => n);  // first truthy
     }
+}
+
+function isElement(childNode: ChildNode): boolean {
+    return childNode.nodeType === Node.ELEMENT_NODE
+}
+
+function asElement(childNode: ChildNode): Element | null {
+    if (isElement(childNode)) return childNode as Element
+    else return null
+}
+
+function isHidden(element: Element): boolean {
+    // element.computedStyleMap()?.getAll("display")?.includes("none")  // not supported yet by firefox (https://bugzilla.mozilla.org/show_bug.cgi?id=1857849)
+    return window.getComputedStyle(element).display === "none"
 }
 
 export function firstText(node?: Node | undefined | null): string | undefined {
