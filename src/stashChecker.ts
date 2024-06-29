@@ -325,23 +325,17 @@ export async function runStashChecker() {
             break;
         }
         case "hobby.porn": {
-            // Necessary because on page 1 there are span[class='hidden'] containing '<Performername> -'
-            let removeHiddenElements = (e: Element) => {
-                e.querySelectorAll(".hidden").forEach(h => h.remove())
-                return e.textContent?.trim()
-            }
-
             check(Target.Performer, "a[href*='/model/']:not([href*='modelInfo'])", {
                 urlSelector: e => closestUrl(e)?.match(/\/model\/[^\/]+\/\d+$/)?.[0],
                 nameSelector: e => firstText(e)?.replace("porn", "")?.replace("videos", "")?.trim()
             });
             check(Target.Performer, "h1", { nameSelector: e => firstText(e)?.replace("Free Amateur Porn - Hobby.porn", "").split("porn videos")?.[0].trim()});
             check(Target.Performer, "#tab_info > div.model-info > div > b");
-            check(Target.Scene, "h1[itemprop='name']", {urlSelector: currentSite, titleSelector: e => firstText(e)});            
+            check(Target.Scene, "h1[itemprop='name']", {urlSelector: currentSite, titleSelector: firstText});
             check(Target.Scene, "div[class*='item item-video item-lozad'] a[href*='hobby.porn/video/'] div.title-holder", {
                 observe: true,
-                urlSelector: e => closestUrl(e),
-                titleSelector: e => removeHiddenElements(e)
+                urlSelector: closestUrl,
+                titleSelector: e => e.textContent?.trim()
             });
             break;
         }
@@ -349,7 +343,7 @@ export async function runStashChecker() {
             check(Target.Performer, "[class*='pcVideoListItem'] a[href*='/model/'], [class*='pcVideoListItem'] a[href*='/pornstar/']");
             check(Target.Performer, "h1[itemprop='name']", { urlSelector: currentSite });
             check(Target.Performer, "span.pornStarName.performerCardName, div.userCardNameBlock, span.usernameBadgesWrapper", { 
-                urlSelector: e => closestUrl(e),
+                urlSelector: closestUrl,
                 nameSelector: e => e.textContent?.trim()
             });
             check(Target.Performer, "div.modelVideosTitle, div.subHeaderOverrite > h2", {
