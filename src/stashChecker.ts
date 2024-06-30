@@ -335,7 +335,7 @@ export async function runStashChecker() {
             check(Target.Scene, "div[class*='item item-video item-lozad'] a[href*='hobby.porn/video/'] div.title-holder", {
                 observe: true,
                 urlSelector: closestUrl,
-                titleSelector: e => e.textContent?.trim()
+                titleSelector: firstText
             });
             break;
         }
