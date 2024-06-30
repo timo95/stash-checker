@@ -6645,7 +6645,7 @@
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div[class*='item item-video item-lozad'] a[href*='hobby.porn/video/'] div.title-holder", {
                 observe: true,
                 urlSelector: closestUrl,
-                titleSelector: e => e.textContent?.trim()
+                titleSelector: _utils__WEBPACK_IMPORTED_MODULE_2__.ou
               });
               break;
 
