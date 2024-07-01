@@ -363,6 +363,16 @@ export async function runStashChecker() {
             check(Target.Scene, "[class*='pcVideoListItem'] span.title a[href*='/view_video.php?viewkey=']", { observe: true })
             break;
         }
+        case "www.clips4sale.com": {
+            check(Target.Studio, "div[class*='items-center'] h1", { urlSelector: currentSite });
+            check(Target.Studio, "div[class*='items-center'] div[class*='flex']:not([class*='hidden']) a[href*='/studio/']", {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.split("/Cat")?.[0]
+            });
+            check(Target.Scene, "figure[class*='mediabook-preview'] h1[class*='static group']", { urlSelector: currentSite });
+            check(Target.Scene, "div[class*='w-full'] a[class*='search-clip__title']", { observe: true });
+            break;
+        }
         case "www.babepedia.com": {
             check(Target.Performer, "h1#babename", {urlSelector: currentSite});
             check(Target.Performer, "a[href*='/babe/']", {observe: true});
