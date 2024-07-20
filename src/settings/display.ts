@@ -8,8 +8,8 @@ import {moveIndex} from "../utils";
 // TODO: settings with a site pattern/regex (powerful and easy to verify - isActive indicator)
 // TODO: escape input examples in description
 const customRulesMap: Map<Target, CustomDisplayRule[]> = new Map([
-    [Target.Scene, [{pattern: "1", filter: "organized:true", display: {color: "purple"}}, {pattern: "2", filter: "organized:true", display: {color: "purple"}}, {pattern: "3", filter: "organized:true", display: {color: "purple"}}, {pattern: "4", filter: "organized:true", display: {color: "purple"}}, {pattern: "5", filter: "file_count:{value:1,modifier:GREATER_THAN}", display: {color: "brown"}}]],
-    [Target.Studio, [{pattern: "*", filter: "scene_count:{value:5,modifier:GREATER_THAN}", display: {color: "purple"}}]]
+    [Target.Scene, [{pattern: "*", filter: "organized:true", display: {color: "purple"}}, {pattern: "*", filter: "organized:true", display: {color: "purple"}}, {pattern: "*", filter: "organized:true", display: {color: "purple"}}, {pattern: "*", filter: "organized:true", display: {color: "purple"}}, {pattern: "*", filter: "file_count:{value:1,modifier:GREATER_THAN}", display: {color: "brown"}}]],
+    [Target.Studio, [{pattern: "*://stashdb.org/*", filter: "scene_count:{value:5,modifier:GREATER_THAN}", display: {color: "purple"}}]]
 ]);
 
 export const customDisplayRules: Map<Target, CustomDisplayRule[]> = await getValue<Map<Target, CustomDisplayRule[]>>(StorageKey.CustomDisplayRules, customRulesMap);
