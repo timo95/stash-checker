@@ -6627,13 +6627,10 @@
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "#tab_info > div.model-info > div > b");
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1[itemprop='name']", {
-                urlSelector: currentSite,
-                titleSelector: _utils__WEBPACK_IMPORTED_MODULE_2__.ou
+                urlSelector: currentSite
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div[class*='item item-video item-lozad'] a[href*='hobby.porn/video/'] div.title-holder", {
-                observe: true,
-                urlSelector: closestUrl,
-                titleSelector: _utils__WEBPACK_IMPORTED_MODULE_2__.ou
+                observe: true
               });
               break;
 
@@ -6642,10 +6639,7 @@
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1[itemprop='name']", {
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "span.pornStarName.performerCardName, div.userCardNameBlock, span.usernameBadgesWrapper", {
-                urlSelector: closestUrl,
-                nameSelector: e => e.textContent?.trim()
-              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "span.pornStarName.performerCardName, div.userCardNameBlock, span.usernameBadgesWrapper");
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "div.modelVideosTitle, div.subHeaderOverrite > h2", {
                 urlSelector: currentSite,
                 nameSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.split("'s")?.[0].trim()
