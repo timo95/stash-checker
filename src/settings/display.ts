@@ -39,7 +39,7 @@ function populateDisplaySection(displaySection: HTMLElement) {
     let tableBody = document.createElement("tbody");
     table.append(tableBody);
     let tableHeading = document.createElement("h2");
-    tableHeading.innerHTML = readable(Target.Scene)
+    tableHeading.innerHTML = "Custom Display Rules";
     displaySection.append(tableHeading);
     displaySection.append(table);
     Sortable.create(tableBody, {
