@@ -5414,7 +5414,7 @@
               return;
             }
             _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__.I.forEach((endpoint => {
-              (0, _request__WEBPACK_IMPORTED_MODULE_4__.E)(endpoint, query, false).then((data => onload(target, type, endpoint, access(data))));
+              (0, _request__WEBPACK_IMPORTED_MODULE_4__.E)(endpoint, query, true).then((data => onload(target, type, endpoint, access(data))));
             }));
           }
           async function checkElement(target, element, customFilter, display, {displaySelector = e => e, urlSelector = e => e.closest("a")?.href, codeSelector, stashIdSelector, stashIdEndpoint = `https://${window.location.host}/graphql`, nameSelector = _utils__WEBPACK_IMPORTED_MODULE_2__.ou, titleSelector = _utils__WEBPACK_IMPORTED_MODULE_2__.ou}) {
@@ -5460,7 +5460,7 @@
             }
           }
           function getCustomRules(target) {
-            let targetRules = _settings_display__WEBPACK_IMPORTED_MODULE_6__.p.get(target) ?? [];
+            let targetRules = _settings_display__WEBPACK_IMPORTED_MODULE_6__.p.filter((rule => rule.target === target));
             return targetRules.filter((rule => new urlpattern_polyfill__WEBPACK_IMPORTED_MODULE_7__.I(rule.pattern, self.location.href).test(window.location.href)));
           }
           function combineFilters(customAndFilters, customNotFilters) {
@@ -5473,14 +5473,18 @@
             let customRules = getCustomRules(target);
             for (let i = 0; i < customRules.length; i++) {
               let rule = customRules[i];
-              let notFilters = customRules.slice(0, i).map((rule => rule.filter));
-              void checkElement(target, element, combineFilters([ rule.filter ], notFilters), rule.display, checkConfig);
+              let notFilters = customRules.slice(0, i).map((rule => rule.filter)).map(emptyToTrue);
+              let andFilters = [ rule.filter ].map(emptyToTrue);
+              void checkElement(target, element, combineFilters(andFilters, notFilters), rule.display, checkConfig);
             }
-            let notFilters = customRules.map((rule => rule.filter));
+            let notFilters = customRules.map((rule => rule.filter)).map(emptyToTrue);
             console.log("default");
             void checkElement(target, element, combineFilters([], notFilters), {
               color: "green"
             }, checkConfig);
+          }
+          function emptyToTrue(s) {
+            return s.length > 0 ? s : "id:{value:-1,modifier:GREATER_THAN}";
           }
           function check(target, elementSelector, {observe = false, ...checkConfig} = {}) {
             if (observe) (0, _observer__WEBPACK_IMPORTED_MODULE_8__.C)(elementSelector, (element => checkWithCustomRules(target, element, checkConfig)));
@@ -5780,46 +5784,31 @@
           var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(185);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__, _general__WEBPACK_IMPORTED_MODULE_3__ ]);
           [_settings__WEBPACK_IMPORTED_MODULE_0__, _general__WEBPACK_IMPORTED_MODULE_3__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
-          const customRulesMap = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, [ {
+          const customRules = [ {
+            target: _dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene,
             pattern: "*",
-            filter: "organized:true",
+            filter: "organized:false",
+            display: {
+              color: "blue"
+            }
+          }, {
+            target: _dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene,
+            pattern: "*://*.javlibrary.com/*",
+            filter: "",
             display: {
               color: "purple"
             }
           }, {
-            pattern: "*",
-            filter: "organized:true",
-            display: {
-              color: "purple"
-            }
-          }, {
-            pattern: "*",
-            filter: "organized:true",
-            display: {
-              color: "purple"
-            }
-          }, {
-            pattern: "*",
-            filter: "organized:true",
-            display: {
-              color: "purple"
-            }
-          }, {
-            pattern: "*",
-            filter: "file_count:{value:1,modifier:GREATER_THAN}",
-            display: {
-              color: "brown"
-            }
-          } ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, [ {
+            target: _dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio,
             pattern: "*://stashdb.org/*",
             filter: "scene_count:{value:5,modifier:GREATER_THAN}",
             display: {
               color: "purple"
             }
-          } ] ] ]);
-          const customDisplayRules = await (0, _storage__WEBPACK_IMPORTED_MODULE_2__._W)(_storage__WEBPACK_IMPORTED_MODULE_2__.Zg.CustomDisplayRules, customRulesMap);
+          } ];
+          const customDisplayRules = await (0, _storage__WEBPACK_IMPORTED_MODULE_2__._W)(_storage__WEBPACK_IMPORTED_MODULE_2__.Zg.CustomDisplayRules, customRules);
           function initDisplaySettings() {
-            let description = "Custom display rules can change the display of check marks. " + "A rule applies when the URL pattern matches the current website and the GraphQL filter matches the element. " + "Rules higher in the list have higher priority. " + "The order can be changed by dragging. " + "If no rule applies, the default display options are use. " + "GraphQL filters may not contain AND/OR/NOT. " + "Multiple filters can still be concatenated by ','.";
+            let description = "Custom display rules can change the display of check marks. " + "A rule applies when the URL pattern matches the current website and the GraphQL filter matches the element. " + "Rules higher in the list have higher priority. " + "The order can be changed by dragging. " + "If no rule applies, the default display options are use. " + "GraphQL filters may not contain AND/OR/NOT. " + "Multiple filters can still be concatenated by ','. " + "Leave the filter empty to always apply.";
             let displaySection = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.Lc)("display", "Display", description);
             populateDisplaySection(displaySection);
           }
@@ -5836,21 +5825,18 @@
             displaySection.append(table);
             sortablejs__WEBPACK_IMPORTED_MODULE_4__.Ay.create(tableBody, {
               onEnd: event => {
-                if (event.oldIndex && event.newIndex) {
-                  let old = customDisplayRules.get(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene) ?? [];
-                  customDisplayRules.set(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, (0, _utils__WEBPACK_IMPORTED_MODULE_5__.e6)(old, event.oldIndex, event.newIndex));
-                }
+                if (event.oldIndex && event.newIndex) (0, _utils__WEBPACK_IMPORTED_MODULE_5__.e6)(customDisplayRules, event.oldIndex, event.newIndex);
               }
             });
-            populateCustomRulesTable(tableBody, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene);
+            populateCustomRulesTable(tableBody);
           }
-          function populateCustomRulesTable(tableBody, target) {
-            let tableRows = Array.from(customDisplayRules.get(target) ?? []).map(tableRow);
+          function populateCustomRulesTable(tableBody) {
+            let tableRows = Array.from(customDisplayRules).map(tableRow);
             tableBody.replaceChildren(...tableRows);
           }
           function tableHeadRow() {
             let row = document.createElement("tr");
-            row.innerHTML = "<th>URL Pattern</th><th>GraphQL Filter</th><th>Color</th><th>Preview</th>";
+            row.innerHTML = "<th>Type</th><th>URL Pattern</th><th>GraphQL Filter</th><th>Color</th><th>Preview</th>";
             return row;
           }
           function tableRow(customRule) {
@@ -5862,7 +5848,7 @@
             let previewElement = document.createElement("td");
             previewElement.classList.add("center");
             previewElement.append(preview);
-            row.append(dataCell(customRule.pattern), dataCell(customRule.filter), dataCell(customRule.display.color), previewElement);
+            row.append(dataCell(customRule.target), dataCell(customRule.pattern), dataCell(customRule.filter), dataCell(customRule.display.color), previewElement);
             return row;
           }
           function dataCell(innerHtml) {
