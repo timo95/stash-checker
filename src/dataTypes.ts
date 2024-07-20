@@ -46,6 +46,7 @@ export interface DisplayOptions {
 }
 
 export interface CustomDisplayRule {
+    target: Target,
     pattern: string,
     filter: string,
     display: DisplayOptions,
