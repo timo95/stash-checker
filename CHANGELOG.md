@@ -1,5 +1,5 @@
 
-## [1.1.0]
+## [WIP]
 
 - Add support for websites: manyvids, warashi-asian-pornstars.fr, hobby.porn, pornhub
 - Add showCheckMark setting
