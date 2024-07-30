@@ -12,6 +12,7 @@ export default {
     license: 'MIT',
     match: [
         "*://adultanime.dbsearch.net/*",
+        "*://www.brazzers.com/*",
         "*://coomer.su/*",
         "*://erommdtube.com/*",
         "*://fansdb.cc/*",
