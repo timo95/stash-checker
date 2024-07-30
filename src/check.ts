@@ -1,6 +1,6 @@
 import {prefixSymbol} from "./tooltip/tooltip";
 import {stashEndpoints} from "./settings/endpoints";
-import {firstText, hasKanji} from "./utils";
+import {firstText, hasKanji, nakedDomain} from "./utils";
 import {CheckOptions, CustomDisplayRule, DataField, DisplayOptions, StashEndpoint, Target, Type} from "./dataTypes";
 import {request} from "./request";
 import {booleanOptions, OptionKey} from "./settings/general";
@@ -19,7 +19,7 @@ const supportedDataFields = new Map<Target, DataField[]>([
     [Target.Performer, [DataField.Id, DataField.Name, DataField.Disambiguation, DataField.Favorite, DataField.AliasList, DataField.Birthdate, DataField.HeightCm, DataField.Tags]],
     [Target.Gallery, [DataField.Id, DataField.Title, DataField.Date, DataField.Tags, DataField.Files]],
     [Target.Movie, [DataField.Id, DataField.Name, DataField.Date]],
-    [Target.Studio,[DataField.Id, DataField.Name, DataField.Aliases]],
+    [Target.Studio, [DataField.Id, DataField.Name, DataField.Aliases]],
     [Target.Tag, [DataField.Id, DataField.Name]],
 ]);
 
@@ -62,6 +62,9 @@ async function queryStash(
     switch (type) {
         case Type.StashId:
             filter = `stash_id_endpoint:{endpoint:"${encodeURIComponent(stashIdEndpoint)}",stash_id:"${encodeURIComponent(queryString)}",modifier:EQUALS}${customFilter}`;
+            break;
+        case Type.Url:
+            filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:INCLUDES}${customFilter}`;
             break;
         default:
             filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
@@ -132,6 +135,7 @@ async function checkElement(
     if (urlSelector) {
         let url = urlSelector(element)
         if (url) {
+            url = nakedDomain(url);
             console.debug(`URL: ${url}`);
             await queryStash(url, (...args) => prefixSymbol(displayElement!, ...args, display), target, Type.Url, customFilter, stashIdEndpoint);
         } else {
