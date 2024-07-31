@@ -121,6 +121,15 @@ export enum Type {
 }
 
 /**
+ * Possible themes
+ */
+export enum Theme {
+    Light = "light",
+    Dark = "dark",
+    Device = "device"
+}
+
+/**
  * A function to select a [Type] query parameter from a given element.
  */
 export type Selector = (e: Element) => null | undefined | string;

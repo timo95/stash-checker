@@ -13,6 +13,7 @@ import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "
 import {booleanOptions, OptionKey, stringOptions} from "../settings/general";
 import {StashQuery, StashQueryClass} from "./stashQuery";
 import tippy, {ReferenceElement} from "tippy.js";
+import {setTheme} from "../style/theme";
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -67,7 +68,7 @@ function formatFileData(file: StashFile, queries: StashQuery[], target: Target, 
     return `<div class='stashChecker file'>${text}</div>`
 }
 
-function formatTagPill(tag: {id: string, name: string}): string {
+function formatTagPill(tag: { id: string, name: string }): string {
     return `<span class='stashChecker tag'>${tag.name}</span>`;
 }
 
@@ -152,7 +153,7 @@ export function prefixSymbol(
     let queryTypes = [type];
     // Specific query for this result
     let baseUrl = endpoint.url.replace(/\/graphql\/?$/, "");
-    let query: StashQuery = { endpoint: endpoint.name, baseUrl, types: queryTypes };
+    let query: StashQuery = {endpoint: endpoint.name, baseUrl, types: queryTypes};
     // Add query, endpoint and display options to each new entry
     data.forEach((entry: StashEntry) => {
         entry.queries = [query]
@@ -197,7 +198,7 @@ export function prefixSymbol(
         }
         symbol.style.color = "red";
         tooltip = `${targetReadable} not in Stash<br>`;
-    } else if(new Set(data.map(e => e.endpoint)).size < data.length) {
+    } else if (new Set(data.map(e => e.endpoint)).size < data.length) {
         symbol.setAttribute("data-symbol", StashSymbol.Warning);
         symbol.innerHTML = `${stringOptions.get(OptionKey.warningMark)!}&nbsp;`;
         symbol.style.color = "orange";
@@ -216,6 +217,8 @@ export function prefixSymbol(
     tooltip += `Queries: ${queryTypes.map(type => typeToString.get(type)).join(", ")}`;
     // List of results
     tooltip += data.map(entry => formatEntryData(entry, target, queryTypes.length)).join("");
+
+    setTheme();
 
     // Set tooltip content on symbol
     let tooltipWindow = document.createElement("div");

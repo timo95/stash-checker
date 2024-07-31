@@ -12,6 +12,7 @@ import {initDisplaySettings} from "./settings/display";
     initStatistics();
     initGeneralSettings();
     initDisplaySettings();
+
     await initEndpointSettings();
     await initMenu();
 

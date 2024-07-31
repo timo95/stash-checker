@@ -1,5 +1,6 @@
 import {buttonDanger, getSettingsSection, newSettingsSection} from "./settings";
 import {getValue, setValue, StorageKey} from "./storage";
+import {Theme} from "../dataTypes";
 
 export enum OptionKey {
     showCheckMark = "showCheckMark",
@@ -9,19 +10,21 @@ export enum OptionKey {
     checkMark = "checkMark",
     crossMark = "crossMark",
     warningMark = "warningMark",
+    theme = "theme",
 }
 
 const defaultBooleanOptions = new Map([
     [OptionKey.showCheckMark, true],
     [OptionKey.showCrossMark, true],
     [OptionKey.showTags, true],
-    [OptionKey.showFiles, true]
+    [OptionKey.showFiles, true],
 ]);
 
 const defaultStringOptions = new Map([
     [OptionKey.checkMark, "✓"],
     [OptionKey.crossMark, "✗"],
-    [OptionKey.warningMark, "!"]
+    [OptionKey.warningMark, "!"],
+    [OptionKey.theme, Theme.Device],
 ]);
 
 export const booleanOptions: Map<OptionKey, boolean> = await getValue(StorageKey.BooleanOptions, defaultBooleanOptions)
@@ -47,6 +50,7 @@ function populateGeneralSection(generalSection: HTMLElement) {
     tooltipSettings.append(
         checkBox(OptionKey.showTags, "Show tags"),
         checkBox(OptionKey.showFiles, "Show files"),
+        selectMenu(OptionKey.theme, "Theme", [Theme.Light, Theme.Dark, Theme.Device]),
     );
     generalSection.appendChild(tooltipSettings);
 
@@ -118,5 +122,39 @@ function charBox(key: OptionKey, label: string): HTMLElement {
 
     div.appendChild(labelElement)
     div.appendChild(inputElement)
+    return div
+}
+
+function selectMenu(key: OptionKey, label: string, options: string[]): HTMLElement {
+    let div = document.createElement("div")
+    div.classList.add("option")
+
+    let labelElement: HTMLLabelElement = document.createElement("label")
+    labelElement.htmlFor = `stashChecker-dropdown-${key}`
+    labelElement.innerHTML = label
+
+    let selectElement = document.createElement("select")
+    selectElement.id = `stashChecker-dropdown-${key}`
+    selectElement.name = key
+
+    // Set the currently selected option based on saved values
+    let currentSelection = stringOptions.get(key) ?? defaultStringOptions.get(key) ?? options[0]
+    options.forEach(option => {
+        let optionElement = document.createElement("option")
+        optionElement.value = option
+        optionElement.innerHTML = option
+        if (option === currentSelection) {
+            optionElement.selected = true
+        }
+        selectElement.appendChild(optionElement)
+    })
+
+    selectElement.addEventListener("change", () => {
+        stringOptions.set(key, selectElement.value)
+        void setValue(StorageKey.StringOptions, stringOptions)
+    });
+
+    div.appendChild(labelElement)
+    div.appendChild(selectElement)
     return div
 }
