@@ -24,6 +24,7 @@
 // @match *://www.adultfilmdatabase.com/*
 // @match *://www.animecharactersdatabase.com/*
 // @match *://www.babepedia.com/*
+// @match *://www.clips4sale.com/*
 // @match *://www.data18.com/*
 // @match *://www.freeones.com/*
 // @match *://www.iafd.com/*

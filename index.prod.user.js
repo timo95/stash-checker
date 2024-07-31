@@ -24,6 +24,7 @@
 // @match *://www.adultfilmdatabase.com/*
 // @match *://www.animecharactersdatabase.com/*
 // @match *://www.babepedia.com/*
+// @match *://www.clips4sale.com/*
 // @match *://www.data18.com/*
 // @match *://www.freeones.com/*
 // @match *://www.iafd.com/*
@@ -6658,6 +6659,31 @@
                 observe: true
               });
               break;
+
+             case "www.clips4sale.com":
+              {
+                let hrefStudio = "[href^='/studio/']";
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "h1[data-testid*='studio-title']", {
+                  urlSelector: currentSite
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, `a[data-testid*='studio-link']${hrefStudio}, a[data-testid*='clip-page-clipCategory']${hrefStudio}`);
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, `a[data-testid*='clip-category-link']${hrefStudio}, a[data-testid*='clip-studio']${hrefStudio}, a[data-testid*='studioAnchor']${hrefStudio}`, {
+                  observe: true
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, `div[data-testid*='categoryTopStores'] a${hrefStudio}`, {
+                  observe: true
+                });
+                if (window.location.pathname.startsWith("/clips/page/studios")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, `a${hrefStudio}`, {
+                  observe: true
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1[data-testid*='clip-page-clipTitle']", {
+                  urlSelector: currentSite
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, `a[data-testid*='clip-link']${hrefStudio}, a[data-testid*='clipCard-titleAnchor']${hrefStudio}`, {
+                  observe: true
+                });
+                break;
+              }
 
              case "www.babepedia.com":
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1#babename", {
