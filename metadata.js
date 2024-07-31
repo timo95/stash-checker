@@ -33,6 +33,7 @@ export default {
         "*://www.adultfilmdatabase.com/*",
         "*://www.animecharactersdatabase.com/*",
         "*://www.babepedia.com/*",
+        "*://www.clips4sale.com/*",
         "*://www.data18.com/*",
         "*://www.freeones.com/*",
         "*://www.iafd.com/*",
