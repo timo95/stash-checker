@@ -366,9 +366,11 @@ export async function runStashChecker() {
         case "www.clips4sale.com": {
             let hrefStudio = "[href^='/studio/']";
             check(Target.Studio, "h1[data-testid*='studio-title']", {urlSelector: currentSite});
-            check(Target.Studio, `a[data-testid*='studio-link']${hrefStudio}, a[data-testid*='clip-page-clipCategory']${hrefStudio}`);
-            check(Target.Studio, `a[data-testid*='clip-category-link']${hrefStudio}, a[data-testid*='clip-studio']${hrefStudio}, a[data-testid*='studioAnchor']${hrefStudio}`, {observe: true});
-            check(Target.Studio, `div[data-testid*='categoryTopStores'] a${hrefStudio}`, {observe: true});
+            check(Target.Studio, `a[data-testid*='studio-link']${hrefStudio}, a[data-testid*='clip-page-clipCategory']${hrefStudio}`, {urlSelector: e => closestUrl(e)?.split("/Cat")?.[0]});
+            check(Target.Studio, `a[data-testid*='clip-category-link']${hrefStudio}, a[data-testid*='clip-studio']${hrefStudio}, a[data-testid*='studioAnchor']${hrefStudio}, div[data-testid*='categoryTopStores'] a${hrefStudio}`, {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.split("/Cat")?.[0]
+            });
             if (window.location.pathname.startsWith("/clips/page/studios")) {
                 check(Target.Studio, `a${hrefStudio}`, {observe: true});
             }
