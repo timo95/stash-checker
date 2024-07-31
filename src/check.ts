@@ -7,6 +7,13 @@ import {booleanOptions, OptionKey} from "./settings/general";
 import {onAddition} from "./observer";
 import {customDisplayRules} from "./settings/display";
 
+// Conditional ESM module loading (Node.js and browser)
+// @ts-ignore: Property 'UrlPattern' does not exist
+/*if (!globalThis.URLPattern) {
+    await import("urlpattern-polyfill");
+}*/ // Short Form not yet supported by native chromium implementation -> always polyfill
+import {URLPattern} from "urlpattern-polyfill";
+
 const supportedDataFields = new Map<Target, DataField[]>([
     [Target.Scene, [DataField.Id, DataField.Title, DataField.Organized, DataField.Studio, DataField.Code, DataField.Date, DataField.Tags, DataField.Files]],
     [Target.Performer, [DataField.Id, DataField.Name, DataField.Disambiguation, DataField.Favorite, DataField.AliasList, DataField.Birthdate, DataField.HeightCm, DataField.Tags]],
@@ -93,7 +100,7 @@ async function queryStash(
 
     // Get config values or wait for popup if it is not stored
     stashEndpoints.forEach((endpoint: StashEndpoint) => {
-        request(endpoint, query, false)  // TODO
+        request(endpoint, query, true)
             .then((data: any) => onload(target, type, endpoint, access(data)));
     });
 }
@@ -176,7 +183,8 @@ async function checkElement(
 }
 
 function getCustomRules(target: Target): CustomDisplayRule[] {
-    return customDisplayRules.get(target) ?? []
+    let targetRules = customDisplayRules.filter(rule => rule.target === target)
+    return targetRules.filter(rule => new URLPattern(rule.pattern, self.location.href).test(window.location.href))
 }
 
 /**
@@ -209,13 +217,18 @@ function checkWithCustomRules(
     // filter for each rule
     for (let i = 0; i < customRules.length; i++) {
         let rule = customRules[i]
-        let notFilters = customRules.slice(0, i).map(rule => rule.filter)
-        void checkElement(target, element, combineFilters([rule.filter], notFilters), rule.display, checkConfig)
+        let notFilters = customRules.slice(0, i).map(rule => rule.filter).map(emptyToTrue)
+        let andFilters = [rule.filter].map(emptyToTrue)
+        void checkElement(target, element, combineFilters(andFilters, notFilters), rule.display, checkConfig)
     }
     // default excluding all rules
-    let notFilters = customRules.map(rule => rule.filter)
+    let notFilters = customRules.map(rule => rule.filter).map(emptyToTrue)
     console.log("default")
     void checkElement(target, element, combineFilters([], notFilters), {color: "green"}, checkConfig)
+}
+
+function emptyToTrue(s: string): string {
+    return s.length > 0 ? s : "id:{value:-1,modifier:GREATER_THAN}"
 }
 
 /**

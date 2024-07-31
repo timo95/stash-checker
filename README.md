@@ -9,7 +9,7 @@ Hovering over the checkmark gives you a tooltip with information about the item 
 ## Features
 
 - A tooltip for matched entries including basic metadata and a link to the entry
-- Supported websites: StashDB, TPDB, IAFD, JabLibrary and many more (see `@match` section in the userscript; go [here](https://github.com/timo95/stash-checker/issues/5) to request more)
+- Supported websites: StashDB, TPDB, IAFD, JavLibrary and many more (see `@match` section in the userscript; go [here](https://github.com/timo95/stash-checker/issues/5) to request more)
 - Many different types of entries: Scene, Performer, Movie, Gallery, Studio and Tag (not yet supported by Stash)
 - Match entries by: StashId, URL, Studio Code, Name and Title
 - Multiple Stash endpoints
