@@ -1,6 +1,6 @@
 import {check} from "./check";
 import {CheckOptions, Target} from "./dataTypes";
-import {allText, firstText, hasKana, hasKanji, capitalized} from "./utils";
+import {allText, capitalized, firstText, hasKana, hasKanji} from "./utils";
 import {isSiteBlocked} from "./settings/menu";
 
 export async function runStashChecker() {
@@ -350,6 +350,19 @@ export async function runStashChecker() {
             check(Target.Scene, "[class*='pcVideoListItem'] span.title a[href*='/view_video.php?viewkey=']", { observe: true })
             break;
         }
+        case "www.clips4sale.com": {
+            let hrefStudio = "[href^='/studio/']";
+            check(Target.Studio, "h1[data-testid*='studio-title']", {urlSelector: currentSite});
+            check(Target.Studio, `a[data-testid*='studio-link']${hrefStudio}, a[data-testid*='clip-page-clipCategory']${hrefStudio}`);
+            check(Target.Studio, `a[data-testid*='clip-category-link']${hrefStudio}, a[data-testid*='clip-studio']${hrefStudio}, a[data-testid*='studioAnchor']${hrefStudio}`, {observe: true});
+            check(Target.Studio, `div[data-testid*='categoryTopStores'] a${hrefStudio}`, {observe: true});
+            if (window.location.pathname.startsWith("/clips/page/studios")) {
+                check(Target.Studio, `a${hrefStudio}`, {observe: true});
+            }
+            check(Target.Scene, "h1[data-testid*='clip-page-clipTitle']", {urlSelector: currentSite});
+            check(Target.Scene, `a[data-testid*='clip-link']${hrefStudio}, a[data-testid*='clipCard-titleAnchor']${hrefStudio}`, {observe: true});
+            break;
+        }
         case "www.babepedia.com": {
             check(Target.Performer, "h1#babename", {urlSelector: currentSite});
             check(Target.Performer, "a[href*='/babe/']", {observe: true});
@@ -417,6 +430,7 @@ export async function runStashChecker() {
                 titleSelector: null,
                 nameSelector: null
             }
+
             // noinspection Annotator
             function findId(string?: string): undefined | string {
                 return string?.match(/\p{Hex}{8}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{4}-\p{Hex}{12}/u)?.[0]
