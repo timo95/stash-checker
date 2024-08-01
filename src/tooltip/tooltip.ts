@@ -9,13 +9,13 @@ import {
     Target,
     Type
 } from "../dataTypes";
-import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "../utils";
+import {bytesToReadable, firstTextChild, isBetween, percentToDecimal, secondsToReadable, typeToString} from "../utils";
 import {booleanOptions, OptionKey, stringOptions} from "../settings/general";
 import {StashQuery, StashQueryClass} from "./stashQuery";
 import tippy, {ReferenceElement} from "tippy.js";
 
 /**
- * find existing symbol span recursively, undefined if none available
+ * Find existing symbol span recursively, undefined if none available
  */
 function getExistingSymbol(element: Element): HTMLSpanElement | undefined {
     if (element.getAttribute("data-type") === "stash-symbol") {
@@ -27,6 +27,51 @@ function getExistingSymbol(element: Element): HTMLSpanElement | undefined {
             .map(getExistingSymbol)
             .find(n => n);  // first truthy
     }
+}
+
+/**
+ * Find the closest image of the element at siblings or parents
+ */
+function getClosestImageElement(element: Element): HTMLImageElement | undefined {
+    let currentElement: Element | null = element;
+
+    function checkSiblings(element: Element): HTMLImageElement | undefined {
+        let sibling: Element | null = element.previousElementSibling as Element | null;
+
+        while (sibling) {
+            const img = sibling.querySelector('img');
+            if (img) {
+                return img as HTMLImageElement;
+            }
+            sibling = sibling.previousElementSibling as Element | null;
+        }
+
+        sibling = element.nextElementSibling as Element | null;
+        while (sibling) {
+            const img = sibling.querySelector('img');
+            if (img) {
+                return img as HTMLImageElement;
+            }
+            sibling = sibling.nextElementSibling as Element | null;
+        }
+
+        return undefined;
+    }
+
+    while (currentElement) {
+        const imgInCurrent = currentElement.querySelector('img');
+        if (imgInCurrent) {
+            return imgInCurrent as HTMLImageElement;
+        }
+
+        const imgInSiblings = checkSiblings(currentElement);
+        if (imgInSiblings) {
+            return imgInSiblings as HTMLImageElement;
+        }
+
+        currentElement = currentElement.parentElement;
+    }
+    return undefined;
 }
 
 export function clearSymbols() {
@@ -137,7 +182,7 @@ function stashSymbol(): HTMLSpanElement {
 
 /**
  * Prepends depending on the data the checkmark or cross to the selected element.
- * Also populates tooltip window.
+ * Also populates tooltip window and sets the opacity of the cover based on user settings.
  */
 export function prefixSymbol(
     element: Element,
@@ -223,4 +268,27 @@ export function prefixSymbol(
     tooltipWindow.innerHTML = tooltip;
     tooltipWindow.tabIndex = 0;
     (symbol as ReferenceElement)._tippy?.setContent(tooltipWindow);
+
+    // Set opacity of scene cover
+    if ((target === Target.Scene)) {
+
+        let opacityCheckMarkValue = parseInt(stringOptions.get(OptionKey.opacityCheckMark) ?? '-1');
+        let opacityCrossMarkValue = parseInt(stringOptions.get(OptionKey.opacityCrossMark) ?? '-1');
+
+        let symbolDataSymbol = symbol.getAttribute("data-symbol");
+
+        if (symbolDataSymbol === StashSymbol.Check && isBetween(opacityCheckMarkValue, 1, 99)) {
+            let img = getClosestImageElement(element);
+            if (img) {
+                img.style.opacity = percentToDecimal(opacityCheckMarkValue, 1).toFixed(1);
+            }
+        }
+
+        if (symbolDataSymbol === StashSymbol.Cross && isBetween(opacityCrossMarkValue, 1, 99)) {
+            let img = getClosestImageElement(element);
+            if (img) {
+                img.style.opacity = percentToDecimal(opacityCrossMarkValue, 1).toFixed(1);
+            }
+        }
+    }
 }

@@ -96,6 +96,20 @@ export function titleCase(text: string): string {
     return text.split(" ").map(n => capitalized(n)).join(" ");
 }
 
+export function isBetween(value: number | undefined | null, min: number, max: number): boolean {
+    if (value === undefined || value === null) {
+        return false;
+    }
+    return value >= min && value <= max;
+}
+
+export function percentToDecimal(percent: number | undefined | null, defaultValue: number): number {
+    if (percent == null || isNaN(percent)) {
+        return defaultValue;
+    }
+    return percent / 100;
+}
+
 export function nakedDomain(url: string): string {
     const regex = /^(https?:\/\/)?(www\.)?/i;
     return url.replace(regex, '');
