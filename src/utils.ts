@@ -41,7 +41,7 @@ export function firstText(node?: Node | undefined | null): string | undefined {
 }
 
 export function allText(node?: Node | undefined | null): string[] {
-    let words: any[] =  node ? Array.from(node.childNodes)
+    let words: any[] = node ? Array.from(node.childNodes)
         .flatMap(n => n.nodeType == Node.TEXT_NODE ? [n.textContent] : allText(n))
         .filter((s: string | null) => s) : []
     return words;
@@ -94,6 +94,20 @@ export function capitalized(word: string): string {
 
 export function titleCase(text: string): string {
     return text.split(" ").map(n => capitalized(n)).join(" ");
+}
+
+export function isBetween(value: number | undefined | null, min: number, max: number): boolean {
+    if (value === undefined || value === null) {
+        return false;
+    }
+    return value >= min && value <= max;
+}
+
+export function percentToDecimal(percent: number | undefined | null, defaultValue: number): number {
+    if (percent == null || isNaN(percent)) {
+        return defaultValue;
+    }
+    return percent / 100;
 }
 
 export function interleave<T extends Node>(array: T[], between: T): T[] {

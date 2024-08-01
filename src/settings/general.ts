@@ -9,6 +9,8 @@ export enum OptionKey {
     checkMark = "checkMark",
     crossMark = "crossMark",
     warningMark = "warningMark",
+    opacityCheckMark = "opacityCheckMark",
+    opacityCrossMark = "opacityCrossMark",
 }
 
 const defaultBooleanOptions = new Map([
@@ -21,14 +23,18 @@ const defaultBooleanOptions = new Map([
 const defaultStringOptions = new Map([
     [OptionKey.checkMark, "✓"],
     [OptionKey.crossMark, "✗"],
-    [OptionKey.warningMark, "!"]
+    [OptionKey.warningMark, "!"],
+    [OptionKey.opacityCheckMark, "100"],
+    [OptionKey.opacityCrossMark, "100"],
 ]);
 
 export const booleanOptions: Map<OptionKey, boolean> = await getValue(StorageKey.BooleanOptions, defaultBooleanOptions)
 export const stringOptions: Map<OptionKey, string> = await getValue(StorageKey.StringOptions, defaultStringOptions)
 
 export function initGeneralSettings() {
-    let generalSection = newSettingsSection("general", "General")
+    let description = "Scene cover opacity can change the visual effect of the scene covers. You can darken both the found and the missing elements. " +
+        "If the value is 100%, no changes are made."
+    let generalSection = newSettingsSection("general", "General", description);
     populateGeneralSection(generalSection)
 }
 
