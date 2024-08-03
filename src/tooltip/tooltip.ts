@@ -268,6 +268,7 @@ export function prefixSymbol(
     tooltipWindow.innerHTML = tooltip;
     tooltipWindow.tabIndex = 0;
     (symbol as ReferenceElement)._tippy?.setContent(tooltipWindow);
+}
 
     // Set opacity of scene cover if functionality is enabled
     if ((target === Target.Scene) && (booleanOptions.get(OptionKey.opacityScenes) ?? false)) {
