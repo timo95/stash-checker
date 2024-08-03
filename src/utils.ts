@@ -110,6 +110,18 @@ export function percentToDecimal(percent: number | undefined | null, defaultValu
     return percent / 100;
 }
 
+export function range(first: number, last: number, step: number): number[] {
+    const rangeArray: number[] = [];
+    for (let i = first; i <= last; i += step) {
+        rangeArray.push(i);
+    }
+    return rangeArray;
+}
+
+export function rangeStr(first: number, last: number, step: number): string[] {
+    return range(first, last, step).map(number => number.toString());
+}
+
 export function nakedDomain(url: string): string {
     const regex = /^(https?:\/\/)?(www\.)?/i;
     return url.replace(regex, '');

@@ -182,7 +182,7 @@ function stashSymbol(): HTMLSpanElement {
 
 /**
  * Prepends depending on the data the checkmark or cross to the selected element.
- * Also populates tooltip window and sets the opacity of the cover based on user settings.
+ * Also populates tooltip window and sets the opacity of the scene covers based on user settings (optional).
  */
 export function prefixSymbol(
     element: Element,
@@ -269,8 +269,8 @@ export function prefixSymbol(
     tooltipWindow.tabIndex = 0;
     (symbol as ReferenceElement)._tippy?.setContent(tooltipWindow);
 
-    // Set opacity of scene cover
-    if ((target === Target.Scene)) {
+    // Set opacity of scene cover if functionality is enabled
+    if ((target === Target.Scene) && (booleanOptions.get(OptionKey.opacityScenes) ?? false)) {
 
         let opacityCheckMarkValue = parseInt(stringOptions.get(OptionKey.opacityCheckMark) ?? '-1');
         let opacityCrossMarkValue = parseInt(stringOptions.get(OptionKey.opacityCrossMark) ?? '-1');

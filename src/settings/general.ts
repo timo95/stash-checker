@@ -1,6 +1,7 @@
 import {buttonDanger, getSettingsSection, newSettingsSection} from "./settings";
 import {getValue, setValue, StorageKey} from "./storage";
-import {Theme} from "../dataTypes";
+import {getAllThemes, Theme} from "../dataTypes";
+import {rangeStr} from "../utils";
 
 export enum OptionKey {
     showCheckMark = "showCheckMark",
@@ -11,6 +12,7 @@ export enum OptionKey {
     crossMark = "crossMark",
     warningMark = "warningMark",
     theme = "theme",
+    opacityScenes = "opacityScenes",
     opacityCheckMark = "opacityCheckMark",
     opacityCrossMark = "opacityCrossMark",
 }
@@ -20,6 +22,7 @@ const defaultBooleanOptions = new Map([
     [OptionKey.showCrossMark, true],
     [OptionKey.showTags, true],
     [OptionKey.showFiles, true],
+    [OptionKey.opacityScenes, false]
 ]);
 
 const defaultStringOptions = new Map([
@@ -56,9 +59,17 @@ function populateGeneralSection(generalSection: HTMLElement) {
     tooltipSettings.append(
         checkBox(OptionKey.showTags, "Show tags"),
         checkBox(OptionKey.showFiles, "Show files"),
-        selectMenu(OptionKey.theme, "Theme", [Theme.Light, Theme.Dark, Theme.Device]),
+        selectMenu(OptionKey.theme, "Theme", getAllThemes()),
     );
     generalSection.appendChild(tooltipSettings);
+
+    let sceneSettings = fieldSet("scene-settings", "Scene");
+    sceneSettings.append(
+        checkBox(OptionKey.opacityScenes, "Modify cover opacity"),
+        selectMenu(OptionKey.opacityCheckMark, "Check mark", rangeStr(0, 100, 10), '%'),
+        selectMenu(OptionKey.opacityCrossMark, "Cross mark", rangeStr(0, 100, 10), '%'),
+    );
+    generalSection.appendChild(sceneSettings);
 
     let defaultButton = fieldSet("default-button", "Default Settings");
     let div = document.createElement("div")
@@ -131,7 +142,7 @@ function charBox(key: OptionKey, label: string): HTMLElement {
     return div
 }
 
-function selectMenu(key: OptionKey, label: string, options: string[]): HTMLElement {
+function selectMenu(key: OptionKey, label: string, options: string[], unit?: string): HTMLElement {
     let div = document.createElement("div")
     div.classList.add("option")
 
@@ -148,7 +159,7 @@ function selectMenu(key: OptionKey, label: string, options: string[]): HTMLEleme
     options.forEach(option => {
         let optionElement = document.createElement("option")
         optionElement.value = option
-        optionElement.innerHTML = option
+        optionElement.innerHTML = option.concat(unit ?? '');
         if (option === currentSelection) {
             optionElement.selected = true
         }
