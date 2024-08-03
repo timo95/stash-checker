@@ -5377,6 +5377,10 @@
               filter = `stash_id_endpoint:{endpoint:"${encodeURIComponent(stashIdEndpoint)}",stash_id:"${encodeURIComponent(queryString)}",modifier:EQUALS}${customFilter}`;
               break;
 
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Url:
+              filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:INCLUDES}${customFilter}`;
+              break;
+
              default:
               filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
               break;
@@ -5425,6 +5429,7 @@
             if (urlSelector) {
               let url = urlSelector(element);
               if (url) {
+                url = (0, _utils__WEBPACK_IMPORTED_MODULE_2__.Si)(url);
                 void 0;
                 await queryStash(url, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, display)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Url, customFilter, stashIdEndpoint);
               } else console.info(`No URL for ${target} found.`);
@@ -7080,6 +7085,7 @@
     185: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
         $R: () => bytesToReadable,
+        Si: () => nakedDomain,
         Yz: () => firstTextChild,
         _t: () => hasKanji,
         bM: () => entryLink,
@@ -7145,6 +7151,10 @@
       }
       function titleCase(text) {
         return text.split(" ").map((n => capitalized(n))).join(" ");
+      }
+      function nakedDomain(url) {
+        const regex = /^(https?:\/\/)?(www\.)?/i;
+        return url.replace(regex, "");
       }
       function interleave(array, between) {
         return array.flatMap((element => [ element, between.cloneNode(true) ])).slice(0, -1);
