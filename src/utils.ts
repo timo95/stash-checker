@@ -41,7 +41,7 @@ export function firstText(node?: Node | undefined | null): string | undefined {
 }
 
 export function allText(node?: Node | undefined | null): string[] {
-    let words: any[] =  node ? Array.from(node.childNodes)
+    let words: any[] = node ? Array.from(node.childNodes)
         .flatMap(n => n.nodeType == Node.TEXT_NODE ? [n.textContent] : allText(n))
         .filter((s: string | null) => s) : []
     return words;
@@ -94,6 +94,11 @@ export function capitalized(word: string): string {
 
 export function titleCase(text: string): string {
     return text.split(" ").map(n => capitalized(n)).join(" ");
+}
+
+export function nakedDomain(url: string): string {
+    const regex = /^(https?:\/\/)?(www\.)?/i;
+    return url.replace(regex, '');
 }
 
 export function interleave<T extends Node>(array: T[], between: T): T[] {
