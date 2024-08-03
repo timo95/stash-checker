@@ -1,6 +1,7 @@
 import {buttonDanger, getSettingsSection, newSettingsSection} from "./settings";
 import {getValue, setValue, StorageKey} from "./storage";
-import {Theme} from "../dataTypes";
+import {getAllThemes, Theme} from "../dataTypes";
+import {rangeStr} from "../utils";
 
 export enum OptionKey {
     showCheckMark = "showCheckMark",
@@ -11,6 +12,9 @@ export enum OptionKey {
     crossMark = "crossMark",
     warningMark = "warningMark",
     theme = "theme",
+    opacityScenes = "opacityScenes",
+    opacityCheckMark = "opacityCheckMark",
+    opacityCrossMark = "opacityCrossMark",
 }
 
 const defaultBooleanOptions = new Map([
@@ -18,6 +22,7 @@ const defaultBooleanOptions = new Map([
     [OptionKey.showCrossMark, true],
     [OptionKey.showTags, true],
     [OptionKey.showFiles, true],
+    [OptionKey.opacityScenes, false]
 ]);
 
 const defaultStringOptions = new Map([
@@ -25,13 +30,17 @@ const defaultStringOptions = new Map([
     [OptionKey.crossMark, "✗"],
     [OptionKey.warningMark, "!"],
     [OptionKey.theme, Theme.Device],
+    [OptionKey.opacityCheckMark, "100"],
+    [OptionKey.opacityCrossMark, "100"],
 ]);
 
 export const booleanOptions: Map<OptionKey, boolean> = await getValue(StorageKey.BooleanOptions, defaultBooleanOptions)
 export const stringOptions: Map<OptionKey, string> = await getValue(StorageKey.StringOptions, defaultStringOptions)
 
 export function initGeneralSettings() {
-    let generalSection = newSettingsSection("general", "General")
+    let description = "Scene cover opacity can change the visual effect of the scene covers. You can darken both the found and the missing elements. " +
+        "If the value is 100%, no changes are made."
+    let generalSection = newSettingsSection("general", "General", description);
     populateGeneralSection(generalSection)
 }
 
@@ -50,9 +59,17 @@ function populateGeneralSection(generalSection: HTMLElement) {
     tooltipSettings.append(
         checkBox(OptionKey.showTags, "Show tags"),
         checkBox(OptionKey.showFiles, "Show files"),
-        selectMenu(OptionKey.theme, "Theme", [Theme.Light, Theme.Dark, Theme.Device]),
+        selectMenu(OptionKey.theme, "Theme", getAllThemes()),
     );
     generalSection.appendChild(tooltipSettings);
+
+    let sceneSettings = fieldSet("scene-settings", "Scene");
+    sceneSettings.append(
+        checkBox(OptionKey.opacityScenes, "Modify cover opacity"),
+        selectMenu(OptionKey.opacityCheckMark, "Check mark", rangeStr(0, 100, 10), '%'),
+        selectMenu(OptionKey.opacityCrossMark, "Cross mark", rangeStr(0, 100, 10), '%'),
+    );
+    generalSection.appendChild(sceneSettings);
 
     let defaultButton = fieldSet("default-button", "Default Settings");
     let div = document.createElement("div")
@@ -125,7 +142,7 @@ function charBox(key: OptionKey, label: string): HTMLElement {
     return div
 }
 
-function selectMenu(key: OptionKey, label: string, options: string[]): HTMLElement {
+function selectMenu(key: OptionKey, label: string, options: string[], unit?: string): HTMLElement {
     let div = document.createElement("div")
     div.classList.add("option")
 
@@ -142,7 +159,7 @@ function selectMenu(key: OptionKey, label: string, options: string[]): HTMLEleme
     options.forEach(option => {
         let optionElement = document.createElement("option")
         optionElement.value = option
-        optionElement.innerHTML = option
+        optionElement.innerHTML = option.concat(unit ?? '');
         if (option === currentSelection) {
             optionElement.selected = true
         }
