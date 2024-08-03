@@ -4,6 +4,7 @@
 // @version 1.1.0
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
+// @match *://www.brazzers.com/*
 // @match *://coomer.su/*
 // @match *://erommdtube.com/*
 // @match *://fansdb.cc/*
@@ -6653,6 +6654,23 @@
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href^='/video/']", {
                 observe: true,
                 titleSelector: e => e.getAttribute("title")?.trim() ?? (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)
+              });
+              break;
+
+             case "www.brazzers.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h2[class='sc-1b6bgon-3 iTXrhy font-secondary']", {
+                observe: true,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href*='/video/'", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h2[class='sc-ebvhsz-1 fLnSSs font-secondary']", {
+                observe: true,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/pornstar/'", {
+                observe: true
               });
               break;
 
