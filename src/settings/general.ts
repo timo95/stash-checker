@@ -66,8 +66,8 @@ function populateGeneralSection(generalSection: HTMLElement) {
     let sceneSettings = fieldSet("scene-settings", "Scene");
     sceneSettings.append(
         checkBox(OptionKey.opacityScenes, "Modify cover opacity"),
-        selectMenu(OptionKey.opacityCheckMark, "Check mark", rangeStr(0, 100, 10), '%'),
-        selectMenu(OptionKey.opacityCrossMark, "Cross mark", rangeStr(0, 100, 10), '%'),
+        selectMenu(OptionKey.opacityCheckMark, "Check mark", rangeStr(10, 100, 10), '%'),
+        selectMenu(OptionKey.opacityCrossMark, "Cross mark", rangeStr(10, 100, 10), '%'),
     );
     generalSection.appendChild(sceneSettings);
 
