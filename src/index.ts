@@ -6,12 +6,16 @@ import {initGeneralSettings} from "./settings/general";
 import {runStashChecker} from "./stashChecker";
 import {initStatistics} from "./settings/statistics";
 import {initDisplaySettings} from "./settings/display";
+import {setTheme} from "./style/theme";
 
 (async function () {
     initSettingsWindow();
     initStatistics();
     initGeneralSettings();
     initDisplaySettings();
+
+    setTheme();
+
     await initEndpointSettings();
     await initMenu();
 
