@@ -6,7 +6,7 @@ export function setTheme() {
     const osSetting = window.matchMedia("(prefers-color-scheme: dark)");
 
     function toggleDarkMode(state: boolean | undefined) {
-        document.documentElement.classList.toggle("dark-mode", state);
+        document.documentElement.classList.toggle("stashChecker-dark-mode", state);
     }
 
     switch (stringOptions.get(OptionKey.theme)) {
@@ -22,5 +22,3 @@ export function setTheme() {
             break;
     }
 }
-
-window.addEventListener("DOMContentLoaded", setTheme);

@@ -13,7 +13,6 @@ import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "
 import {booleanOptions, OptionKey, stringOptions} from "../settings/general";
 import {StashQuery, StashQueryClass} from "./stashQuery";
 import tippy, {ReferenceElement} from "tippy.js";
-import {setTheme} from "../style/theme";
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -217,8 +216,6 @@ export function prefixSymbol(
     tooltip += `Queries: ${queryTypes.map(type => typeToString.get(type)).join(", ")}`;
     // List of results
     tooltip += data.map(entry => formatEntryData(entry, target, queryTypes.length)).join("");
-
-    setTheme();
 
     // Set tooltip content on symbol
     let tooltipWindow = document.createElement("div");
