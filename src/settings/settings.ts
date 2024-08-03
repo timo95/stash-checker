@@ -2,6 +2,7 @@ import {clearObservers} from "../observer";
 import {clearSymbols} from "../tooltip/tooltip";
 import {runStashChecker} from "../stashChecker";
 import {updateStatistics} from "./statistics";
+import {setTheme} from "../style/theme";
 
 export function initSettingsWindow() {
     let settingsModal = document.createElement("div");
@@ -64,6 +65,7 @@ function closeSettingsWindow(this: HTMLElement, event: MouseEvent) {
         this.style.display = "none";
         clearObservers()
         clearSymbols()
+        setTheme()
         void runStashChecker()
     }
 }
