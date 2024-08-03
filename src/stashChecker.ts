@@ -324,6 +324,19 @@ export async function runStashChecker() {
             });
             break;
         }
+        case "www.brazzers.com": {
+            check(Target.Scene, "h2[class='sc-1b6bgon-3 iTXrhy font-secondary']", {
+                observe: true,
+                urlSelector: currentSite
+            });
+            check(Target.Scene, "a[href*='/video/'", {observe: true});
+            check(Target.Performer, "h2[class='sc-ebvhsz-1 fLnSSs font-secondary']", {
+                observe: true,
+                urlSelector: currentSite
+            });
+            check(Target.Performer, "a[href*='/pornstar/'", {observe: true});
+            break;
+        }
         case "hobby.porn": {
             check(Target.Performer, "a[href*='/model/']:not([href*='modelInfo'])", {
                 urlSelector: e => closestUrl(e)?.match(/\/model\/[^\/]+\/\d+$/)?.[0],
