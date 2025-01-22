@@ -22,6 +22,7 @@ export default {
         "*://javdb.com/*",
         "*://kemono.su/*",
         "*://onlyfans.com/*",
+        "*://fansly.com/*",
         "*://oreno3d.com/*",
         "*://pmvhaven.com/*",
         "*://pmvstash.org/*",
