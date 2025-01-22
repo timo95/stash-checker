@@ -3,7 +3,7 @@ import meta from "./package.json" with { type: "json" };
 export default {
     name: "Stash Checker",
     description: meta.description,
-    icon: "https://docs.stashapp.cc/favicon.ico",
+    icon: "https://docs.stashapp.cc/assets/images/favicon.ico",
     version: meta.version,
     author: meta.author.name,
     source: meta.repository.url,
@@ -22,6 +22,7 @@ export default {
         "*://javdb.com/*",
         "*://kemono.su/*",
         "*://onlyfans.com/*",
+        "*://fansly.com/*",
         "*://oreno3d.com/*",
         "*://pmvhaven.com/*",
         "*://pmvstash.org/*",

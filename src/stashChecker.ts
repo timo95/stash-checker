@@ -399,6 +399,13 @@ export async function runStashChecker() {
             check(Target.Performer, "a.b-username > div.g-user-name", {observe: true});
             break;
         }
+        case "fansly.com": {
+            check(Target.Performer, "a.username-wrapper > div > span.display-name", {observe: true, urlSelector: currentSite});
+            check(Target.Performer, "a.username-wrapper > div > span.user-name", {
+                urlSelector: _ => currentSite().replace("/^@/", "")
+        });
+            break;
+        }
         case "www.pornteengirl.com": {
             check(Target.Performer, "a[href*='/model/']", {
                 nameSelector: e => firstText(e)?.replace(/\([^()]*\)$/, "")?.trimEnd()
