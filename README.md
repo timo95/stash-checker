@@ -22,6 +22,8 @@ You need a browser plugin like [Tampermonkey](https://www.tampermonkey.net/) or 
 The newest release of Stash Checker can be found in the release section to the right.
 Opening `index.prod.user.js` under `Assets` should prompt Tampermonkey to install the script.
 
+Chrome users may have to activate developer mode to run userscripts (see [Tampermonkey FAQ](https://www.tampermonkey.net/faq.php#Q209))
+
 ## Settings
 
 Settings can be opened on any supported website using the Tampermonkey dropdown menu.
