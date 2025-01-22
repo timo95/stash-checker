@@ -14,6 +14,7 @@
 // @match *://javdb.com/*
 // @match *://kemono.su/*
 // @match *://onlyfans.com/*
+// @match *://fansly.com/*
 // @match *://oreno3d.com/*
 // @match *://pmvhaven.com/*
 // @match *://pmvstash.org/*
@@ -48,7 +49,7 @@
 // @grant GM.deleteValue
 // @grant GM.listValues
 // @grant GM.registerMenuCommand
-// @icon https://docs.stashapp.cc/favicon.ico
+// @icon https://docs.stashapp.cc/assets/images/favicon.ico
 // @license MIT
 // @run-at document-end
 // @source https://github.com/timo95/stash-checker
@@ -6775,6 +6776,16 @@
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a.b-username > div.g-user-name", {
                 observe: true
+              });
+              break;
+
+             case "fansly.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a.username-wrapper > div > span.display-name", {
+                observe: true,
+                urlSelector: currentSite
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a.username-wrapper > div > span.user-name", {
+                urlSelector: _ => currentSite().replace("/^@/", "")
               });
               break;
 

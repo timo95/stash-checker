@@ -14,6 +14,7 @@
 // @match *://javdb.com/*
 // @match *://kemono.su/*
 // @match *://onlyfans.com/*
+// @match *://fansly.com/*
 // @match *://oreno3d.com/*
 // @match *://pmvhaven.com/*
 // @match *://pmvstash.org/*
@@ -48,7 +49,7 @@
 // @grant GM.deleteValue
 // @grant GM.listValues
 // @grant GM.registerMenuCommand
-// @icon https://docs.stashapp.cc/favicon.ico
+// @icon https://docs.stashapp.cc/assets/images/favicon.ico
 // @license MIT
 // @run-at document-end
 // @source https://github.com/timo95/stash-checker
