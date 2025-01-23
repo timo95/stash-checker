@@ -442,6 +442,7 @@ export async function runStashChecker() {
         }
         case "fansdb.cc":
         case "fansdb.xyz":
+        case "javstash.org":
         case "pmvstash.org":
         case "stashdb.org": {
             // These buttons are only visible with edit permissions.
