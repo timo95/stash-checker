@@ -30,7 +30,7 @@ function getExistingSymbol(element: Element): HTMLSpanElement | undefined {
 }
 
 export function clearSymbols() {
-    document.querySelectorAll(".stashCheckerSymbol")
+    document.querySelectorAll(":not(.stashCheckerPreview).stashCheckerSymbol")
         .forEach(symbol => symbol.remove())
 }
 

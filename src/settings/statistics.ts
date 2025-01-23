@@ -25,7 +25,7 @@ function statistics(target: Target): string | null {
 }
 
 function symbolCount(target: Target | undefined = undefined, symbol: StashSymbol[] | undefined = undefined): number {
-    let symbols = Array.from(document.querySelectorAll(".stashCheckerSymbol"))
+    let symbols = Array.from(document.querySelectorAll(":not(.stashCheckerPreview).stashCheckerSymbol"))
     if (target) {
         symbols = symbols.filter(element => element.getAttribute("data-target") == target);
     }
