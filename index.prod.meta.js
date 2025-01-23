@@ -9,12 +9,13 @@
 // @match *://erommdtube.com/*
 // @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
+// @match *://fansly.com/*
 // @match *://gayeroticvideoindex.com/*
 // @match *://hobby.porn/*
 // @match *://javdb.com/*
+// @match *://javstash.org/*
 // @match *://kemono.su/*
 // @match *://onlyfans.com/*
-// @match *://fansly.com/*
 // @match *://oreno3d.com/*
 // @match *://pmvhaven.com/*
 // @match *://pmvstash.org/*
