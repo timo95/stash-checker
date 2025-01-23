@@ -18,7 +18,7 @@ export function initDisplaySettings() {
         "GraphQL filters may not contain AND/OR/NOT. " +
         "Multiple filters can still be concatenated by ','. " +
         "Leave the filter empty to always apply."
-    let displaySection = newSettingsSection("display", "Display", description);
+    let displaySection = newSettingsSection("display", "Custom Display Rules", description);
     populateDisplaySection(displaySection);
 }
 
@@ -33,9 +33,6 @@ function populateDisplaySection(displaySection: HTMLElement) {
     let tableBody = document.createElement("tbody");
     tableBody.id = "stashChecker-displayRules"
     table.append(tableBody);
-    let tableHeading = document.createElement("h2");
-    tableHeading.innerHTML = "Custom Display Rules";
-    displaySection.append(tableHeading);
     displaySection.append(table);
     displaySection.append(document.createElement("br"));
     displaySection.append(buttonPrimary("Add Rule", addRuleListener));
