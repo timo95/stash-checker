@@ -5826,7 +5826,7 @@
           const customDisplayRules = await (0, _storage__WEBPACK_IMPORTED_MODULE_2__._W)(_storage__WEBPACK_IMPORTED_MODULE_2__.Zg.CustomDisplayRules, []);
           function initDisplaySettings() {
             let description = "Custom display rules can change the display of check marks. " + "A rule applies when the URL pattern matches the current website and the GraphQL filter matches the element. " + "Rules higher in the list have higher priority. " + "The order can be changed by dragging. " + "If no rule applies, the default display options are used. " + "GraphQL filters may not contain AND/OR/NOT. " + "Multiple filters can still be concatenated by ','. " + "Leave the filter empty to always apply.";
-            let displaySection = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.Lc)("display", "Display", description);
+            let displaySection = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.Lc)("display", "Custom Display Rules", description);
             populateDisplaySection(displaySection);
           }
           function populateDisplaySection(displaySection) {
@@ -5837,9 +5837,6 @@
             let tableBody = document.createElement("tbody");
             tableBody.id = "stashChecker-displayRules";
             table.append(tableBody);
-            let tableHeading = document.createElement("h2");
-            tableHeading.innerHTML = "Custom Display Rules";
-            displaySection.append(tableHeading);
             displaySection.append(table);
             displaySection.append(document.createElement("br"));
             displaySection.append((0, _settings__WEBPACK_IMPORTED_MODULE_0__.jr)("Add Rule", addRuleListener));
