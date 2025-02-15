@@ -104,8 +104,10 @@ export function readable(target: Target): string {
 
 export function readablePlural(target: Target): string {
     switch (target) {
-        case Target.Gallery: return "Galleries";
-        default: return readable(target) + "s";
+        case Target.Gallery:
+            return "Galleries";
+        default:
+            return readable(target) + "s";
     }
 }
 
@@ -124,9 +126,13 @@ export enum Type {
  * Possible themes
  */
 export enum Theme {
-    Light = "light",
-    Dark = "dark",
-    Device = "device"
+    Light = "Light",
+    Dark = "Dark",
+    Device = "Device"
+}
+
+export function getAllThemes(): string[] {
+    return [Theme.Light, Theme.Dark, Theme.Device];
 }
 
 /**
