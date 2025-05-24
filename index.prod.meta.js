@@ -10,6 +10,11 @@
 // @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://fansly.com/*
+// @match *://www.angelslove.xxx/*
+// @match *://www.sensuallove.xxx/*
+// @match *://www.wowgirlsblog.com/*
+// @match *://www.ultrafilms.xxx/*
+// @match *://www.18onlygirlsblog.com/*
 // @match *://gayeroticvideoindex.com/*
 // @match *://hobby.porn/*
 // @match *://javdb.com/*

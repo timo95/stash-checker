@@ -10,6 +10,11 @@
 // @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://fansly.com/*
+// @match *://www.angelslove.xxx/*
+// @match *://www.sensuallove.xxx/*
+// @match *://www.wowgirlsblog.com/*
+// @match *://www.ultrafilms.xxx/*
+// @match *://www.18onlygirlsblog.com/*
 // @match *://gayeroticvideoindex.com/*
 // @match *://hobby.porn/*
 // @match *://javdb.com/*
@@ -6842,6 +6847,15 @@
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a.username-wrapper > div > span.user-name", {
                 urlSelector: _ => currentSite().replace("/^@/", "")
               });
+              break;
+
+             case "www.angelslove.xxx":
+             case "www.sensuallove.xxx":
+             case "www.wowgirlsblog.com":
+             case "www.ultrafilms.xxx":
+             case "www.18onlygirlsblog.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "article a header span");
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/actor/']");
               break;
 
              case "www.pornteengirl.com":
