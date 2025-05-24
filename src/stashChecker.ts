@@ -406,6 +406,15 @@ export async function runStashChecker() {
         });
             break;
         }
+        case "www.angelslove.xxx":
+        case "www.sensuallove.xxx":
+        case "www.wowgirlsblog.com":
+        case "www.ultrafilms.xxx":
+        case "www.18onlygirlsblog.com": {
+            check(Target.Scene, "article a header span");
+            check(Target.Performer, "a[href*='/actor/']");
+            break;
+        }
         case "www.pornteengirl.com": {
             check(Target.Performer, "a[href*='/model/']", {
                 nameSelector: e => firstText(e)?.replace(/\([^()]*\)$/, "")?.trimEnd()
