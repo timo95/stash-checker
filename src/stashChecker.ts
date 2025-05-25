@@ -429,8 +429,8 @@ export async function runStashChecker() {
         case "www.alsscan.com":
         case "www.rylskyart.com":
         case "www.eternaldesire.com": {
-            check(Target.Scene, "a[href*='/model/'][href*='/movie']", {observe: true,});
-            check(Target.Performer, "a[href*='/model/']:not([href*='/movie'])", {observe: true,});
+            check(Target.Scene, "a[href*='/movie']", {observe: true});
+            check(Target.Performer, "a[href*='/model/']:not([href*='/movie'])", {observe: true});
             break;
         }
         case "www.pornteengirl.com": {
