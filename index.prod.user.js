@@ -15,6 +15,20 @@
 // @match *://www.wowgirlsblog.com/*
 // @match *://www.ultrafilms.xxx/*
 // @match *://www.18onlygirlsblog.com/*
+// @match *://www.metart.com/*
+// @match *://www.metartx.com/*
+// @match *://www.sexart.com/*
+// @match *://www.vivthomas.com/*
+// @match *://www.thelifeerotic.com/*
+// @match *://www.straplez.com/*
+// @match *://www.errotica-archives.com/*
+// @match *://www.domai.com/*
+// @match *://www.goddessnudes.com/*
+// @match *://www.eroticbeauty.com/*
+// @match *://www.lovehairy.com/*
+// @match *://www.alsscan.com/*
+// @match *://www.rylskyart.com/*
+// @match *://www.eternaldesire.com/*
 // @match *://gayeroticvideoindex.com/*
 // @match *://hobby.porn/*
 // @match *://javdb.com/*
@@ -6856,6 +6870,28 @@
              case "www.18onlygirlsblog.com":
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "article a header span");
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/actor/']");
+              break;
+
+             case "www.metart.com":
+             case "www.metartx.com":
+             case "www.sexart.com":
+             case "www.vivthomas.com":
+             case "www.thelifeerotic.com":
+             case "www.straplez.com":
+             case "www.errotica-archives.com":
+             case "www.domai.com":
+             case "www.goddessnudes.com":
+             case "www.eroticbeauty.com":
+             case "www.lovehairy.com":
+             case "www.alsscan.com":
+             case "www.rylskyart.com":
+             case "www.eternaldesire.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href*='/movie']", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/model/']:not([href*='/movie'])", {
+                observe: true
+              });
               break;
 
              case "www.pornteengirl.com":
