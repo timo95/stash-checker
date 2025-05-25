@@ -415,6 +415,24 @@ export async function runStashChecker() {
             check(Target.Performer, "a[href*='/actor/']");
             break;
         }
+        case "www.metart.com":
+        case "www.metartx.com":
+        case "www.sexart.com":
+        case "www.vivthomas.com":
+        case "www.thelifeerotic.com":
+        case "www.straplez.com":
+        case "www.errotica-archives.com":
+        case "www.domai.com":
+        case "www.goddessnudes.com":
+        case "www.eroticbeauty.com":
+        case "www.lovehairy.com":
+        case "www.alsscan.com":
+        case "www.rylskyart.com":
+        case "www.eternaldesire.com": {
+            check(Target.Scene, "a[href*='/movie']", {observe: true});
+            check(Target.Performer, "a[href*='/model/']:not([href*='/movie'])", {observe: true});
+            break;
+        }
         case "www.pornteengirl.com": {
             check(Target.Performer, "a[href*='/model/']", {
                 nameSelector: e => firstText(e)?.replace(/\([^()]*\)$/, "")?.trimEnd()
