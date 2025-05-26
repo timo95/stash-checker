@@ -10,6 +10,15 @@
 // @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://fansly.com/*
+// @match *://www.slayed.com/*
+// @match *://www.blacked.com/*
+// @match *://www.tushy.com/*
+// @match *://www.vixen.com/*
+// @match *://www.blackedraw.com/*
+// @match *://www.tushyraw.com/*
+// @match *://www.deeper.com/*
+// @match *://www.milfy.com/*
+// @match *://www.wifey.com/*
 // @match *://www.angelslove.xxx/*
 // @match *://www.sensuallove.xxx/*
 // @match *://www.wowgirlsblog.com/*

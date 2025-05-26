@@ -10,6 +10,15 @@
 // @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://fansly.com/*
+// @match *://www.slayed.com/*
+// @match *://www.blacked.com/*
+// @match *://www.tushy.com/*
+// @match *://www.vixen.com/*
+// @match *://www.blackedraw.com/*
+// @match *://www.tushyraw.com/*
+// @match *://www.deeper.com/*
+// @match *://www.milfy.com/*
+// @match *://www.wifey.com/*
 // @match *://www.angelslove.xxx/*
 // @match *://www.sensuallove.xxx/*
 // @match *://www.wowgirlsblog.com/*
@@ -6860,6 +6869,26 @@
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a.username-wrapper > div > span.user-name", {
                 urlSelector: _ => currentSite().replace("/^@/", "")
+              });
+              break;
+
+             case "www.slayed.com":
+             case "www.blacked.com":
+             case "www.tushy.com":
+             case "www.vixen.com":
+             case "www.blackedraw.com":
+             case "www.tushyraw.com":
+             case "www.deeper.com":
+             case "www.milfy.com":
+             case "www.wifey.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, 'a[data-test-component="TitleLink"]', {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, 'h1[data-test-component="VideoTitle"]', {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/performers/']", {
+                observe: true
               });
               break;
 
