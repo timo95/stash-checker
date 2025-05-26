@@ -406,6 +406,20 @@ export async function runStashChecker() {
         });
             break;
         }
+        case "www.slayed.com":
+        case "www.blacked.com":
+        case "www.tushy.com":
+        case "www.vixen.com":
+        case "www.blackedraw.com":
+        case "www.tushyraw.com":
+        case "www.deeper.com":
+        case "www.milfy.com":
+        case "www.wifey.com":{
+            check(Target.Scene, 'a[data-test-component="TitleLink"]', {observe: true});
+            check(Target.Scene, 'h1[data-test-component="VideoTitle"]', {observe: true});
+            check(Target.Performer, "a[href*='/performers/']", {observe: true});
+            break;
+        }
         case "www.angelslove.xxx":
         case "www.sensuallove.xxx":
         case "www.wowgirlsblog.com":
