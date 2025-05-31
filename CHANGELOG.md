@@ -1,9 +1,11 @@
 
 ## [WIP]
 
-- Add support for websites: manyvids, warashi-asian-pornstars.fr, hobby.porn, pornhub
+- Add support for studio websites: Vixen Media Group, MetArt Network, WowNetwork
+- Add support for websites: manyvids, warashi-asian-pornstars.fr, hobby.porn, pornhub, fansly, brazzers, clips4sale
 - Add showCheckMark setting
-- Add organized flag to tooltip
+- Add 'organized' flag to tooltip
+- Add custom rules to change the checkmark color based on graphQL filters (WIP)
 - Use tippy.js for better tooltips
 - Fix indexxx performer search results
 
