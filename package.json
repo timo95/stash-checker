@@ -17,6 +17,7 @@
   "type": "module",
   "private": true,
   "devDependencies": {
+    "@floating-ui/dom": "^1.7.0",
     "@types/greasemonkey": "^4.0.7",
     "@types/sortablejs": "^1.15.8",
     "browserslist": "^4.25.0",
@@ -28,7 +29,6 @@
     "sortablejs": "^1.15.6",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.14",
-    "tippy.js": "^6.3.7",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
     "urlpattern-polyfill": "^10.1.0",

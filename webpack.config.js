@@ -35,15 +35,33 @@ export default {
                 exclude: /node-modules/,
             },
             {
-                test: /\.s[ac]ss$/i,
-                use: ["style-loader", "css-loader", "cssimportant-loader", "sass-loader"],
-                exclude: /node-modules/,
+                test: /\.css$/,
+                oneOf: [
+                    {
+                        test: /_important\.css$/,
+                        use: ["style-loader", "css-loader", "cssimportant-loader"],
+                        exclude: /node-modules/,
+                    },
+                    {
+                        use: ["style-loader", "css-loader"],
+                        exclude: /node-modules/,
+                    },
+                ],
             },
             {
-                test: /\.css$/,
-                use: ["style-loader", "css-loader", "cssimportant-loader"],
-                exclude: /node-modules/,
-            },
+                test: /\.s[ac]ss$/i,
+                oneOf: [
+                    {
+                        test: /_important\.s[ac]ss$/i,
+                        use: ["style-loader", "css-loader", "cssimportant-loader", "sass-loader"],
+                        exclude: /node-modules/,
+                    },
+                    {
+                        use: ["style-loader", "css-loader", "sass-loader"],
+                        exclude: /node-modules/,
+                    },
+                ],
+            }
         ],
     },
     optimization: dev ? undefined : {

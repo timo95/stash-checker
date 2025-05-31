@@ -12,7 +12,7 @@ import {
 import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "../utils";
 import {booleanOptions, OptionKey, stringOptions} from "../settings/general";
 import {StashQuery, StashQueryClass} from "./stashQuery";
-import tippy, {ReferenceElement} from "tippy.js";
+import {mouseoverListener, mouseoutListener} from "./tooltipElement";
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -123,16 +123,9 @@ function stashSymbol(): HTMLSpanElement {
     symbol.classList.add("stashCheckerSymbol");
     symbol.setAttribute("data-type", "stash-symbol");
     symbol.setAttribute("data-count", "1");
-    tippy(symbol, {
-        allowHTML: true,
-        interactive: true,
-        appendTo: document.body,
-        delay: [100, 300],
-        duration: [200, 200],
-        placement: "top",
-        maxWidth: "none",
-    });
-    return symbol;
+    symbol.addEventListener("mouseover", mouseoverListener);
+    symbol.addEventListener("mouseout", mouseoutListener);
+    return symbol
 }
 
 /**
@@ -217,10 +210,6 @@ export function prefixSymbol(
     // List of results
     tooltip += data.map(entry => formatEntryData(entry, target, queryTypes.length)).join("");
 
-    // Set tooltip content on symbol
-    let tooltipWindow = document.createElement("div");
-    tooltipWindow.classList.add("stashChecker", "tooltip");
-    tooltipWindow.innerHTML = tooltip;
-    tooltipWindow.tabIndex = 0;
-    (symbol as ReferenceElement)._tippy?.setContent(tooltipWindow);
+    // Store tooltip content on symbol
+    symbol.setAttribute("data-info", tooltip)
 }
