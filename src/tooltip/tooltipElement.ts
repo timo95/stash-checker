@@ -1,5 +1,5 @@
 
-import {computePosition, flip, offset} from "@floating-ui/dom";
+import {computePosition, ComputePositionConfig, flip, offset} from "@floating-ui/dom";
 
 export async function initTooltip() {
     let tooltipWindow = document.createElement("div");
@@ -28,12 +28,12 @@ export function mouseoverListener(this: HTMLElement) {
     tooltipWindow.style.display = "";
 
     // Floating-UI
-    let options = {
+    let config: ComputePositionConfig = {
         placement: 'top',
         strategy: 'absolute',
         middleware: [flip(), offset(10)]
     }
-    computePosition(this, tooltipWindow, options).then(({x, y}) => {
+    computePosition(this, tooltipWindow, config).then(({x, y}) => {
         tooltipWindow.style.left = `${x}px`
         tooltipWindow.style.top = `${y}px`
     });
