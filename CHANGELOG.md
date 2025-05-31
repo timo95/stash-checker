@@ -6,7 +6,7 @@
 - Add showCheckMark setting
 - Add 'organized' flag to tooltip
 - Add custom rules to change the checkmark color based on graphQL filters (WIP)
-- Use tippy.js for better tooltips
+- Use floating-ui for better tooltip positioning
 - Fix indexxx performer search results
 
 ## [1.0.0]
