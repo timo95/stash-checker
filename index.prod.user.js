@@ -99,11 +99,11 @@
           var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(59);
           var _dataTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(389);
           var _storage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(613);
-          var _general__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(44);
-          var sortablejs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(246);
-          var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(185);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__, _general__WEBPACK_IMPORTED_MODULE_3__ ]);
-          [_settings__WEBPACK_IMPORTED_MODULE_0__, _general__WEBPACK_IMPORTED_MODULE_3__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          var sortablejs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(246);
+          var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(185);
+          var _providers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(710);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_5__ ]);
+          [_settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_5__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           const customDisplayRules = await (0, _storage__WEBPACK_IMPORTED_MODULE_2__._W)(_storage__WEBPACK_IMPORTED_MODULE_2__.Zg.CustomDisplayRules, []);
           function initDisplaySettings() {
             let description = "Custom display rules can change the display of check marks. " + "A rule applies when the URL pattern matches the current website and the GraphQL filter matches the element. " + "Rules higher in the list have higher priority. " + "The order can be changed by dragging. " + "If no rule applies, the default display options are used. " + "GraphQL filters may not contain AND/OR/NOT. " + "Multiple filters can still be concatenated by ','. " + "Leave the filter empty to always apply.";
@@ -121,10 +121,10 @@
             displaySection.append(table);
             displaySection.append(document.createElement("br"));
             displaySection.append((0, _settings__WEBPACK_IMPORTED_MODULE_0__.jr)("Add Rule", addRuleListener));
-            sortablejs__WEBPACK_IMPORTED_MODULE_4__.Ay.create(tableBody, {
+            sortablejs__WEBPACK_IMPORTED_MODULE_3__.Ay.create(tableBody, {
               onEnd: event => {
                 if (event.oldIndex && event.newIndex) {
-                  (0, _utils__WEBPACK_IMPORTED_MODULE_5__.e6)(customDisplayRules, event.oldIndex, event.newIndex);
+                  (0, _utils__WEBPACK_IMPORTED_MODULE_4__.e6)(customDisplayRules, event.oldIndex, event.newIndex);
                   populateCustomRulesTable(document.querySelector("#stashChecker-displayRules"));
                 }
               }
@@ -143,7 +143,7 @@
           function tableRow(customRule, index) {
             let row = document.createElement("tr");
             let preview = document.createElement("span");
-            preview.innerHTML = _general__WEBPACK_IMPORTED_MODULE_3__.i3.get(_general__WEBPACK_IMPORTED_MODULE_3__.vw.checkMark);
+            preview.innerHTML = _providers__WEBPACK_IMPORTED_MODULE_5__.i3.get(_providers__WEBPACK_IMPORTED_MODULE_5__.vw.checkMark);
             preview.classList.add("stashCheckerSymbol");
             preview.classList.add("stashCheckerPreview");
             preview.style.color = customRule.display.color;
@@ -182,13 +182,13 @@
               }
             };
             customDisplayRules.push(newRule);
-            await populateCustomRulesTable(document.querySelector("#stashChecker-displayRules"));
+            populateCustomRulesTable(document.querySelector("#stashChecker-displayRules"));
           }
           async function deleteRuleListener() {
             let index = parseInt(this.getAttribute("data-index"));
             customDisplayRules.splice(index, 1);
             void (0, _storage__WEBPACK_IMPORTED_MODULE_2__.KY)(_storage__WEBPACK_IMPORTED_MODULE_2__.Zg.CustomDisplayRules, customDisplayRules);
-            await populateCustomRulesTable(document.querySelector("#stashChecker-displayRules"));
+            populateCustomRulesTable(document.querySelector("#stashChecker-displayRules"));
           }
           async function editRuleListener() {
             let index = parseInt(this.getAttribute("data-index"));
@@ -207,7 +207,7 @@
               }
             };
             void (0, _storage__WEBPACK_IMPORTED_MODULE_2__.KY)(_storage__WEBPACK_IMPORTED_MODULE_2__.Zg.CustomDisplayRules, customDisplayRules);
-            await populateCustomRulesTable(document.querySelector("#stashChecker-displayRules"));
+            populateCustomRulesTable(document.querySelector("#stashChecker-displayRules"));
           }
           __webpack_async_result__();
         } catch (e) {
@@ -218,8 +218,8 @@
     42: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
         AA: () => initTooltip,
-        _I: () => mouseoutListener,
-        sQ: () => mouseoverListener
+        Mf: () => symbolMouseoutListener,
+        aN: () => symbolMouseoverListener
       });
       const floating_ui_utils_sides = null && [ "top", "right", "bottom", "left" ];
       const alignments = null && [ "start", "end" ];
@@ -1630,86 +1630,94 @@
           platform: platformWithCache
         });
       };
+      const tooltipWindowId = "stashChecker-tooltipWindow";
+      const outHandleKey = "outHandle";
+      const inHandleKey = "inHandle";
       async function initTooltip() {
         let tooltipWindow = document.createElement("div");
         tooltipWindow.style.display = "none";
         tooltipWindow.classList.add("stashChecker", "tooltip");
-        tooltipWindow.id = "stashChecker-tooltipWindow";
-        tooltipWindow.addEventListener("mouseover", (function() {
-          let handle = parseInt(this.getAttribute("handle"));
-          window.clearTimeout(handle);
+        tooltipWindow.id = tooltipWindowId;
+        tooltipWindow.addEventListener("mouseover", (() => {
+          let outHandle = maybeParseInt(tooltipWindow.getAttribute(outHandleKey));
+          console.info(`maybe clear out handle ${outHandle}`);
+          window.clearTimeout(outHandle);
         }));
-        tooltipWindow.addEventListener("mouseout", (function() {
-          let handle = window.setTimeout((function() {
-            tooltipWindow.style.display = "none";
-          }), 500);
-          this.setAttribute("handle", handle.toString());
+        tooltipWindow.addEventListener("mouseout", (() => {
+          let outHandle = window.setTimeout((() => hideTooltip(tooltipWindow)), 500);
+          console.info(`out handle: ${outHandle}`);
+          tooltipWindow.setAttribute(outHandleKey, outHandle.toString());
         }));
         document.body.append(tooltipWindow);
       }
-      function mouseoverListener() {
-        let tooltipWindow = document.getElementById("stashChecker-tooltipWindow");
-        let handle = parseInt(tooltipWindow.getAttribute("handle"));
-        window.clearTimeout(handle);
-        tooltipWindow.innerHTML = this.getAttribute("data-info");
+      function symbolMouseoverListener() {
+        let tooltipWindow = document.getElementById(tooltipWindowId);
+        let inHandle = window.setTimeout((() => displayTooltip(this, tooltipWindow)), 500);
+        console.info(`in handle: ${inHandle}`);
+        tooltipWindow.setAttribute(inHandleKey, inHandle.toString());
+        let outHandle = maybeParseInt(tooltipWindow.getAttribute(outHandleKey));
+        console.info(`maybe clear out handle ${outHandle}`);
+        window.clearTimeout(outHandle);
+      }
+      function symbolMouseoutListener() {
+        let tooltipWindow = document.getElementById(tooltipWindowId);
+        let inHandle = maybeParseInt(tooltipWindow.getAttribute(inHandleKey));
+        console.info(`maybe clear in handle ${inHandle}`);
+        window.clearTimeout(inHandle);
+        let outHandle = window.setTimeout((() => hideTooltip(tooltipWindow)), 500);
+        console.info(`out handle: ${outHandle}`);
+        tooltipWindow.setAttribute(outHandleKey, outHandle.toString());
+      }
+      function displayTooltip(stashSymbol, tooltipWindow) {
+        console.info("run in");
+        tooltipWindow.innerHTML = stashSymbol.getAttribute("data-info");
         tooltipWindow.style.display = "";
         let config = {
           placement: "top",
           strategy: "absolute",
           middleware: [ floating_ui_dom_flip(), floating_ui_dom_offset(10) ]
         };
-        floating_ui_dom_computePosition(this, tooltipWindow, config).then((({x, y}) => {
+        floating_ui_dom_computePosition(stashSymbol, tooltipWindow, config).then((({x, y}) => {
           tooltipWindow.style.left = `${x}px`;
           tooltipWindow.style.top = `${y}px`;
         }));
       }
-      function mouseoutListener() {
-        let tooltipWindow = document.getElementById("stashChecker-tooltipWindow");
-        let handle = window.setTimeout((function() {
-          tooltipWindow.style.display = "none";
-        }), 500);
-        tooltipWindow.setAttribute("handle", handle.toString());
+      function hideTooltip(tooltipWindow) {
+        console.info("run out");
+        tooltipWindow.style.display = "none";
+      }
+      function maybeParseInt(string) {
+        if (string !== null) return parseInt(string); else return;
       }
     },
     44: (module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
-            $k: () => booleanOptions,
-            WA: () => initGeneralSettings,
-            i3: () => stringOptions,
-            vw: () => OptionKey
+            W: () => initGeneralSettings
           });
           var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(59);
-          var _storage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(613);
-          var _dataTypes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(389);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__ ]);
-          _settings__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
-          var OptionKey;
-          (function(OptionKey) {
-            OptionKey["showCheckMark"] = "showCheckMark";
-            OptionKey["showCrossMark"] = "showCrossMark";
-            OptionKey["showTags"] = "showTags";
-            OptionKey["showFiles"] = "showFiles";
-            OptionKey["checkMark"] = "checkMark";
-            OptionKey["crossMark"] = "crossMark";
-            OptionKey["warningMark"] = "warningMark";
-            OptionKey["theme"] = "theme";
-          })(OptionKey || (OptionKey = {}));
-          const defaultBooleanOptions = new Map([ [ OptionKey.showCheckMark, true ], [ OptionKey.showCrossMark, true ], [ OptionKey.showTags, true ], [ OptionKey.showFiles, true ] ]);
-          const defaultStringOptions = new Map([ [ OptionKey.checkMark, "✓" ], [ OptionKey.crossMark, "✗" ], [ OptionKey.warningMark, "!" ], [ OptionKey.theme, _dataTypes__WEBPACK_IMPORTED_MODULE_2__.Sx.Device ] ]);
-          const booleanOptions = await (0, _storage__WEBPACK_IMPORTED_MODULE_1__._W)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.BooleanOptions, defaultBooleanOptions);
-          const stringOptions = await (0, _storage__WEBPACK_IMPORTED_MODULE_1__._W)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.StringOptions, defaultStringOptions);
+          var _dataTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(389);
+          var _elements__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(591);
+          var _providers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(710);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_2__ ]);
+          [_settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_2__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           function initGeneralSettings() {
             let generalSection = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.Lc)("general", "General");
             populateGeneralSection(generalSection);
           }
           function populateGeneralSection(generalSection) {
             let symbolSettings = fieldSet("symbol-settings", "Symbol");
-            symbolSettings.append(checkBox(OptionKey.showCheckMark, "Show check mark"), checkBox(OptionKey.showCrossMark, "Show cross mark"), charBox(OptionKey.checkMark, "Check mark"), charBox(OptionKey.warningMark, "Duplicate mark"), charBox(OptionKey.crossMark, "Cross mark"));
+            symbolSettings.append((0, _elements__WEBPACK_IMPORTED_MODULE_3__.OO)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.showCheckMark, "Show check mark", _providers__WEBPACK_IMPORTED_MODULE_2__.$k), (0, 
+            _elements__WEBPACK_IMPORTED_MODULE_3__.OO)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.showCrossMark, "Show cross mark", _providers__WEBPACK_IMPORTED_MODULE_2__.$k), (0, 
+            _elements__WEBPACK_IMPORTED_MODULE_3__._V)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.checkMark, "Check mark", _providers__WEBPACK_IMPORTED_MODULE_2__.i3), (0, 
+            _elements__WEBPACK_IMPORTED_MODULE_3__._V)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.warningMark, "Duplicate mark", _providers__WEBPACK_IMPORTED_MODULE_2__.i3), (0, 
+            _elements__WEBPACK_IMPORTED_MODULE_3__._V)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.crossMark, "Cross mark", _providers__WEBPACK_IMPORTED_MODULE_2__.i3));
             generalSection.appendChild(symbolSettings);
             let tooltipSettings = fieldSet("tooltip-settings", "Tooltip");
-            tooltipSettings.append(checkBox(OptionKey.showTags, "Show tags"), checkBox(OptionKey.showFiles, "Show files"), selectMenu(OptionKey.theme, "Theme", [ _dataTypes__WEBPACK_IMPORTED_MODULE_2__.Sx.Light, _dataTypes__WEBPACK_IMPORTED_MODULE_2__.Sx.Dark, _dataTypes__WEBPACK_IMPORTED_MODULE_2__.Sx.Device ]));
+            tooltipSettings.append((0, _elements__WEBPACK_IMPORTED_MODULE_3__.OO)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.showTags, "Show tags", _providers__WEBPACK_IMPORTED_MODULE_2__.$k), (0, 
+            _elements__WEBPACK_IMPORTED_MODULE_3__.OO)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.showFiles, "Show files", _providers__WEBPACK_IMPORTED_MODULE_2__.$k), (0, 
+            _elements__WEBPACK_IMPORTED_MODULE_3__.g4)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.theme, "Theme", [ _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Light, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Dark, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Device ], _providers__WEBPACK_IMPORTED_MODULE_2__.i3));
             generalSection.appendChild(tooltipSettings);
             let defaultButton = fieldSet("default-button", "Default Settings");
             let div = document.createElement("div");
@@ -1725,82 +1733,16 @@
             return fieldSet;
           }
           function resetToDefault() {
-            defaultBooleanOptions.forEach(((value, key) => booleanOptions.set(key, value)));
-            void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.BooleanOptions, booleanOptions);
-            defaultStringOptions.forEach(((value, key) => stringOptions.set(key, value)));
-            void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.StringOptions, stringOptions);
+            _providers__WEBPACK_IMPORTED_MODULE_2__.$k.clear();
+            _providers__WEBPACK_IMPORTED_MODULE_2__.i3.clear();
             let generalSection = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.zH)("general");
             populateGeneralSection(generalSection);
-          }
-          function checkBox(key, label) {
-            let div = document.createElement("div");
-            div.classList.add("option");
-            let inputElement = document.createElement("input");
-            inputElement.id = `stashChecker-checkBox-${key}`;
-            inputElement.name = key;
-            inputElement.type = "checkbox";
-            inputElement.defaultChecked = booleanOptions.get(key) ?? defaultBooleanOptions.get(key) ?? false;
-            inputElement.addEventListener("input", (() => {
-              booleanOptions.set(key, inputElement.checked);
-              void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.BooleanOptions, booleanOptions);
-            }));
-            let labelElement = document.createElement("label");
-            labelElement.htmlFor = inputElement.id;
-            labelElement.innerHTML = label;
-            div.appendChild(labelElement);
-            div.appendChild(inputElement);
-            return div;
-          }
-          function charBox(key, label) {
-            let div = document.createElement("div");
-            div.classList.add("option");
-            let inputElement = document.createElement("input");
-            inputElement.id = `stashChecker-textBox-${key}`;
-            inputElement.name = key;
-            inputElement.type = "text";
-            inputElement.size = 2;
-            inputElement.defaultValue = stringOptions.get(key) ?? defaultStringOptions.get(key) ?? "";
-            inputElement.addEventListener("input", (() => {
-              stringOptions.set(key, inputElement.value);
-              void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.StringOptions, stringOptions);
-            }));
-            let labelElement = document.createElement("label");
-            labelElement.htmlFor = inputElement.id;
-            labelElement.innerHTML = label;
-            div.appendChild(labelElement);
-            div.appendChild(inputElement);
-            return div;
-          }
-          function selectMenu(key, label, options) {
-            let div = document.createElement("div");
-            div.classList.add("option");
-            let labelElement = document.createElement("label");
-            labelElement.htmlFor = `stashChecker-dropdown-${key}`;
-            labelElement.innerHTML = label;
-            let selectElement = document.createElement("select");
-            selectElement.id = `stashChecker-dropdown-${key}`;
-            selectElement.name = key;
-            let currentSelection = stringOptions.get(key) ?? defaultStringOptions.get(key) ?? options[0];
-            options.forEach((option => {
-              let optionElement = document.createElement("option");
-              optionElement.value = option;
-              optionElement.innerHTML = option;
-              if (option === currentSelection) optionElement.selected = true;
-              selectElement.appendChild(optionElement);
-            }));
-            selectElement.addEventListener("change", (() => {
-              stringOptions.set(key, selectElement.value);
-              void (0, _storage__WEBPACK_IMPORTED_MODULE_1__.KY)(_storage__WEBPACK_IMPORTED_MODULE_1__.Zg.StringOptions, stringOptions);
-            }));
-            div.appendChild(labelElement);
-            div.appendChild(selectElement);
-            return div;
           }
           __webpack_async_result__();
         } catch (e) {
           __webpack_async_result__(e);
         }
-      }), 1);
+      }));
     },
     56: (module, __unused_webpack_exports, __webpack_require__) => {
       function setAttributesWithoutAttributes(styleElement) {
@@ -2008,7 +1950,7 @@
             await (0, _tooltip_tooltipElement__WEBPACK_IMPORTED_MODULE_9__.AA)();
             (0, _settings_settings__WEBPACK_IMPORTED_MODULE_2__.yD)();
             (0, _settings_statistics__WEBPACK_IMPORTED_MODULE_6__.S)();
-            (0, _settings_general__WEBPACK_IMPORTED_MODULE_4__.WA)();
+            (0, _settings_general__WEBPACK_IMPORTED_MODULE_4__.W)();
             (0, _settings_display__WEBPACK_IMPORTED_MODULE_7__.s)();
             (0, _style_theme__WEBPACK_IMPORTED_MODULE_8__.Y)();
             await (0, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__.P)();
@@ -2115,11 +2057,11 @@
           });
           var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
           var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(185);
-          var _settings_general__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(44);
-          var _stashQuery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(657);
+          var _stashQuery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(657);
           var _tooltipElement__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(42);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_general__WEBPACK_IMPORTED_MODULE_2__ ]);
-          _settings_general__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+          var _settings_providers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(710);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_providers__WEBPACK_IMPORTED_MODULE_3__ ]);
+          _settings_providers__WEBPACK_IMPORTED_MODULE_3__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
           function getExistingSymbol(element) {
             if (element.getAttribute("data-type") === "stash-symbol") return element; else return Array.from(element.childNodes).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n)).map(getExistingSymbol).find((n => n));
           }
@@ -2137,7 +2079,7 @@
             return `<span class='stashChecker tag'>${tag.name}</span>`;
           }
           function formatQueries(queries, target, id, numQueries) {
-            return queries.map((query => new _stashQuery__WEBPACK_IMPORTED_MODULE_3__.M(query).toHtml(target, id, numQueries))).join("<br>");
+            return queries.map((query => new _stashQuery__WEBPACK_IMPORTED_MODULE_2__.M(query).toHtml(target, id, numQueries))).join("<br>");
           }
           function formatEntryData(entry, target, numQueries) {
             return "<hr>" + Object.entries(entry).map((([key, value]) => value ? propertyStrings.get(key)?.(value, entry.queries, target, numQueries) : void 0)).filter((s => s)).join("");
@@ -2151,13 +2093,13 @@
                 let targetQueries = new Map(mapTarget.get(key).queries.map((v => [ v.endpoint, v ])));
                 sourceQueries.forEach(((sourceQuery, key) => {
                   if (targetQueries.has(key)) {
-                    let s = new _stashQuery__WEBPACK_IMPORTED_MODULE_3__.M(sourceQuery);
+                    let s = new _stashQuery__WEBPACK_IMPORTED_MODULE_2__.M(sourceQuery);
                     s.addTypes(targetQueries.get(key).types);
                     sourceQuery = s;
                   }
                   targetQueries.set(key, sourceQuery);
                 }));
-                sourceEntry.queries = Array.from(targetQueries.values()).map((q => new _stashQuery__WEBPACK_IMPORTED_MODULE_3__.M(q))).sort(((a, b) => a.compareTo(b)));
+                sourceEntry.queries = Array.from(targetQueries.values()).map((q => new _stashQuery__WEBPACK_IMPORTED_MODULE_2__.M(q))).sort(((a, b) => a.compareTo(b)));
               }
               mapTarget.set(key, sourceEntry);
             }));
@@ -2171,8 +2113,8 @@
             symbol.classList.add("stashCheckerSymbol");
             symbol.setAttribute("data-type", "stash-symbol");
             symbol.setAttribute("data-count", "1");
-            symbol.addEventListener("mouseover", _tooltipElement__WEBPACK_IMPORTED_MODULE_4__.sQ);
-            symbol.addEventListener("mouseout", _tooltipElement__WEBPACK_IMPORTED_MODULE_4__._I);
+            symbol.addEventListener("mouseover", _tooltipElement__WEBPACK_IMPORTED_MODULE_4__.aN);
+            symbol.addEventListener("mouseout", _tooltipElement__WEBPACK_IMPORTED_MODULE_4__.Mf);
             return symbol;
           }
           function prefixSymbol(element, target, type, endpoint, data, display) {
@@ -2209,17 +2151,17 @@
             let targetReadable = (0, _dataTypes__WEBPACK_IMPORTED_MODULE_0__.HD)(target);
             if (count === 0) {
               symbol.setAttribute("data-symbol", _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Wb.Cross);
-              if (_settings_general__WEBPACK_IMPORTED_MODULE_2__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.showCrossMark)) symbol.innerHTML = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.crossMark)}&nbsp;`;
+              if (_settings_providers__WEBPACK_IMPORTED_MODULE_3__.$k.get(_settings_providers__WEBPACK_IMPORTED_MODULE_3__.vw.showCrossMark)) symbol.innerHTML = `${_settings_providers__WEBPACK_IMPORTED_MODULE_3__.i3.get(_settings_providers__WEBPACK_IMPORTED_MODULE_3__.vw.crossMark)}&nbsp;`;
               symbol.style.color = "red";
               tooltip = `${targetReadable} not in Stash<br>`;
             } else if (new Set(data.map((e => e.endpoint))).size < data.length) {
               symbol.setAttribute("data-symbol", _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Wb.Warning);
-              symbol.innerHTML = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.warningMark)}&nbsp;`;
+              symbol.innerHTML = `${_settings_providers__WEBPACK_IMPORTED_MODULE_3__.i3.get(_settings_providers__WEBPACK_IMPORTED_MODULE_3__.vw.warningMark)}&nbsp;`;
               symbol.style.color = "orange";
               tooltip = `${targetReadable} has duplicate matches<br>`;
             } else {
               symbol.setAttribute("data-symbol", _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Wb.Check);
-              if (_settings_general__WEBPACK_IMPORTED_MODULE_2__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.showCheckMark)) symbol.innerHTML = `${_settings_general__WEBPACK_IMPORTED_MODULE_2__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_2__.vw.checkMark)}&nbsp;`;
+              if (_settings_providers__WEBPACK_IMPORTED_MODULE_3__.$k.get(_settings_providers__WEBPACK_IMPORTED_MODULE_3__.vw.showCheckMark)) symbol.innerHTML = `${_settings_providers__WEBPACK_IMPORTED_MODULE_3__.i3.get(_settings_providers__WEBPACK_IMPORTED_MODULE_3__.vw.checkMark)}&nbsp;`;
               symbol.style.color = data[0].display.color;
             }
             tooltip += `Endpoints: ${endpoints.join(", ")}`;
@@ -4899,18 +4841,18 @@
           var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(185);
           var _dataTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(389);
           var _request__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(463);
-          var _settings_general__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(44);
           var _observer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(648);
-          var _settings_display__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
+          var _settings_display__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
+          var _settings_providers__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(710);
           var urlpattern_polyfill__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(487);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_general__WEBPACK_IMPORTED_MODULE_5__, _settings_display__WEBPACK_IMPORTED_MODULE_6__ ]);
-          [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_general__WEBPACK_IMPORTED_MODULE_5__, _settings_display__WEBPACK_IMPORTED_MODULE_6__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_display__WEBPACK_IMPORTED_MODULE_5__, _settings_providers__WEBPACK_IMPORTED_MODULE_6__ ]);
+          [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_display__WEBPACK_IMPORTED_MODULE_5__, _settings_providers__WEBPACK_IMPORTED_MODULE_6__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           const supportedDataFields = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Scene, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Title, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Organized, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Code, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Disambiguation, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Favorite, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.AliasList, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Birthdate, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.HeightCm, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Gallery, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Title, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Aliases ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ] ]);
           const supportedSubDataFields = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Studio, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Path, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.VideoCodec, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Width, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Height, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Size, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.BitRate, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Duration ] ] ]);
           function getDataFields(target) {
             let supported = new Set(supportedDataFields.get(target) ?? []);
-            if (!_settings_general__WEBPACK_IMPORTED_MODULE_5__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_5__.vw.showTags)) supported.delete(_dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags);
-            if (!_settings_general__WEBPACK_IMPORTED_MODULE_5__.$k.get(_settings_general__WEBPACK_IMPORTED_MODULE_5__.vw.showFiles)) supported.delete(_dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files);
+            if (!_settings_providers__WEBPACK_IMPORTED_MODULE_6__.$k.get(_settings_providers__WEBPACK_IMPORTED_MODULE_6__.vw.showTags)) supported.delete(_dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags);
+            if (!_settings_providers__WEBPACK_IMPORTED_MODULE_6__.$k.get(_settings_providers__WEBPACK_IMPORTED_MODULE_6__.vw.showFiles)) supported.delete(_dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files);
             return Array.from(supported).map((field => field + getSubDataFields(field))).join(",");
           }
           function getSubDataFields(field) {
@@ -5017,7 +4959,7 @@
             }
           }
           function getCustomRules(target) {
-            let targetRules = _settings_display__WEBPACK_IMPORTED_MODULE_6__.p.filter((rule => rule.target === target));
+            let targetRules = _settings_display__WEBPACK_IMPORTED_MODULE_5__.p.filter((rule => rule.target === target));
             return targetRules.filter((rule => new urlpattern_polyfill__WEBPACK_IMPORTED_MODULE_7__.I(rule.pattern, self.location.href).test(window.location.href)));
           }
           function combineFilters(customAndFilters, customNotFilters) {
@@ -5059,25 +5001,25 @@
           __webpack_require__.d(__webpack_exports__, {
             Y: () => setTheme
           });
-          var _settings_general__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(44);
-          var _dataTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(389);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_general__WEBPACK_IMPORTED_MODULE_0__ ]);
-          _settings_general__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+          var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
+          var _settings_providers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(710);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_providers__WEBPACK_IMPORTED_MODULE_1__ ]);
+          _settings_providers__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
           function setTheme() {
             const osSetting = window.matchMedia("(prefers-color-scheme: dark)");
             function toggleDarkMode(state) {
               document.documentElement.classList.toggle("stashChecker-dark-mode", state);
             }
-            switch (_settings_general__WEBPACK_IMPORTED_MODULE_0__.i3.get(_settings_general__WEBPACK_IMPORTED_MODULE_0__.vw.theme)) {
-             case _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Light:
+            switch (_settings_providers__WEBPACK_IMPORTED_MODULE_1__.i3.get(_settings_providers__WEBPACK_IMPORTED_MODULE_1__.vw.theme)) {
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Sx.Light:
               toggleDarkMode(false);
               break;
 
-             case _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Dark:
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Sx.Dark:
               toggleDarkMode(true);
               break;
 
-             case _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Device:
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Sx.Device:
              default:
               toggleDarkMode(osSetting.matches);
               break;
@@ -6065,6 +6007,68 @@
       }
       module.exports = insertStyleElement;
     },
+    591: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.d(__webpack_exports__, {
+        OO: () => checkBox,
+        _V: () => charBox,
+        g4: () => selectMenu
+      });
+      function checkBox(key, label, valueProvider) {
+        let div = document.createElement("div");
+        div.classList.add("option");
+        let inputElement = document.createElement("input");
+        inputElement.id = `stashChecker-checkBox-${key}`;
+        inputElement.name = key;
+        inputElement.type = "checkbox";
+        inputElement.defaultChecked = valueProvider.get(key) ?? false;
+        inputElement.addEventListener("input", (() => valueProvider.set(key, inputElement.checked)));
+        let labelElement = document.createElement("label");
+        labelElement.htmlFor = inputElement.id;
+        labelElement.innerHTML = label;
+        div.appendChild(labelElement);
+        div.appendChild(inputElement);
+        return div;
+      }
+      function charBox(key, label, valueProvider) {
+        let div = document.createElement("div");
+        div.classList.add("option");
+        let inputElement = document.createElement("input");
+        inputElement.id = `stashChecker-textBox-${key}`;
+        inputElement.name = key;
+        inputElement.type = "text";
+        inputElement.size = 2;
+        inputElement.defaultValue = valueProvider.get(key) ?? "";
+        inputElement.addEventListener("input", (() => valueProvider.set(key, inputElement.value)));
+        let labelElement = document.createElement("label");
+        labelElement.htmlFor = inputElement.id;
+        labelElement.innerHTML = label;
+        div.appendChild(labelElement);
+        div.appendChild(inputElement);
+        return div;
+      }
+      function selectMenu(key, label, options, valueProvider) {
+        let div = document.createElement("div");
+        div.classList.add("option");
+        let labelElement = document.createElement("label");
+        labelElement.htmlFor = `stashChecker-dropdown-${key}`;
+        labelElement.innerHTML = label;
+        let selectElement = document.createElement("select");
+        selectElement.id = `stashChecker-dropdown-${key}`;
+        selectElement.name = key;
+        let currentSelection = valueProvider.get(key) ?? options[0];
+        options.forEach((option => {
+          let optionElement = document.createElement("option");
+          optionElement.value = option;
+          optionElement.innerHTML = option;
+          if (option === currentSelection) optionElement.selected = true;
+          selectElement.appendChild(optionElement);
+        }));
+        selectElement.addEventListener("change", (() => valueProvider.set(key, selectElement.value)));
+        div.appendChild(labelElement);
+        div.appendChild(selectElement);
+        return div;
+      }
+    },
     601: module => {
       module.exports = function(i) {
         return i[1];
@@ -6087,9 +6091,15 @@
       async function getValue(key, defaultValue) {
         const text = await GM.getValue(key, void 0);
         try {
-          if (text === void 0) return Promise.resolve(defaultValue); else return Promise.resolve(JSON.parse(text, reviver));
+          if (text === void 0) {
+            console.info(`No stored value for '${key}'. Using default value.`);
+            return Promise.resolve(defaultValue);
+          } else {
+            console.info(`Found stored value for '${key}'.`);
+            return Promise.resolve(JSON.parse(text, reviver));
+          }
         } catch (e) {
-          console.warn("Failed to parse stored value. Delete stored key-value pair.");
+          console.warn("Failed to parse stored value for '${key}'. Deleting stored key-value pair.");
           await deleteValue(key);
           return Promise.resolve(defaultValue);
         }
@@ -6186,6 +6196,68 @@
         target.appendChild(style);
       }
       module.exports = insertBySelector;
+    },
+    710: (module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
+        try {
+          __webpack_require__.d(__webpack_exports__, {
+            $k: () => booleanOptions,
+            i3: () => stringOptions,
+            vw: () => OptionKey
+          });
+          var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(613);
+          var _dataTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(389);
+          var OptionKey;
+          (function(OptionKey) {
+            OptionKey["showCheckMark"] = "showCheckMark";
+            OptionKey["showCrossMark"] = "showCrossMark";
+            OptionKey["showTags"] = "showTags";
+            OptionKey["showFiles"] = "showFiles";
+            OptionKey["checkMark"] = "checkMark";
+            OptionKey["crossMark"] = "crossMark";
+            OptionKey["warningMark"] = "warningMark";
+            OptionKey["theme"] = "theme";
+          })(OptionKey || (OptionKey = {}));
+          const defaultBooleanOptions = new Map([ [ OptionKey.showCheckMark, true ], [ OptionKey.showCrossMark, true ], [ OptionKey.showTags, true ], [ OptionKey.showFiles, true ] ]);
+          const defaultStringOptions = new Map([ [ OptionKey.checkMark, "✓" ], [ OptionKey.crossMark, "✗" ], [ OptionKey.warningMark, "!" ], [ OptionKey.theme, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Device ] ]);
+          class DefaultableMap extends Map {
+            constructor(map, defaults, onChange) {
+              super(map.entries());
+              this.defaults = defaults;
+              this.onChange = onChange;
+            }
+            onChange() {}
+            clear() {
+              super.clear();
+              this.onChange();
+            }
+            delete(key) {
+              let result = super.delete(key);
+              this.onChange();
+              return result;
+            }
+            get(key) {
+              return super.get(key) ?? this.defaults.get(key);
+            }
+            set(key, value) {
+              super.set(key, value);
+              this.onChange();
+              return this;
+            }
+          }
+          const booleanOptions = await optionProvider(_storage__WEBPACK_IMPORTED_MODULE_0__.Zg.BooleanOptions, defaultBooleanOptions);
+          const stringOptions = await optionProvider(_storage__WEBPACK_IMPORTED_MODULE_0__.Zg.StringOptions, defaultStringOptions);
+          async function optionProvider(storageKey, defaultOptions) {
+            let map = await (0, _storage__WEBPACK_IMPORTED_MODULE_0__._W)(storageKey, new Map);
+            return new DefaultableMap(map, defaultOptions, (function() {
+              (0, _storage__WEBPACK_IMPORTED_MODULE_0__.KY)(storageKey, this);
+            }));
+          }
+          __webpack_async_result__();
+        } catch (e) {
+          __webpack_async_result__(e);
+        }
+      }), 1);
     },
     782: (module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
