@@ -15,12 +15,14 @@ export async function getValue<T>(key: string, defaultValue: T): Promise<T> {
     const text = await GM.getValue<string | undefined>(key, undefined);
     try {
         if (text === undefined) {
+            console.info(`No stored value for '${key}'. Using default value.`)
             return Promise.resolve(defaultValue);
         } else {
+            console.info(`Found stored value for '${key}'.`)
             return Promise.resolve(JSON.parse(text, reviver));
         }
     } catch (e: any) {
-        console.warn("Failed to parse stored value. Delete stored key-value pair.")
+        console.warn("Failed to parse stored value for '${key}'. Deleting stored key-value pair.")
         await deleteValue(key);
         return Promise.resolve(defaultValue);
     }
@@ -45,7 +47,7 @@ export async function deleteValue(key: string): Promise<void> {
 }
 
 function replacer(key: string, value: any) {
-    if(value instanceof Map) {
+    if (value instanceof Map) {
         return {
             dataType: 'Map',
             value: Array.from(value.entries()), // or with spread: value: [...value]
@@ -56,7 +58,7 @@ function replacer(key: string, value: any) {
 }
 
 function reviver(key: string, value: any) {
-    if(typeof value === 'object' && value !== null) {
+    if (typeof value === 'object' && value !== null) {
         if (value.dataType === 'Map') {
             return new Map(value.value);
         }

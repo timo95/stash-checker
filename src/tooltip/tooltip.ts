@@ -10,9 +10,9 @@ import {
     Type
 } from "../dataTypes";
 import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "../utils";
-import {booleanOptions, OptionKey, stringOptions} from "../settings/general";
 import {StashQuery, StashQueryClass} from "./stashQuery";
-import {mouseoverListener, mouseoutListener} from "./tooltipElement";
+import {symbolMouseoverListener, symbolMouseoutListener} from "./tooltipElement";
+import {booleanOptions, OptionKey, stringOptions} from "../settings/providers";
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -123,8 +123,8 @@ function stashSymbol(): HTMLSpanElement {
     symbol.classList.add("stashCheckerSymbol");
     symbol.setAttribute("data-type", "stash-symbol");
     symbol.setAttribute("data-count", "1");
-    symbol.addEventListener("mouseover", mouseoverListener);
-    symbol.addEventListener("mouseout", mouseoutListener);
+    symbol.addEventListener("mouseover", symbolMouseoverListener);
+    symbol.addEventListener("mouseout", symbolMouseoutListener);
     return symbol
 }
 

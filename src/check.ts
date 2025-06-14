@@ -3,9 +3,9 @@ import {stashEndpoints} from "./settings/endpoints";
 import {firstText, hasKanji, nakedDomain} from "./utils";
 import {CheckOptions, CustomDisplayRule, DataField, DisplayOptions, StashEndpoint, Target, Type} from "./dataTypes";
 import {request} from "./request";
-import {booleanOptions, OptionKey} from "./settings/general";
 import {onAddition} from "./observer";
 import {customDisplayRules} from "./settings/display";
+import {booleanOptions, OptionKey} from "./settings/providers";
 
 // Conditional ESM module loading (Node.js and browser)
 // @ts-ignore: Property 'UrlPattern' does not exist

@@ -1,48 +1,78 @@
 
 import {computePosition, ComputePositionConfig, flip, offset} from "@floating-ui/dom";
 
+const tooltipWindowId = "stashChecker-tooltipWindow";
+const outHandleKey = "outHandle";
+const inHandleKey = "inHandle";
+
 export async function initTooltip() {
     let tooltipWindow = document.createElement("div");
     tooltipWindow.style.display = "none";
     tooltipWindow.classList.add("stashChecker", "tooltip");
-    tooltipWindow.id = "stashChecker-tooltipWindow";
-    tooltipWindow.addEventListener("mouseover", function () {
-        let handle = parseInt(this.getAttribute("handle")!);
-        window.clearTimeout(handle);
+    tooltipWindow.id = tooltipWindowId;
+    tooltipWindow.addEventListener("mouseover", () => {
+        let outHandle = maybeParseInt(tooltipWindow.getAttribute(outHandleKey));
+        console.info(`maybe clear out handle ${outHandle}`)
+        window.clearTimeout(outHandle);
     });
-    tooltipWindow.addEventListener("mouseout", function () {
-        let handle = window.setTimeout(function () {
-            tooltipWindow.style.display = "none";
-        }, 500);
-        this.setAttribute("handle", handle.toString());
+    tooltipWindow.addEventListener("mouseout", () => {
+        let outHandle = window.setTimeout(() => hideTooltip(tooltipWindow), 500);
+        console.info(`out handle: ${outHandle}`)
+        tooltipWindow.setAttribute(outHandleKey, outHandle.toString());
     });
     document.body.append(tooltipWindow);
 }
 
-export function mouseoverListener(this: HTMLElement) {
-    let tooltipWindow = document.getElementById("stashChecker-tooltipWindow")!;
-    let handle = parseInt(tooltipWindow.getAttribute("handle")!);
-    window.clearTimeout(handle);
+export function symbolMouseoverListener(this: HTMLElement) {
+    let tooltipWindow = document.getElementById(tooltipWindowId)!;
 
-    tooltipWindow.innerHTML = this.getAttribute("data-info")!;
+    let inHandle = window.setTimeout(() => displayTooltip(this, tooltipWindow), 500);
+    console.info(`in handle: ${inHandle}`)
+    tooltipWindow.setAttribute(inHandleKey, inHandle.toString());
+
+    let outHandle = maybeParseInt(tooltipWindow.getAttribute(outHandleKey));
+    console.info(`maybe clear out handle ${outHandle}`)
+    window.clearTimeout(outHandle);
+}
+
+export function symbolMouseoutListener() {
+    let tooltipWindow = document.getElementById(tooltipWindowId)!;
+
+    let inHandle = maybeParseInt(tooltipWindow.getAttribute(inHandleKey));
+    console.info(`maybe clear in handle ${inHandle}`)
+    window.clearTimeout(inHandle);
+
+    let outHandle = window.setTimeout(() => hideTooltip(tooltipWindow), 500);
+    console.info(`out handle: ${outHandle}`)
+    tooltipWindow.setAttribute(outHandleKey, outHandle.toString());
+}
+
+function displayTooltip(stashSymbol: HTMLElement, tooltipWindow: HTMLElement) {
+    console.info("run in")
+    // Display tooltip
+    tooltipWindow.innerHTML = stashSymbol.getAttribute("data-info")!;
     tooltipWindow.style.display = "";
-
     // Floating-UI
     let config: ComputePositionConfig = {
         placement: 'top',
         strategy: 'absolute',
         middleware: [flip(), offset(10)]
     }
-    computePosition(this, tooltipWindow, config).then(({x, y}) => {
+    computePosition(stashSymbol, tooltipWindow, config).then(({x, y}) => {
         tooltipWindow.style.left = `${x}px`
         tooltipWindow.style.top = `${y}px`
     });
 }
 
-export function mouseoutListener() {
-    let tooltipWindow = document.getElementById("stashChecker-tooltipWindow")!;
-    let handle = window.setTimeout(function () {
-        tooltipWindow.style.display = "none";
-    }, 500);
-    tooltipWindow.setAttribute("handle", handle.toString());
+function hideTooltip(tooltipWindow: HTMLElement) {
+    console.info("run out")
+    tooltipWindow.style.display = "none";
+}
+
+function maybeParseInt(string: string | null): number | undefined {
+    if (string !== null) {
+        return parseInt(string)
+    } else {
+        return undefined
+    }
 }

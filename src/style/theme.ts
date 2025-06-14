@@ -1,5 +1,5 @@
-import {OptionKey, stringOptions} from "../settings/general";
 import {Theme} from "../dataTypes";
+import {OptionKey, stringOptions} from "../settings/providers";
 
 export function setTheme() {
 
@@ -10,15 +10,18 @@ export function setTheme() {
     }
 
     switch (stringOptions.get(OptionKey.theme)) {
-        case Theme.Light:
+        case Theme.Light: {
             toggleDarkMode(false)
             break;
-        case Theme.Dark:
+        }
+        case Theme.Dark: {
             toggleDarkMode(true)
             break;
+        }
         case Theme.Device:
-        default:
+        default: {
             toggleDarkMode(osSetting.matches);
             break;
+        }
     }
 }

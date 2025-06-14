@@ -1,9 +1,9 @@
-import {buttonDanger, buttonPrimary, getSettingsSection, newSettingsSection} from "./settings";
-import {CustomDisplayRule, readable, Target} from "../dataTypes";
+import {buttonDanger, buttonPrimary, newSettingsSection} from "./settings";
+import {CustomDisplayRule, Target} from "../dataTypes";
 import {getValue, setValue, StorageKey} from "./storage";
-import {OptionKey, stringOptions} from "./general";
 import Sortable from 'sortablejs';
 import {moveIndex} from "../utils";
+import {OptionKey, stringOptions} from "./providers";
 
 // TODO: isActive indicator
 
@@ -114,14 +114,14 @@ async function addRuleListener() {
     };
 
     customDisplayRules.push(newRule)
-    await populateCustomRulesTable(document.querySelector("#stashChecker-displayRules")!);
+    populateCustomRulesTable(document.querySelector("#stashChecker-displayRules")!);
 }
 
 async function deleteRuleListener(this: HTMLButtonElement) {
     let index = parseInt(this.getAttribute("data-index")!);
     customDisplayRules.splice(index, 1);
     void setValue(StorageKey.CustomDisplayRules, customDisplayRules);
-    await populateCustomRulesTable(document.querySelector("#stashChecker-displayRules")!);
+    populateCustomRulesTable(document.querySelector("#stashChecker-displayRules")!);
 }
 
 async function editRuleListener(this: HTMLButtonElement) {
@@ -141,5 +141,5 @@ async function editRuleListener(this: HTMLButtonElement) {
         display: { color: color }
     };
     void setValue(StorageKey.CustomDisplayRules, customDisplayRules);
-    await populateCustomRulesTable(document.querySelector("#stashChecker-displayRules")!);
+    populateCustomRulesTable(document.querySelector("#stashChecker-displayRules")!);
 }
