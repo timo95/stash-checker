@@ -19,6 +19,7 @@ export function initDisplaySettings() {
         "Multiple filters can still be concatenated by ','. " +
         "Leave the filter empty to always apply."
     let displaySection = newSettingsSection("display", "Custom Display Rules", description);
+    displaySection.classList.add("flex-column");
     populateDisplaySection(displaySection);
 }
 
@@ -35,7 +36,7 @@ function populateDisplaySection(displaySection: HTMLElement) {
     table.append(tableBody);
     displaySection.append(table);
     displaySection.append(document.createElement("br"));
-    displaySection.append(buttonPrimary("Add Rule", addRuleListener));
+    displaySection.append(buttonPrimary("Add Rule", addRuleListener, ["align-end"]));
     Sortable.create(tableBody, {
         onEnd: event => {
             if (event.oldIndex && event.newIndex) {
@@ -56,7 +57,8 @@ function populateCustomRulesTable(tableBody: HTMLTableSectionElement) {
 
 function tableHeadRow(): HTMLTableRowElement {
     let row = document.createElement("tr");
-    row.innerHTML = "<th>Type</th><th>URL Pattern</th><th>GraphQL Filter</th><th>Color</th><th>Preview</th>";
+    let values = ["Type", "URL Pattern", "GraphQL Filter", "Color", "Preview", ""]
+    row.innerHTML = values.map(value => `<th>${value}</th>`).join("");
     return row;
 }
 
@@ -67,42 +69,51 @@ function tableRow(customRule: CustomDisplayRule, index: number): HTMLTableRowEle
     preview.classList.add("stashCheckerSymbol");
     preview.classList.add("stashCheckerPreview");
     preview.style.color = customRule.display.color;
-    let previewElement = document.createElement("td");
-    previewElement.classList.add("center");
-    previewElement.append(preview)
+
+    let previewCell = cell("center");
+    previewCell.append(preview)
+
+    let buttonCell = cell()
+    let buttonCellInner = document.createElement("div");
+    buttonCellInner.classList.add("buttonCell")
+    buttonCellInner.append(editButton(index), deleteButton(index))
+    buttonCell.append(buttonCellInner)
 
     row.append(
-        plainCell(customRule.target),
-        plainCell(customRule.pattern),
-        plainCell(customRule.filter),
-        plainCell(customRule.display.color),
-        previewElement,
-        editButtonCell(index),
-        deleteButtonCell(index)
+        htmlCell(customRule.target),
+        htmlCell(customRule.pattern),
+        htmlCell(customRule.filter),
+        htmlCell(customRule.display.color),
+        previewCell,
+        buttonCell
     );
     return row;
 }
 
-function plainCell(innerHtml: string): HTMLTableCellElement {
+function htmlCell(innerHtml: string): HTMLTableCellElement {
+    let htmlCell = cell();
+    htmlCell.innerHTML = innerHtml
+    return htmlCell;
+}
+
+function cell(...classes: string[]): HTMLTableCellElement {
     let cell = document.createElement("td");
-    cell.innerHTML = innerHtml
+    if (classes.length !== 0) {
+        cell.classList.add(...classes)
+    }
     return cell;
 }
 
-function editButtonCell(index: number): HTMLTableCellElement {
-    let cell = document.createElement("td");
+function editButton(index: number): HTMLButtonElement {
     let button = buttonPrimary("Edit", editRuleListener)
     button.setAttribute("data-index", index.toString())
-    cell.append(button)
-    return cell;
+    return button;
 }
 
-function deleteButtonCell(index: number): HTMLTableCellElement {
-    let cell = document.createElement("td");
+function deleteButton(index: number): HTMLButtonElement {
     let button = buttonDanger("Delete", deleteRuleListener)
     button.setAttribute("data-index", index.toString())
-    cell.append(button)
-    return cell;
+    return button;
 }
 
 async function addRuleListener() {

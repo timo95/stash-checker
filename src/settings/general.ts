@@ -5,6 +5,7 @@ import {booleanOptions, OptionKey, stringOptions} from "./providers";
 
 export function initGeneralSettings() {
     let generalSection = newSettingsSection("general", "General")
+    generalSection.classList.add("flex-row")
     populateGeneralSection(generalSection)
 }
 

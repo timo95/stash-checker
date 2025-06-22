@@ -70,17 +70,17 @@ function closeSettingsWindow(this: HTMLElement, event: MouseEvent) {
     }
 }
 
-export function buttonPrimary(label: string, listener: (this: HTMLButtonElement, ev: MouseEvent) => any): HTMLElement {
+export function buttonPrimary(label: string, listener: (this: HTMLButtonElement, ev: MouseEvent) => any, classes: string[] = []): HTMLButtonElement {
     let button = document.createElement("button");
-    button.classList.add("stashChecker", "btn", "btn-primary");
+    button.classList.add("stashChecker", "btn", "btn-primary", ...classes);
     button.addEventListener("click", listener);
     button.innerHTML = label;
     return button
 }
 
-export function buttonDanger(label: string, listener: (this: HTMLButtonElement, ev: MouseEvent) => any): HTMLElement {
+export function buttonDanger(label: string, listener: (this: HTMLButtonElement, ev: MouseEvent) => any, classes: string[] = []): HTMLButtonElement {
     let button = document.createElement("button");
-    button.classList.add("stashChecker", "btn", "btn-danger");
+    button.classList.add("stashChecker", "btn", "btn-danger", ...classes);
     button.addEventListener("click", listener);
     button.innerHTML = label;
     return button
