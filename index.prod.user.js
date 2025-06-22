@@ -102,25 +102,27 @@
           var sortablejs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(246);
           var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(185);
           var _providers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(710);
+          var _htmlHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(519);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_5__ ]);
           [_settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_5__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           const customDisplayRules = await (0, _storage__WEBPACK_IMPORTED_MODULE_2__._W)(_storage__WEBPACK_IMPORTED_MODULE_2__.Zg.CustomDisplayRules, []);
           function initDisplaySettings() {
             let description = "Custom display rules can change the display of check marks. " + "A rule applies when the URL pattern matches the current website and the GraphQL filter matches the element. " + "Rules higher in the list have higher priority. " + "The order can be changed by dragging. " + "If no rule applies, the default display options are used. " + "GraphQL filters may not contain AND/OR/NOT. " + "Multiple filters can still be concatenated by ','. " + "Leave the filter empty to always apply.";
             let displaySection = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.Lc)("display", "Custom Display Rules", description);
+            displaySection.classList.add("flex-column");
             populateDisplaySection(displaySection);
           }
           function populateDisplaySection(displaySection) {
-            let table = document.createElement("table");
-            let tableHead = document.createElement("thead");
+            let table = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.ZR)();
+            let tableHead = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Ve)();
             tableHead.append(tableHeadRow());
             table.append(tableHead);
-            let tableBody = document.createElement("tbody");
+            let tableBody = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.$0)();
             tableBody.id = "stashChecker-displayRules";
             table.append(tableBody);
             displaySection.append(table);
-            displaySection.append(document.createElement("br"));
-            displaySection.append((0, _settings__WEBPACK_IMPORTED_MODULE_0__.jr)("Add Rule", addRuleListener));
+            displaySection.append((0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.qi)());
+            displaySection.append((0, _settings__WEBPACK_IMPORTED_MODULE_0__.jr)("Add Rule", addRuleListener, [ "align-end" ]));
             sortablejs__WEBPACK_IMPORTED_MODULE_3__.Ay.create(tableBody, {
               onEnd: event => {
                 if (event.oldIndex && event.newIndex) {
@@ -136,41 +138,39 @@
             tableBody.replaceChildren(...tableRows);
           }
           function tableHeadRow() {
-            let row = document.createElement("tr");
-            row.innerHTML = "<th>Type</th><th>URL Pattern</th><th>GraphQL Filter</th><th>Color</th><th>Preview</th>";
+            let row = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.dc)();
+            let values = [ "Type", "URL Pattern", "GraphQL Filter", "Color", "Preview", "" ];
+            row.innerHTML = values.map((value => `<th>${value}</th>`)).join("");
             return row;
           }
           function tableRow(customRule, index) {
-            let row = document.createElement("tr");
-            let preview = document.createElement("span");
+            let row = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.dc)();
+            let preview = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.VI)("stashCheckerSymbol", "stashCheckerPreview");
             preview.innerHTML = _providers__WEBPACK_IMPORTED_MODULE_5__.i3.get(_providers__WEBPACK_IMPORTED_MODULE_5__.vw.checkMark);
-            preview.classList.add("stashCheckerSymbol");
-            preview.classList.add("stashCheckerPreview");
             preview.style.color = customRule.display.color;
-            let previewElement = document.createElement("td");
-            previewElement.classList.add("center");
-            previewElement.append(preview);
-            row.append(plainCell(customRule.target), plainCell(customRule.pattern), plainCell(customRule.filter), plainCell(customRule.display.color), previewElement, editButtonCell(index), deleteButtonCell(index));
+            let previewCell = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Tg)("center");
+            previewCell.append(preview);
+            let buttonCell = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Tg)();
+            let buttonCellInner = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Sw)("buttonCell");
+            buttonCellInner.append(editButton(index), deleteButton(index));
+            buttonCell.append(buttonCellInner);
+            row.append(htmlCell(customRule.target), htmlCell(customRule.pattern), htmlCell(customRule.filter), htmlCell(customRule.display.color), previewCell, buttonCell);
             return row;
           }
-          function plainCell(innerHtml) {
-            let cell = document.createElement("td");
-            cell.innerHTML = innerHtml;
-            return cell;
+          function htmlCell(innerHtml) {
+            let htmlCell = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Tg)();
+            htmlCell.innerHTML = innerHtml;
+            return htmlCell;
           }
-          function editButtonCell(index) {
-            let cell = document.createElement("td");
+          function editButton(index) {
             let button = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.jr)("Edit", editRuleListener);
             button.setAttribute("data-index", index.toString());
-            cell.append(button);
-            return cell;
+            return button;
           }
-          function deleteButtonCell(index) {
-            let cell = document.createElement("td");
+          function deleteButton(index) {
             let button = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.g8)("Delete", deleteRuleListener);
             button.setAttribute("data-index", index.toString());
-            cell.append(button);
-            return cell;
+            return button;
           }
           async function addRuleListener() {
             let newRule = {
@@ -1630,13 +1630,13 @@
           platform: platformWithCache
         });
       };
+      var htmlHelper = __webpack_require__(519);
       const tooltipWindowId = "stashChecker-tooltipWindow";
       const outHandleKey = "outHandle";
       const inHandleKey = "inHandle";
       async function initTooltip() {
-        let tooltipWindow = document.createElement("div");
+        let tooltipWindow = (0, htmlHelper.Sw)("stashChecker", "tooltip");
         tooltipWindow.style.display = "none";
-        tooltipWindow.classList.add("stashChecker", "tooltip");
         tooltipWindow.id = tooltipWindowId;
         tooltipWindow.addEventListener("mouseover", (() => {
           let outHandle = maybeParseInt(tooltipWindow.getAttribute(outHandleKey));
@@ -1700,10 +1700,12 @@
           var _dataTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(389);
           var _elements__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(591);
           var _providers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(710);
+          var _htmlHelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(519);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_2__ ]);
           [_settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_2__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           function initGeneralSettings() {
             let generalSection = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.Lc)("general", "General");
+            generalSection.classList.add("flex-row");
             populateGeneralSection(generalSection);
           }
           function populateGeneralSection(generalSection) {
@@ -1720,8 +1722,7 @@
             _elements__WEBPACK_IMPORTED_MODULE_3__.g4)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.theme, "Theme", [ _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Light, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Dark, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Device ], _providers__WEBPACK_IMPORTED_MODULE_2__.i3));
             generalSection.appendChild(tooltipSettings);
             let defaultButton = fieldSet("default-button", "Default Settings");
-            let div = document.createElement("div");
-            div.classList.add("option");
+            let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Sw)("option");
             div.appendChild((0, _settings__WEBPACK_IMPORTED_MODULE_0__.g8)("Reset", resetToDefault));
             defaultButton.append(div);
             generalSection.appendChild(defaultButton);
@@ -1762,43 +1763,38 @@
             yD: () => initSettingsWindow,
             zH: () => getSettingsSection
           });
-          var _observer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(648);
+          var _observer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(648);
           var _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(219);
           var _stashChecker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(782);
           var _statistics__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(821);
           var _style_theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(483);
+          var _htmlHelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(519);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _stashChecker__WEBPACK_IMPORTED_MODULE_1__, _statistics__WEBPACK_IMPORTED_MODULE_2__, _style_theme__WEBPACK_IMPORTED_MODULE_3__ ]);
           [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _stashChecker__WEBPACK_IMPORTED_MODULE_1__, _statistics__WEBPACK_IMPORTED_MODULE_2__, _style_theme__WEBPACK_IMPORTED_MODULE_3__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           function initSettingsWindow() {
-            let settingsModal = document.createElement("div");
+            let settingsModal = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Sw)("stashChecker", "modal");
             settingsModal.id = "stashChecker-settingsModal";
             settingsModal.style.display = "none";
-            settingsModal.classList.add("stashChecker", "modal");
             settingsModal.addEventListener("click", closeSettingsWindow);
-            let settings = document.createElement("div");
+            let settings = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Sw)("stashChecker", "settings");
             settings.id = "stashChecker-settings";
-            settings.classList.add("stashChecker", "settings");
             settingsModal.append(settings);
             document.body.append(settingsModal);
           }
           function newSettingsSection(id, title, description) {
-            let section = document.createElement("div");
+            let section = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Sw)("stashChecker", "settingsSection");
             section.id = `stashChecker-settingsSection-${id}`;
-            section.classList.add("stashChecker", "settingsSection");
             getSettings().append(section);
-            let heading = document.createElement("h2");
-            heading.classList.add("stashChecker", "heading");
+            let heading = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.RA)(2, "stashChecker", "heading");
             heading.innerHTML = title;
             section.append(heading);
             if (description) {
-              let text = document.createElement("p");
-              text.classList.add("stashChecker", "sub-heading");
+              let text = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.NY)("stashChecker", "sub-heading");
               text.innerHTML = description;
               section.append(text);
             }
-            let body = document.createElement("div");
+            let body = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Sw)("stashChecker", "settingsSectionBody");
             body.id = `stashChecker-settingsSectionBody-${id}`;
-            body.classList.add("stashChecker", "settingsSectionBody");
             section.append(body);
             return body;
           }
@@ -1818,22 +1814,20 @@
           function closeSettingsWindow(event) {
             if (event.target === this) {
               this.style.display = "none";
-              (0, _observer__WEBPACK_IMPORTED_MODULE_4__.r)();
+              (0, _observer__WEBPACK_IMPORTED_MODULE_5__.r)();
               (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.T)();
               (0, _style_theme__WEBPACK_IMPORTED_MODULE_3__.Y)();
               void (0, _stashChecker__WEBPACK_IMPORTED_MODULE_1__.C)();
             }
           }
-          function buttonPrimary(label, listener) {
-            let button = document.createElement("button");
-            button.classList.add("stashChecker", "btn", "btn-primary");
+          function buttonPrimary(label, listener, classes = []) {
+            let button = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Tf)("stashChecker", "btn", "btn-primary", ...classes);
             button.addEventListener("click", listener);
             button.innerHTML = label;
             return button;
           }
-          function buttonDanger(label, listener) {
-            let button = document.createElement("button");
-            button.classList.add("stashChecker", "btn", "btn-danger");
+          function buttonDanger(label, listener, classes = []) {
+            let button = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Tf)("stashChecker", "btn", "btn-danger", ...classes);
             button.addEventListener("click", listener);
             button.innerHTML = label;
             return button;
@@ -2058,8 +2052,9 @@
           var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
           var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(185);
           var _stashQuery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(657);
-          var _tooltipElement__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(42);
+          var _tooltipElement__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(42);
           var _settings_providers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(710);
+          var _htmlHelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(519);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_providers__WEBPACK_IMPORTED_MODULE_3__ ]);
           _settings_providers__WEBPACK_IMPORTED_MODULE_3__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
           function getExistingSymbol(element) {
@@ -2109,12 +2104,11 @@
             return `${entry.endpoint}-${entry.id}`;
           }
           function stashSymbol() {
-            let symbol = document.createElement("span");
-            symbol.classList.add("stashCheckerSymbol");
+            let symbol = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.VI)("stashCheckerSymbol");
             symbol.setAttribute("data-type", "stash-symbol");
             symbol.setAttribute("data-count", "1");
-            symbol.addEventListener("mouseover", _tooltipElement__WEBPACK_IMPORTED_MODULE_4__.aN);
-            symbol.addEventListener("mouseout", _tooltipElement__WEBPACK_IMPORTED_MODULE_4__.Mf);
+            symbol.addEventListener("mouseover", _tooltipElement__WEBPACK_IMPORTED_MODULE_5__.aN);
+            symbol.addEventListener("mouseout", _tooltipElement__WEBPACK_IMPORTED_MODULE_5__.Mf);
             return symbol;
           }
           function prefixSymbol(element, target, type, endpoint, data, display) {
@@ -4488,6 +4482,7 @@
           var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(613);
           var _request__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(463);
           var _settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(59);
+          var _htmlHelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(519);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_2__ ]);
           _settings__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
           const defaultData = [ {
@@ -4499,12 +4494,12 @@
           async function initEndpointSettings() {
             let description = "The GraphQL endpoint URL can be generated by appending '/graphql' to your Stash base URL. The API key can be found on your security settings page. Leave the field empty, if none is required.";
             let endpointSection = (0, _settings__WEBPACK_IMPORTED_MODULE_2__.Lc)("endpoints", "Stash Endpoints", description);
+            endpointSection.classList.add("flex-column");
             await updateEndpoints(endpointSection);
           }
           async function updateEndpoints(container) {
             let endpointList = stashEndpoints.map(((endpoint, index) => {
-              let div = document.createElement("div");
-              div.classList.add("stashChecker", "endpoint");
+              let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_3__.Sw)("stashChecker", "endpoint");
               div.innerHTML = `<div><h3>${endpoint.name}</h3><p>${endpoint.url}</p></div>`;
               getVersion(endpoint, div.querySelector("h3"));
               let editButton = (0, _settings__WEBPACK_IMPORTED_MODULE_2__.jr)("Edit", editEndpointListener);
@@ -4515,8 +4510,7 @@
               div.append(deleteButton);
               return div;
             }));
-            let div = document.createElement("div");
-            div.classList.add("stashChecker", "endpoint");
+            let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_3__.Sw)("stashChecker", "endpoint");
             div.innerHTML = "<div></div>";
             div.append((0, _settings__WEBPACK_IMPORTED_MODULE_2__.jr)("Add", addEndpointListener));
             endpointList.push(div);
@@ -4675,7 +4669,7 @@
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(314);
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = __webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
       var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default());
-      ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-text-light: #989898 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-border-light: #989898 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n.stashChecker-dark-mode {\n  --stash-checker-color-text: #e0e0e0 !important;\n  --stash-checker-color-text-light: #707070 !important;\n  --stash-checker-color-link-visited: #c7c7c7 !important;\n  --stash-checker-color-link-hover: #f2f2f2 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #5a5a5a !important;\n  --stash-checker-color-border-light: #707070 !important;\n  --stash-checker-color-bg: #202020 !important;\n  --stash-checker-color-card: #464646 !important;\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.sub-heading {\n  font-size: .8rem !important;\n  text-align: center !important;\n  margin: 0 0 .5rem !important;\n}\n\n.stashChecker.tooltip {\n  visibility: visible !important;\n  z-index: 99999 !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  max-width: 60rem !important;\n  position: absolute !important;\n  width: max-content !important;\n}\n\n.stashChecker.file {\n  position: relative !important;\n  margin: .5rem !important;\n  padding: .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tag {\n  white-space: nowrap !important;\n  line-height: 1.5rem !important;\n  margin-right: .5rem !important;\n  padding: 0 .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n  border-radius: .5rem !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: hidden auto !important;\n  overscroll-behavior: contain !important;\n  background-color: #000 !important;\n  background-color: rgba(0,0,0,.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 10vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  width: fit-content !important;\n  display: grid !important;\n  gap: 1rem !important;\n}\n\n.stashChecker.settings .version {\n  color: var(--stash-checker-color-text-light) !important;\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settingsSection {\n  width: 50rem !important;\n}\n\n.stashChecker.settingsSectionBody {\n  width: 100% !important;\n  display: flex !important;\n  flex-flow: row wrap !important;\n  justify-content: flex-start !important;\n  align-items: flex-start !important;\n  gap: .5rem !important;\n}\n\n.stashChecker.endpoint {\n  width: 100% !important;\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  padding: 1rem !important;\n  margin: .1rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint>button {\n  flex-grow: 0 !important;\n  margin-left: .5rem !important;\n}\n\n.stashChecker.endpoint>div {\n  flex-grow: 1 !important;\n}\n\n.stashChecker.endpoint>div>* {\n  margin: 0 !important;\n}\n\n.stashChecker.heading {\n  font-size: 1.5rem !important;\n  text-align: center !important;\n}\n\n.stashChecker fieldset {\n  width: fit-content !important;\n  border: .1rem solid var(--stash-checker-color-border-light) !important;\n  border-radius: .5rem !important;\n  margin: .5rem 0 .5rem 0 !important;\n  padding: .5rem !important;\n  flex-grow: 1 !important;\n}\n\n.stashChecker legend {\n  float: unset !important;\n  width: auto !important;\n  height: auto !important;\n  margin-left: .5rem !important;\n  margin-bottom: 0 !important;\n  padding-left: .2rem !important;\n  padding-right: .2rem !important;\n  line-height: unset !important;\n  font-size: unset !important;\n}\n\n.stashChecker table,\n.stashChecker thead,\n.stashChecker tbody,\n.stashChecker tr,\n.stashChecker th,\n.stashChecker td {\n  border-collapse: collapse !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  padding: .2rem !important;\n}\n\n.stashChecker .center {\n  text-align: center !important;\n}\n\n.stashChecker .option {\n  text-align: right !important;\n  margin: .5rem !important;\n}\n\n.stashChecker .option>input {\n  margin-left: .5rem !important;\n  color: var(--stash-checker-color-text) !important;\n  background-color: var(--stash-checker-color-bg) !important;\n}\n\n.stashChecker .option>select {\n  margin-left: .5rem !important;\n}\n\n.stashChecker>.matchQuality {\n  width: .8em !important;\n  height: .8em !important;\n  display: inline-block !important;\n  border-radius: 50% !important;\n}\n\n.stashChecker.btn {\n  display: inline-block !important;\n  font-weight: 400 !important;\n  color: #212529 !important;\n  text-align: center !important;\n  vertical-align: middle !important;\n  user-select: none !important;\n  background-color: rgba(0,0,0,0) !important;\n  border: 1px solid rgba(0,0,0,0) !important;\n  padding: .375rem .75rem !important;\n  font-size: 1rem !important;\n  line-height: 1.5 !important;\n  border-radius: .25rem !important;\n  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n}\n\n.stashChecker.btn:not(:disabled):not(.disabled) {\n  cursor: pointer !important;\n}\n\n.stashChecker.btn:hover {\n  color: #212529 !important;\n  text-decoration: none !important;\n}\n\n.stashChecker.btn-primary {\n  color: #fff !important;\n  background-color: #137cbd !important;\n  border-color: #137cbd !important;\n}\n\n.stashChecker.btn-primary:hover {\n  color: #fff !important;\n  background-color: #10659a !important;\n  border-color: #0e5e8f !important;\n}\n\n.stashChecker.btn-danger {\n  color: #fff !important;\n  background-color: #db3737 !important;\n  border-color: #db3737 !important;\n}\n\n.stashChecker.btn-danger:hover {\n  color: #fff !important;\n  background-color: #c82424 !important;\n  border-color: #bd2222 !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: .5rem !important;\n  margin-bottom: .5rem !important;\n  border-color: var(--stash-checker-color-border-light) !important;\n  background-color: var(--stash-checker-color-border-light) !important;\n}\n\n.stashChecker.tooltip hr+br {\n  display: none !important;\n}\n\n.stashChecker.file+br {\n  display: none !important;\n}\n\n.stashCheckerSymbol {\n  font-size: inherit !important;\n}`, "" ]);
+      ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-text-light: #989898 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-border-light: #989898 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n.stashChecker-dark-mode {\n  --stash-checker-color-text: #e0e0e0 !important;\n  --stash-checker-color-text-light: #707070 !important;\n  --stash-checker-color-link-visited: #c7c7c7 !important;\n  --stash-checker-color-link-hover: #f2f2f2 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #5a5a5a !important;\n  --stash-checker-color-border-light: #707070 !important;\n  --stash-checker-color-bg: #202020 !important;\n  --stash-checker-color-card: #464646 !important;\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.sub-heading {\n  font-size: .8rem !important;\n  text-align: center !important;\n  margin: 0 0 .5rem !important;\n}\n\n.stashChecker.tooltip {\n  visibility: visible !important;\n  z-index: 99999 !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  max-width: 60rem !important;\n  position: absolute !important;\n  width: max-content !important;\n}\n\n.stashChecker.file {\n  position: relative !important;\n  margin: .5rem !important;\n  padding: .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tag {\n  white-space: nowrap !important;\n  line-height: 1.5rem !important;\n  margin-right: .5rem !important;\n  padding: 0 .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n  border-radius: .5rem !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: hidden auto !important;\n  overscroll-behavior: contain !important;\n  background-color: #000 !important;\n  background-color: rgba(0,0,0,.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 10vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  width: fit-content !important;\n  display: grid !important;\n  gap: 1rem !important;\n}\n\n.stashChecker.settings .version {\n  color: var(--stash-checker-color-text-light) !important;\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settingsSection {\n  width: 50rem !important;\n}\n\n.stashChecker.settingsSectionBody {\n  width: 100% !important;\n  gap: .5rem !important;\n}\n\n.stashChecker.flex-row {\n  display: flex !important;\n  flex-flow: row wrap !important;\n  justify-content: flex-start !important;\n  align-items: flex-start !important;\n}\n\n.stashChecker.flex-column {\n  display: flex !important;\n  flex-flow: column wrap !important;\n  justify-content: flex-start !important;\n  align-items: flex-start !important;\n}\n\n.stashChecker.align-end {\n  align-self: end !important;\n}\n\n.stashChecker .buttonCell {\n  display: flex !important;\n  flex-flow: row wrap !important;\n  justify-content: end !important;\n  column-gap: .2rem !important;\n}\n\n.stashChecker.endpoint {\n  width: 100% !important;\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  padding: 1rem !important;\n  margin: .1rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint>button {\n  flex-grow: 0 !important;\n  margin-left: .5rem !important;\n}\n\n.stashChecker.endpoint>div {\n  flex-grow: 1 !important;\n}\n\n.stashChecker.endpoint>div>* {\n  margin: 0 !important;\n}\n\n.stashChecker.heading {\n  font-size: 1.5rem !important;\n  text-align: center !important;\n}\n\n.stashChecker fieldset {\n  width: fit-content !important;\n  border: .1rem solid var(--stash-checker-color-border-light) !important;\n  border-radius: .5rem !important;\n  margin: .5rem 0 .5rem 0 !important;\n  padding: .5rem !important;\n  flex-grow: 1 !important;\n}\n\n.stashChecker legend {\n  float: unset !important;\n  width: auto !important;\n  height: auto !important;\n  margin-left: .5rem !important;\n  margin-bottom: 0 !important;\n  padding-left: .2rem !important;\n  padding-right: .2rem !important;\n  line-height: unset !important;\n  font-size: unset !important;\n}\n\n.stashChecker table {\n  width: 100% !important;\n}\n\n.stashChecker table,\n.stashChecker thead,\n.stashChecker tbody,\n.stashChecker tr,\n.stashChecker th,\n.stashChecker td {\n  border-collapse: collapse !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  padding: .2rem !important;\n}\n\n.stashChecker .center {\n  text-align: center !important;\n}\n\n.stashChecker .option {\n  text-align: right !important;\n  margin: .5rem !important;\n}\n\n.stashChecker .option>input {\n  margin-left: .5rem !important;\n  color: var(--stash-checker-color-text) !important;\n  background-color: var(--stash-checker-color-bg) !important;\n}\n\n.stashChecker .option>select {\n  margin-left: .5rem !important;\n}\n\n.stashChecker>.matchQuality {\n  width: .8em !important;\n  height: .8em !important;\n  display: inline-block !important;\n  border-radius: 50% !important;\n}\n\n.stashChecker.btn {\n  display: inline-block !important;\n  font-weight: 400 !important;\n  color: #212529 !important;\n  text-align: center !important;\n  vertical-align: middle !important;\n  user-select: none !important;\n  background-color: rgba(0,0,0,0) !important;\n  border: 1px solid rgba(0,0,0,0) !important;\n  padding: .375rem .75rem !important;\n  font-size: 1rem !important;\n  line-height: 1.5 !important;\n  border-radius: .25rem !important;\n  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n}\n\n.stashChecker.btn:not(:disabled):not(.disabled) {\n  cursor: pointer !important;\n}\n\n.stashChecker.btn:hover {\n  color: #212529 !important;\n  text-decoration: none !important;\n}\n\n.stashChecker.btn-primary {\n  color: #fff !important;\n  background-color: #137cbd !important;\n  border-color: #137cbd !important;\n}\n\n.stashChecker.btn-primary:hover {\n  color: #fff !important;\n  background-color: #10659a !important;\n  border-color: #0e5e8f !important;\n}\n\n.stashChecker.btn-danger {\n  color: #fff !important;\n  background-color: #db3737 !important;\n  border-color: #db3737 !important;\n}\n\n.stashChecker.btn-danger:hover {\n  color: #fff !important;\n  background-color: #c82424 !important;\n  border-color: #bd2222 !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: .5rem !important;\n  margin-bottom: .5rem !important;\n  border-color: var(--stash-checker-color-border-light) !important;\n  background-color: var(--stash-checker-color-border-light) !important;\n}\n\n.stashChecker.tooltip hr+br {\n  display: none !important;\n}\n\n.stashChecker.file+br {\n  display: none !important;\n}\n\n.stashCheckerSymbol {\n  font-size: inherit !important;\n}`, "" ]);
       const __WEBPACK_DEFAULT_EXPORT__ = ___CSS_LOADER_EXPORT___;
     },
     463: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
@@ -5998,6 +5992,116 @@
         }
       }));
     },
+    519: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.d(__webpack_exports__, {
+        $0: () => createTableBody,
+        NY: () => createParagraph,
+        RA: () => createHeading,
+        Sw: () => createDiv,
+        Tf: () => createButton,
+        Tg: () => createTableCell,
+        VI: () => createSpan,
+        Ve: () => createTableHead,
+        ZR: () => createTable,
+        dc: () => createTableRow,
+        fp: () => createLabel,
+        ph: () => createInput,
+        qi: () => createBreak
+      });
+      function createBreak(...classes) {
+        let element = document.createElement("br");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createButton(...classes) {
+        let element = document.createElement("button");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createDiv(...classes) {
+        let element = document.createElement("div");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createInput(...classes) {
+        let element = document.createElement("input");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createLabel(...classes) {
+        let element = document.createElement("label");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createParagraph(...classes) {
+        let element = document.createElement("p");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createSpan(...classes) {
+        let element = document.createElement("span");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createHeading(size, ...classes) {
+        let element;
+        switch (size) {
+         case 1:
+          element = document.createElement("h1");
+          break;
+
+         case 2:
+          element = document.createElement("h2");
+          break;
+
+         case 3:
+          element = document.createElement("h3");
+          break;
+
+         case 4:
+          element = document.createElement("h4");
+          break;
+
+         case 5:
+          element = document.createElement("h5");
+          break;
+
+         case 6:
+          element = document.createElement("h6");
+          break;
+
+         default:
+          throw Error("Size not a valid header size");
+        }
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createTable(...classes) {
+        let element = document.createElement("table");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createTableBody(...classes) {
+        let element = document.createElement("tbody");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createTableCell(...classes) {
+        let element = document.createElement("td");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createTableHead(...classes) {
+        let element = document.createElement("thead");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createTableRow(...classes) {
+        let element = document.createElement("tr");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+    },
     540: module => {
       function insertStyleElement(options) {
         var element = document.createElement("style");
@@ -6013,16 +6117,16 @@
         _V: () => charBox,
         g4: () => selectMenu
       });
+      var _htmlHelper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(519);
       function checkBox(key, label, valueProvider) {
-        let div = document.createElement("div");
-        div.classList.add("option");
-        let inputElement = document.createElement("input");
+        let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.Sw)("option");
+        let inputElement = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.ph)();
         inputElement.id = `stashChecker-checkBox-${key}`;
         inputElement.name = key;
         inputElement.type = "checkbox";
         inputElement.defaultChecked = valueProvider.get(key) ?? false;
         inputElement.addEventListener("input", (() => valueProvider.set(key, inputElement.checked)));
-        let labelElement = document.createElement("label");
+        let labelElement = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.fp)();
         labelElement.htmlFor = inputElement.id;
         labelElement.innerHTML = label;
         div.appendChild(labelElement);
@@ -6030,16 +6134,15 @@
         return div;
       }
       function charBox(key, label, valueProvider) {
-        let div = document.createElement("div");
-        div.classList.add("option");
-        let inputElement = document.createElement("input");
+        let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.Sw)("option");
+        let inputElement = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.ph)();
         inputElement.id = `stashChecker-textBox-${key}`;
         inputElement.name = key;
         inputElement.type = "text";
         inputElement.size = 2;
         inputElement.defaultValue = valueProvider.get(key) ?? "";
         inputElement.addEventListener("input", (() => valueProvider.set(key, inputElement.value)));
-        let labelElement = document.createElement("label");
+        let labelElement = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.fp)();
         labelElement.htmlFor = inputElement.id;
         labelElement.innerHTML = label;
         div.appendChild(labelElement);
@@ -6047,9 +6150,8 @@
         return div;
       }
       function selectMenu(key, label, options, valueProvider) {
-        let div = document.createElement("div");
-        div.classList.add("option");
-        let labelElement = document.createElement("label");
+        let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.Sw)("option");
+        let labelElement = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.fp)();
         labelElement.htmlFor = `stashChecker-dropdown-${key}`;
         labelElement.innerHTML = label;
         let selectElement = document.createElement("select");
@@ -6898,6 +7000,7 @@
           });
           var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
           var _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(59);
+          var _htmlHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(519);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_1__ ]);
           _settings__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
           function initStatistics() {
@@ -6910,7 +7013,7 @@
               let s = statistics(target);
               return s ? [ s ] : [];
             })).join("<br>");
-            let span = document.createElement("span");
+            let span = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_2__.VI)();
             span.innerHTML = string;
             statisticsSection.replaceChildren(span);
           }
