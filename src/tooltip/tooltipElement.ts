@@ -1,14 +1,14 @@
 
 import {computePosition, ComputePositionConfig, flip, offset} from "@floating-ui/dom";
+import {createDiv} from "../htmlHelper";
 
 const tooltipWindowId = "stashChecker-tooltipWindow";
 const outHandleKey = "outHandle";
 const inHandleKey = "inHandle";
 
 export async function initTooltip() {
-    let tooltipWindow = document.createElement("div");
+    let tooltipWindow = createDiv("stashChecker", "tooltip");
     tooltipWindow.style.display = "none";
-    tooltipWindow.classList.add("stashChecker", "tooltip");
     tooltipWindow.id = tooltipWindowId;
     tooltipWindow.addEventListener("mouseover", () => {
         let outHandle = maybeParseInt(tooltipWindow.getAttribute(outHandleKey));

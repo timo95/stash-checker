@@ -2,6 +2,7 @@ import {getValue, setValue, StorageKey} from "./storage";
 import {request} from "../request";
 import {StashEndpoint} from "../dataTypes";
 import {buttonDanger, buttonPrimary, getSettingsSection, newSettingsSection} from "./settings";
+import {createDiv} from "../htmlHelper";
 
 const defaultData: StashEndpoint[] = [{
     name: "Localhost",
@@ -20,8 +21,7 @@ export async function initEndpointSettings() {
 
 async function updateEndpoints(container: Element) {
     let endpointList = stashEndpoints.map((endpoint: StashEndpoint, index: number) => {
-        let div = document.createElement("div");
-        div.classList.add("stashChecker", "endpoint");
+        let div = createDiv("stashChecker", "endpoint");
         div.innerHTML = `<div><h3>${endpoint.name}</h3><p>${endpoint.url}</p></div>`
         getVersion(endpoint, div.querySelector("h3")!)
 
@@ -36,8 +36,7 @@ async function updateEndpoints(container: Element) {
         return div;
     });
     // Add button dummy endpoint
-    let div = document.createElement("div");
-    div.classList.add("stashChecker", "endpoint");
+    let div = createDiv("stashChecker", "endpoint");
     div.innerHTML = "<div></div>"
     div.append(
         buttonPrimary("Add", addEndpointListener)

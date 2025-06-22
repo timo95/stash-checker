@@ -1,17 +1,17 @@
 import {OptionKey} from "./providers";
+import {createDiv, createInput, createLabel} from "../htmlHelper";
 
 export function checkBox(key: OptionKey, label: string, valueProvider: Map<OptionKey, boolean>): HTMLElement {
-    let div = document.createElement("div")
-    div.classList.add("option")
+    let div = createDiv("option")
 
-    let inputElement = document.createElement("input")
+    let inputElement = createInput();
     inputElement.id = `stashChecker-checkBox-${key}`
     inputElement.name = key
     inputElement.type = "checkbox"
     inputElement.defaultChecked = valueProvider.get(key) ?? false
     inputElement.addEventListener("input", () => valueProvider.set(key, inputElement.checked));
 
-    let labelElement: HTMLLabelElement = document.createElement("label")
+    let labelElement: HTMLLabelElement = createLabel();
     labelElement.htmlFor = inputElement.id
     labelElement.innerHTML = label
 
@@ -21,10 +21,9 @@ export function checkBox(key: OptionKey, label: string, valueProvider: Map<Optio
 }
 
 export function charBox(key: OptionKey, label: string, valueProvider: Map<OptionKey, string>): HTMLElement {
-    let div = document.createElement("div")
-    div.classList.add("option")
+    let div = createDiv("option");
 
-    let inputElement = document.createElement("input")
+    let inputElement = createInput();
     inputElement.id = `stashChecker-textBox-${key}`
     inputElement.name = key
     inputElement.type = "text"
@@ -32,7 +31,7 @@ export function charBox(key: OptionKey, label: string, valueProvider: Map<Option
     inputElement.defaultValue = valueProvider.get(key) ?? ""
     inputElement.addEventListener("input", () => valueProvider.set(key, inputElement.value));
 
-    let labelElement: HTMLLabelElement = document.createElement("label")
+    let labelElement: HTMLLabelElement = createLabel();
     labelElement.htmlFor = inputElement.id
     labelElement.innerHTML = label
 
@@ -42,10 +41,9 @@ export function charBox(key: OptionKey, label: string, valueProvider: Map<Option
 }
 
 export function selectMenu(key: OptionKey, label: string, options: string[], valueProvider: Map<OptionKey, string>): HTMLElement {
-    let div = document.createElement("div")
-    div.classList.add("option")
+    let div = createDiv("option");
 
-    let labelElement: HTMLLabelElement = document.createElement("label")
+    let labelElement: HTMLLabelElement = createLabel();
     labelElement.htmlFor = `stashChecker-dropdown-${key}`
     labelElement.innerHTML = label
 

@@ -3,42 +3,37 @@ import {clearSymbols} from "../tooltip/tooltip";
 import {runStashChecker} from "../stashChecker";
 import {updateStatistics} from "./statistics";
 import {setTheme} from "../style/theme";
+import {createButton, createDiv, createParagraph, createHeading} from "../htmlHelper";
 
 export function initSettingsWindow() {
-    let settingsModal = document.createElement("div");
+    let settingsModal = createDiv("stashChecker", "modal");
     settingsModal.id = "stashChecker-settingsModal";
     settingsModal.style.display = "none";
-    settingsModal.classList.add("stashChecker", "modal");
     settingsModal.addEventListener("click", closeSettingsWindow);
 
-    let settings = document.createElement("div");
+    let settings = createDiv("stashChecker", "settings");
     settings.id = "stashChecker-settings"
-    settings.classList.add("stashChecker", "settings");
     settingsModal.append(settings);
     document.body.append(settingsModal);
 }
 
 export function newSettingsSection(id: string, title: string, description?: string): HTMLDivElement {
-    let section = document.createElement("div");
+    let section = createDiv("stashChecker", "settingsSection");
     section.id = `stashChecker-settingsSection-${id}`
-    section.classList.add("stashChecker", "settingsSection");
     getSettings().append(section)
 
-    let heading = document.createElement("h2")
-    heading.classList.add("stashChecker", "heading");
+    let heading = createHeading(2, "stashChecker", "heading")
     heading.innerHTML = title;
     section.append(heading);
 
     if (description) {
-        let text = document.createElement("p");
-        text.classList.add("stashChecker", "sub-heading");
+        let text = createParagraph("stashChecker", "sub-heading");
         text.innerHTML = description;
         section.append(text);
     }
 
-    let body = document.createElement("div");
+    let body = createDiv("stashChecker", "settingsSectionBody");
     body.id = `stashChecker-settingsSectionBody-${id}`
-    body.classList.add("stashChecker", "settingsSectionBody");
     section.append(body)
 
     return body
@@ -71,16 +66,14 @@ function closeSettingsWindow(this: HTMLElement, event: MouseEvent) {
 }
 
 export function buttonPrimary(label: string, listener: (this: HTMLButtonElement, ev: MouseEvent) => any, classes: string[] = []): HTMLButtonElement {
-    let button = document.createElement("button");
-    button.classList.add("stashChecker", "btn", "btn-primary", ...classes);
+    let button = createButton("stashChecker", "btn", "btn-primary", ...classes);
     button.addEventListener("click", listener);
     button.innerHTML = label;
     return button
 }
 
 export function buttonDanger(label: string, listener: (this: HTMLButtonElement, ev: MouseEvent) => any, classes: string[] = []): HTMLButtonElement {
-    let button = document.createElement("button");
-    button.classList.add("stashChecker", "btn", "btn-danger", ...classes);
+    let button = createButton("stashChecker", "btn", "btn-danger", ...classes);
     button.addEventListener("click", listener);
     button.innerHTML = label;
     return button

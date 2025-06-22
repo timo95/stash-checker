@@ -2,6 +2,7 @@ import {buttonDanger, getSettingsSection, newSettingsSection} from "./settings";
 import {Theme} from "../dataTypes";
 import {charBox, checkBox, selectMenu} from "./elements";
 import {booleanOptions, OptionKey, stringOptions} from "./providers";
+import {createDiv} from "../htmlHelper";
 
 export function initGeneralSettings() {
     let generalSection = newSettingsSection("general", "General")
@@ -29,8 +30,7 @@ function populateGeneralSection(generalSection: HTMLElement) {
     generalSection.appendChild(tooltipSettings);
 
     let defaultButton = fieldSet("default-button", "Default Settings");
-    let div = document.createElement("div")
-    div.classList.add("option")
+    let div = createDiv("option");
     div.appendChild(buttonDanger("Reset", resetToDefault))
     defaultButton.append(div);
     generalSection.appendChild(defaultButton);

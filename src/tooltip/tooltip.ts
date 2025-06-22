@@ -13,6 +13,7 @@ import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "
 import {StashQuery, StashQueryClass} from "./stashQuery";
 import {symbolMouseoverListener, symbolMouseoutListener} from "./tooltipElement";
 import {booleanOptions, OptionKey, stringOptions} from "../settings/providers";
+import {createSpan} from "../htmlHelper";
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -119,8 +120,7 @@ function entryKey(entry: StashEntry): string {
 }
 
 function stashSymbol(): HTMLSpanElement {
-    let symbol = document.createElement("span");
-    symbol.classList.add("stashCheckerSymbol");
+    let symbol = createSpan("stashCheckerSymbol");
     symbol.setAttribute("data-type", "stash-symbol");
     symbol.setAttribute("data-count", "1");
     symbol.addEventListener("mouseover", symbolMouseoverListener);

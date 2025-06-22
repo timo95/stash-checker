@@ -4,6 +4,15 @@ import {getValue, setValue, StorageKey} from "./storage";
 import Sortable from 'sortablejs';
 import {moveIndex} from "../utils";
 import {OptionKey, stringOptions} from "./providers";
+import {
+    createTableCell,
+    createDiv,
+    createTable,
+    createTableBody,
+    createTableHead,
+    createTableRow,
+    createSpan, createBreak
+} from "../htmlHelper";
 
 // TODO: isActive indicator
 
@@ -26,16 +35,16 @@ export function initDisplaySettings() {
 // TODO: use tabs for targets?
 // TODO: separate modal/tab for display settings
 function populateDisplaySection(displaySection: HTMLElement) {
-    let table = document.createElement("table");
-    let tableHead = document.createElement("thead");
+    let table = createTable();
+    let tableHead = createTableHead();
     tableHead.append(tableHeadRow());
     table.append(tableHead);
 
-    let tableBody = document.createElement("tbody");
+    let tableBody = createTableBody();
     tableBody.id = "stashChecker-displayRules"
     table.append(tableBody);
     displaySection.append(table);
-    displaySection.append(document.createElement("br"));
+    displaySection.append(createBreak());
     displaySection.append(buttonPrimary("Add Rule", addRuleListener, ["align-end"]));
     Sortable.create(tableBody, {
         onEnd: event => {
@@ -56,26 +65,23 @@ function populateCustomRulesTable(tableBody: HTMLTableSectionElement) {
 }
 
 function tableHeadRow(): HTMLTableRowElement {
-    let row = document.createElement("tr");
+    let row = createTableRow();
     let values = ["Type", "URL Pattern", "GraphQL Filter", "Color", "Preview", ""]
     row.innerHTML = values.map(value => `<th>${value}</th>`).join("");
     return row;
 }
 
 function tableRow(customRule: CustomDisplayRule, index: number): HTMLTableRowElement {
-    let row = document.createElement("tr");
-    let preview = document.createElement("span");
+    let row = createTableRow();
+    let preview = createSpan("stashCheckerSymbol", "stashCheckerPreview");
     preview.innerHTML = stringOptions.get(OptionKey.checkMark)!;
-    preview.classList.add("stashCheckerSymbol");
-    preview.classList.add("stashCheckerPreview");
     preview.style.color = customRule.display.color;
 
-    let previewCell = cell("center");
+    let previewCell = createTableCell("center");
     previewCell.append(preview)
 
-    let buttonCell = cell()
-    let buttonCellInner = document.createElement("div");
-    buttonCellInner.classList.add("buttonCell")
+    let buttonCell = createTableCell()
+    let buttonCellInner = createDiv("buttonCell");
     buttonCellInner.append(editButton(index), deleteButton(index))
     buttonCell.append(buttonCellInner)
 
@@ -91,17 +97,9 @@ function tableRow(customRule: CustomDisplayRule, index: number): HTMLTableRowEle
 }
 
 function htmlCell(innerHtml: string): HTMLTableCellElement {
-    let htmlCell = cell();
+    let htmlCell = createTableCell();
     htmlCell.innerHTML = innerHtml
     return htmlCell;
-}
-
-function cell(...classes: string[]): HTMLTableCellElement {
-    let cell = document.createElement("td");
-    if (classes.length !== 0) {
-        cell.classList.add(...classes)
-    }
-    return cell;
 }
 
 function editButton(index: number): HTMLButtonElement {

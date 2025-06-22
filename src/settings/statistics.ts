@@ -1,5 +1,6 @@
 import {readablePlural, StashSymbol, Target} from "../dataTypes";
 import {getSettingsSection, newSettingsSection} from "./settings";
+import {createSpan} from "../htmlHelper";
 
 
 export function initStatistics() {
@@ -13,7 +14,7 @@ export function updateStatistics() {
         let s = statistics(target)
         return s ? [s] : []
     }).join("<br>")
-    let span = document.createElement("span")
+    let span = createSpan();
     span.innerHTML = string
     statisticsSection.replaceChildren(span);
 }
