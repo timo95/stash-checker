@@ -1,5 +1,5 @@
 
-import {computePosition, ComputePositionConfig, flip, offset} from "@floating-ui/dom";
+import {computePosition, ComputePositionConfig, flip, offset, shift} from "@floating-ui/dom";
 import {createDiv} from "../htmlHelper";
 
 const tooltipWindowId = "stashChecker-tooltipWindow";
@@ -56,7 +56,8 @@ function displayTooltip(stashSymbol: HTMLElement, tooltipWindow: HTMLElement) {
     let config: ComputePositionConfig = {
         placement: 'top',
         strategy: 'absolute',
-        middleware: [flip(), offset(10)]
+        middleware: [flip(), offset(10), shift({padding: 5})]
+
     }
     computePosition(stashSymbol, tooltipWindow, config).then(({x, y}) => {
         tooltipWindow.style.left = `${x}px`
