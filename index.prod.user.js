@@ -904,14 +904,14 @@
                   y
                 };
               }
-            }, ...detectOverflowOptions} = evaluate(options, state);
+            }, ...detectOverflowOptions} = floating_ui_utils_evaluate(options, state);
             const coords = {
               x,
               y
             };
             const overflow = await detectOverflow(state, detectOverflowOptions);
-            const crossAxis = getSideAxis(getSide(placement));
-            const mainAxis = getOppositeAxis(crossAxis);
+            const crossAxis = floating_ui_utils_getSideAxis(floating_ui_utils_getSide(placement));
+            const mainAxis = floating_ui_utils_getOppositeAxis(crossAxis);
             let mainAxisCoord = coords[mainAxis];
             let crossAxisCoord = coords[crossAxis];
             if (checkMainAxis) {
@@ -919,14 +919,14 @@
               const maxSide = mainAxis === "y" ? "bottom" : "right";
               const min = mainAxisCoord + overflow[minSide];
               const max = mainAxisCoord - overflow[maxSide];
-              mainAxisCoord = clamp(min, mainAxisCoord, max);
+              mainAxisCoord = floating_ui_utils_clamp(min, mainAxisCoord, max);
             }
             if (checkCrossAxis) {
               const minSide = crossAxis === "y" ? "top" : "left";
               const maxSide = crossAxis === "y" ? "bottom" : "right";
               const min = crossAxisCoord + overflow[minSide];
               const max = crossAxisCoord - overflow[maxSide];
-              crossAxisCoord = clamp(min, crossAxisCoord, max);
+              crossAxisCoord = floating_ui_utils_clamp(min, crossAxisCoord, max);
             }
             const limitedCoords = limiter.fn({
               ...state,
@@ -1608,7 +1608,7 @@
       const floating_ui_dom_detectOverflow = null && detectOverflow$1;
       const floating_ui_dom_offset = offset;
       const floating_ui_dom_autoPlacement = null && autoPlacement$1;
-      const floating_ui_dom_shift = null && shift$1;
+      const floating_ui_dom_shift = shift;
       const floating_ui_dom_flip = flip;
       const floating_ui_dom_size = null && size$1;
       const floating_ui_dom_hide = null && hide$1;
@@ -1675,7 +1675,9 @@
         let config = {
           placement: "top",
           strategy: "absolute",
-          middleware: [ floating_ui_dom_flip(), floating_ui_dom_offset(10) ]
+          middleware: [ floating_ui_dom_flip(), floating_ui_dom_offset(10), floating_ui_dom_shift({
+            padding: 5
+          }) ]
         };
         floating_ui_dom_computePosition(stashSymbol, tooltipWindow, config).then((({x, y}) => {
           tooltipWindow.style.left = `${x}px`;
