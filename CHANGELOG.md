@@ -1,6 +1,8 @@
 
 ## [WIP]
 
+
+## [1.1.0]
 - Add support for studio websites: Vixen Media Group, MetArt Network, WowNetwork
 - Add support for websites: manyvids, warashi-asian-pornstars.fr, hobby.porn, pornhub, fansly, brazzers, clips4sale
 - Add showCheckMark setting
