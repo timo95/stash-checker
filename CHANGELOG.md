@@ -8,6 +8,7 @@
 - Add custom rules to change the checkmark color based on graphQL filters (WIP)
 - Use floating-ui for better tooltip positioning
 - Fix indexxx performer search results
+- Update coomer.st and kemono.cr domains
 
 ## [1.0.0]
 

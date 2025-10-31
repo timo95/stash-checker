@@ -51,8 +51,8 @@ export async function runStashChecker() {
             check(Target.Scene, "h2.main__list-title", {titleSelector: null});
             break;
         }
-        case "coomer.su":
-        case "kemono.su": {
+        case "coomer.st":
+        case "kemono.cr": {
             check(Target.Scene, "h1.post__title", {urlSelector: currentSite, titleSelector: null});
             check(Target.Scene, ".post-card > a[href*='/post/']", {titleSelector: null});
             break;

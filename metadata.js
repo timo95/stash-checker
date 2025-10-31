@@ -13,7 +13,7 @@ export default {
     match: [
         "*://adultanime.dbsearch.net/*",
         "*://www.brazzers.com/*",
-        "*://coomer.su/*",
+        "*://coomer.st/*",
         "*://erommdtube.com/*",
         "*://fansdb.cc/*",
         "*://fansdb.xyz/*",
@@ -50,7 +50,7 @@ export default {
         "*://hobby.porn/*",
         "*://javdb.com/*",
         "*://javstash.org/*",
-        "*://kemono.su/*",
+        "*://kemono.cr/*",
         "*://onlyfans.com/*",
         "*://oreno3d.com/*",
         "*://pmvhaven.com/*",
