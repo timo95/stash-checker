@@ -90,52 +90,45 @@ async function sendQuery(
     endpoint: StashEndpoint,
     query: string
 ): Promise<any> {
-    console.debug(`Sending query to endpoint '${endpoint.name}'`);
     return new Promise((resolve, reject) => {
         GM.xmlHttpRequest({
-            method: "GET",
-            url: `${endpoint.url}?query={${query}}`,  // encode query (important for url and some titles)
+            method: "POST",
+            url: endpoint.url,
             headers: {
                 "Content-Type": "application/json",
-                ApiKey: endpoint.key,
+                "Accept": "application/json",
+                "ApiKey": endpoint.key || ""
             },
+            data: JSON.stringify({
+                query: `{${query}}`
+            }),
             onload: (response) => {
-                switch (response.status) {
-                    case 200: {
-                        try {
-                            let r = JSON.parse(response.responseText)
-                            if ("errors" in r) {
-                                r.errors.forEach((e: any) => {
-                                    console.error(`Stash returned "${e.extensions.code}" error: ${e.message}`)
-                                    reject(e.message);
-                                });
-                            } else {
-                                resolve(r.data)
-                            }
-                        } catch (e) {
-                            console.debug("Failed to parse response: " + response.responseText);
-                            reject(response.responseText);
+                const body: string = response.responseText;
+                if (response.status === 200) {
+                    try {
+                        const r = JSON.parse(body);
+                        if (r.errors && r.errors.length) {
+                            r.errors.forEach((e: any) => console.error(`GraphQL: ${e.message}`));
+                            return reject(r.errors[0]?.message || "GraphQL error");
                         }
-                        break;
+                        return resolve(r.data);
+                    } catch (e) {
+                        console.error("JSON parse error", e, body);
+                        return reject("Invalid JSON from server");
                     }
-                    default: {
-                        console.debug(`Error: Response code ${statusMessage(response.status, response.statusText)} for query: ${query}`);
-                        reject(response.responseText ?? statusMessage(response.status, response.statusText));
-                    }
+                } else {
+                    console.error(`HTTP ${response.status}`, body);
+                    return reject(`${response.status}: ${response.statusText || "HTTP error"} — ${body || "no body"}`);
                 }
             },
-            onerror: (response) => {
-                console.debug(response);
-                reject(response.responseText ?? statusMessage(response.status, response.statusText));
+            onerror: (e) => {
+                console.error("Network error", e);
+                reject("Network error");
             },
-            onabort() {
-                reject("aborted");
-            },
-            ontimeout() {
-                reject("timeout");
-            }
+            ontimeout: () => reject("Request timeout"),
+            timeout: 30000
         });
-    })
+    });
 }
 
 function statusMessage(status: number, statusText?: string): string {

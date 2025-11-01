@@ -46,6 +46,10 @@ function getSubDataFields(field: DataField): string {
     return string ? `{${string}}` : ""
 }
 
+function gq(v: any) {
+  return JSON.stringify(String(v));
+}
+
 async function queryStash(
     queryString: string,
     onload: (target: Target, type: Type, endpoint: StashEndpoint, data: any[]) => any,
@@ -61,13 +65,13 @@ async function queryStash(
     // Build filter
     switch (type) {
         case Type.StashId:
-            filter = `stash_id_endpoint:{endpoint:"${encodeURIComponent(stashIdEndpoint)}",stash_id:"${encodeURIComponent(queryString)}",modifier:EQUALS}${customFilter}`;
+            filter = `stash_id_endpoint:{endpoint:${gq(stashIdEndpoint)},stash_id:${gq(queryString)},modifier:EQUALS}${customFilter}`;
             break;
         case Type.Url:
-            filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:INCLUDES}${customFilter}`;
+            filter = `${type}:{value:${gq(queryString)},modifier:INCLUDES}${customFilter}`;
             break;
         default:
-            filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
+            filter = `${type}:{value:${gq(queryString)},modifier:EQUALS}${customFilter}`;
             break;
     }
 
