@@ -96,6 +96,24 @@
   font-size: 1.25rem;
 }
 
+.stashChecker.settings select {
+  padding: 0.25rem 2.25rem 0.25rem 0.25rem;
+}
+
+.stashChecker.settings input[type="text"] {
+  padding: 0.25rem;
+}
+
+.stashChecker.settings input[type="radio"] {
+  appearance: radio;
+  vertical-align: middle;
+}
+
+.stashChecker.settings input[type="checkbox"]  {
+  appearance: checkbox;
+  vertical-align: middle;
+}
+
 .stashChecker.settingsSection {
   width: 50rem;
 }
