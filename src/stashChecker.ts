@@ -273,6 +273,25 @@ export async function runStashChecker() {
             });
             break;
         }
+        case "fc2ppvdb.com": {
+            let prefix = "FC2-PPV-";
+            if (/articles\//.test(window.location.pathname)) {
+                check(Target.Scene, "main h2.title-font", {
+                    observe: true,
+                    codeSelector: _ => `${prefix}${window.location.pathname.split("articles/")[1]}`,
+                    urlSelector: _ => currentSite(),
+                });
+                check(Target.Studio, "main h2.title-font ~ div a[href*='writers/']", {observe: true});
+                check(Target.Performer, "main h2.title-font ~ div a[href*='actresses/']", {observe: true});
+            }
+            check(Target.Scene, "a[href*='articles/'][title]", {
+                observe: true,
+                codeSelector: e => `${prefix}${e.getAttribute("href")?.split("articles/")?.[1]}`,
+            });
+            check(Target.Studio, "a[href*='writers/'][title]", {observe: true});
+            check(Target.Performer, "a[href*='actresses/'][title]", {observe: true});
+            break;
+        }
         case 'www.avbase.net': {
             check(Target.Performer, "a[href*='/talents/']:not([href*='on_sale']):not([href*='page='])", {observe: true});
             check(Target.Scene, "div:not(.bg-base-100) > a[href*='/works/']:not([href*='/works/date']):not([href*='/edit'])", {
