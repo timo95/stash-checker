@@ -4,6 +4,7 @@ export enum StorageKey {
     CustomDisplayRules = "customDisplayRules",
     StashEndpoints = "stashEndpoints",
     StringOptions = "stringOptions",
+    NumberOptions = "numberOptions",
 }
 
 /**

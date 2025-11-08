@@ -1,7 +1,7 @@
 import {buttonDanger, getSettingsSection, newSettingsSection} from "./settings";
 import {Theme} from "../dataTypes";
-import {charBox, checkBox, selectMenu} from "./elements";
-import {booleanOptions, OptionKey, stringOptions} from "./providers";
+import {charBox, checkBox, numberBox, selectMenu} from "./elements";
+import {booleanOptions, numberOptions, OptionKey, stringOptions} from "./providers";
 import {createDiv} from "../htmlHelper";
 
 export function initGeneralSettings() {
@@ -28,6 +28,12 @@ function populateGeneralSection(generalSection: HTMLElement) {
         selectMenu(OptionKey.theme, "Theme", [Theme.Light, Theme.Dark, Theme.Device], stringOptions),
     );
     generalSection.appendChild(tooltipSettings);
+
+    let querySettings = fieldSet("query-settings", "Query");
+    querySettings.append(
+        numberBox(OptionKey.batchSize, "Batch size", numberOptions),
+    );
+    generalSection.appendChild(querySettings);
 
     let defaultButton = fieldSet("default-button", "Default Settings");
     let div = createDiv("option");

@@ -2,6 +2,7 @@ import {getValue, setValue, StorageKey} from "./storage";
 import {Theme} from "../dataTypes";
 
 export enum OptionKey {
+    batchSize = "batchSize",
     showCheckMark = "showCheckMark",
     showCrossMark = "showCrossMark",
     showTags = "showTags",
@@ -24,6 +25,10 @@ const defaultStringOptions = new Map([
     [OptionKey.crossMark, "✗"],
     [OptionKey.warningMark, "!"],
     [OptionKey.theme, Theme.Device],
+]);
+
+const defaultNumberOptions = new Map([
+    [OptionKey.batchSize, 50],
 ]);
 
 class DefaultableMap<K, V> extends Map<K, V> {
@@ -61,6 +66,7 @@ class DefaultableMap<K, V> extends Map<K, V> {
 
 export const booleanOptions: Map<OptionKey, boolean> = await optionProvider(StorageKey.BooleanOptions, defaultBooleanOptions)
 export const stringOptions: Map<OptionKey, string> = await optionProvider(StorageKey.StringOptions, defaultStringOptions)
+export const numberOptions: Map<OptionKey, number> = await optionProvider(StorageKey.NumberOptions, defaultNumberOptions)
 
 async function optionProvider<V>(storageKey: StorageKey, defaultOptions: Map<OptionKey, V>): Promise<Map<OptionKey, V>> {
     let map: Map<OptionKey, V> = await getValue(storageKey, new Map<OptionKey, V>)

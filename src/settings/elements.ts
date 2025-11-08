@@ -40,6 +40,26 @@ export function charBox(key: OptionKey, label: string, valueProvider: Map<Option
     return div
 }
 
+export function numberBox(key: OptionKey, label: string, valueProvider: Map<OptionKey, number>): HTMLElement {
+    let div = createDiv("option");
+
+    let inputElement = createInput();
+    inputElement.id = `stashChecker-numberBox-${key}`
+    inputElement.name = key
+    inputElement.type = "number"
+    inputElement.size = 3
+    inputElement.defaultValue = valueProvider.get(key)?.toString() ?? "0"
+    inputElement.addEventListener("input", () => valueProvider.set(key, parseInt(inputElement.value)));
+
+    let labelElement: HTMLLabelElement = createLabel();
+    labelElement.htmlFor = inputElement.id
+    labelElement.innerHTML = label
+
+    div.appendChild(labelElement)
+    div.appendChild(inputElement)
+    return div
+}
+
 export function selectMenu(key: OptionKey, label: string, options: string[], valueProvider: Map<OptionKey, string>): HTMLElement {
     let div = createDiv("option");
 

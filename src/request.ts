@@ -1,9 +1,9 @@
 import {BatchQuery, GraphQlQuery, StashEndpoint} from "./dataTypes";
 import {friendlyHttpStatus} from "./utils";
 import {JobQueue} from "./jobQueue";
+import {numberOptions, OptionKey} from "./settings/providers";
 
-const batchTimeout = 10;
-const maxBatchSize = 100;
+const batchCollectionTimeout = 10;
 
 let batchQueries: Map<StashEndpoint, BatchQuery> = new Map();
 let batchQueues: Map<StashEndpoint, JobQueue> = new Map();
@@ -45,7 +45,7 @@ async function addQuery(
                     .then(query.resolve)
                     .catch(query.reject);
                 batchQueries.delete(endpoint);
-            }, batchTimeout)
+            }, batchCollectionTimeout)
             batchQuery = {
                 timerHandle,
                 queries: [],
@@ -56,7 +56,8 @@ async function addQuery(
         // Add new query to batch collector
         batchQuery.queries.push({ query, resolve, reject });
 
-        if (batchQuery.queries.length >= maxBatchSize) {
+        const batchSize = numberOptions.get(OptionKey.batchSize)!;
+        if (batchQuery.queries.length >= batchSize) {
             // Send full batch and delete map entry
             window.clearTimeout(batchQuery.timerHandle);
             batchQueries.delete(endpoint);
