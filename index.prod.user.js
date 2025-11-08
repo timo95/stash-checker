@@ -104,7 +104,7 @@
           var sortablejs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(246);
           var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(185);
           var _providers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(710);
-          var _htmlHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(519);
+          var _util_htmlHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(128);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_5__ ]);
           [_settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_5__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           const customDisplayRules = await (0, _storage__WEBPACK_IMPORTED_MODULE_2__._W)(_storage__WEBPACK_IMPORTED_MODULE_2__.Zg.CustomDisplayRules, []);
@@ -115,15 +115,15 @@
             populateDisplaySection(displaySection);
           }
           function populateDisplaySection(displaySection) {
-            let table = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.ZR)();
-            let tableHead = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Ve)();
+            let table = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_6__.ZR)();
+            let tableHead = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Ve)();
             tableHead.append(tableHeadRow());
             table.append(tableHead);
-            let tableBody = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.$0)();
+            let tableBody = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_6__.$0)();
             tableBody.id = "stashChecker-displayRules";
             table.append(tableBody);
             displaySection.append(table);
-            displaySection.append((0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.qi)());
+            displaySection.append((0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_6__.qi)());
             displaySection.append((0, _settings__WEBPACK_IMPORTED_MODULE_0__.jr)("Add Rule", addRuleListener, [ "align-end" ]));
             sortablejs__WEBPACK_IMPORTED_MODULE_3__.Ay.create(tableBody, {
               onEnd: event => {
@@ -140,27 +140,27 @@
             tableBody.replaceChildren(...tableRows);
           }
           function tableHeadRow() {
-            let row = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.dc)();
+            let row = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_6__.dc)();
             let values = [ "Type", "URL Pattern", "GraphQL Filter", "Color", "Preview", "" ];
             row.innerHTML = values.map((value => `<th>${value}</th>`)).join("");
             return row;
           }
           function tableRow(customRule, index) {
-            let row = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.dc)();
-            let preview = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.VI)("stashCheckerSymbol", "stashCheckerPreview");
+            let row = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_6__.dc)();
+            let preview = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_6__.VI)("stashCheckerSymbol", "stashCheckerPreview");
             preview.innerHTML = _providers__WEBPACK_IMPORTED_MODULE_5__.i3.get(_providers__WEBPACK_IMPORTED_MODULE_5__.vw.checkMark);
             preview.style.color = customRule.display.color;
-            let previewCell = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Tg)("center");
+            let previewCell = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Tg)("center");
             previewCell.append(preview);
-            let buttonCell = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Tg)();
-            let buttonCellInner = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Sw)("buttonCell");
+            let buttonCell = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Tg)();
+            let buttonCellInner = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Sw)("buttonCell");
             buttonCellInner.append(editButton(index), deleteButton(index));
             buttonCell.append(buttonCellInner);
             row.append(htmlCell(customRule.target), htmlCell(customRule.pattern), htmlCell(customRule.filter), htmlCell(customRule.display.color), previewCell, buttonCell);
             return row;
           }
           function htmlCell(innerHtml) {
-            let htmlCell = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Tg)();
+            let htmlCell = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_6__.Tg)();
             htmlCell.innerHTML = innerHtml;
             return htmlCell;
           }
@@ -1649,7 +1649,7 @@
           platform: platformWithCache
         });
       };
-      var htmlHelper = __webpack_require__(519);
+      var htmlHelper = __webpack_require__(128);
       const tooltipWindowId = "stashChecker-tooltipWindow";
       const outHandleKey = "outHandle";
       const inHandleKey = "inHandle";
@@ -1721,7 +1721,7 @@
           var _dataTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(389);
           var _elements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(591);
           var _providers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(710);
-          var _htmlHelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(519);
+          var _util_htmlHelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(128);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_3__ ]);
           [_settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_3__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           function initGeneralSettings() {
@@ -1742,8 +1742,11 @@
             _elements__WEBPACK_IMPORTED_MODULE_2__.OO)(_providers__WEBPACK_IMPORTED_MODULE_3__.vw.showFiles, "Show files", _providers__WEBPACK_IMPORTED_MODULE_3__.$k), (0, 
             _elements__WEBPACK_IMPORTED_MODULE_2__.g4)(_providers__WEBPACK_IMPORTED_MODULE_3__.vw.theme, "Theme", [ _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Light, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Dark, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Device ], _providers__WEBPACK_IMPORTED_MODULE_3__.i3));
             generalSection.appendChild(tooltipSettings);
+            let querySettings = fieldSet("query-settings", "Query");
+            querySettings.append((0, _elements__WEBPACK_IMPORTED_MODULE_2__.jB)(_providers__WEBPACK_IMPORTED_MODULE_3__.vw.batchSize, "Batch size", _providers__WEBPACK_IMPORTED_MODULE_3__.Es));
+            generalSection.appendChild(querySettings);
             let defaultButton = fieldSet("default-button", "Default Settings");
-            let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Sw)("option");
+            let div = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Sw)("option");
             div.appendChild((0, _settings__WEBPACK_IMPORTED_MODULE_0__.g8)("Reset", resetToDefault));
             defaultButton.append(div);
             generalSection.appendChild(defaultButton);
@@ -1789,32 +1792,32 @@
           var _stashChecker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(782);
           var _statistics__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(821);
           var _style_theme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(483);
-          var _htmlHelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(519);
+          var _util_htmlHelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(128);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_1__, _stashChecker__WEBPACK_IMPORTED_MODULE_2__, _statistics__WEBPACK_IMPORTED_MODULE_3__, _style_theme__WEBPACK_IMPORTED_MODULE_4__ ]);
           [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_1__, _stashChecker__WEBPACK_IMPORTED_MODULE_2__, _statistics__WEBPACK_IMPORTED_MODULE_3__, _style_theme__WEBPACK_IMPORTED_MODULE_4__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           function initSettingsWindow() {
-            let settingsModal = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Sw)("stashChecker", "modal");
+            let settingsModal = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Sw)("stashChecker", "modal");
             settingsModal.id = "stashChecker-settingsModal";
             settingsModal.style.display = "none";
             settingsModal.addEventListener("click", closeSettingsWindow);
-            let settings = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Sw)("stashChecker", "settings");
+            let settings = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Sw)("stashChecker", "settings");
             settings.id = "stashChecker-settings";
             settingsModal.append(settings);
             document.body.append(settingsModal);
           }
           function newSettingsSection(id, title, description) {
-            let section = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Sw)("stashChecker", "settingsSection");
+            let section = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Sw)("stashChecker", "settingsSection");
             section.id = `stashChecker-settingsSection-${id}`;
             getSettings().append(section);
-            let heading = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.RA)(2, "stashChecker", "heading");
+            let heading = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_5__.RA)(2, "stashChecker", "heading");
             heading.innerHTML = title;
             section.append(heading);
             if (description) {
-              let text = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.NY)("stashChecker", "sub-heading");
+              let text = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_5__.NY)("stashChecker", "sub-heading");
               text.innerHTML = description;
               section.append(text);
             }
-            let body = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Sw)("stashChecker", "settingsSectionBody");
+            let body = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Sw)("stashChecker", "settingsSectionBody");
             body.id = `stashChecker-settingsSectionBody-${id}`;
             section.append(body);
             return body;
@@ -1842,13 +1845,13 @@
             }
           }
           function buttonPrimary(label, listener, classes = []) {
-            let button = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Tf)("stashChecker", "btn", "btn-primary", ...classes);
+            let button = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Tf)("stashChecker", "btn", "btn-primary", ...classes);
             button.addEventListener("click", listener);
             button.innerHTML = label;
             return button;
           }
           function buttonDanger(label, listener, classes = []) {
-            let button = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Tf)("stashChecker", "btn", "btn-danger", ...classes);
+            let button = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Tf)("stashChecker", "btn", "btn-danger", ...classes);
             button.addEventListener("click", listener);
             button.innerHTML = label;
             return button;
@@ -1946,6 +1949,116 @@
       }
       module.exports = styleTagTransform;
     },
+    128: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.d(__webpack_exports__, {
+        $0: () => createTableBody,
+        NY: () => createParagraph,
+        RA: () => createHeading,
+        Sw: () => createDiv,
+        Tf: () => createButton,
+        Tg: () => createTableCell,
+        VI: () => createSpan,
+        Ve: () => createTableHead,
+        ZR: () => createTable,
+        dc: () => createTableRow,
+        fp: () => createLabel,
+        ph: () => createInput,
+        qi: () => createBreak
+      });
+      function createBreak(...classes) {
+        let element = document.createElement("br");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createButton(...classes) {
+        let element = document.createElement("button");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createDiv(...classes) {
+        let element = document.createElement("div");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createInput(...classes) {
+        let element = document.createElement("input");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createLabel(...classes) {
+        let element = document.createElement("label");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createParagraph(...classes) {
+        let element = document.createElement("p");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createSpan(...classes) {
+        let element = document.createElement("span");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createHeading(size, ...classes) {
+        let element;
+        switch (size) {
+         case 1:
+          element = document.createElement("h1");
+          break;
+
+         case 2:
+          element = document.createElement("h2");
+          break;
+
+         case 3:
+          element = document.createElement("h3");
+          break;
+
+         case 4:
+          element = document.createElement("h4");
+          break;
+
+         case 5:
+          element = document.createElement("h5");
+          break;
+
+         case 6:
+          element = document.createElement("h6");
+          break;
+
+         default:
+          throw Error("Size not a valid header size");
+        }
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createTable(...classes) {
+        let element = document.createElement("table");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createTableBody(...classes) {
+        let element = document.createElement("tbody");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createTableCell(...classes) {
+        let element = document.createElement("td");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createTableHead(...classes) {
+        let element = document.createElement("thead");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+      function createTableRow(...classes) {
+        let element = document.createElement("tr");
+        if (classes.length !== 0) element.classList.add(...classes);
+        return element;
+      }
+    },
     156: (module, __unused_webpack___webpack_exports__, __webpack_require__) => {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
@@ -1977,6 +2090,36 @@
           __webpack_async_result__(e);
         }
       }));
+    },
+    172: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.d(__webpack_exports__, {
+        O: () => DefaultableMap
+      });
+      class DefaultableMap extends Map {
+        constructor(map, defaults, onChange) {
+          super(map.entries());
+          this.defaults = defaults;
+          this.onChange = onChange;
+        }
+        onChange() {}
+        clear() {
+          super.clear();
+          this.onChange();
+        }
+        delete(key) {
+          let result = super.delete(key);
+          this.onChange();
+          return result;
+        }
+        get(key) {
+          return super.get(key) ?? this.defaults.get(key);
+        }
+        set(key, value) {
+          super.set(key, value);
+          this.onChange();
+          return this;
+        }
+      }
     },
     185: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
@@ -2061,7 +2204,51 @@
         return list;
       }
       let friendlyHttpStatus = new Map([ [ 200, "OK" ], [ 201, "Created" ], [ 202, "Accepted" ], [ 203, "Non-Authoritative Information" ], [ 204, "No Content" ], [ 205, "Reset Content" ], [ 206, "Partial Content" ], [ 300, "Multiple Choices" ], [ 301, "Moved Permanently" ], [ 302, "Found" ], [ 303, "See Other" ], [ 304, "Not Modified" ], [ 305, "Use Proxy" ], [ 306, "Unused" ], [ 307, "Temporary Redirect" ], [ 400, "Bad Request" ], [ 401, "Unauthorized" ], [ 402, "Payment Required" ], [ 403, "Forbidden" ], [ 404, "Not Found" ], [ 405, "Method Not Allowed" ], [ 406, "Not Acceptable" ], [ 407, "Proxy Authentication Required" ], [ 408, "Request Timeout" ], [ 409, "Conflict" ], [ 410, "Gone" ], [ 411, "Length Required" ], [ 412, "Precondition Required" ], [ 413, "Request Entry Too Large" ], [ 414, "Request-URI Too Long" ], [ 415, "Unsupported Media Type" ], [ 416, "Requested Range Not Satisfiable" ], [ 417, "Expectation Failed" ], [ 418, "I'm a teapot" ], [ 429, "Too Many Requests" ], [ 500, "Internal Server Error" ], [ 501, "Not Implemented" ], [ 502, "Bad Gateway" ], [ 503, "Service Unavailable" ], [ 504, "Gateway Timeout" ], [ 505, "HTTP Version Not Supported" ] ]);
-      const typeToString = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Url, "URL" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Code, "Code" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.StashId, "StashId" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Name, "Name" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Title, "Title" ] ]);
+      const typeToString = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Url, "URL" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Code, "Code" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.StashId, "StashId" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Name, "Name" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Aliases, "Aliases" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Title, "Title" ] ]);
+    },
+    207: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.d(__webpack_exports__, {
+        J: () => JobQueue
+      });
+      var Status;
+      (function(Status) {
+        Status[Status["WAITING"] = 0] = "WAITING";
+        Status[Status["RUNNING"] = 1] = "RUNNING";
+        Status[Status["FINISHED"] = 2] = "FINISHED";
+      })(Status || (Status = {}));
+      class JobQueue {
+        constructor(parallel = 1) {
+          this.queue = [];
+          this.parallel = parallel;
+        }
+        enqueue(job) {
+          return new Promise(((resolve, reject) => {
+            this.queue.push({
+              job,
+              resolve,
+              reject,
+              status: Status.WAITING
+            });
+            this.dequeue();
+          }));
+        }
+        dequeue() {
+          let job = this.queue.find(((job, index) => index < this.parallel && job.status === Status.WAITING));
+          if (job) {
+            job.status = Status.RUNNING;
+            void 0;
+            job.job().then(job.resolve).catch(job.reject).finally((() => {
+              job.status = Status.FINISHED;
+              this.queue = this.queue.filter((job => job.status !== Status.FINISHED));
+              void 0;
+              this.dequeue();
+            }));
+          }
+        }
+        length() {
+          return this.queue.length;
+        }
+      }
     },
     219: (module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
@@ -2075,7 +2262,7 @@
           var _stashQuery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(657);
           var _tooltipElement__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
           var _settings_providers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(710);
-          var _htmlHelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(519);
+          var _util_htmlHelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(128);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_providers__WEBPACK_IMPORTED_MODULE_4__ ]);
           var __webpack_async_dependencies_result__ = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           _settings_providers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_async_dependencies_result__[0];
@@ -2126,7 +2313,7 @@
             return `${entry.endpoint}-${entry.id}`;
           }
           function stashSymbol() {
-            let symbol = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.VI)("stashCheckerSymbol");
+            let symbol = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_5__.VI)("stashCheckerSymbol");
             symbol.setAttribute("data-type", "stash-symbol");
             symbol.setAttribute("data-count", "1");
             symbol.addEventListener("mouseover", _tooltipElement__WEBPACK_IMPORTED_MODULE_3__.aN);
@@ -4502,12 +4689,11 @@
             P: () => initEndpointSettings
           });
           var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(613);
-          var _request__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(463);
+          var _request__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(494);
           var _settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(59);
-          var _htmlHelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(519);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_2__ ]);
-          var __webpack_async_dependencies_result__ = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
-          _settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_async_dependencies_result__[0];
+          var _util_htmlHelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(128);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _request__WEBPACK_IMPORTED_MODULE_1__, _settings__WEBPACK_IMPORTED_MODULE_2__ ]);
+          [_request__WEBPACK_IMPORTED_MODULE_1__, _settings__WEBPACK_IMPORTED_MODULE_2__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           const defaultData = [ {
             name: "Localhost",
             url: "http://localhost:9999/graphql",
@@ -4522,7 +4708,7 @@
           }
           async function updateEndpoints(container) {
             let endpointList = stashEndpoints.map(((endpoint, index) => {
-              let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_3__.Sw)("stashChecker", "endpoint");
+              let div = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_3__.Sw)("stashChecker", "endpoint");
               div.innerHTML = `<div><h3>${endpoint.name}</h3><p>${endpoint.url}</p></div>`;
               getVersion(endpoint, div.querySelector("h3"));
               let editButton = (0, _settings__WEBPACK_IMPORTED_MODULE_2__.jr)("Edit", editEndpointListener);
@@ -4533,7 +4719,7 @@
               div.append(deleteButton);
               return div;
             }));
-            let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_3__.Sw)("stashChecker", "endpoint");
+            let div = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_3__.Sw)("stashChecker", "endpoint");
             div.innerHTML = "<div></div>";
             div.append((0, _settings__WEBPACK_IMPORTED_MODULE_2__.jr)("Add", addEndpointListener));
             endpointList.push(div);
@@ -4586,6 +4772,7 @@
     389: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
         HD: () => readable,
+        IT: () => Method,
         J7: () => DataField,
         Sx: () => Theme,
         T4: () => readablePlural,
@@ -4633,6 +4820,10 @@
         Target["Studio"] = "studio";
         Target["Tag"] = "tag";
       })(Target || (Target = {}));
+      var Method;
+      (function(Method) {
+        Method["Get"] = "get";
+      })(Method || (Method = {}));
       function readable(target) {
         return target.charAt(0).toUpperCase() + target.slice(1);
       }
@@ -4647,6 +4838,7 @@
       }
       var Type;
       (function(Type) {
+        Type["Aliases"] = "aliases";
         Type["Code"] = "code";
         Type["Name"] = "name";
         Type["StashId"] = "stash_id";
@@ -4692,160 +4884,8 @@
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(314);
       var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = __webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
       var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default());
-      ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-text-light: #989898 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-border-light: #989898 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n.stashChecker-dark-mode {\n  --stash-checker-color-text: #e0e0e0 !important;\n  --stash-checker-color-text-light: #707070 !important;\n  --stash-checker-color-link-visited: #c7c7c7 !important;\n  --stash-checker-color-link-hover: #f2f2f2 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #5a5a5a !important;\n  --stash-checker-color-border-light: #707070 !important;\n  --stash-checker-color-bg: #202020 !important;\n  --stash-checker-color-card: #464646 !important;\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.sub-heading {\n  font-size: .8rem !important;\n  text-align: center !important;\n  margin: 0 0 .5rem !important;\n}\n\n.stashChecker.tooltip {\n  visibility: visible !important;\n  z-index: 99999 !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  max-width: 60rem !important;\n  position: absolute !important;\n  width: max-content !important;\n}\n\n.stashChecker.file {\n  position: relative !important;\n  margin: .5rem !important;\n  padding: .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tag {\n  white-space: nowrap !important;\n  line-height: 1.5rem !important;\n  margin-right: .5rem !important;\n  padding: 0 .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n  border-radius: .5rem !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: hidden auto !important;\n  overscroll-behavior: contain !important;\n  background-color: #000 !important;\n  background-color: rgba(0,0,0,.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 10vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  width: fit-content !important;\n  display: grid !important;\n  gap: 1rem !important;\n}\n\n.stashChecker.settings .version {\n  color: var(--stash-checker-color-text-light) !important;\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settingsSection {\n  width: 50rem !important;\n}\n\n.stashChecker.settingsSectionBody {\n  width: 100% !important;\n  gap: .5rem !important;\n}\n\n.stashChecker.flex-row {\n  display: flex !important;\n  flex-flow: row wrap !important;\n  justify-content: flex-start !important;\n  align-items: flex-start !important;\n}\n\n.stashChecker.flex-column {\n  display: flex !important;\n  flex-flow: column wrap !important;\n  justify-content: flex-start !important;\n  align-items: flex-start !important;\n}\n\n.stashChecker.align-end {\n  align-self: end !important;\n}\n\n.stashChecker .buttonCell {\n  display: flex !important;\n  flex-flow: row wrap !important;\n  justify-content: end !important;\n  column-gap: .2rem !important;\n}\n\n.stashChecker.endpoint {\n  width: 100% !important;\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  padding: 1rem !important;\n  margin: .1rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint>button {\n  flex-grow: 0 !important;\n  margin-left: .5rem !important;\n}\n\n.stashChecker.endpoint>div {\n  flex-grow: 1 !important;\n}\n\n.stashChecker.endpoint>div>* {\n  margin: 0 !important;\n}\n\n.stashChecker.heading {\n  font-size: 1.5rem !important;\n  text-align: center !important;\n}\n\n.stashChecker fieldset {\n  width: fit-content !important;\n  border: .1rem solid var(--stash-checker-color-border-light) !important;\n  border-radius: .5rem !important;\n  margin: .5rem 0 .5rem 0 !important;\n  padding: .5rem !important;\n  flex-grow: 1 !important;\n}\n\n.stashChecker legend {\n  float: unset !important;\n  width: auto !important;\n  height: auto !important;\n  margin-left: .5rem !important;\n  margin-bottom: 0 !important;\n  padding-left: .2rem !important;\n  padding-right: .2rem !important;\n  line-height: unset !important;\n  font-size: unset !important;\n}\n\n.stashChecker table {\n  width: 100% !important;\n}\n\n.stashChecker table,\n.stashChecker thead,\n.stashChecker tbody,\n.stashChecker tr,\n.stashChecker th,\n.stashChecker td {\n  border-collapse: collapse !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  padding: .2rem !important;\n}\n\n.stashChecker .center {\n  text-align: center !important;\n}\n\n.stashChecker .option {\n  text-align: right !important;\n  margin: .5rem !important;\n}\n\n.stashChecker .option>input {\n  margin-left: .5rem !important;\n  color: var(--stash-checker-color-text) !important;\n  background-color: var(--stash-checker-color-bg) !important;\n}\n\n.stashChecker .option>select {\n  margin-left: .5rem !important;\n}\n\n.stashChecker>.matchQuality {\n  width: .8em !important;\n  height: .8em !important;\n  display: inline-block !important;\n  border-radius: 50% !important;\n}\n\n.stashChecker.btn {\n  display: inline-block !important;\n  font-weight: 400 !important;\n  color: #212529 !important;\n  text-align: center !important;\n  vertical-align: middle !important;\n  user-select: none !important;\n  background-color: rgba(0,0,0,0) !important;\n  border: 1px solid rgba(0,0,0,0) !important;\n  padding: .375rem .75rem !important;\n  font-size: 1rem !important;\n  line-height: 1.5 !important;\n  border-radius: .25rem !important;\n  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n}\n\n.stashChecker.btn:not(:disabled):not(.disabled) {\n  cursor: pointer !important;\n}\n\n.stashChecker.btn:hover {\n  color: #212529 !important;\n  text-decoration: none !important;\n}\n\n.stashChecker.btn-primary {\n  color: #fff !important;\n  background-color: #137cbd !important;\n  border-color: #137cbd !important;\n}\n\n.stashChecker.btn-primary:hover {\n  color: #fff !important;\n  background-color: #10659a !important;\n  border-color: #0e5e8f !important;\n}\n\n.stashChecker.btn-danger {\n  color: #fff !important;\n  background-color: #db3737 !important;\n  border-color: #db3737 !important;\n}\n\n.stashChecker.btn-danger:hover {\n  color: #fff !important;\n  background-color: #c82424 !important;\n  border-color: #bd2222 !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: .5rem !important;\n  margin-bottom: .5rem !important;\n  border-color: var(--stash-checker-color-border-light) !important;\n  background-color: var(--stash-checker-color-border-light) !important;\n}\n\n.stashChecker.tooltip hr+br {\n  display: none !important;\n}\n\n.stashChecker.file+br {\n  display: none !important;\n}\n\n.stashCheckerSymbol {\n  font-size: inherit !important;\n}`, "" ]);
+      ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-text-light: #989898 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-border-light: #989898 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n.stashChecker-dark-mode {\n  --stash-checker-color-text: #e0e0e0 !important;\n  --stash-checker-color-text-light: #707070 !important;\n  --stash-checker-color-link-visited: #c7c7c7 !important;\n  --stash-checker-color-link-hover: #f2f2f2 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #5a5a5a !important;\n  --stash-checker-color-border-light: #707070 !important;\n  --stash-checker-color-bg: #202020 !important;\n  --stash-checker-color-card: #464646 !important;\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.sub-heading {\n  font-size: .8rem !important;\n  text-align: center !important;\n  margin: 0 0 .5rem !important;\n}\n\n.stashChecker.tooltip {\n  visibility: visible !important;\n  z-index: 99999 !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  max-width: 60rem !important;\n  position: absolute !important;\n  width: max-content !important;\n}\n\n.stashChecker.file {\n  position: relative !important;\n  margin: .5rem !important;\n  padding: .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tag {\n  white-space: nowrap !important;\n  line-height: 1.5rem !important;\n  margin-right: .5rem !important;\n  padding: 0 .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n  border-radius: .5rem !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: hidden auto !important;\n  overscroll-behavior: contain !important;\n  background-color: #000 !important;\n  background-color: rgba(0,0,0,.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 10vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  width: fit-content !important;\n  display: grid !important;\n  gap: 1rem !important;\n}\n\n.stashChecker.settings .version {\n  color: var(--stash-checker-color-text-light) !important;\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settings select {\n  padding: .25rem 2.25rem .25rem .25rem !important;\n}\n\n.stashChecker.settings input[type=text] {\n  padding: .25rem !important;\n}\n\n.stashChecker.settings input[type=radio] {\n  appearance: radio !important;\n  vertical-align: middle !important;\n}\n\n.stashChecker.settings input[type=checkbox] {\n  appearance: checkbox !important;\n  vertical-align: middle !important;\n}\n\n.stashChecker.settingsSection {\n  width: 50rem !important;\n}\n\n.stashChecker.settingsSectionBody {\n  width: 100% !important;\n  gap: .5rem !important;\n}\n\n.stashChecker.flex-row {\n  display: flex !important;\n  flex-flow: row wrap !important;\n  justify-content: flex-start !important;\n  align-items: flex-start !important;\n}\n\n.stashChecker.flex-column {\n  display: flex !important;\n  flex-flow: column wrap !important;\n  justify-content: flex-start !important;\n  align-items: flex-start !important;\n}\n\n.stashChecker.align-end {\n  align-self: end !important;\n}\n\n.stashChecker .buttonCell {\n  display: flex !important;\n  flex-flow: row wrap !important;\n  justify-content: end !important;\n  column-gap: .2rem !important;\n}\n\n.stashChecker.endpoint {\n  width: 100% !important;\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  padding: 1rem !important;\n  margin: .1rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint>button {\n  flex-grow: 0 !important;\n  margin-left: .5rem !important;\n}\n\n.stashChecker.endpoint>div {\n  flex-grow: 1 !important;\n}\n\n.stashChecker.endpoint>div>* {\n  margin: 0 !important;\n}\n\n.stashChecker.heading {\n  font-size: 1.5rem !important;\n  text-align: center !important;\n}\n\n.stashChecker fieldset {\n  width: fit-content !important;\n  border: .1rem solid var(--stash-checker-color-border-light) !important;\n  border-radius: .5rem !important;\n  margin: .5rem 0 .5rem 0 !important;\n  padding: .5rem !important;\n  flex-grow: 1 !important;\n}\n\n.stashChecker legend {\n  float: unset !important;\n  width: auto !important;\n  height: auto !important;\n  margin-left: .5rem !important;\n  margin-bottom: 0 !important;\n  padding-left: .2rem !important;\n  padding-right: .2rem !important;\n  line-height: unset !important;\n  font-size: unset !important;\n}\n\n.stashChecker table {\n  width: 100% !important;\n}\n\n.stashChecker table,\n.stashChecker thead,\n.stashChecker tbody,\n.stashChecker tr,\n.stashChecker th,\n.stashChecker td {\n  border-collapse: collapse !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  padding: .2rem !important;\n}\n\n.stashChecker .center {\n  text-align: center !important;\n}\n\n.stashChecker .option {\n  text-align: right !important;\n  margin: .5rem !important;\n}\n\n.stashChecker .option>input {\n  margin-left: .5rem !important;\n  color: var(--stash-checker-color-text) !important;\n  background-color: var(--stash-checker-color-bg) !important;\n}\n\n.stashChecker .option>select {\n  margin-left: .5rem !important;\n}\n\n.stashChecker>.matchQuality {\n  width: .8em !important;\n  height: .8em !important;\n  display: inline-block !important;\n  border-radius: 50% !important;\n}\n\n.stashChecker.btn {\n  display: inline-block !important;\n  font-weight: 400 !important;\n  color: #212529 !important;\n  text-align: center !important;\n  vertical-align: middle !important;\n  user-select: none !important;\n  background-color: rgba(0,0,0,0) !important;\n  border: 1px solid rgba(0,0,0,0) !important;\n  padding: .375rem .75rem !important;\n  font-size: 1rem !important;\n  line-height: 1.5 !important;\n  border-radius: .25rem !important;\n  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n}\n\n.stashChecker.btn:not(:disabled):not(.disabled) {\n  cursor: pointer !important;\n}\n\n.stashChecker.btn:hover {\n  color: #212529 !important;\n  text-decoration: none !important;\n}\n\n.stashChecker.btn-primary {\n  color: #fff !important;\n  background-color: #137cbd !important;\n  border-color: #137cbd !important;\n}\n\n.stashChecker.btn-primary:hover {\n  color: #fff !important;\n  background-color: #10659a !important;\n  border-color: #0e5e8f !important;\n}\n\n.stashChecker.btn-danger {\n  color: #fff !important;\n  background-color: #db3737 !important;\n  border-color: #db3737 !important;\n}\n\n.stashChecker.btn-danger:hover {\n  color: #fff !important;\n  background-color: #c82424 !important;\n  border-color: #bd2222 !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: .5rem !important;\n  margin-bottom: .5rem !important;\n  border-color: var(--stash-checker-color-border-light) !important;\n  background-color: var(--stash-checker-color-border-light) !important;\n}\n\n.stashChecker.tooltip hr+br {\n  display: none !important;\n}\n\n.stashChecker.file+br {\n  display: none !important;\n}\n\n.stashCheckerSymbol {\n  font-size: inherit !important;\n}`, "" ]);
       const __WEBPACK_DEFAULT_EXPORT__ = ___CSS_LOADER_EXPORT___;
-    },
-    463: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-      __webpack_require__.d(__webpack_exports__, {
-        E: () => request
-      });
-      var utils = __webpack_require__(185);
-      var Status;
-      (function(Status) {
-        Status[Status["WAITING"] = 0] = "WAITING";
-        Status[Status["RUNNING"] = 1] = "RUNNING";
-        Status[Status["FINISHED"] = 2] = "FINISHED";
-      })(Status || (Status = {}));
-      class JobQueue {
-        constructor(parallel = 1) {
-          this.queue = [];
-          this.parallel = parallel;
-        }
-        enqueue(job) {
-          return new Promise(((resolve, reject) => {
-            this.queue.push({
-              job,
-              resolve,
-              reject,
-              status: Status.WAITING
-            });
-            this.dequeue();
-          }));
-        }
-        dequeue() {
-          let job = this.queue.find(((job, index) => index < this.parallel && job.status === Status.WAITING));
-          if (job) {
-            job.status = Status.RUNNING;
-            void 0;
-            job.job().then(job.resolve).catch(job.reject).finally((() => {
-              job.status = Status.FINISHED;
-              this.queue = this.queue.filter((job => job.status !== Status.FINISHED));
-              void 0;
-              this.dequeue();
-            }));
-          }
-        }
-        length() {
-          return this.queue.length;
-        }
-      }
-      const batchTimeout = 10;
-      const maxBatchSize = 100;
-      let batchQueries = new Map;
-      let batchQueues = new Map;
-      async function request(endpoint, query, batchQueries = false) {
-        if (batchQueries) return addQuery(endpoint, query); else return new Promise(((resolve, reject) => sendQuery(endpoint, `q:${query}`).then((data => resolve(data.q))).catch(reject)));
-      }
-      async function addQuery(endpoint, query) {
-        return new Promise(((resolve, reject) => {
-          let batchQueue = batchQueues.get(endpoint);
-          if (!batchQueue) {
-            batchQueue = new JobQueue(2);
-            batchQueues.set(endpoint, batchQueue);
-          }
-          let batchQuery = batchQueries.get(endpoint);
-          if (!batchQuery) {
-            let timerHandle = window.setTimeout((() => {
-              let query = buildBatchQuery(endpoint, batchQueries.get(endpoint));
-              batchQueue.enqueue((() => sendQuery(endpoint, query.query))).then(query.resolve).catch(query.reject);
-              batchQueries.delete(endpoint);
-            }), batchTimeout);
-            batchQuery = {
-              timerHandle,
-              queries: []
-            };
-            batchQueries.set(endpoint, batchQuery);
-          }
-          batchQuery.queries.push({
-            query,
-            resolve,
-            reject
-          });
-          if (batchQuery.queries.length >= maxBatchSize) {
-            window.clearTimeout(batchQuery.timerHandle);
-            batchQueries.delete(endpoint);
-            let query = buildBatchQuery(endpoint, batchQuery);
-            return batchQueue.enqueue((() => sendQuery(endpoint, query.query))).then(query.resolve).catch(query.reject);
-          }
-        }));
-      }
-      function buildBatchQuery(endpoint, batchQuery) {
-        let query = batchQuery.queries.map(((request, index) => `q${index}:${request.query}`)).join();
-        let resolve = data => {
-          void 0;
-          batchQuery.queries.forEach(((request, index) => {
-            if (request.resolve) request.resolve(data[`q${index}`]);
-          }));
-        };
-        let reject = message => {
-          void 0;
-          batchQuery.queries.forEach((request => {
-            if (request.reject) request.reject(message);
-          }));
-        };
-        console.info(`Build batch query of size ${batchQuery.queries.length} for endpoint '${endpoint.name}'`);
-        return {
-          query,
-          resolve,
-          reject
-        };
-      }
-      async function sendQuery(endpoint, query) {
-        void 0;
-        return new Promise(((resolve, reject) => {
-          GM.xmlHttpRequest({
-            method: "GET",
-            url: `${endpoint.url}?query={${query}}`,
-            headers: {
-              "Content-Type": "application/json",
-              ApiKey: endpoint.key
-            },
-            onload: response => {
-              switch (response.status) {
-               case 200:
-                try {
-                  let r = JSON.parse(response.responseText);
-                  if ("errors" in r) r.errors.forEach((e => {
-                    console.error(`Stash returned "${e.extensions.code}" error: ${e.message}`);
-                    reject(e.message);
-                  })); else resolve(r.data);
-                } catch (e) {
-                  void 0;
-                  reject(response.responseText);
-                }
-                break;
-
-               default:
-                void 0;
-                reject(response.responseText ?? statusMessage(response.status, response.statusText));
-              }
-            },
-            onerror: response => {
-              void 0;
-              reject(response.responseText ?? statusMessage(response.status, response.statusText));
-            },
-            onabort() {
-              reject("aborted");
-            },
-            ontimeout() {
-              reject("timeout");
-            }
-          });
-        }));
-      }
-      function statusMessage(status, statusText) {
-        if (statusText && statusText.trim() !== "") return `${status}: ${statusText}`; else return `${status}: ${utils.iy.get(status)}`;
-      }
     },
     464: (module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
@@ -4857,13 +4897,13 @@
           var _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(378);
           var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(185);
           var _dataTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(389);
-          var _request__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(463);
+          var _request__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(494);
           var _observer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(648);
           var _settings_display__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
           var _settings_providers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(710);
           var urlpattern_polyfill__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(487);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_display__WEBPACK_IMPORTED_MODULE_6__, _settings_providers__WEBPACK_IMPORTED_MODULE_7__ ]);
-          [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_display__WEBPACK_IMPORTED_MODULE_6__, _settings_providers__WEBPACK_IMPORTED_MODULE_7__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _request__WEBPACK_IMPORTED_MODULE_4__, _settings_display__WEBPACK_IMPORTED_MODULE_6__, _settings_providers__WEBPACK_IMPORTED_MODULE_7__ ]);
+          [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _request__WEBPACK_IMPORTED_MODULE_4__, _settings_display__WEBPACK_IMPORTED_MODULE_6__, _settings_providers__WEBPACK_IMPORTED_MODULE_7__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           const supportedDataFields = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Scene, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Title, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Organized, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Code, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Disambiguation, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Favorite, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.AliasList, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Birthdate, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.HeightCm, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Gallery, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Title, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Aliases ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ] ]);
           const supportedSubDataFields = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Studio, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Path, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.VideoCodec, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Width, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Height, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Size, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.BitRate, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Duration ] ] ]);
           function getDataFields(target) {
@@ -4877,26 +4917,32 @@
             let string = supported.join(",");
             return string ? `{${string}}` : "";
           }
+          function escapeString(value, method) {
+            let escapedGraphQl = value.replaceAll("\n", "\\n").replaceAll('"', "\\u0022").replaceAll("\\", "\\\\");
+            switch (method) {
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.IT.Get:
+              return encodeURIComponent(escapedGraphQl);
+
+             default:
+              throw Error(`Missing implementation for method ${method}`);
+            }
+          }
           async function queryStash(queryString, onload, target, type, customFilter, stashIdEndpoint) {
             let filter;
             let query;
             let access = d => d;
+            let method = _dataTypes__WEBPACK_IMPORTED_MODULE_3__.IT.Get;
             switch (type) {
              case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.StashId:
-              filter = `stash_id_endpoint:{endpoint:"${encodeURIComponent(stashIdEndpoint)}",stash_id:"${encodeURIComponent(queryString)}",modifier:EQUALS}${customFilter}`;
+              filter = `stash_id_endpoint:{endpoint:"${escapeString(stashIdEndpoint, method)}",stash_id:"${escapeString(queryString, method)}",modifier:EQUALS}${customFilter}`;
               break;
 
              case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Url:
-              filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:INCLUDES}${customFilter}`;
-              break;
-
-             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Name:
-              filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
-              if (target != _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie) filter += `OR:{aliases:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}}`;
+              filter = `${type}:{value:"${escapeString(queryString, method)}",modifier:INCLUDES}${customFilter}`;
               break;
 
              default:
-              filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
+              filter = `${type}:{value:"${escapeString(queryString, method)}",modifier:EQUALS}${customFilter}`;
               break;
             }
             switch (target) {
@@ -4964,13 +5010,19 @@
             }
             if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag ].includes(target) && nameSelector) {
               let name = nameSelector(element);
-              let nameCount = name?.split(/\s+/)?.length;
-              let kanji = name ? (0, _utils__WEBPACK_IMPORTED_MODULE_2__._t)(name) : false;
-              let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer && nameCount === 1 && !kanji;
+              let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer && name ? ignorePerformerName(name) : true;
               if (name && !ignore) {
                 void 0;
                 await queryStash(name, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, display)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Name, customFilter, stashIdEndpoint);
               } else if (name && ignore) console.info(`Ignore single name: ${name}`); else console.info(`No Name for ${target} found.`);
+            }
+            if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag ].includes(target) && nameSelector) {
+              let name = nameSelector(element);
+              let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer && name ? ignorePerformerName(name) : true;
+              if (name && !ignore) {
+                void 0;
+                await queryStash(name, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, display)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Aliases, customFilter, stashIdEndpoint);
+              } else if (name && ignore) console.info(`Ignore single name alias: ${name}`); else console.info(`No name alias for ${target} found.`);
             }
             if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Scene, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Gallery ].includes(target) && titleSelector) {
               let title = titleSelector(element);
@@ -4979,6 +5031,11 @@
                 await queryStash(title, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, display)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Title, customFilter, stashIdEndpoint);
               } else console.info(`No Title for ${target} found.`);
             }
+          }
+          function ignorePerformerName(name) {
+            let nameCount = name?.split(/\s+/)?.length;
+            let kanji = name ? (0, _utils__WEBPACK_IMPORTED_MODULE_2__._t)(name) : false;
+            return nameCount === 1 && !kanji;
           }
           function getCustomRules(target) {
             let targetRules = _settings_display__WEBPACK_IMPORTED_MODULE_6__.p.filter((rule => rule.target === target));
@@ -5988,6 +6045,131 @@
       a(Y, "URLPattern");
       if (!globalThis.URLPattern) globalThis.URLPattern = Y;
     },
+    494: (module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
+        try {
+          __webpack_require__.d(__webpack_exports__, {
+            E: () => request
+          });
+          var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(185);
+          var _util_jobQueue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(207);
+          var _settings_providers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(710);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_providers__WEBPACK_IMPORTED_MODULE_2__ ]);
+          var __webpack_async_dependencies_result__ = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          _settings_providers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_async_dependencies_result__[0];
+          const batchCollectionTimeout = 10;
+          let batchQueries = new Map;
+          let batchQueues = new Map;
+          async function request(endpoint, query, batchQueries = false) {
+            if (batchQueries) return addQuery(endpoint, query); else return new Promise(((resolve, reject) => sendQuery(endpoint, `q:${query}`).then((data => resolve(data.q))).catch(reject)));
+          }
+          async function addQuery(endpoint, query) {
+            return new Promise(((resolve, reject) => {
+              let batchQueue = batchQueues.get(endpoint);
+              if (!batchQueue) {
+                batchQueue = new _util_jobQueue__WEBPACK_IMPORTED_MODULE_1__.J(2);
+                batchQueues.set(endpoint, batchQueue);
+              }
+              let batchQuery = batchQueries.get(endpoint);
+              if (!batchQuery) {
+                let timerHandle = window.setTimeout((() => {
+                  let query = buildBatchQuery(endpoint, batchQueries.get(endpoint));
+                  batchQueue.enqueue((() => sendQuery(endpoint, query.query))).then(query.resolve).catch(query.reject);
+                  batchQueries.delete(endpoint);
+                }), batchCollectionTimeout);
+                batchQuery = {
+                  timerHandle,
+                  queries: []
+                };
+                batchQueries.set(endpoint, batchQuery);
+              }
+              batchQuery.queries.push({
+                query,
+                resolve,
+                reject
+              });
+              const batchSize = _settings_providers__WEBPACK_IMPORTED_MODULE_2__.Es.get(_settings_providers__WEBPACK_IMPORTED_MODULE_2__.vw.batchSize);
+              if (batchQuery.queries.length >= batchSize) {
+                window.clearTimeout(batchQuery.timerHandle);
+                batchQueries.delete(endpoint);
+                let query = buildBatchQuery(endpoint, batchQuery);
+                return batchQueue.enqueue((() => sendQuery(endpoint, query.query))).then(query.resolve).catch(query.reject);
+              }
+            }));
+          }
+          function buildBatchQuery(endpoint, batchQuery) {
+            let query = batchQuery.queries.map(((request, index) => `q${index}:${request.query}`)).join();
+            let resolve = data => {
+              void 0;
+              batchQuery.queries.forEach(((request, index) => {
+                if (request.resolve) request.resolve(data[`q${index}`]);
+              }));
+            };
+            let reject = message => {
+              void 0;
+              batchQuery.queries.forEach((request => {
+                if (request.reject) request.reject(message);
+              }));
+            };
+            console.info(`Build batch query of size ${batchQuery.queries.length} for endpoint '${endpoint.name}'`);
+            return {
+              query,
+              resolve,
+              reject
+            };
+          }
+          async function sendQuery(endpoint, query) {
+            void 0;
+            return new Promise(((resolve, reject) => {
+              GM.xmlHttpRequest({
+                method: "GET",
+                url: `${endpoint.url}?query={${query}}`,
+                headers: {
+                  "Content-Type": "application/json",
+                  ApiKey: endpoint.key
+                },
+                onload: response => {
+                  switch (response.status) {
+                   case 200:
+                    try {
+                      let r = JSON.parse(response.responseText);
+                      if ("errors" in r) r.errors.forEach((e => {
+                        console.error(`Stash returned "${e.extensions.code}" error: ${e.message}`);
+                        reject(e.message);
+                      })); else resolve(r.data);
+                    } catch (e) {
+                      void 0;
+                      reject(response.responseText);
+                    }
+                    break;
+
+                   default:
+                    void 0;
+                    reject(response.responseText ?? statusMessage(response.status, response.statusText));
+                  }
+                },
+                onerror: response => {
+                  void 0;
+                  reject(response.responseText ?? statusMessage(response.status, response.statusText));
+                },
+                onabort() {
+                  reject("aborted");
+                },
+                ontimeout() {
+                  reject("timeout");
+                }
+              });
+            }));
+          }
+          function statusMessage(status, statusText) {
+            if (statusText && statusText.trim() !== "") return `${status}: ${statusText}`; else return `${status}: ${_utils__WEBPACK_IMPORTED_MODULE_0__.iy.get(status)}`;
+          }
+          __webpack_async_result__();
+        } catch (e) {
+          __webpack_async_result__(e);
+        }
+      }));
+    },
     513: (module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
@@ -6022,116 +6204,6 @@
         }
       }));
     },
-    519: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-      __webpack_require__.d(__webpack_exports__, {
-        $0: () => createTableBody,
-        NY: () => createParagraph,
-        RA: () => createHeading,
-        Sw: () => createDiv,
-        Tf: () => createButton,
-        Tg: () => createTableCell,
-        VI: () => createSpan,
-        Ve: () => createTableHead,
-        ZR: () => createTable,
-        dc: () => createTableRow,
-        fp: () => createLabel,
-        ph: () => createInput,
-        qi: () => createBreak
-      });
-      function createBreak(...classes) {
-        let element = document.createElement("br");
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-      function createButton(...classes) {
-        let element = document.createElement("button");
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-      function createDiv(...classes) {
-        let element = document.createElement("div");
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-      function createInput(...classes) {
-        let element = document.createElement("input");
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-      function createLabel(...classes) {
-        let element = document.createElement("label");
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-      function createParagraph(...classes) {
-        let element = document.createElement("p");
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-      function createSpan(...classes) {
-        let element = document.createElement("span");
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-      function createHeading(size, ...classes) {
-        let element;
-        switch (size) {
-         case 1:
-          element = document.createElement("h1");
-          break;
-
-         case 2:
-          element = document.createElement("h2");
-          break;
-
-         case 3:
-          element = document.createElement("h3");
-          break;
-
-         case 4:
-          element = document.createElement("h4");
-          break;
-
-         case 5:
-          element = document.createElement("h5");
-          break;
-
-         case 6:
-          element = document.createElement("h6");
-          break;
-
-         default:
-          throw Error("Size not a valid header size");
-        }
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-      function createTable(...classes) {
-        let element = document.createElement("table");
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-      function createTableBody(...classes) {
-        let element = document.createElement("tbody");
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-      function createTableCell(...classes) {
-        let element = document.createElement("td");
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-      function createTableHead(...classes) {
-        let element = document.createElement("thead");
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-      function createTableRow(...classes) {
-        let element = document.createElement("tr");
-        if (classes.length !== 0) element.classList.add(...classes);
-        return element;
-      }
-    },
     540: module => {
       function insertStyleElement(options) {
         var element = document.createElement("style");
@@ -6145,18 +6217,19 @@
       __webpack_require__.d(__webpack_exports__, {
         OO: () => checkBox,
         _V: () => charBox,
-        g4: () => selectMenu
+        g4: () => selectMenu,
+        jB: () => numberBox
       });
-      var _htmlHelper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(519);
+      var _util_htmlHelper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
       function checkBox(key, label, valueProvider) {
-        let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.Sw)("option");
-        let inputElement = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.ph)();
+        let div = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_0__.Sw)("option");
+        let inputElement = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_0__.ph)();
         inputElement.id = `stashChecker-checkBox-${key}`;
         inputElement.name = key;
         inputElement.type = "checkbox";
         inputElement.defaultChecked = valueProvider.get(key) ?? false;
         inputElement.addEventListener("input", (() => valueProvider.set(key, inputElement.checked)));
-        let labelElement = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.fp)();
+        let labelElement = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_0__.fp)();
         labelElement.htmlFor = inputElement.id;
         labelElement.innerHTML = label;
         div.appendChild(labelElement);
@@ -6164,15 +6237,31 @@
         return div;
       }
       function charBox(key, label, valueProvider) {
-        let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.Sw)("option");
-        let inputElement = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.ph)();
+        let div = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_0__.Sw)("option");
+        let inputElement = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_0__.ph)();
         inputElement.id = `stashChecker-textBox-${key}`;
         inputElement.name = key;
         inputElement.type = "text";
         inputElement.size = 2;
         inputElement.defaultValue = valueProvider.get(key) ?? "";
         inputElement.addEventListener("input", (() => valueProvider.set(key, inputElement.value)));
-        let labelElement = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.fp)();
+        let labelElement = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_0__.fp)();
+        labelElement.htmlFor = inputElement.id;
+        labelElement.innerHTML = label;
+        div.appendChild(labelElement);
+        div.appendChild(inputElement);
+        return div;
+      }
+      function numberBox(key, label, valueProvider) {
+        let div = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_0__.Sw)("option");
+        let inputElement = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_0__.ph)();
+        inputElement.id = `stashChecker-numberBox-${key}`;
+        inputElement.name = key;
+        inputElement.type = "number";
+        inputElement.size = 3;
+        inputElement.defaultValue = valueProvider.get(key)?.toString() ?? "0";
+        inputElement.addEventListener("input", (() => valueProvider.set(key, parseInt(inputElement.value))));
+        let labelElement = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_0__.fp)();
         labelElement.htmlFor = inputElement.id;
         labelElement.innerHTML = label;
         div.appendChild(labelElement);
@@ -6180,8 +6269,8 @@
         return div;
       }
       function selectMenu(key, label, options, valueProvider) {
-        let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.Sw)("option");
-        let labelElement = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_0__.fp)();
+        let div = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_0__.Sw)("option");
+        let labelElement = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_0__.fp)();
         labelElement.htmlFor = `stashChecker-dropdown-${key}`;
         labelElement.innerHTML = label;
         let selectElement = document.createElement("select");
@@ -6219,6 +6308,7 @@
         StorageKey["CustomDisplayRules"] = "customDisplayRules";
         StorageKey["StashEndpoints"] = "stashEndpoints";
         StorageKey["StringOptions"] = "stringOptions";
+        StorageKey["NumberOptions"] = "numberOptions";
       })(StorageKey || (StorageKey = {}));
       async function getValue(key, defaultValue) {
         const text = await GM.getValue(key, void 0);
@@ -6334,13 +6424,16 @@
         try {
           __webpack_require__.d(__webpack_exports__, {
             $k: () => booleanOptions,
+            Es: () => numberOptions,
             i3: () => stringOptions,
             vw: () => OptionKey
           });
           var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(613);
           var _dataTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(389);
+          var _util_defaultableMap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(172);
           var OptionKey;
           (function(OptionKey) {
+            OptionKey["batchSize"] = "batchSize";
             OptionKey["showCheckMark"] = "showCheckMark";
             OptionKey["showCrossMark"] = "showCrossMark";
             OptionKey["showTags"] = "showTags";
@@ -6352,36 +6445,13 @@
           })(OptionKey || (OptionKey = {}));
           const defaultBooleanOptions = new Map([ [ OptionKey.showCheckMark, true ], [ OptionKey.showCrossMark, true ], [ OptionKey.showTags, true ], [ OptionKey.showFiles, true ] ]);
           const defaultStringOptions = new Map([ [ OptionKey.checkMark, "✓" ], [ OptionKey.crossMark, "✗" ], [ OptionKey.warningMark, "!" ], [ OptionKey.theme, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Device ] ]);
-          class DefaultableMap extends Map {
-            constructor(map, defaults, onChange) {
-              super(map.entries());
-              this.defaults = defaults;
-              this.onChange = onChange;
-            }
-            onChange() {}
-            clear() {
-              super.clear();
-              this.onChange();
-            }
-            delete(key) {
-              let result = super.delete(key);
-              this.onChange();
-              return result;
-            }
-            get(key) {
-              return super.get(key) ?? this.defaults.get(key);
-            }
-            set(key, value) {
-              super.set(key, value);
-              this.onChange();
-              return this;
-            }
-          }
+          const defaultNumberOptions = new Map([ [ OptionKey.batchSize, 50 ] ]);
           const booleanOptions = await optionProvider(_storage__WEBPACK_IMPORTED_MODULE_0__.Zg.BooleanOptions, defaultBooleanOptions);
           const stringOptions = await optionProvider(_storage__WEBPACK_IMPORTED_MODULE_0__.Zg.StringOptions, defaultStringOptions);
+          const numberOptions = await optionProvider(_storage__WEBPACK_IMPORTED_MODULE_0__.Zg.NumberOptions, defaultNumberOptions);
           async function optionProvider(storageKey, defaultOptions) {
             let map = await (0, _storage__WEBPACK_IMPORTED_MODULE_0__._W)(storageKey, new Map);
-            return new DefaultableMap(map, defaultOptions, (function() {
+            return new _util_defaultableMap__WEBPACK_IMPORTED_MODULE_2__.O(map, defaultOptions, (function() {
               (0, _storage__WEBPACK_IMPORTED_MODULE_0__.KY)(storageKey, this);
             }));
           }
@@ -6525,12 +6595,12 @@
               break;
 
              case "www.iafd.com":
-              if (window.location.pathname.startsWith("/person.rme/perfid=")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1", {
+              if (window.location.pathname.startsWith("/person.rme/id=")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1", {
                 urlSelector: currentSite
               }); else if (window.location.pathname.startsWith("/title.rme/id=")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1", {
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/person.rme/perfid=']");
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/person.rme/id=']");
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href*='/title.rme/id=']");
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "a[href*='/studio.rme/studio=']");
               break;
@@ -7091,7 +7161,7 @@
           });
           var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
           var _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(59);
-          var _htmlHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(519);
+          var _util_htmlHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(128);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_1__ ]);
           var __webpack_async_dependencies_result__ = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_async_dependencies_result__[0];
@@ -7105,7 +7175,7 @@
               let s = statistics(target);
               return s ? [ s ] : [];
             })).join("<br>");
-            let span = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_2__.VI)();
+            let span = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_2__.VI)();
             span.innerHTML = string;
             statisticsSection.replaceChildren(span);
           }
