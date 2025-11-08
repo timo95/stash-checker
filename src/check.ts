@@ -1,7 +1,16 @@
 import {prefixSymbol} from "./tooltip/tooltip";
 import {stashEndpoints} from "./settings/endpoints";
 import {firstText, hasKanji, nakedDomain} from "./utils";
-import {CheckOptions, CustomDisplayRule, DataField, DisplayOptions, StashEndpoint, Target, Type} from "./dataTypes";
+import {
+    CheckOptions,
+    CustomDisplayRule,
+    DataField,
+    DisplayOptions,
+    Method,
+    StashEndpoint,
+    Target,
+    Type
+} from "./dataTypes";
 import {request} from "./request";
 import {onAddition} from "./observer";
 import {customDisplayRules} from "./settings/display";
@@ -47,6 +56,20 @@ function getSubDataFields(field: DataField): string {
     return string ? `{${string}}` : ""
 }
 
+function escapeString(value: string, method: Method): string {
+    let escapedGraphQl = value
+        .replaceAll("\n", "\\n")
+        .replaceAll('"', "\\u0022")
+        .replaceAll("\\", "\\\\")
+
+    switch (method) {
+        case Method.Get:
+            return encodeURIComponent(escapedGraphQl)
+        default:
+            throw Error(`Missing implementation for method ${method}`);
+    }
+}
+
 async function queryStash(
     queryString: string,
     onload: (target: Target, type: Type, endpoint: StashEndpoint, data: any[]) => any,
@@ -59,16 +82,18 @@ async function queryStash(
     let query: string;
     let access = (d: any) => d;
 
+    let method = Method.Get
+
     // Build filter
     switch (type) {
         case Type.StashId:
-            filter = `stash_id_endpoint:{endpoint:"${encodeURIComponent(stashIdEndpoint)}",stash_id:"${encodeURIComponent(queryString)}",modifier:EQUALS}${customFilter}`;
+            filter = `stash_id_endpoint:{endpoint:"${escapeString(stashIdEndpoint, method)}",stash_id:"${escapeString(queryString, method)}",modifier:EQUALS}${customFilter}`;
             break;
         case Type.Url:
-            filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:INCLUDES}${customFilter}`;
+            filter = `${type}:{value:"${escapeString(queryString, method)}",modifier:INCLUDES}${customFilter}`;
             break;
         default:
-            filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
+            filter = `${type}:{value:"${escapeString(queryString, method)}",modifier:EQUALS}${customFilter}`;
             break;
     }
 

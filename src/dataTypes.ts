@@ -98,6 +98,10 @@ export enum Target {
     Tag = "tag",
 }
 
+export enum Method {
+    Get = "get",
+}
+
 export function readable(target: Target): string {
     return target.charAt(0).toUpperCase() + target.slice(1);
 }
