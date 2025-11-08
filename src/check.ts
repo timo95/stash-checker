@@ -66,6 +66,12 @@ async function queryStash(
         case Type.Url:
             filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:INCLUDES}${customFilter}`;
             break;
+        case Type.Name:
+            filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
+            if (target != Target.Movie) {
+                filter += `OR:{aliases:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}}`;
+            }
+            break;
         default:
             filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
             break;
