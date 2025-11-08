@@ -273,6 +273,32 @@ export async function runStashChecker() {
             });
             break;
         }
+        case 'www.avbase.net': {
+            check(Target.Performer, "a[href*='/talents/']:not([href*='on_sale']):not([href*='page='])", {observe: true});
+            check(Target.Scene, "div:not(.bg-base-100) > a[href*='/works/']:not([href*='/works/date']):not([href*='/edit'])", {
+                observe: true,
+                codeSelector: e => e.getAttribute("href")?.split(":")?.[1] || e.getAttribute("href")?.split("works/")?.[1],
+            });
+            check(Target.Studio, "a[href*='/makers/']:not([href*='page='])", {observe: true});
+            check(Target.Studio, "a[href*='/labels/']:not([href*='page='])", {observe: true});
+            check(Target.Movie, "a[href*='/series/']:not([href*='page='])", {observe: true});
+            if (/talents\//.test(window.location.pathname)) {
+                check(Target.Performer, "h1:first-child", {observe: true})
+            }
+            if (/works\//.test(window.location.pathname)) {
+                check(Target.Scene, "h1:first-child", {
+                    observe: true,
+                    codeSelector: _ => currentSite().split("works/")[1]?.split(":")?.[1] || currentSite().split("works/")[1],
+                })
+            }
+            if (/makers\/|labels\//.test(window.location.pathname)) {
+                check(Target.Studio, "h1:first-child", {observe: true})
+            }
+            if (/series\//.test(window.location.pathname)) {
+                check(Target.Movie, "h1:first-child", {observe: true})
+            }
+            break;
+        }
         case "www.indexxx.com": {
             check(Target.Performer, "h1[id='model-name']", {urlSelector: currentSite});
             check(Target.Performer, "a[class^='modelLink'][href*='/m/'] > span", {observe: true});
