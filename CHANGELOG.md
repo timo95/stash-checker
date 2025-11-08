@@ -1,6 +1,11 @@
 
 ## [WIP]
 
+- Add support for websites: avbase.net, fc2ppvdb.com
+- Add aliases matching for tags, performers and studios
+- Add batchSize setting
+- Fix iafd performer sites
+- Fix quotes in title parsing error [#45]
 
 ## [1.1.0]
 - Add support for studio websites: Vixen Media Group, MetArt Network, WowNetwork
