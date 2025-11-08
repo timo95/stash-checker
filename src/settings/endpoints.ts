@@ -2,7 +2,7 @@ import {getValue, setValue, StorageKey} from "./storage";
 import {request} from "../request";
 import {StashEndpoint} from "../dataTypes";
 import {buttonDanger, buttonPrimary, getSettingsSection, newSettingsSection} from "./settings";
-import {createDiv} from "../htmlHelper";
+import {createDiv} from "../util/htmlHelper";
 
 const defaultData: StashEndpoint[] = [{
     name: "Localhost",

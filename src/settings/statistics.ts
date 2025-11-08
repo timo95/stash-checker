@@ -1,6 +1,6 @@
 import {readablePlural, StashSymbol, Target} from "../dataTypes";
 import {getSettingsSection, newSettingsSection} from "./settings";
-import {createSpan} from "../htmlHelper";
+import {createSpan} from "../util/htmlHelper";
 
 
 export function initStatistics() {

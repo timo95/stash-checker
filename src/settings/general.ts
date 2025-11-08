@@ -2,7 +2,7 @@ import {buttonDanger, getSettingsSection, newSettingsSection} from "./settings";
 import {Theme} from "../dataTypes";
 import {charBox, checkBox, numberBox, selectMenu} from "./elements";
 import {booleanOptions, numberOptions, OptionKey, stringOptions} from "./providers";
-import {createDiv} from "../htmlHelper";
+import {createDiv} from "../util/htmlHelper";
 
 export function initGeneralSettings() {
     let generalSection = newSettingsSection("general", "General")

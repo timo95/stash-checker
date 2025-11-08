@@ -1,6 +1,6 @@
 import {BatchQuery, GraphQlQuery, StashEndpoint} from "./dataTypes";
 import {friendlyHttpStatus} from "./utils";
-import {JobQueue} from "./jobQueue";
+import {JobQueue} from "./util/jobQueue";
 import {numberOptions, OptionKey} from "./settings/providers";
 
 const batchCollectionTimeout = 10;

@@ -3,7 +3,7 @@ import {clearSymbols} from "../tooltip/tooltip";
 import {runStashChecker} from "../stashChecker";
 import {updateStatistics} from "./statistics";
 import {setTheme} from "../style/theme";
-import {createButton, createDiv, createParagraph, createHeading} from "../htmlHelper";
+import {createButton, createDiv, createParagraph, createHeading} from "../util/htmlHelper";
 
 export function initSettingsWindow() {
     let settingsModal = createDiv("stashChecker", "modal");

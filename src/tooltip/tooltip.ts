@@ -13,7 +13,7 @@ import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "
 import {StashQuery, StashQueryClass} from "./stashQuery";
 import {symbolMouseoverListener, symbolMouseoutListener} from "./tooltipElement";
 import {booleanOptions, OptionKey, stringOptions} from "../settings/providers";
-import {createSpan} from "../htmlHelper";
+import {createSpan} from "../util/htmlHelper";
 
 /**
  * find existing symbol span recursively, undefined if none available

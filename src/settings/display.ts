@@ -12,7 +12,7 @@ import {
     createTableHead,
     createTableRow,
     createSpan, createBreak
-} from "../htmlHelper";
+} from "../util/htmlHelper";
 
 // TODO: isActive indicator
 

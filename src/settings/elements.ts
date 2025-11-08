@@ -1,5 +1,5 @@
 import {OptionKey} from "./providers";
-import {createDiv, createInput, createLabel} from "../htmlHelper";
+import {createDiv, createInput, createLabel} from "../util/htmlHelper";
 
 export function checkBox(key: OptionKey, label: string, valueProvider: Map<OptionKey, boolean>): HTMLElement {
     let div = createDiv("option")

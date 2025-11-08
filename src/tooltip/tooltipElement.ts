@@ -1,6 +1,6 @@
 
 import {computePosition, ComputePositionConfig, flip, offset, shift} from "@floating-ui/dom";
-import {createDiv} from "../htmlHelper";
+import {createDiv} from "../util/htmlHelper";
 
 const tooltipWindowId = "stashChecker-tooltipWindow";
 const outHandleKey = "outHandle";
