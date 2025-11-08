@@ -262,8 +262,9 @@
       function floating_ui_utils_getAxisLength(axis) {
         return axis === "y" ? "height" : "width";
       }
+      const yAxisSides = new Set([ "top", "bottom" ]);
       function floating_ui_utils_getSideAxis(placement) {
-        return [ "top", "bottom" ].includes(floating_ui_utils_getSide(placement)) ? "y" : "x";
+        return yAxisSides.has(floating_ui_utils_getSide(placement)) ? "y" : "x";
       }
       function floating_ui_utils_getAlignmentAxis(placement) {
         return floating_ui_utils_getOppositeAxis(floating_ui_utils_getSideAxis(placement));
@@ -284,20 +285,20 @@
       function floating_ui_utils_getOppositeAlignmentPlacement(placement) {
         return placement.replace(/start|end/g, (alignment => oppositeAlignmentMap[alignment]));
       }
+      const lrPlacement = [ "left", "right" ];
+      const rlPlacement = [ "right", "left" ];
+      const tbPlacement = [ "top", "bottom" ];
+      const btPlacement = [ "bottom", "top" ];
       function getSideList(side, isStart, rtl) {
-        const lr = [ "left", "right" ];
-        const rl = [ "right", "left" ];
-        const tb = [ "top", "bottom" ];
-        const bt = [ "bottom", "top" ];
         switch (side) {
          case "top":
          case "bottom":
-          if (rtl) return isStart ? rl : lr;
-          return isStart ? lr : rl;
+          if (rtl) return isStart ? rlPlacement : lrPlacement;
+          return isStart ? lrPlacement : rlPlacement;
 
          case "left":
          case "right":
-          return isStart ? tb : bt;
+          return isStart ? tbPlacement : btPlacement;
 
          default:
           return [];
@@ -646,10 +647,8 @@
               const nextIndex = (((_middlewareData$flip2 = middlewareData.flip) == null ? void 0 : _middlewareData$flip2.index) || 0) + 1;
               const nextPlacement = placements[nextIndex];
               if (nextPlacement) {
-                var _overflowsData$;
                 const ignoreCrossAxisOverflow = checkCrossAxis === "alignment" ? initialSideAxis !== floating_ui_utils_getSideAxis(nextPlacement) : false;
-                const hasInitialMainAxisOverflow = ((_overflowsData$ = overflowsData[0]) == null ? void 0 : _overflowsData$.overflows[0]) > 0;
-                if (!ignoreCrossAxisOverflow || hasInitialMainAxisOverflow) return {
+                if (!ignoreCrossAxisOverflow || overflowsData.every((d => floating_ui_utils_getSideAxis(d.placement) === initialSideAxis ? d.overflows[0] > 0 : true))) return {
                   data: {
                     index: nextIndex,
                     overflows: overflowsData
@@ -843,13 +842,14 @@
           }
         };
       };
+      const originSides = new Set([ "left", "top" ]);
       async function convertValueToCoords(state, options) {
         const {placement, platform, elements} = state;
         const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(elements.floating));
         const side = floating_ui_utils_getSide(placement);
         const alignment = floating_ui_utils_getAlignment(placement);
         const isVertical = floating_ui_utils_getSideAxis(placement) === "y";
-        const mainAxisMulti = [ "left", "top" ].includes(side) ? -1 : 1;
+        const mainAxisMulti = originSides.has(side) ? -1 : 1;
         const crossAxisMulti = rtl && isVertical ? -1 : 1;
         const rawValue = floating_ui_utils_evaluate(options, state);
         let {mainAxis, crossAxis, alignmentAxis} = typeof rawValue === "number" ? {
@@ -982,7 +982,7 @@
             if (checkCrossAxis) {
               var _middlewareData$offse, _middlewareData$offse2;
               const len = mainAxis === "y" ? "width" : "height";
-              const isOriginSide = [ "top", "left" ].includes(getSide(placement));
+              const isOriginSide = originSides.has(getSide(placement));
               const limitMin = rects.reference[crossAxis] - rects.floating[len] + (isOriginSide ? ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse[crossAxis]) || 0 : 0) + (isOriginSide ? 0 : computedOffset.crossAxis);
               const limitMax = rects.reference[crossAxis] + rects.reference[len] + (isOriginSide ? 0 : ((_middlewareData$offse2 = middlewareData.offset) == null ? void 0 : _middlewareData$offse2[crossAxis]) || 0) - (isOriginSide ? computedOffset.crossAxis : 0);
               if (crossAxisCoord < limitMin) crossAxisCoord = limitMin; else if (crossAxisCoord > limitMax) crossAxisCoord = limitMax;
@@ -1079,26 +1079,32 @@
         if (!hasWindow() || typeof ShadowRoot === "undefined") return false;
         return value instanceof ShadowRoot || value instanceof getWindow(value).ShadowRoot;
       }
+      const invalidOverflowDisplayValues = new Set([ "inline", "contents" ]);
       function isOverflowElement(element) {
-        const {overflow, overflowX, overflowY, display} = getComputedStyle(element);
-        return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && ![ "inline", "contents" ].includes(display);
+        const {overflow, overflowX, overflowY, display} = floating_ui_utils_dom_getComputedStyle(element);
+        return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && !invalidOverflowDisplayValues.has(display);
       }
+      const tableElements = new Set([ "table", "td", "th" ]);
       function isTableElement(element) {
-        return [ "table", "td", "th" ].includes(getNodeName(element));
+        return tableElements.has(getNodeName(element));
       }
+      const topLayerSelectors = [ ":popover-open", ":modal" ];
       function isTopLayer(element) {
-        return [ ":popover-open", ":modal" ].some((selector => {
+        return topLayerSelectors.some((selector => {
           try {
             return element.matches(selector);
-          } catch (e) {
+          } catch (_e) {
             return false;
           }
         }));
       }
+      const transformProperties = [ "transform", "translate", "scale", "rotate", "perspective" ];
+      const willChangeValues = [ "transform", "translate", "scale", "rotate", "perspective", "filter" ];
+      const containValues = [ "paint", "layout", "strict", "content" ];
       function isContainingBlock(elementOrCss) {
         const webkit = isWebKit();
-        const css = isElement(elementOrCss) ? getComputedStyle(elementOrCss) : elementOrCss;
-        return [ "transform", "translate", "scale", "rotate", "perspective" ].some((value => css[value] ? css[value] !== "none" : false)) || (css.containerType ? css.containerType !== "normal" : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== "none" : false) || !webkit && (css.filter ? css.filter !== "none" : false) || [ "transform", "translate", "scale", "rotate", "perspective", "filter" ].some((value => (css.willChange || "").includes(value))) || [ "paint", "layout", "strict", "content" ].some((value => (css.contain || "").includes(value)));
+        const css = isElement(elementOrCss) ? floating_ui_utils_dom_getComputedStyle(elementOrCss) : elementOrCss;
+        return transformProperties.some((value => css[value] ? css[value] !== "none" : false)) || (css.containerType ? css.containerType !== "normal" : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== "none" : false) || !webkit && (css.filter ? css.filter !== "none" : false) || willChangeValues.some((value => (css.willChange || "").includes(value))) || containValues.some((value => (css.contain || "").includes(value)));
       }
       function getContainingBlock(element) {
         let currentNode = getParentNode(element);
@@ -1112,10 +1118,11 @@
         if (typeof CSS === "undefined" || !CSS.supports) return false;
         return CSS.supports("-webkit-backdrop-filter", "none");
       }
+      const lastTraversableNodeNames = new Set([ "html", "body", "#document" ]);
       function isLastTraversableNode(node) {
-        return [ "html", "body", "#document" ].includes(getNodeName(node));
+        return lastTraversableNodeNames.has(getNodeName(node));
       }
-      function getComputedStyle(element) {
+      function floating_ui_utils_dom_getComputedStyle(element) {
         return getWindow(element).getComputedStyle(element);
       }
       function getNodeScroll(element) {
@@ -1156,7 +1163,7 @@
         return win.parent && Object.getPrototypeOf(win.parent) ? win.frameElement : null;
       }
       function getCssDimensions(element) {
-        const css = getComputedStyle(element);
+        const css = floating_ui_utils_dom_getComputedStyle(element);
         let width = parseFloat(css.width) || 0;
         let height = parseFloat(css.height) || 0;
         const hasOffset = isHTMLElement(element);
@@ -1226,7 +1233,7 @@
           while (currentIFrame && offsetParent && offsetWin !== currentWin) {
             const iframeScale = getScale(currentIFrame);
             const iframeRect = currentIFrame.getBoundingClientRect();
-            const css = getComputedStyle(currentIFrame);
+            const css = floating_ui_utils_dom_getComputedStyle(currentIFrame);
             const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css.paddingLeft)) * iframeScale.x;
             const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeScale.y;
             x *= iframeScale.x;
@@ -1251,10 +1258,9 @@
         if (!rect) return getBoundingClientRect(floating_ui_utils_dom_getDocumentElement(element)).left + leftScroll;
         return rect.left + leftScroll;
       }
-      function getHTMLOffset(documentElement, scroll, ignoreScrollbarX) {
-        if (ignoreScrollbarX === void 0) ignoreScrollbarX = false;
+      function getHTMLOffset(documentElement, scroll) {
         const htmlRect = documentElement.getBoundingClientRect();
-        const x = htmlRect.left + scroll.scrollLeft - (ignoreScrollbarX ? 0 : getWindowScrollBarX(documentElement, htmlRect));
+        const x = htmlRect.left + scroll.scrollLeft - getWindowScrollBarX(documentElement, htmlRect);
         const y = htmlRect.top + scroll.scrollTop;
         return {
           x,
@@ -1283,7 +1289,7 @@
             offsets.y = offsetRect.y + offsetParent.clientTop;
           }
         }
-        const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll, true) : createCoords(0);
+        const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
         return {
           width: rect.width * scale.x,
           height: rect.height * scale.y,
@@ -1302,7 +1308,7 @@
         const height = floating_ui_utils_max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
         let x = -scroll.scrollLeft + getWindowScrollBarX(element);
         const y = -scroll.scrollTop;
-        if (getComputedStyle(body).direction === "rtl") x += floating_ui_utils_max(html.clientWidth, body.clientWidth) - width;
+        if (floating_ui_utils_dom_getComputedStyle(body).direction === "rtl") x += floating_ui_utils_max(html.clientWidth, body.clientWidth) - width;
         return {
           width,
           height,
@@ -1310,6 +1316,7 @@
           y
         };
       }
+      const SCROLLBAR_MAX = 25;
       function getViewportRect(element, strategy) {
         const win = getWindow(element);
         const html = floating_ui_utils_dom_getDocumentElement(element);
@@ -1327,6 +1334,15 @@
             y = visualViewport.offsetTop;
           }
         }
+        const windowScrollbarX = getWindowScrollBarX(html);
+        if (windowScrollbarX <= 0) {
+          const doc = html.ownerDocument;
+          const body = doc.body;
+          const bodyStyles = getComputedStyle(body);
+          const bodyMarginInline = doc.compatMode === "CSS1Compat" ? parseFloat(bodyStyles.marginLeft) + parseFloat(bodyStyles.marginRight) || 0 : 0;
+          const clippingStableScrollbarWidth = Math.abs(html.clientWidth - body.clientWidth - bodyMarginInline);
+          if (clippingStableScrollbarWidth <= SCROLLBAR_MAX) width -= clippingStableScrollbarWidth;
+        } else if (windowScrollbarX <= SCROLLBAR_MAX) width += windowScrollbarX;
         return {
           width,
           height,
@@ -1334,6 +1350,7 @@
           y
         };
       }
+      const absoluteOrFixed = new Set([ "absolute", "fixed" ]);
       function getInnerBoundingClientRect(element, strategy) {
         const clientRect = getBoundingClientRect(element, true, strategy === "fixed");
         const top = clientRect.top + element.clientTop;
@@ -1366,20 +1383,20 @@
       function hasFixedPositionAncestor(element, stopNode) {
         const parentNode = getParentNode(element);
         if (parentNode === stopNode || !isElement(parentNode) || isLastTraversableNode(parentNode)) return false;
-        return getComputedStyle(parentNode).position === "fixed" || hasFixedPositionAncestor(parentNode, stopNode);
+        return floating_ui_utils_dom_getComputedStyle(parentNode).position === "fixed" || hasFixedPositionAncestor(parentNode, stopNode);
       }
       function getClippingElementAncestors(element, cache) {
         const cachedResult = cache.get(element);
         if (cachedResult) return cachedResult;
         let result = floating_ui_utils_dom_getOverflowAncestors(element, [], false).filter((el => isElement(el) && getNodeName(el) !== "body"));
         let currentContainingBlockComputedStyle = null;
-        const elementIsFixed = getComputedStyle(element).position === "fixed";
+        const elementIsFixed = floating_ui_utils_dom_getComputedStyle(element).position === "fixed";
         let currentNode = elementIsFixed ? getParentNode(element) : element;
         while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
-          const computedStyle = getComputedStyle(currentNode);
+          const computedStyle = floating_ui_utils_dom_getComputedStyle(currentNode);
           const currentNodeIsContaining = isContainingBlock(currentNode);
           if (!currentNodeIsContaining && computedStyle.position === "fixed") currentContainingBlockComputedStyle = null;
-          const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === "static" && !!currentContainingBlockComputedStyle && [ "absolute", "fixed" ].includes(currentContainingBlockComputedStyle.position) || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
+          const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === "static" && !!currentContainingBlockComputedStyle && absoluteOrFixed.has(currentContainingBlockComputedStyle.position) || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
           if (shouldDropCurrentNode) result = result.filter((ancestor => ancestor !== currentNode)); else currentContainingBlockComputedStyle = computedStyle;
           currentNode = getParentNode(currentNode);
         }
@@ -1446,10 +1463,10 @@
         };
       }
       function isStaticPositioned(element) {
-        return getComputedStyle(element).position === "static";
+        return floating_ui_utils_dom_getComputedStyle(element).position === "static";
       }
       function getTrueOffsetParent(element, polyfill) {
-        if (!isHTMLElement(element) || getComputedStyle(element).position === "fixed") return null;
+        if (!isHTMLElement(element) || floating_ui_utils_dom_getComputedStyle(element).position === "fixed") return null;
         if (polyfill) return polyfill(element);
         let rawOffsetParent = element.offsetParent;
         if (floating_ui_utils_dom_getDocumentElement(element) === rawOffsetParent) rawOffsetParent = rawOffsetParent.ownerDocument.body;
@@ -1486,7 +1503,7 @@
         };
       };
       function isRTL(element) {
-        return getComputedStyle(element).direction === "rtl";
+        return floating_ui_utils_dom_getComputedStyle(element).direction === "rtl";
       }
       const platform = {
         convertOffsetParentRelativeRectToViewportRelativeRect,
@@ -1702,11 +1719,11 @@
           });
           var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(59);
           var _dataTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(389);
-          var _elements__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(591);
-          var _providers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(710);
+          var _elements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(591);
+          var _providers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(710);
           var _htmlHelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(519);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_2__ ]);
-          [_settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_2__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_3__ ]);
+          [_settings__WEBPACK_IMPORTED_MODULE_0__, _providers__WEBPACK_IMPORTED_MODULE_3__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           function initGeneralSettings() {
             let generalSection = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.Lc)("general", "General");
             generalSection.classList.add("flex-row");
@@ -1714,16 +1731,16 @@
           }
           function populateGeneralSection(generalSection) {
             let symbolSettings = fieldSet("symbol-settings", "Symbol");
-            symbolSettings.append((0, _elements__WEBPACK_IMPORTED_MODULE_3__.OO)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.showCheckMark, "Show check mark", _providers__WEBPACK_IMPORTED_MODULE_2__.$k), (0, 
-            _elements__WEBPACK_IMPORTED_MODULE_3__.OO)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.showCrossMark, "Show cross mark", _providers__WEBPACK_IMPORTED_MODULE_2__.$k), (0, 
-            _elements__WEBPACK_IMPORTED_MODULE_3__._V)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.checkMark, "Check mark", _providers__WEBPACK_IMPORTED_MODULE_2__.i3), (0, 
-            _elements__WEBPACK_IMPORTED_MODULE_3__._V)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.warningMark, "Duplicate mark", _providers__WEBPACK_IMPORTED_MODULE_2__.i3), (0, 
-            _elements__WEBPACK_IMPORTED_MODULE_3__._V)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.crossMark, "Cross mark", _providers__WEBPACK_IMPORTED_MODULE_2__.i3));
+            symbolSettings.append((0, _elements__WEBPACK_IMPORTED_MODULE_2__.OO)(_providers__WEBPACK_IMPORTED_MODULE_3__.vw.showCheckMark, "Show check mark", _providers__WEBPACK_IMPORTED_MODULE_3__.$k), (0, 
+            _elements__WEBPACK_IMPORTED_MODULE_2__.OO)(_providers__WEBPACK_IMPORTED_MODULE_3__.vw.showCrossMark, "Show cross mark", _providers__WEBPACK_IMPORTED_MODULE_3__.$k), (0, 
+            _elements__WEBPACK_IMPORTED_MODULE_2__._V)(_providers__WEBPACK_IMPORTED_MODULE_3__.vw.checkMark, "Check mark", _providers__WEBPACK_IMPORTED_MODULE_3__.i3), (0, 
+            _elements__WEBPACK_IMPORTED_MODULE_2__._V)(_providers__WEBPACK_IMPORTED_MODULE_3__.vw.warningMark, "Duplicate mark", _providers__WEBPACK_IMPORTED_MODULE_3__.i3), (0, 
+            _elements__WEBPACK_IMPORTED_MODULE_2__._V)(_providers__WEBPACK_IMPORTED_MODULE_3__.vw.crossMark, "Cross mark", _providers__WEBPACK_IMPORTED_MODULE_3__.i3));
             generalSection.appendChild(symbolSettings);
             let tooltipSettings = fieldSet("tooltip-settings", "Tooltip");
-            tooltipSettings.append((0, _elements__WEBPACK_IMPORTED_MODULE_3__.OO)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.showTags, "Show tags", _providers__WEBPACK_IMPORTED_MODULE_2__.$k), (0, 
-            _elements__WEBPACK_IMPORTED_MODULE_3__.OO)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.showFiles, "Show files", _providers__WEBPACK_IMPORTED_MODULE_2__.$k), (0, 
-            _elements__WEBPACK_IMPORTED_MODULE_3__.g4)(_providers__WEBPACK_IMPORTED_MODULE_2__.vw.theme, "Theme", [ _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Light, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Dark, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Device ], _providers__WEBPACK_IMPORTED_MODULE_2__.i3));
+            tooltipSettings.append((0, _elements__WEBPACK_IMPORTED_MODULE_2__.OO)(_providers__WEBPACK_IMPORTED_MODULE_3__.vw.showTags, "Show tags", _providers__WEBPACK_IMPORTED_MODULE_3__.$k), (0, 
+            _elements__WEBPACK_IMPORTED_MODULE_2__.OO)(_providers__WEBPACK_IMPORTED_MODULE_3__.vw.showFiles, "Show files", _providers__WEBPACK_IMPORTED_MODULE_3__.$k), (0, 
+            _elements__WEBPACK_IMPORTED_MODULE_2__.g4)(_providers__WEBPACK_IMPORTED_MODULE_3__.vw.theme, "Theme", [ _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Light, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Dark, _dataTypes__WEBPACK_IMPORTED_MODULE_1__.Sx.Device ], _providers__WEBPACK_IMPORTED_MODULE_3__.i3));
             generalSection.appendChild(tooltipSettings);
             let defaultButton = fieldSet("default-button", "Default Settings");
             let div = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Sw)("option");
@@ -1738,8 +1755,8 @@
             return fieldSet;
           }
           function resetToDefault() {
-            _providers__WEBPACK_IMPORTED_MODULE_2__.$k.clear();
-            _providers__WEBPACK_IMPORTED_MODULE_2__.i3.clear();
+            _providers__WEBPACK_IMPORTED_MODULE_3__.$k.clear();
+            _providers__WEBPACK_IMPORTED_MODULE_3__.i3.clear();
             let generalSection = (0, _settings__WEBPACK_IMPORTED_MODULE_0__.zH)("general");
             populateGeneralSection(generalSection);
           }
@@ -1767,37 +1784,37 @@
             yD: () => initSettingsWindow,
             zH: () => getSettingsSection
           });
-          var _observer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(648);
-          var _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(219);
-          var _stashChecker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(782);
-          var _statistics__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(821);
-          var _style_theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(483);
-          var _htmlHelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(519);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _stashChecker__WEBPACK_IMPORTED_MODULE_1__, _statistics__WEBPACK_IMPORTED_MODULE_2__, _style_theme__WEBPACK_IMPORTED_MODULE_3__ ]);
-          [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _stashChecker__WEBPACK_IMPORTED_MODULE_1__, _statistics__WEBPACK_IMPORTED_MODULE_2__, _style_theme__WEBPACK_IMPORTED_MODULE_3__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          var _observer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(648);
+          var _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(219);
+          var _stashChecker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(782);
+          var _statistics__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(821);
+          var _style_theme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(483);
+          var _htmlHelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(519);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_1__, _stashChecker__WEBPACK_IMPORTED_MODULE_2__, _statistics__WEBPACK_IMPORTED_MODULE_3__, _style_theme__WEBPACK_IMPORTED_MODULE_4__ ]);
+          [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_1__, _stashChecker__WEBPACK_IMPORTED_MODULE_2__, _statistics__WEBPACK_IMPORTED_MODULE_3__, _style_theme__WEBPACK_IMPORTED_MODULE_4__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           function initSettingsWindow() {
-            let settingsModal = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Sw)("stashChecker", "modal");
+            let settingsModal = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Sw)("stashChecker", "modal");
             settingsModal.id = "stashChecker-settingsModal";
             settingsModal.style.display = "none";
             settingsModal.addEventListener("click", closeSettingsWindow);
-            let settings = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Sw)("stashChecker", "settings");
+            let settings = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Sw)("stashChecker", "settings");
             settings.id = "stashChecker-settings";
             settingsModal.append(settings);
             document.body.append(settingsModal);
           }
           function newSettingsSection(id, title, description) {
-            let section = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Sw)("stashChecker", "settingsSection");
+            let section = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Sw)("stashChecker", "settingsSection");
             section.id = `stashChecker-settingsSection-${id}`;
             getSettings().append(section);
-            let heading = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.RA)(2, "stashChecker", "heading");
+            let heading = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.RA)(2, "stashChecker", "heading");
             heading.innerHTML = title;
             section.append(heading);
             if (description) {
-              let text = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.NY)("stashChecker", "sub-heading");
+              let text = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.NY)("stashChecker", "sub-heading");
               text.innerHTML = description;
               section.append(text);
             }
-            let body = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Sw)("stashChecker", "settingsSectionBody");
+            let body = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Sw)("stashChecker", "settingsSectionBody");
             body.id = `stashChecker-settingsSectionBody-${id}`;
             section.append(body);
             return body;
@@ -1811,27 +1828,27 @@
           function openSettingsWindow() {
             let settingsModal = document.getElementById("stashChecker-settingsModal");
             if (settingsModal?.style?.display) {
-              (0, _statistics__WEBPACK_IMPORTED_MODULE_2__.n)();
+              (0, _statistics__WEBPACK_IMPORTED_MODULE_3__.n)();
               settingsModal.style.display = "initial";
             }
           }
           function closeSettingsWindow(event) {
             if (event.target === this) {
               this.style.display = "none";
-              (0, _observer__WEBPACK_IMPORTED_MODULE_5__.r)();
-              (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.T)();
-              (0, _style_theme__WEBPACK_IMPORTED_MODULE_3__.Y)();
-              void (0, _stashChecker__WEBPACK_IMPORTED_MODULE_1__.C)();
+              (0, _observer__WEBPACK_IMPORTED_MODULE_0__.r)();
+              (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_1__.T)();
+              (0, _style_theme__WEBPACK_IMPORTED_MODULE_4__.Y)();
+              void (0, _stashChecker__WEBPACK_IMPORTED_MODULE_2__.C)();
             }
           }
           function buttonPrimary(label, listener, classes = []) {
-            let button = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Tf)("stashChecker", "btn", "btn-primary", ...classes);
+            let button = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Tf)("stashChecker", "btn", "btn-primary", ...classes);
             button.addEventListener("click", listener);
             button.innerHTML = label;
             return button;
           }
           function buttonDanger(label, listener, classes = []) {
-            let button = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.Tf)("stashChecker", "btn", "btn-danger", ...classes);
+            let button = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.Tf)("stashChecker", "btn", "btn-danger", ...classes);
             button.addEventListener("click", listener);
             button.innerHTML = label;
             return button;
@@ -2056,11 +2073,12 @@
           var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
           var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(185);
           var _stashQuery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(657);
-          var _tooltipElement__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(42);
-          var _settings_providers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(710);
-          var _htmlHelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(519);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_providers__WEBPACK_IMPORTED_MODULE_3__ ]);
-          _settings_providers__WEBPACK_IMPORTED_MODULE_3__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+          var _tooltipElement__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
+          var _settings_providers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(710);
+          var _htmlHelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(519);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_providers__WEBPACK_IMPORTED_MODULE_4__ ]);
+          var __webpack_async_dependencies_result__ = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          _settings_providers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_async_dependencies_result__[0];
           function getExistingSymbol(element) {
             if (element.getAttribute("data-type") === "stash-symbol") return element; else return Array.from(element.childNodes).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n)).map(getExistingSymbol).find((n => n));
           }
@@ -2108,11 +2126,11 @@
             return `${entry.endpoint}-${entry.id}`;
           }
           function stashSymbol() {
-            let symbol = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_4__.VI)("stashCheckerSymbol");
+            let symbol = (0, _htmlHelper__WEBPACK_IMPORTED_MODULE_5__.VI)("stashCheckerSymbol");
             symbol.setAttribute("data-type", "stash-symbol");
             symbol.setAttribute("data-count", "1");
-            symbol.addEventListener("mouseover", _tooltipElement__WEBPACK_IMPORTED_MODULE_5__.aN);
-            symbol.addEventListener("mouseout", _tooltipElement__WEBPACK_IMPORTED_MODULE_5__.Mf);
+            symbol.addEventListener("mouseover", _tooltipElement__WEBPACK_IMPORTED_MODULE_3__.aN);
+            symbol.addEventListener("mouseout", _tooltipElement__WEBPACK_IMPORTED_MODULE_3__.Mf);
             return symbol;
           }
           function prefixSymbol(element, target, type, endpoint, data, display) {
@@ -2149,17 +2167,17 @@
             let targetReadable = (0, _dataTypes__WEBPACK_IMPORTED_MODULE_0__.HD)(target);
             if (count === 0) {
               symbol.setAttribute("data-symbol", _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Wb.Cross);
-              if (_settings_providers__WEBPACK_IMPORTED_MODULE_3__.$k.get(_settings_providers__WEBPACK_IMPORTED_MODULE_3__.vw.showCrossMark)) symbol.innerHTML = `${_settings_providers__WEBPACK_IMPORTED_MODULE_3__.i3.get(_settings_providers__WEBPACK_IMPORTED_MODULE_3__.vw.crossMark)}&nbsp;`;
+              if (_settings_providers__WEBPACK_IMPORTED_MODULE_4__.$k.get(_settings_providers__WEBPACK_IMPORTED_MODULE_4__.vw.showCrossMark)) symbol.innerHTML = `${_settings_providers__WEBPACK_IMPORTED_MODULE_4__.i3.get(_settings_providers__WEBPACK_IMPORTED_MODULE_4__.vw.crossMark)}&nbsp;`;
               symbol.style.color = "red";
               tooltip = `${targetReadable} not in Stash<br>`;
             } else if (new Set(data.map((e => e.endpoint))).size < data.length) {
               symbol.setAttribute("data-symbol", _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Wb.Warning);
-              symbol.innerHTML = `${_settings_providers__WEBPACK_IMPORTED_MODULE_3__.i3.get(_settings_providers__WEBPACK_IMPORTED_MODULE_3__.vw.warningMark)}&nbsp;`;
+              symbol.innerHTML = `${_settings_providers__WEBPACK_IMPORTED_MODULE_4__.i3.get(_settings_providers__WEBPACK_IMPORTED_MODULE_4__.vw.warningMark)}&nbsp;`;
               symbol.style.color = "orange";
               tooltip = `${targetReadable} has duplicate matches<br>`;
             } else {
               symbol.setAttribute("data-symbol", _dataTypes__WEBPACK_IMPORTED_MODULE_0__.Wb.Check);
-              if (_settings_providers__WEBPACK_IMPORTED_MODULE_3__.$k.get(_settings_providers__WEBPACK_IMPORTED_MODULE_3__.vw.showCheckMark)) symbol.innerHTML = `${_settings_providers__WEBPACK_IMPORTED_MODULE_3__.i3.get(_settings_providers__WEBPACK_IMPORTED_MODULE_3__.vw.checkMark)}&nbsp;`;
+              if (_settings_providers__WEBPACK_IMPORTED_MODULE_4__.$k.get(_settings_providers__WEBPACK_IMPORTED_MODULE_4__.vw.showCheckMark)) symbol.innerHTML = `${_settings_providers__WEBPACK_IMPORTED_MODULE_4__.i3.get(_settings_providers__WEBPACK_IMPORTED_MODULE_4__.vw.checkMark)}&nbsp;`;
               symbol.style.color = data[0].display.color;
             }
             tooltip += `Endpoints: ${endpoints.join(", ")}`;
@@ -4488,7 +4506,8 @@
           var _settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(59);
           var _htmlHelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(519);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_2__ ]);
-          _settings__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+          var __webpack_async_dependencies_result__ = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          _settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_async_dependencies_result__[0];
           const defaultData = [ {
             name: "Localhost",
             url: "http://localhost:9999/graphql",
@@ -4839,18 +4858,18 @@
           var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(185);
           var _dataTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(389);
           var _request__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(463);
-          var _observer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(648);
-          var _settings_display__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
-          var _settings_providers__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(710);
-          var urlpattern_polyfill__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(487);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_display__WEBPACK_IMPORTED_MODULE_5__, _settings_providers__WEBPACK_IMPORTED_MODULE_6__ ]);
-          [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_display__WEBPACK_IMPORTED_MODULE_5__, _settings_providers__WEBPACK_IMPORTED_MODULE_6__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          var _observer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(648);
+          var _settings_display__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
+          var _settings_providers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(710);
+          var urlpattern_polyfill__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(487);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_display__WEBPACK_IMPORTED_MODULE_6__, _settings_providers__WEBPACK_IMPORTED_MODULE_7__ ]);
+          [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_display__WEBPACK_IMPORTED_MODULE_6__, _settings_providers__WEBPACK_IMPORTED_MODULE_7__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           const supportedDataFields = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Scene, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Title, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Organized, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Code, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Disambiguation, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Favorite, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.AliasList, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Birthdate, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.HeightCm, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Gallery, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Title, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Aliases ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ] ]);
           const supportedSubDataFields = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Studio, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Path, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.VideoCodec, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Width, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Height, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Size, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.BitRate, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Duration ] ] ]);
           function getDataFields(target) {
             let supported = new Set(supportedDataFields.get(target) ?? []);
-            if (!_settings_providers__WEBPACK_IMPORTED_MODULE_6__.$k.get(_settings_providers__WEBPACK_IMPORTED_MODULE_6__.vw.showTags)) supported.delete(_dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags);
-            if (!_settings_providers__WEBPACK_IMPORTED_MODULE_6__.$k.get(_settings_providers__WEBPACK_IMPORTED_MODULE_6__.vw.showFiles)) supported.delete(_dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files);
+            if (!_settings_providers__WEBPACK_IMPORTED_MODULE_7__.$k.get(_settings_providers__WEBPACK_IMPORTED_MODULE_7__.vw.showTags)) supported.delete(_dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags);
+            if (!_settings_providers__WEBPACK_IMPORTED_MODULE_7__.$k.get(_settings_providers__WEBPACK_IMPORTED_MODULE_7__.vw.showFiles)) supported.delete(_dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files);
             return Array.from(supported).map((field => field + getSubDataFields(field))).join(",");
           }
           function getSubDataFields(field) {
@@ -4957,8 +4976,8 @@
             }
           }
           function getCustomRules(target) {
-            let targetRules = _settings_display__WEBPACK_IMPORTED_MODULE_5__.p.filter((rule => rule.target === target));
-            return targetRules.filter((rule => new urlpattern_polyfill__WEBPACK_IMPORTED_MODULE_7__.I(rule.pattern, self.location.href).test(window.location.href)));
+            let targetRules = _settings_display__WEBPACK_IMPORTED_MODULE_6__.p.filter((rule => rule.target === target));
+            return targetRules.filter((rule => new urlpattern_polyfill__WEBPACK_IMPORTED_MODULE_8__.I(rule.pattern, self.location.href).test(window.location.href)));
           }
           function combineFilters(customAndFilters, customNotFilters) {
             let andFilter = customAndFilters.map((f => ",AND:{" + f)).join();
@@ -4984,7 +5003,7 @@
             return s.length > 0 ? s : "id:{value:-1,modifier:GREATER_THAN}";
           }
           function check(target, elementSelector, {observe = false, ...checkConfig} = {}) {
-            if (observe) (0, _observer__WEBPACK_IMPORTED_MODULE_8__.C)(elementSelector, (element => checkWithCustomRules(target, element, checkConfig)));
+            if (observe) (0, _observer__WEBPACK_IMPORTED_MODULE_5__.C)(elementSelector, (element => checkWithCustomRules(target, element, checkConfig)));
             document.querySelectorAll(elementSelector).forEach((e => checkWithCustomRules(target, e, checkConfig)));
           }
           __webpack_async_result__();
@@ -5002,7 +5021,8 @@
           var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
           var _settings_providers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(710);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_providers__WEBPACK_IMPORTED_MODULE_1__ ]);
-          _settings_providers__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+          var __webpack_async_dependencies_result__ = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          _settings_providers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_async_dependencies_result__[0];
           function setTheme() {
             const osSetting = window.matchMedia("(prefers-color-scheme: dark)");
             function toggleDarkMode(state) {
@@ -5973,7 +5993,8 @@
           var _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(59);
           var _storage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(613);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_0__ ]);
-          _settings__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+          var __webpack_async_dependencies_result__ = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          _settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_async_dependencies_result__[0];
           const BLOCKED_SITE_KEY = `blocked_${window.location.host}`.replace(/[.\-]/, "_");
           async function initMenu() {
             GM.registerMenuCommand("Settings", _settings__WEBPACK_IMPORTED_MODULE_0__.YH, "s");
@@ -7067,7 +7088,8 @@
           var _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(59);
           var _htmlHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(519);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_1__ ]);
-          _settings__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+          var __webpack_async_dependencies_result__ = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_async_dependencies_result__[0];
           function initStatistics() {
             (0, _settings__WEBPACK_IMPORTED_MODULE_1__.Lc)("statistics", "Statistics");
           }
@@ -7149,9 +7171,10 @@
     return module.exports;
   }
   (() => {
-    var webpackQueues = typeof Symbol === "function" ? Symbol("webpack queues") : "__webpack_queues__";
-    var webpackExports = typeof Symbol === "function" ? Symbol("webpack exports") : "__webpack_exports__";
-    var webpackError = typeof Symbol === "function" ? Symbol("webpack error") : "__webpack_error__";
+    var hasSymbol = typeof Symbol === "function";
+    var webpackQueues = hasSymbol ? Symbol("webpack queues") : "__webpack_queues__";
+    var webpackExports = hasSymbol ? Symbol("webpack exports") : "__webpack_exports__";
+    var webpackError = hasSymbol ? Symbol("webpack error") : "__webpack_error__";
     var resolveQueue = queue => {
       if (queue && queue.d < 1) {
         queue.d = 1;
@@ -7197,7 +7220,7 @@
       promise[webpackExports] = exports;
       promise[webpackQueues] = fn => (queue && fn(queue), depQueues.forEach(fn), promise["catch"]((x => {})));
       module.exports = promise;
-      body((deps => {
+      var handle = deps => {
         currentDeps = wrapDeps(deps);
         var fn;
         var getResult = () => currentDeps.map((d => {
@@ -7212,8 +7235,10 @@
           currentDeps.map((dep => dep[webpackQueues](fnQueue)));
         }));
         return fn.r ? promise : getResult();
-      }), (err => (err ? reject(promise[webpackError] = err) : outerResolve(exports), 
-      resolveQueue(queue))));
+      };
+      var done = err => (err ? reject(promise[webpackError] = err) : outerResolve(exports), 
+      resolveQueue(queue));
+      body(handle, done);
       queue && queue.d < 0 && (queue.d = 0);
     };
   })();
