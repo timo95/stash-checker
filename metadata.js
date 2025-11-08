@@ -54,6 +54,7 @@ export default {
         "*://fansdb.cc/*",
         "*://fansdb.xyz/*",
         "*://fansly.com/*",
+        "*://fc2ppvdb.com/*",
         "*://gayeroticvideoindex.com/*",
         "*://hobby.porn/*",
         "*://javdb.com/*",
