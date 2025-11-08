@@ -4890,6 +4890,11 @@
               filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:INCLUDES}${customFilter}`;
               break;
 
+             case _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Name:
+              filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
+              if (target != _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie) filter += `OR:{aliases:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}}`;
+              break;
+
              default:
               filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
               break;
