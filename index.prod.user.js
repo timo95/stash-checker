@@ -4,6 +4,7 @@
 // @version 1.1.0
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
+// @match *://www.avbase.net/*
 // @match *://coomer.st/*
 // @match *://erommdtube.com/*
 // @match *://fansdb.cc/*
@@ -6650,6 +6651,38 @@
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
                 urlSelector: e => closestUrl(e)?.split("?")?.[0]
+              });
+              break;
+
+             case "www.avbase.net":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/talents/']:not([href*='on_sale']):not([href*='page='])", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div:not(.bg-base-100) > a[href*='/works/']:not([href*='/works/date']):not([href*='/edit'])", {
+                observe: true,
+                codeSelector: e => e.getAttribute("href")?.split(":")?.[1] || e.getAttribute("href")?.split("works/")?.[1]
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "a[href*='/makers/']:not([href*='page='])", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "a[href*='/labels/']:not([href*='page='])", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Movie, "a[href*='/series/']:not([href*='page='])", {
+                observe: true
+              });
+              if (/talents\//.test(window.location.pathname)) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1:first-child", {
+                observe: true
+              });
+              if (/works\//.test(window.location.pathname)) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1:first-child", {
+                observe: true,
+                codeSelector: _ => currentSite().split("works/")[1]?.split(":")?.[1] || currentSite().split("works/")[1]
+              });
+              if (/makers\/|labels\//.test(window.location.pathname)) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "h1:first-child", {
+                observe: true
+              });
+              if (/series\//.test(window.location.pathname)) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Movie, "h1:first-child", {
+                observe: true
               });
               break;
 

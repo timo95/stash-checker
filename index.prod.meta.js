@@ -4,6 +4,7 @@
 // @version 1.1.0
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
+// @match *://www.avbase.net/*
 // @match *://coomer.st/*
 // @match *://erommdtube.com/*
 // @match *://fansdb.cc/*
