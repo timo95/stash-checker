@@ -160,5 +160,6 @@ export const typeToString = new Map<Type, string>([
     [Type.Code, "Code"],
     [Type.StashId, "StashId"],
     [Type.Name, "Name"],
+    [Type.Aliases, "Aliases"],
     [Type.Title, "Title"],
 ]);

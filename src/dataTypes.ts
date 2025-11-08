@@ -113,6 +113,7 @@ export function readablePlural(target: Target): string {
  * Ways to query for an entry
  */
 export enum Type {
+    Aliases = "aliases",
     Code = "code",
     Name = "name",
     StashId = "stash_id",

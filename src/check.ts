@@ -11,7 +11,8 @@ import {booleanOptions, OptionKey} from "./settings/providers";
 // @ts-ignore: Property 'UrlPattern' does not exist
 /*if (!globalThis.URLPattern) {
     await import("urlpattern-polyfill");
-}*/ // Short Form not yet supported by native chromium implementation -> always polyfill
+}*/
+// Short Form not yet supported by native chromium implementation -> always polyfill
 import {URLPattern} from "urlpattern-polyfill";
 
 const supportedDataFields = new Map<Target, DataField[]>([
@@ -65,12 +66,6 @@ async function queryStash(
             break;
         case Type.Url:
             filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:INCLUDES}${customFilter}`;
-            break;
-        case Type.Name:
-            filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
-            if (target != Target.Movie) {
-                filter += `OR:{aliases:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}}`;
-            }
             break;
         default:
             filter = `${type}:{value:"""${encodeURIComponent(queryString)}""",modifier:EQUALS}${customFilter}`;
@@ -168,10 +163,7 @@ async function checkElement(
     }
     if ([Target.Performer, Target.Movie, Target.Studio, Target.Tag].includes(target) && nameSelector) {
         let name = nameSelector(element);
-        // Do not use single performer names
-        let nameCount = name?.split(/\s+/)?.length
-        let kanji = name ? hasKanji(name) : false
-        let ignore = target === Target.Performer && nameCount === 1 && !kanji
+        let ignore = target === Target.Performer && name ? ignorePerformerName(name) : true
         if (name && !ignore) {
             console.debug(`Name: ${name}`);
             await queryStash(name, (...args) => prefixSymbol(displayElement!, ...args, display), target, Type.Name, customFilter, stashIdEndpoint);
@@ -179,6 +171,18 @@ async function checkElement(
             console.info(`Ignore single name: ${name}`)
         } else {
             console.info(`No Name for ${target} found.`);
+        }
+    }
+    if ([Target.Performer, Target.Studio, Target.Tag].includes(target) && nameSelector) {
+        let name = nameSelector(element);
+        let ignore = target === Target.Performer && name ? ignorePerformerName(name) : true
+        if (name && !ignore) {
+            console.debug(`Alias name: ${name}`);
+            await queryStash(name, (...args) => prefixSymbol(displayElement!, ...args, display), target, Type.Aliases, customFilter, stashIdEndpoint);
+        } else if (name && ignore) {
+            console.info(`Ignore single name alias: ${name}`)
+        } else {
+            console.info(`No name alias for ${target} found.`);
         }
     }
     if ([Target.Scene, Target.Gallery].includes(target) && titleSelector) {
@@ -190,6 +194,13 @@ async function checkElement(
             console.info(`No Title for ${target} found.`);
         }
     }
+}
+
+function ignorePerformerName(name: string): boolean {
+    // Do not use single performer names
+    let nameCount = name?.split(/\s+/)?.length
+    let kanji = name ? hasKanji(name) : false
+    return nameCount === 1 && !kanji
 }
 
 function getCustomRules(target: Target): CustomDisplayRule[] {
