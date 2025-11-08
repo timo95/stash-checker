@@ -10,6 +10,7 @@
 // @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://fansly.com/*
+// @match *://fc2ppvdb.com/*
 // @match *://gayeroticvideoindex.com/*
 // @match *://hobby.porn/*
 // @match *://javdb.com/*

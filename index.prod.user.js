@@ -10,6 +10,7 @@
 // @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://fansly.com/*
+// @match *://fc2ppvdb.com/*
 // @match *://gayeroticvideoindex.com/*
 // @match *://hobby.porn/*
 // @match *://javdb.com/*
@@ -6653,6 +6654,35 @@
                 urlSelector: e => closestUrl(e)?.split("?")?.[0]
               });
               break;
+
+             case "fc2ppvdb.com":
+              {
+                let prefix = "FC2-PPV-";
+                if (/articles\//.test(window.location.pathname)) {
+                  (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "main h2.title-font", {
+                    observe: true,
+                    codeSelector: _ => `${prefix}${window.location.pathname.split("articles/")[1]}`,
+                    urlSelector: _ => currentSite()
+                  });
+                  (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "main h2.title-font ~ div a[href*='writers/']", {
+                    observe: true
+                  });
+                  (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "main h2.title-font ~ div a[href*='actresses/']", {
+                    observe: true
+                  });
+                }
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href*='articles/'][title]", {
+                  observe: true,
+                  codeSelector: e => `${prefix}${e.getAttribute("href")?.split("articles/")?.[1]}`
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "a[href*='writers/'][title]", {
+                  observe: true
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='actresses/'][title]", {
+                  observe: true
+                });
+                break;
+              }
 
              case "www.avbase.net":
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/talents/']:not([href*='on_sale']):not([href*='page='])", {
