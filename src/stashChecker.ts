@@ -114,12 +114,12 @@ export async function runStashChecker() {
             check(Target.Performer, "a[href*='characters.php']:not([href*='_']):not([href*='series'])");
             break;
         case "www.iafd.com": {
-            if (window.location.pathname.startsWith("/person.rme/perfid=")) {
+            if (window.location.pathname.startsWith("/person.rme/id=")) {
                 check(Target.Performer, "h1", {urlSelector: currentSite});
             } else if (window.location.pathname.startsWith("/title.rme/id=")) {
                 check(Target.Scene, "h1", {urlSelector: currentSite});
             }
-            check(Target.Performer, "a[href*='/person.rme/perfid=']");
+            check(Target.Performer, "a[href*='/person.rme/id=']");
             check(Target.Scene, "a[href*='/title.rme/id=']");
             check(Target.Studio, "a[href*='/studio.rme/studio=']");
             break;
