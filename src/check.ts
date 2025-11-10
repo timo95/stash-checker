@@ -188,7 +188,7 @@ async function checkElement(
     }
     if ([Target.Performer, Target.Movie, Target.Studio, Target.Tag].includes(target) && nameSelector) {
         let name = nameSelector(element);
-        let ignore = target === Target.Performer && name ? ignorePerformerName(name) : true
+        let ignore = target === Target.Performer && (name ? ignorePerformerName(name) : true);
         if (name && !ignore) {
             console.debug(`Name: ${name}`);
             await queryStash(name, (...args) => prefixSymbol(displayElement!, ...args, display), target, Type.Name, customFilter, stashIdEndpoint);
@@ -200,7 +200,7 @@ async function checkElement(
     }
     if ([Target.Performer, Target.Studio, Target.Tag].includes(target) && nameSelector) {
         let name = nameSelector(element);
-        let ignore = target === Target.Performer && name ? ignorePerformerName(name) : true
+        let ignore = target === Target.Performer && (name ? ignorePerformerName(name) : true);
         if (name && !ignore) {
             console.debug(`Alias name: ${name}`);
             await queryStash(name, (...args) => prefixSymbol(displayElement!, ...args, display), target, Type.Aliases, customFilter, stashIdEndpoint);
