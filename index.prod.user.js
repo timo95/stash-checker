@@ -5010,7 +5010,7 @@
             }
             if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Movie, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag ].includes(target) && nameSelector) {
               let name = nameSelector(element);
-              let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer && name ? ignorePerformerName(name) : true;
+              let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer && (name ? ignorePerformerName(name) : true);
               if (name && !ignore) {
                 void 0;
                 await queryStash(name, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, display)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Name, customFilter, stashIdEndpoint);
@@ -5018,7 +5018,7 @@
             }
             if ([ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag ].includes(target) && nameSelector) {
               let name = nameSelector(element);
-              let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer && name ? ignorePerformerName(name) : true;
+              let ignore = target === _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer && (name ? ignorePerformerName(name) : true);
               if (name && !ignore) {
                 void 0;
                 await queryStash(name, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, display)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Aliases, customFilter, stashIdEndpoint);
