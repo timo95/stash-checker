@@ -49,6 +49,12 @@ Here you can edit the Stash URL and API key or add another Stash endpoint.
 - Check for the correct URL. It should include the scheme (`http`/`https`) at the beginning and end with `/graphql`.
 - Some users had problems with Tampermonkey which got fixed by switching to Violentmonkey.
 
+### Queries fail with a GraphQL parsing error
+
+Some reverse proxies may truncate long URLs resulting in parsing errors. To circumvent this problem you can:
+- Reduce the batch size in the settings
+- Change the query method from GET to POST
+
 ## Development
 
 See [here](docs/DEVELOPMENT.md).

@@ -3,7 +3,8 @@
 
 - Add support for websites: avbase.net, fc2ppvdb.com
 - Add aliases matching for tags, performers and studios
-- Add batchSize setting
+- Add batchSize setting [#65]
+- Add query method setting (get/post) [#65]
 - Fix iafd performer sites
 - Fix quotes in title parsing error [#45]
 

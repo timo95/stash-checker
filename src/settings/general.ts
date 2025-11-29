@@ -1,5 +1,5 @@
 import {buttonDanger, getSettingsSection, newSettingsSection} from "./settings";
-import {Theme} from "../dataTypes";
+import {Method, Theme} from "../dataTypes";
 import {charBox, checkBox, numberBox, selectMenu} from "./elements";
 import {booleanOptions, numberOptions, OptionKey, stringOptions} from "./providers";
 import {createDiv} from "../util/htmlHelper";
@@ -31,6 +31,7 @@ function populateGeneralSection(generalSection: HTMLElement) {
 
     let querySettings = fieldSet("query-settings", "Query");
     querySettings.append(
+        selectMenu(OptionKey.queryMethod, "Method", [Method.Get, Method.Post], stringOptions),
         numberBox(OptionKey.batchSize, "Batch size", numberOptions),
     );
     generalSection.appendChild(querySettings);

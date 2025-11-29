@@ -1,5 +1,5 @@
 import {getValue, setValue, StorageKey} from "./storage";
-import {Theme} from "../dataTypes";
+import {Method, Theme} from "../dataTypes";
 import {DefaultableMap} from "../util/defaultableMap";
 
 export enum OptionKey {
@@ -12,6 +12,7 @@ export enum OptionKey {
     crossMark = "crossMark",
     warningMark = "warningMark",
     theme = "theme",
+    queryMethod = "queryMethod",
 }
 
 const defaultBooleanOptions = new Map([
@@ -26,6 +27,7 @@ const defaultStringOptions = new Map([
     [OptionKey.crossMark, "✗"],
     [OptionKey.warningMark, "!"],
     [OptionKey.theme, Theme.Device],
+    [OptionKey.queryMethod, Method.Get],
 ]);
 
 const defaultNumberOptions = new Map([
@@ -39,4 +41,17 @@ export const numberOptions: Map<OptionKey, number> = await optionProvider(Storag
 async function optionProvider<V>(storageKey: StorageKey, defaultOptions: Map<OptionKey, V>): Promise<Map<OptionKey, V>> {
     let map: Map<OptionKey, V> = await getValue(storageKey, new Map<OptionKey, V>)
     return new DefaultableMap<OptionKey, V>(map, defaultOptions, function() {setValue(storageKey, this)})
+}
+
+//////
+
+export function getEnumOptionMethod(): Method {
+    let methodString = stringOptions.get(OptionKey.queryMethod)
+    switch (methodString) {
+        case Method.Get:
+        case Method.Post:
+            return methodString
+        default:
+            throw Error(`Unknown method string '${methodString}'`);
+    }
 }

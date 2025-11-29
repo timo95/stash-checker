@@ -24,6 +24,11 @@ export type StashFile = {
     [key in DataField]: any;
 }
 
+export enum Method {
+    Get = "GET",
+    Post = "POST",
+}
+
 /**
  * A batch collector of requests.
  */
@@ -96,10 +101,6 @@ export enum Target {
     Scene = "scene",
     Studio = "studio",
     Tag = "tag",
-}
-
-export enum Method {
-    Get = "get",
 }
 
 export function readable(target: Target): string {

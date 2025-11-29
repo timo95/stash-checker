@@ -14,7 +14,7 @@ import {
 import {request} from "./request";
 import {onAddition} from "./observer";
 import {customDisplayRules} from "./settings/display";
-import {booleanOptions, OptionKey} from "./settings/providers";
+import {booleanOptions, getEnumOptionMethod, OptionKey} from "./settings/providers";
 
 const supportedDataFields = new Map<Target, DataField[]>([
     [Target.Scene, [DataField.Id, DataField.Title, DataField.Organized, DataField.Studio, DataField.Code, DataField.Date, DataField.Tags, DataField.Files]],
@@ -57,6 +57,8 @@ function escapeString(value: string, method: Method): string {
     switch (method) {
         case Method.Get:
             return encodeURIComponent(escapedGraphQl)
+        case Method.Post:
+            return escapedGraphQl
         default:
             throw Error(`Missing implementation for method ${method}`);
     }
@@ -73,8 +75,7 @@ async function queryStash(
     let filter: string;
     let query: string;
     let access = (d: any) => d;
-
-    let method = Method.Get
+    let method = getEnumOptionMethod()
 
     // Build filter
     switch (type) {
@@ -121,7 +122,7 @@ async function queryStash(
 
     // Get config values or wait for popup if it is not stored
     stashEndpoints.forEach((endpoint: StashEndpoint) => {
-        request(endpoint, query, true)
+        request(endpoint, query, method, true)
             .then((data: any) => onload(target, type, endpoint, access(data)));
     });
 }

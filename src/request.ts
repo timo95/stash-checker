@@ -1,22 +1,24 @@
-import {BatchQuery, GraphQlQuery, StashEndpoint} from "./dataTypes";
+import {BatchQuery, GraphQlQuery, Method, StashEndpoint} from "./dataTypes";
 import {friendlyHttpStatus} from "./utils";
 import {JobQueue} from "./util/jobQueue";
 import {numberOptions, OptionKey} from "./settings/providers";
 
 const batchCollectionTimeout = 10;
 
-let batchQueries: Map<StashEndpoint, BatchQuery> = new Map();
+let batchQueriesGet: Map<StashEndpoint, BatchQuery> = new Map();
+let batchQueriesPost: Map<StashEndpoint, BatchQuery> = new Map();
 let batchQueues: Map<StashEndpoint, JobQueue> = new Map();
 
 export async function request(
     endpoint: StashEndpoint,
     query: string,
+    method: Method,
     batchQueries: boolean = false
 ): Promise<any> {
     if (batchQueries) {
-        return addQuery(endpoint, query);
+        return addQuery(endpoint, query, method);
     } else {
-        return new Promise((resolve, reject) => sendQuery(endpoint, `q:${query}`)
+        return new Promise((resolve, reject) => sendQuery(endpoint, `q:${query}`, method)
             .then((data: any) => resolve(data.q))
             .catch(reject)
         );
@@ -25,10 +27,23 @@ export async function request(
 
 async function addQuery(
     endpoint: StashEndpoint,
-    query: string
+    query: string,
+    method: Method,
 ): Promise<any> {
     return new Promise((resolve, reject) => {
         let batchQueue = batchQueues.get(endpoint);
+        let batchQueries
+        switch (method) {
+            case Method.Get:
+                batchQueries = batchQueriesGet;
+                break;
+            case Method.Post:
+                batchQueries = batchQueriesPost;
+                break;
+            default:
+                throw Error(`Missing implementation for method ${method}`);
+        }
+
         if (!batchQueue) {
             // Init new queue. Every queue gets initialized once and never deleted
             batchQueue = new JobQueue(2)
@@ -41,7 +56,7 @@ async function addQuery(
             let timerHandle = window.setTimeout(() => {
                 // Send batch after timeout and delete map entry
                 let query = buildBatchQuery(endpoint, batchQueries.get(endpoint)!);
-                batchQueue!.enqueue(() => sendQuery(endpoint, query.query))
+                batchQueue!.enqueue(() => sendQuery(endpoint, query.query, method))
                     .then(query.resolve)
                     .catch(query.reject);
                 batchQueries.delete(endpoint);
@@ -58,11 +73,11 @@ async function addQuery(
 
         const batchSize = numberOptions.get(OptionKey.batchSize)!;
         if (batchQuery.queries.length >= batchSize) {
-            // Send full batch and delete map entry
+            // Send full batch query and delete map entry
             window.clearTimeout(batchQuery.timerHandle);
             batchQueries.delete(endpoint);
             let query = buildBatchQuery(endpoint, batchQuery)
-            return batchQueue.enqueue(() => sendQuery(endpoint, query.query))
+            return batchQueue.enqueue(() => sendQuery(endpoint, query.query, method))
                 .then(query.resolve)
                 .catch(query.reject);
         }
@@ -89,13 +104,28 @@ function buildBatchQuery(endpoint: StashEndpoint, batchQuery: BatchQuery): Graph
 
 async function sendQuery(
     endpoint: StashEndpoint,
-    query: string
+    query: string,
+    method: Method,
 ): Promise<any> {
-    console.debug(`Sending query to endpoint '${endpoint.name}'`);
+    let url = endpoint.url;
+    let data: string | undefined;
+    switch (method) {
+        case Method.Get:
+            url = `${url}?query={${query}}`;
+            break;
+        case Method.Post:
+            data = JSON.stringify({query: `{${query}}`});
+            break;
+        default:
+            throw Error(`Missing implementation for method ${method}`);
+    }
+
+    console.debug(`Sending ${method} query to endpoint '${endpoint.name}'`);
     return new Promise((resolve, reject) => {
         GM.xmlHttpRequest({
-            method: "GET",
-            url: `${endpoint.url}?query={${query}}`,  // encode query (important for url and some titles)
+            method: method,
+            url: url,
+            data: data,
             headers: {
                 "Content-Type": "application/json",
                 ApiKey: endpoint.key,
@@ -136,7 +166,7 @@ async function sendQuery(
                 reject("timeout");
             }
         });
-    })
+    });
 }
 
 function statusMessage(status: number, statusText?: string): string {
