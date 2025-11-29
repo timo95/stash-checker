@@ -6,10 +6,10 @@
     "strict": true,
     "moduleResolution": "Node",
     "module": "ESNext",
-    "target": "ES2021",
+    "target": "ES2024",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "lib": ["ES2021", "dom"],
+    "lib": ["ES2024", "dom"],
     "sourceMap": true,
   }
 }

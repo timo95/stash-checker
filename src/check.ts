@@ -16,14 +16,6 @@ import {onAddition} from "./observer";
 import {customDisplayRules} from "./settings/display";
 import {booleanOptions, OptionKey} from "./settings/providers";
 
-// Conditional ESM module loading (Node.js and browser)
-// @ts-ignore: Property 'UrlPattern' does not exist
-/*if (!globalThis.URLPattern) {
-    await import("urlpattern-polyfill");
-}*/
-// Short Form not yet supported by native chromium implementation -> always polyfill
-import {URLPattern} from "urlpattern-polyfill";
-
 const supportedDataFields = new Map<Target, DataField[]>([
     [Target.Scene, [DataField.Id, DataField.Title, DataField.Organized, DataField.Studio, DataField.Code, DataField.Date, DataField.Tags, DataField.Files]],
     [Target.Performer, [DataField.Id, DataField.Name, DataField.Disambiguation, DataField.Favorite, DataField.AliasList, DataField.Birthdate, DataField.HeightCm, DataField.Tags]],
@@ -230,6 +222,7 @@ function ignorePerformerName(name: string): boolean {
 
 function getCustomRules(target: Target): CustomDisplayRule[] {
     let targetRules = customDisplayRules.filter(rule => rule.target === target)
+    // @ts-ignore: Property 'URLPattern' does not exist TODO remove
     return targetRules.filter(rule => new URLPattern(rule.pattern, self.location.href).test(window.location.href))
 }
 
