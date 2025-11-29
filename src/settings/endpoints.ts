@@ -1,6 +1,6 @@
 import {getValue, setValue, StorageKey} from "./storage";
 import {request} from "../request";
-import {StashEndpoint} from "../dataTypes";
+import {Method, StashEndpoint} from "../dataTypes";
 import {buttonDanger, buttonPrimary, getSettingsSection, newSettingsSection} from "./settings";
 import {createDiv} from "../util/htmlHelper";
 
@@ -86,6 +86,6 @@ async function getVersion(endpoint: StashEndpoint, element: HTMLElement) {
         if (message) explanation = message.length < 30 ? message?.trim() : "wrong URL"
         element.innerHTML += `<span class="version"> (${explanation})</span>`
     }
-    await request(endpoint, "version{version}")
+    await request(endpoint, "version{version}", Method.Get)
         .then(resolve).catch(reject)
 }
