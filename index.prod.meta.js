@@ -4,7 +4,6 @@
 // @version 1.2.0
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
-// @match *://www.avbase.net/*
 // @match *://coomer.st/*
 // @match *://erommdtube.com/*
 // @match *://duga.jp/*
@@ -28,6 +27,7 @@
 // @match *://warashi-asian-pornstars.fr/*
 // @match *://www.adultfilmdatabase.com/*
 // @match *://www.animecharactersdatabase.com/*
+// @match *://www.avbase.net/*
 // @match *://www.babepedia.com/*
 // @match *://www.brazzers.com/*
 // @match *://www.clips4sale.com/*
