@@ -91,7 +91,7 @@
 (() => {
   "use strict";
   var __webpack_modules__ = {
-    6: (module, __webpack_exports__, __webpack_require__) => {
+    6(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
@@ -217,7 +217,7 @@
         }
       }), 1);
     },
-    42: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+    42(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         AA: () => initTooltip,
         Mf: () => symbolMouseoutListener,
@@ -1711,7 +1711,7 @@
         if (string !== null) return parseInt(string); else return;
       }
     },
-    44: (module, __webpack_exports__, __webpack_require__) => {
+    44(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
@@ -1770,14 +1770,14 @@
         }
       }));
     },
-    56: (module, __unused_webpack_exports, __webpack_require__) => {
+    56(module, __unused_webpack_exports, __webpack_require__) {
       function setAttributesWithoutAttributes(styleElement) {
         var nonce = true ? __webpack_require__.nc : 0;
         if (nonce) styleElement.setAttribute("nonce", nonce);
       }
       module.exports = setAttributesWithoutAttributes;
     },
-    59: (module, __webpack_exports__, __webpack_require__) => {
+    59(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
@@ -1863,7 +1863,7 @@
         }
       }));
     },
-    72: module => {
+    72(module) {
       var stylesInDOM = [];
       function getIndexByIdentifier(identifier) {
         var result = -1;
@@ -1941,7 +1941,7 @@
         };
       };
     },
-    113: module => {
+    113(module) {
       function styleTagTransform(css, styleElement) {
         if (styleElement.styleSheet) styleElement.styleSheet.cssText = css; else {
           while (styleElement.firstChild) styleElement.removeChild(styleElement.firstChild);
@@ -1950,7 +1950,7 @@
       }
       module.exports = styleTagTransform;
     },
-    128: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+    128(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         $0: () => createTableBody,
         NY: () => createParagraph,
@@ -2060,7 +2060,7 @@
         return element;
       }
     },
-    156: (module, __unused_webpack___webpack_exports__, __webpack_require__) => {
+    156(module, __unused_webpack___webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           var _style_main_important_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(397);
@@ -2092,7 +2092,7 @@
         }
       }));
     },
-    172: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+    172(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         O: () => DefaultableMap
       });
@@ -2123,7 +2123,7 @@
         }
       }
     },
-    185: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+    185(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         $R: () => bytesToReadable,
         Si: () => nakedDomain,
@@ -2208,7 +2208,7 @@
       let friendlyHttpStatus = new Map([ [ 200, "OK" ], [ 201, "Created" ], [ 202, "Accepted" ], [ 203, "Non-Authoritative Information" ], [ 204, "No Content" ], [ 205, "Reset Content" ], [ 206, "Partial Content" ], [ 300, "Multiple Choices" ], [ 301, "Moved Permanently" ], [ 302, "Found" ], [ 303, "See Other" ], [ 304, "Not Modified" ], [ 305, "Use Proxy" ], [ 306, "Unused" ], [ 307, "Temporary Redirect" ], [ 400, "Bad Request" ], [ 401, "Unauthorized" ], [ 402, "Payment Required" ], [ 403, "Forbidden" ], [ 404, "Not Found" ], [ 405, "Method Not Allowed" ], [ 406, "Not Acceptable" ], [ 407, "Proxy Authentication Required" ], [ 408, "Request Timeout" ], [ 409, "Conflict" ], [ 410, "Gone" ], [ 411, "Length Required" ], [ 412, "Precondition Required" ], [ 413, "Request Entry Too Large" ], [ 414, "Request-URI Too Long" ], [ 415, "Unsupported Media Type" ], [ 416, "Requested Range Not Satisfiable" ], [ 417, "Expectation Failed" ], [ 418, "I'm a teapot" ], [ 429, "Too Many Requests" ], [ 500, "Internal Server Error" ], [ 501, "Not Implemented" ], [ 502, "Bad Gateway" ], [ 503, "Service Unavailable" ], [ 504, "Gateway Timeout" ], [ 505, "HTTP Version Not Supported" ] ]);
       const typeToString = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Url, "URL" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Code, "Code" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.StashId, "StashId" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Name, "Name" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Aliases, "Aliases" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Title, "Title" ] ]);
     },
-    207: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+    207(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         J: () => JobQueue
       });
@@ -2221,7 +2221,7 @@
       class JobQueue {
         parallel;
         queue=[];
-        constructor(parallel = 1) {
+        constructor(parallel) {
           this.parallel = parallel;
         }
         enqueue(job) {
@@ -2253,7 +2253,7 @@
         }
       }
     },
-    219: (module, __webpack_exports__, __webpack_require__) => {
+    219(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
@@ -2382,7 +2382,7 @@
         }
       }));
     },
-    246: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+    246(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         Ay: () => __WEBPACK_DEFAULT_EXPORT__
       });
@@ -4639,7 +4639,7 @@
       Sortable.mount(Remove, Revert);
       const __WEBPACK_DEFAULT_EXPORT__ = Sortable;
     },
-    314: module => {
+    314(module) {
       module.exports = function(cssWithMappingToString) {
         var list = [];
         list.toString = function toString() {
@@ -4684,7 +4684,7 @@
         return list;
       };
     },
-    378: (module, __webpack_exports__, __webpack_require__) => {
+    378(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
@@ -4773,7 +4773,7 @@
         }
       }), 1);
     },
-    389: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+    389(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         HD: () => readable,
         IT: () => Method,
@@ -4857,7 +4857,7 @@
         Theme["Device"] = "device";
       })(Theme || (Theme = {}));
     },
-    397: (__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
+    397(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
       var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(72);
       var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = __webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
       var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(825);
@@ -4880,7 +4880,7 @@
       var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_node_modules_cssimportant_loader_index_js_node_modules_sass_loader_dist_cjs_js_main_important_scss__WEBPACK_IMPORTED_MODULE_6__.A, options);
       var __WEBPACK_DEFAULT_EXPORT__ = _node_modules_css_loader_dist_cjs_js_node_modules_cssimportant_loader_index_js_node_modules_sass_loader_dist_cjs_js_main_important_scss__WEBPACK_IMPORTED_MODULE_6__.A && _node_modules_css_loader_dist_cjs_js_node_modules_cssimportant_loader_index_js_node_modules_sass_loader_dist_cjs_js_main_important_scss__WEBPACK_IMPORTED_MODULE_6__.A.locals ? _node_modules_css_loader_dist_cjs_js_node_modules_cssimportant_loader_index_js_node_modules_sass_loader_dist_cjs_js_main_important_scss__WEBPACK_IMPORTED_MODULE_6__.A.locals : void 0;
     },
-    452: (module, __webpack_exports__, __webpack_require__) => {
+    452(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         A: () => __WEBPACK_DEFAULT_EXPORT__
       });
@@ -4892,7 +4892,7 @@
       ___CSS_LOADER_EXPORT___.push([ module.id, `:root {\n  --stash-checker-color-text: #323232 !important;\n  --stash-checker-color-text-light: #989898 !important;\n  --stash-checker-color-link-visited: #323232 !important;\n  --stash-checker-color-link-hover: #039 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #323232 !important;\n  --stash-checker-color-border-light: #989898 !important;\n  --stash-checker-color-bg: #ffffff !important;\n  --stash-checker-color-card: #f2f2f2 !important;\n}\n\n.stashChecker-dark-mode {\n  --stash-checker-color-text: #e0e0e0 !important;\n  --stash-checker-color-text-light: #707070 !important;\n  --stash-checker-color-link-visited: #c7c7c7 !important;\n  --stash-checker-color-link-hover: #f2f2f2 !important;\n  --stash-checker-color-link-active: #039 !important;\n  --stash-checker-color-border: #5a5a5a !important;\n  --stash-checker-color-border-light: #707070 !important;\n  --stash-checker-color-bg: #202020 !important;\n  --stash-checker-color-card: #464646 !important;\n}\n\n.stashChecker {\n  color: var(--stash-checker-color-text) !important;\n  text-align: left !important;\n  font-size: medium !important;\n  line-height: normal !important;\n  opacity: 1 !important;\n}\n\n.stashChecker.sub-heading {\n  font-size: .8rem !important;\n  text-align: center !important;\n  margin: 0 0 .5rem !important;\n}\n\n.stashChecker.tooltip {\n  visibility: visible !important;\n  z-index: 99999 !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  max-width: 60rem !important;\n  position: absolute !important;\n  width: max-content !important;\n}\n\n.stashChecker.file {\n  position: relative !important;\n  margin: .5rem !important;\n  padding: .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.tag {\n  white-space: nowrap !important;\n  line-height: 1.5rem !important;\n  margin-right: .5rem !important;\n  padding: 0 .5rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n  border-radius: .5rem !important;\n}\n\n.stashChecker.modal {\n  position: fixed !important;\n  z-index: 999999 !important;\n  left: 0 !important;\n  top: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  overflow: hidden auto !important;\n  overscroll-behavior: contain !important;\n  background-color: #000 !important;\n  background-color: rgba(0,0,0,.4) !important;\n}\n\n.stashChecker.settings {\n  margin: 10vh auto !important;\n  background-color: var(--stash-checker-color-bg) !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  border-radius: .5rem !important;\n  padding: .5rem !important;\n  width: fit-content !important;\n  display: grid !important;\n  gap: 1rem !important;\n}\n\n.stashChecker.settings .version {\n  color: var(--stash-checker-color-text-light) !important;\n  font-size: 1.25rem !important;\n}\n\n.stashChecker.settings select {\n  padding: .25rem 2.25rem .25rem .25rem !important;\n}\n\n.stashChecker.settings input[type=text] {\n  padding: .25rem !important;\n}\n\n.stashChecker.settings input[type=radio] {\n  appearance: radio !important;\n  vertical-align: middle !important;\n}\n\n.stashChecker.settings input[type=checkbox] {\n  appearance: checkbox !important;\n  vertical-align: middle !important;\n}\n\n.stashChecker.settingsSection {\n  width: 50rem !important;\n}\n\n.stashChecker.settingsSectionBody {\n  width: 100% !important;\n  gap: .5rem !important;\n}\n\n.stashChecker.flex-row {\n  display: flex !important;\n  flex-flow: row wrap !important;\n  justify-content: flex-start !important;\n  align-items: flex-start !important;\n}\n\n.stashChecker.flex-column {\n  display: flex !important;\n  flex-flow: column wrap !important;\n  justify-content: flex-start !important;\n  align-items: flex-start !important;\n}\n\n.stashChecker.align-end {\n  align-self: end !important;\n}\n\n.stashChecker .buttonCell {\n  display: flex !important;\n  flex-flow: row wrap !important;\n  justify-content: end !important;\n  column-gap: .2rem !important;\n}\n\n.stashChecker.endpoint {\n  width: 100% !important;\n  display: flex !important;\n  flex-direction: row !important;\n  justify-content: space-between !important;\n  justify-items: flex-start !important;\n  align-items: center !important;\n  padding: 1rem !important;\n  margin: .1rem !important;\n  background-color: var(--stash-checker-color-card) !important;\n}\n\n.stashChecker.endpoint>button {\n  flex-grow: 0 !important;\n  margin-left: .5rem !important;\n}\n\n.stashChecker.endpoint>div {\n  flex-grow: 1 !important;\n}\n\n.stashChecker.endpoint>div>* {\n  margin: 0 !important;\n}\n\n.stashChecker.heading {\n  font-size: 1.5rem !important;\n  text-align: center !important;\n}\n\n.stashChecker fieldset {\n  width: fit-content !important;\n  border: .1rem solid var(--stash-checker-color-border-light) !important;\n  border-radius: .5rem !important;\n  margin: .5rem 0 .5rem 0 !important;\n  padding: .5rem !important;\n  flex-grow: 1 !important;\n}\n\n.stashChecker legend {\n  float: unset !important;\n  width: auto !important;\n  height: auto !important;\n  margin-left: .5rem !important;\n  margin-bottom: 0 !important;\n  padding-left: .2rem !important;\n  padding-right: .2rem !important;\n  line-height: unset !important;\n  font-size: unset !important;\n}\n\n.stashChecker table {\n  width: 100% !important;\n}\n\n.stashChecker table,\n.stashChecker thead,\n.stashChecker tbody,\n.stashChecker tr,\n.stashChecker th,\n.stashChecker td {\n  border-collapse: collapse !important;\n  border: .1rem solid var(--stash-checker-color-border) !important;\n  padding: .2rem !important;\n}\n\n.stashChecker .center {\n  text-align: center !important;\n}\n\n.stashChecker .option {\n  text-align: right !important;\n  margin: .5rem !important;\n}\n\n.stashChecker .option>input {\n  margin-left: .5rem !important;\n  color: var(--stash-checker-color-text) !important;\n  background-color: var(--stash-checker-color-bg) !important;\n}\n\n.stashChecker .option>select {\n  margin-left: .5rem !important;\n}\n\n.stashChecker>.matchQuality {\n  width: .8em !important;\n  height: .8em !important;\n  display: inline-block !important;\n  border-radius: 50% !important;\n}\n\n.stashChecker.btn {\n  display: inline-block !important;\n  font-weight: 400 !important;\n  color: #212529 !important;\n  text-align: center !important;\n  vertical-align: middle !important;\n  user-select: none !important;\n  background-color: rgba(0,0,0,0) !important;\n  border: 1px solid rgba(0,0,0,0) !important;\n  padding: .375rem .75rem !important;\n  font-size: 1rem !important;\n  line-height: 1.5 !important;\n  border-radius: .25rem !important;\n  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n}\n\n.stashChecker.btn:not(:disabled):not(.disabled) {\n  cursor: pointer !important;\n}\n\n.stashChecker.btn:hover {\n  color: #212529 !important;\n  text-decoration: none !important;\n}\n\n.stashChecker.btn-primary {\n  color: #fff !important;\n  background-color: #137cbd !important;\n  border-color: #137cbd !important;\n}\n\n.stashChecker.btn-primary:hover {\n  color: #fff !important;\n  background-color: #10659a !important;\n  border-color: #0e5e8f !important;\n}\n\n.stashChecker.btn-danger {\n  color: #fff !important;\n  background-color: #db3737 !important;\n  border-color: #db3737 !important;\n}\n\n.stashChecker.btn-danger:hover {\n  color: #fff !important;\n  background-color: #c82424 !important;\n  border-color: #bd2222 !important;\n}\n\n.stashChecker.tooltip a:link {\n  color: var(--stash-checker-color-text) !important;\n}\n\n.stashChecker.tooltip a:visited {\n  color: var(--stash-checker-color-link-visited) !important;\n}\n\n.stashChecker.tooltip a:hover {\n  color: var(--stash-checker-color-link-hover) !important;\n}\n\n.stashChecker.tooltip a:active {\n  color: var(--stash-checker-color-link-active) !important;\n}\n\n.stashChecker.tooltip hr {\n  margin-top: .5rem !important;\n  margin-bottom: .5rem !important;\n  border-color: var(--stash-checker-color-border-light) !important;\n  background-color: var(--stash-checker-color-border-light) !important;\n}\n\n.stashChecker.tooltip hr+br {\n  display: none !important;\n}\n\n.stashChecker.file+br {\n  display: none !important;\n}\n\n.stashCheckerSymbol {\n  font-size: inherit !important;\n}`, "" ]);
       const __WEBPACK_DEFAULT_EXPORT__ = ___CSS_LOADER_EXPORT___;
     },
-    464: (module, __webpack_exports__, __webpack_require__) => {
+    464(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
@@ -5081,7 +5081,7 @@
         }
       }));
     },
-    483: (module, __webpack_exports__, __webpack_require__) => {
+    483(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
@@ -5118,7 +5118,7 @@
         }
       }));
     },
-    494: (module, __webpack_exports__, __webpack_require__) => {
+    494(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
@@ -5134,13 +5134,13 @@
           const batchCollectionTimeout = 10;
           let batchQueriesGet = new Map;
           let batchQueriesPost = new Map;
-          let batchQueues = new Map;
+          let requestQueues = new Map;
           async function request(endpoint, query, method, batchQueries = false) {
             if (batchQueries) return addQuery(endpoint, query, method); else return new Promise(((resolve, reject) => sendQuery(endpoint, `q:${query}`, method).then((data => resolve(data.q))).catch(reject)));
           }
           async function addQuery(endpoint, query, method) {
             return new Promise(((resolve, reject) => {
-              let batchQueue = batchQueues.get(endpoint);
+              let requestQueue = requestQueues.get(endpoint);
               let batchQueries;
               switch (method) {
                case _dataTypes__WEBPACK_IMPORTED_MODULE_0__.IT.Get:
@@ -5154,15 +5154,15 @@
                default:
                 throw Error(`Missing implementation for method ${method}`);
               }
-              if (!batchQueue) {
-                batchQueue = new _util_jobQueue__WEBPACK_IMPORTED_MODULE_2__.J(2);
-                batchQueues.set(endpoint, batchQueue);
+              if (!requestQueue) {
+                requestQueue = new _util_jobQueue__WEBPACK_IMPORTED_MODULE_2__.J(2);
+                requestQueues.set(endpoint, requestQueue);
               }
               let batchQuery = batchQueries.get(endpoint);
               if (!batchQuery) {
                 let timerHandle = window.setTimeout((() => {
                   let query = buildBatchQuery(endpoint, batchQueries.get(endpoint));
-                  batchQueue.enqueue((() => sendQuery(endpoint, query.query, method))).then(query.resolve).catch(query.reject);
+                  requestQueue.enqueue((() => sendQuery(endpoint, query.query, method))).then(query.resolve).catch(query.reject);
                   batchQueries.delete(endpoint);
                 }), batchCollectionTimeout);
                 batchQuery = {
@@ -5181,7 +5181,7 @@
                 window.clearTimeout(batchQuery.timerHandle);
                 batchQueries.delete(endpoint);
                 let query = buildBatchQuery(endpoint, batchQuery);
-                return batchQueue.enqueue((() => sendQuery(endpoint, query.query, method))).then(query.resolve).catch(query.reject);
+                return requestQueue.enqueue((() => sendQuery(endpoint, query.query, method))).then(query.resolve).catch(query.reject);
               }
             }));
           }
@@ -5275,7 +5275,7 @@
         }
       }));
     },
-    513: (module, __webpack_exports__, __webpack_require__) => {
+    513(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
@@ -5309,7 +5309,7 @@
         }
       }));
     },
-    540: module => {
+    540(module) {
       function insertStyleElement(options) {
         var element = document.createElement("style");
         options.setAttributes(element, options.attributes);
@@ -5318,7 +5318,7 @@
       }
       module.exports = insertStyleElement;
     },
-    591: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+    591(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         OO: () => checkBox,
         _V: () => charBox,
@@ -5395,12 +5395,12 @@
         return div;
       }
     },
-    601: module => {
+    601(module) {
       module.exports = function(i) {
         return i[1];
       };
     },
-    613: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+    613(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         KY: () => setValue,
         Tc: () => deleteValue,
@@ -5448,7 +5448,7 @@
         return value;
       }
     },
-    648: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+    648(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         C: () => onAddition,
         r: () => clearObservers
@@ -5471,7 +5471,7 @@
         while (observerList.length > 0) observerList.pop()?.disconnect();
       }
     },
-    657: (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+    657(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         M: () => StashQueryClass
       });
@@ -5506,7 +5506,7 @@
         }
       }
     },
-    659: module => {
+    659(module) {
       var memo = {};
       function getTarget(target) {
         if (typeof memo[target] === "undefined") {
@@ -5527,7 +5527,7 @@
       }
       module.exports = insertBySelector;
     },
-    710: (module, __webpack_exports__, __webpack_require__) => {
+    710(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
@@ -5582,7 +5582,7 @@
         }
       }), 1);
     },
-    782: (module, __webpack_exports__, __webpack_require__) => {
+    782(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
@@ -6273,7 +6273,7 @@
         }
       }));
     },
-    821: (module, __webpack_exports__, __webpack_require__) => {
+    821(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           __webpack_require__.d(__webpack_exports__, {
@@ -6318,7 +6318,7 @@
         }
       }));
     },
-    825: module => {
+    825(module) {
       function apply(styleElement, options, obj) {
         var css = "";
         if (obj.supports) css += "@supports (".concat(obj.supports, ") {");
