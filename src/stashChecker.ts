@@ -86,7 +86,7 @@ export async function runStashChecker() {
 
             check(Target.Scene, sceneSelector, {observe: true, urlSelector: e => e.closest("a")?.href?.replace("/month/", "/ppv/"), displaySelector: displaySelector, titleSelector: titleSelector});
             check(Target.Performer, ".sidemenu.actress > a[href*='/search/=/performerid=']", {observe: true, displaySelector: displaySelector, nameSelector: titleSelector});
-            check(Target.Movie, ".serieslist > a[href*='/search/=/seriesid=']", {observe: true, displaySelector: displaySelector, nameSelector: titleSelector});
+            check(Target.Group, ".serieslist > a[href*='/search/=/seriesid=']", {observe: true, displaySelector: displaySelector, nameSelector: titleSelector});
             check(Target.Studio, ".newlabel a[href*='/ppv/']", {
                 observe: true,
                 displaySelector: e => directChildTextNode(e.querySelector("span")),
@@ -207,13 +207,13 @@ export async function runStashChecker() {
                 stashIdSelector,
                 stashIdEndpoint
             });
-            check(Target.Movie, "div.flex.justify-between > h2", {
+            check(Target.Group, "div.flex.justify-between > h2", {
                 observe: true,
                 displaySelector: e => window.location.pathname.startsWith("/movies/") ? e : null,
                 urlSelector: currentSite,
                 stashIdSelector
             });
-            check(Target.Movie, "div.flex.justify-between > h2", {
+            check(Target.Group, "div.flex.justify-between > h2", {
                 observe: true,
                 displaySelector: e => window.location.pathname.startsWith("/movies/") ? e : null,
                 urlSelector: null,
@@ -223,7 +223,7 @@ export async function runStashChecker() {
             });
             check(Target.Performer, "a[href^='https://theporndb.net/performers/']", {observe: true});
             check(Target.Scene, "a[href^='https://theporndb.net/scenes/'], a[href^='https://theporndb.net/jav/']", {observe: true});
-            check(Target.Movie, "a[href^='https://theporndb.net/movies/']", {observe: true});
+            check(Target.Group, "a[href^='https://theporndb.net/movies/']", {observe: true});
             break;
         }
         case "www.javlibrary.com": {
@@ -327,7 +327,7 @@ export async function runStashChecker() {
             });
             check(Target.Studio, "a[href*='/makers/']:not([href*='page='])", {observe: true});
             check(Target.Studio, "a[href*='/labels/']:not([href*='page='])", {observe: true});
-            check(Target.Movie, "a[href*='/series/']:not([href*='page='])", {observe: true});
+            check(Target.Group, "a[href*='/series/']:not([href*='page='])", {observe: true});
             if (/talents\//.test(window.location.pathname)) {
                 check(Target.Performer, "h1:first-child", {observe: true})
             }
@@ -341,7 +341,7 @@ export async function runStashChecker() {
                 check(Target.Studio, "h1:first-child", {observe: true})
             }
             if (/series\//.test(window.location.pathname)) {
-                check(Target.Movie, "h1:first-child", {observe: true})
+                check(Target.Group, "h1:first-child", {observe: true})
             }
             break;
         }
@@ -360,7 +360,7 @@ export async function runStashChecker() {
                 observe: true,
                 titleSelector: e => e.getAttribute("title")?.trim()
             });
-            check(Target.Movie, "a[href^='https://www.data18.com/movies/']:not([href*='#']):not([href$='/movies/series']):not([href$='/movies/showcases'])", {
+            check(Target.Group, "a[href^='https://www.data18.com/movies/']:not([href*='#']):not([href$='/movies/series']):not([href$='/movies/showcases'])", {
                 observe: true,
                 nameSelector: e => e.getAttribute("title")?.trim()
             });
@@ -531,11 +531,11 @@ export async function runStashChecker() {
             } else if (window.location.pathname.startsWith("/episode/")) {
                 check(Target.Scene, "[id='data'] h1", {urlSelector: currentSite});
             } else if (window.location.pathname.startsWith("/video/")) {
-                check(Target.Movie, "[id='data'] h1", {urlSelector: currentSite});
+                check(Target.Group, "[id='data'] h1", {urlSelector: currentSite});
             }
             check(Target.Performer, "a[href*='performer/']", {observe: true});
             check(Target.Scene, "a[href*='episode/']", {observe: true});
-            check(Target.Movie, "a[href*='video/']", {observe: true});
+            check(Target.Group, "a[href*='video/']", {observe: true});
             break;
         }
         case "pmvhaven.com": {

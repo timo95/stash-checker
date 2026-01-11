@@ -5,6 +5,7 @@
 - Add aliases matching for tags, performers and studios
 - Add batchSize setting [#65]
 - Add query method setting (get/post) [#65]
+- Change Movie to Group [#68]
 - Fix iafd performer sites
 - Fix quotes in title parsing error [#45]
 

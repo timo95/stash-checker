@@ -9,7 +9,7 @@ export function initStatistics() {
 
 export function updateStatistics() {
     let statisticsSection = getSettingsSection("statistics")!;
-    let targets = [Target.Scene, Target.Movie, Target.Gallery, Target.Performer, Target.Studio, Target.Tag]
+    let targets = [Target.Scene, Target.Group, Target.Gallery, Target.Performer, Target.Studio, Target.Tag]
     let string = targets.flatMap(target => {
         let s = statistics(target)
         return s ? [s] : []

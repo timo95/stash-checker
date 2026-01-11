@@ -67,6 +67,7 @@ export enum DataField {
     BitRate = "bit_rate",
     Code = "code",
     Date = "date",
+    Director = "director",
     Disambiguation = "disambiguation",
     Duration = "duration",
     Favorite = "favorite",
@@ -77,6 +78,7 @@ export enum DataField {
     Name = "name",
     Organized = "organized",
     Path = "path",
+    SceneCount = "scene_count",
     Size = "size",
     Studio = "studio",
     Tags = "tags",
@@ -96,7 +98,7 @@ export enum StashSymbol {
  */
 export enum Target {
     Gallery = "gallery",
-    Movie = "movie",
+    Group = "group",
     Performer = "performer",
     Scene = "scene",
     Studio = "studio",

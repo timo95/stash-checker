@@ -20,7 +20,7 @@ const supportedDataFields = new Map<Target, DataField[]>([
     [Target.Scene, [DataField.Id, DataField.Title, DataField.Organized, DataField.Studio, DataField.Code, DataField.Date, DataField.Tags, DataField.Files]],
     [Target.Performer, [DataField.Id, DataField.Name, DataField.Disambiguation, DataField.Favorite, DataField.AliasList, DataField.Birthdate, DataField.HeightCm, DataField.Tags]],
     [Target.Gallery, [DataField.Id, DataField.Title, DataField.Date, DataField.Tags, DataField.Files]],
-    [Target.Movie, [DataField.Id, DataField.Name, DataField.Date]],
+    [Target.Group, [DataField.Id, DataField.Name, DataField.Aliases, DataField.Date, DataField.Studio, DataField.Director, DataField.SceneCount]],
     [Target.Studio, [DataField.Id, DataField.Name, DataField.Aliases]],
     [Target.Tag, [DataField.Id, DataField.Name, DataField.Aliases]],
 ]);
@@ -104,9 +104,9 @@ async function queryStash(
             query = `findGalleries(gallery_filter:{${filter}}){galleries{${getDataFields(target)}}}`;
             access = (d) => d.galleries;
             break;
-        case Target.Movie:
-            query = `findMovies(movie_filter:{${filter}}){movies{${getDataFields(target)}}}`;
-            access = (d) => d.movies;
+        case Target.Group:
+            query = `findGroups(group_filter:{${filter}}){groups{${getDataFields(target)}}}`;
+            access = (d) => d.groups;
             break;
         case Target.Studio:
             query = `findStudios(studio_filter:{${filter}}){studios{${getDataFields(target)}}}`;
@@ -179,7 +179,7 @@ async function checkElement(
             console.info(`No StashId for ${target} found.`);
         }
     }
-    if ([Target.Performer, Target.Movie, Target.Studio, Target.Tag].includes(target) && nameSelector) {
+    if ([Target.Performer, Target.Group, Target.Studio, Target.Tag].includes(target) && nameSelector) {
         let name = nameSelector(element);
         let ignore = target === Target.Performer && (name ? ignorePerformerName(name) : true);
         if (name && !ignore) {
