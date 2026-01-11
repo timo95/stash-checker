@@ -7,7 +7,7 @@ const batchCollectionTimeout = 10;
 
 let batchQueriesGet: Map<StashEndpoint, BatchQuery> = new Map();
 let batchQueriesPost: Map<StashEndpoint, BatchQuery> = new Map();
-let batchQueues: Map<StashEndpoint, JobQueue> = new Map();
+let requestQueues: Map<StashEndpoint, JobQueue> = new Map();
 
 export async function request(
     endpoint: StashEndpoint,
@@ -31,7 +31,7 @@ async function addQuery(
     method: Method,
 ): Promise<any> {
     return new Promise((resolve, reject) => {
-        let batchQueue = batchQueues.get(endpoint);
+        let requestQueue = requestQueues.get(endpoint);
         let batchQueries
         switch (method) {
             case Method.Get:
@@ -44,10 +44,10 @@ async function addQuery(
                 throw Error(`Missing implementation for method ${method}`);
         }
 
-        if (!batchQueue) {
+        if (!requestQueue) {
             // Init new queue. Every queue gets initialized once and never deleted
-            batchQueue = new JobQueue(2)
-            batchQueues.set(endpoint, batchQueue)
+            requestQueue = new JobQueue(2)
+            requestQueues.set(endpoint, requestQueue)
         }
 
         let batchQuery = batchQueries.get(endpoint)
@@ -56,7 +56,7 @@ async function addQuery(
             let timerHandle = window.setTimeout(() => {
                 // Send batch after timeout and delete map entry
                 let query = buildBatchQuery(endpoint, batchQueries.get(endpoint)!);
-                batchQueue!.enqueue(() => sendQuery(endpoint, query.query, method))
+                requestQueue!.enqueue(() => sendQuery(endpoint, query.query, method))
                     .then(query.resolve)
                     .catch(query.reject);
                 batchQueries.delete(endpoint);
@@ -77,7 +77,7 @@ async function addQuery(
             window.clearTimeout(batchQuery.timerHandle);
             batchQueries.delete(endpoint);
             let query = buildBatchQuery(endpoint, batchQuery)
-            return batchQueue.enqueue(() => sendQuery(endpoint, query.query, method))
+            return requestQueue.enqueue(() => sendQuery(endpoint, query.query, method))
                 .then(query.resolve)
                 .catch(query.reject);
         }

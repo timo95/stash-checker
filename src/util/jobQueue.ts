@@ -14,10 +14,10 @@ enum Status {
  * Queue for jobs. Can run multiple jobs in parallel.
  */
 export class JobQueue {
-    public readonly parallel: number;
+    private readonly parallel: number;
     private queue: QueuedJob[] = [];
 
-    constructor(parallel: number = 1) {
+    constructor(parallel: number) {
         this.parallel = parallel;
     }
 
