@@ -7,6 +7,7 @@
 // @match *://www.avbase.net/*
 // @match *://coomer.st/*
 // @match *://erommdtube.com/*
+// @match *://duga.jp/*
 // @match *://fansdb.cc/*
 // @match *://fansdb.xyz/*
 // @match *://fansly.com/*
