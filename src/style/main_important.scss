@@ -151,12 +151,12 @@
 .stashChecker.endpoint {
   width: 100%;
   display: flex;
+  box-sizing: border-box;
   flex-direction: row;
   justify-content: space-between;
   justify-items: flex-start;
   align-items: center;
   padding: 1rem;
-  margin: 0.1rem;
   background-color: var(--stash-checker-color-card);
 }
 
