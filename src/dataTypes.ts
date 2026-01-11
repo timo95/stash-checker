@@ -144,7 +144,7 @@ export type Selector = (e: Element) => null | undefined | string;
  * Configure queries for an entry.
  */
 export interface CheckOptions {
-    displaySelector?: (e: Element) => Element | null | undefined;
+    displaySelector?: (e: Element) => Node | null | undefined;
     urlSelector?: Selector | null;
     codeSelector?: Selector | null;
     stashIdSelector?: Selector | null;

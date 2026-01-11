@@ -52,6 +52,7 @@ export default {
         "*://www.avbase.net/*",
         "*://coomer.st/*",
         "*://erommdtube.com/*",
+        "*://duga.jp/*",
         "*://fansdb.cc/*",
         "*://fansdb.xyz/*",
         "*://fansly.com/*",

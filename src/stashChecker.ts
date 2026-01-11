@@ -13,6 +13,7 @@ export async function runStashChecker() {
     console.info("Running Stash Checker")
     let currentSite = () => window.location.href
     let closestUrl = (e: Element) => e.closest("a")?.href
+    let directChildTextNode = (e: Element | null | undefined) => Array.from(e?.childNodes ?? []).find(n => n.nodeType === Node.TEXT_NODE)
 
     switch (window.location.host) {
         case "www.iwara.tv": {
@@ -65,6 +66,32 @@ export async function runStashChecker() {
                 });
             }
             check(Target.Scene, "div.item-info > :is(h4, h5) > a");
+            break;
+        }
+        case "duga.jp": {
+            if (window.location.pathname.startsWith("/ppv/") || window.location.pathname.startsWith("/month/")) {
+                check(Target.Scene, "#contentsname.title", {
+                    urlSelector: _ => currentSite().replace("/month/", "/ppv/"),
+                    codeSelector: _ => document.querySelector("[itemprop='mpn']")?.textContent
+                });
+                check(Target.Studio, ".maintitle.multiple", {urlSelector: currentSite});
+            } else if (window.location.pathname.startsWith("/search/=/performerid=")) {
+                check(Target.Performer, ".performerdetail .name", {
+                    urlSelector: currentSite,
+                });
+            }
+            let displaySelector = (e: Element) => directChildTextNode(e.querySelector(".title"))
+            let titleSelector = (e: Element) => directChildTextNode(e)?.textContent
+            let sceneSelector = ".contentslist > a[href*='/ppv/'], .contentslist > a[href*='/month/'], .monthlylist > a[href*='/month/'], .sidemenu > a[href*='/ppv/']"
+
+            check(Target.Scene, sceneSelector, {observe: true, urlSelector: e => e.closest("a")?.href?.replace("/month/", "/ppv/"), displaySelector: displaySelector, titleSelector: titleSelector});
+            check(Target.Performer, ".sidemenu.actress > a[href*='/search/=/performerid=']", {observe: true, displaySelector: displaySelector, nameSelector: titleSelector});
+            check(Target.Movie, ".serieslist > a[href*='/search/=/seriesid=']", {observe: true, displaySelector: displaySelector, nameSelector: titleSelector});
+            check(Target.Studio, ".newlabel a[href*='/ppv/']", {
+                observe: true,
+                displaySelector: e => directChildTextNode(e.querySelector("span")),
+                nameSelector: e => directChildTextNode(e.querySelector("span"))?.textContent
+            });
             break;
         }
         case "xcity.jp": {

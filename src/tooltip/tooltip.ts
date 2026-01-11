@@ -18,13 +18,19 @@ import {createSpan} from "../util/htmlHelper";
 /**
  * find existing symbol span recursively, undefined if none available
  */
-function getExistingSymbol(element: Element): HTMLSpanElement | undefined {
-    if (element.getAttribute("data-type") === "stash-symbol") {
-        return element as HTMLSpanElement;
+function getExistingSymbol(node: Node): HTMLSpanElement | undefined {
+    if (node instanceof Element) {
+        if (node.getAttribute("data-type") === "stash-symbol") {
+            return node as HTMLSpanElement;
+        } else {
+            return Array.from(node.childNodes)  // child nodes
+                .filter(n => n.nodeType === Node.ELEMENT_NODE)
+                .map(getExistingSymbol)
+                .find(n => n);  // first truthy
+        }
     } else {
-        return Array.from(element.childNodes)
+        return Array.from(node.parentElement?.childNodes ?? [])  // sibling nodes
             .filter(n => n.nodeType === Node.ELEMENT_NODE)
-            .map(n => n as Element)
             .map(getExistingSymbol)
             .find(n => n);  // first truthy
     }
@@ -133,7 +139,7 @@ function stashSymbol(): HTMLSpanElement {
  * Also populates tooltip window.
  */
 export function prefixSymbol(
-    element: Element,
+    node: Node,
     target: Target,
     type: Type,
     endpoint: StashEndpoint,
@@ -154,7 +160,7 @@ export function prefixSymbol(
     });
 
     // Look for existing check symbol
-    let symbol = getExistingSymbol(element);
+    let symbol = getExistingSymbol(node);
     if (symbol) {
         // Merge new result with existing results
         endpoints = [...new Set<string>(JSON.parse(symbol.getAttribute("data-endpoints")!)).add(endpoint.name)].sort();
@@ -165,10 +171,10 @@ export function prefixSymbol(
         // insert new symbol before first text because css selectors cannot select text nodes directly
         // it works with cases were non text elements (images) are inside the selected element
         symbol = stashSymbol();
-        let text = firstTextChild(element);
+        let text = firstTextChild(node);
         if (text) {
             // If node contains text, insert symbol before the text
-            text.parentNode?.insertBefore(symbol, text);
+            text?.parentNode?.insertBefore(symbol, text);
         } else {
             return;  // abort if no text in symbol
         }
