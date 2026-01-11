@@ -1,7 +1,9 @@
 
 ## [WIP]
 
-- Add support for websites: avbase.net, fc2ppvdb.com, duga.jp
+## [1.2.0]
+
+- Add support for websites: avbase.net, duga.jp, fc2ppvdb.com
 - Add aliases matching for tags, performers and studios
 - Add batchSize setting [#65]
 - Add query method setting (get/post) [#65]
