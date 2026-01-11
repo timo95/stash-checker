@@ -596,8 +596,7 @@ export async function runStashChecker() {
                 ...stashBoxDefault,
                 stashIdSelector: (e) => findId(closestUrl(e)),
             });
-            // Tag by StashId isn't supported by Stash yet
-            /*check(Target.Tag, ".MainContent > .NarrowPage h3 > span", {
+            check(Target.Tag, ".MainContent > .NarrowPage h3 > span", {
                 ...stashBoxDefault,
                 displaySelector: e => window.location.pathname.startsWith("/tags/") ? e : null,  // only on tag page
                 stashIdSelector: () => findId(currentSite()),
@@ -606,7 +605,7 @@ export async function runStashChecker() {
                 ...stashBoxDefault,
                 displaySelector: e => window.location.pathname === "/tags" ? e : null,  // only on overview page
                 stashIdSelector: (e) => findId(closestUrl(e)),
-            });*/
+            });
             break;
         }
         default:

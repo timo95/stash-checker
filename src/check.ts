@@ -22,7 +22,7 @@ const supportedDataFields = new Map<Target, DataField[]>([
     [Target.Gallery, [DataField.Id, DataField.Title, DataField.Date, DataField.Tags, DataField.Files]],
     [Target.Movie, [DataField.Id, DataField.Name, DataField.Date]],
     [Target.Studio, [DataField.Id, DataField.Name, DataField.Aliases]],
-    [Target.Tag, [DataField.Id, DataField.Name]],
+    [Target.Tag, [DataField.Id, DataField.Name, DataField.Aliases]],
 ]);
 
 const supportedSubDataFields = new Map<DataField, DataField[]>([
