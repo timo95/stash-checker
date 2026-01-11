@@ -2,13 +2,15 @@
   "name": "stash-checker",
   "description": "Add checkmarks on porn websites to scenes/performers that are present in your own Stash instance.",
   "version": "1.2.0",
+  "license": "MIT",
   "author": {
     "name": "timo95",
     "email": "24251362+timo95@users.noreply.github.com"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
-    "dev": "cross-env NODE_ENV=development webpack serve --config webpack.config.js"
+    "dev": "cross-env NODE_ENV=development webpack serve --config webpack.config.js",
+    "updates": "npx npm-check-updates"
   },
   "repository": {
     "type": "git",
@@ -21,7 +23,7 @@
     "@types/greasemonkey": "^4.0.7",
     "@types/sortablejs": "^1.15.9",
     "browserslist": "^4.28.1",
-    "cross-env": "^7.0.3",
+    "cross-env": "^10.1.0",
     "css-loader": "^7.1.2",
     "cssimportant-loader": "^0.4.0",
     "sass": "^1.97.2",
