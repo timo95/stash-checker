@@ -1,50 +1,7 @@
 import {Target, Type} from "./dataTypes";
 
-/**
- * recursive (dfs) first non empty text node child, undefined if none available
- */
-export function firstTextChild(node?: Node | undefined | null): null | undefined | Node {
-    if (!node) {
-        return node;
-    }
-    if (
-        node.nodeType === Node.TEXT_NODE &&
-        node.textContent?.match(/^[\s<>]*$/) === null  // exclude whitespace, <, >
-    ) {
-        return node;
-    } else {
-        return Array.from(node.childNodes)
-            .filter(n => !["svg"].includes(n.nodeName.toLowerCase()))  // element tag exceptions
-            .filter(n => asElement(n)?.getAttribute("data-type") !== "stash-symbol")  // exclude checkmark
-            .filter(n => isElement(n) ? !isHidden(n as Element) : true)  // exclude hidden elements
-            .map(firstTextChild)
-            .find(n => n);  // first truthy
-    }
-}
-
-function isElement(childNode: ChildNode): boolean {
-    return childNode.nodeType === Node.ELEMENT_NODE
-}
-
-function asElement(childNode: ChildNode): Element | null {
-    if (isElement(childNode)) return childNode as Element
-    else return null
-}
-
-function isHidden(element: Element): boolean {
-    // element.computedStyleMap()?.getAll("display")?.includes("none")  // not supported yet by firefox (https://bugzilla.mozilla.org/show_bug.cgi?id=1857849)
-    return window.getComputedStyle(element).display === "none"
-}
-
 export function firstText(node?: Node | undefined | null): string | undefined {
-    return firstTextChild(node)?.textContent?.trim()
-}
-
-export function allText(node?: Node | undefined | null): string[] {
-    let words: any[] = node ? Array.from(node.childNodes)
-        .flatMap(n => n.nodeType == Node.TEXT_NODE ? [n.textContent] : allText(n))
-        .filter((s: string | null) => s) : []
-    return words;
+    return node?.firstTextChildDfs()?.textContent?.trim()
 }
 
 export function entryLink(stashUrl: string, target: Target, id: string): string {
@@ -56,6 +13,18 @@ export function entryLink(stashUrl: string, target: Target, id: string): string 
     }
     let url = `${stashUrl}/${path}/${id}`;
     return `<a target="_blank" href="${url}">${url}</a>`
+}
+
+export function bytesToReadable(bytes: number): string {
+    const labels = ["KB", "MB", "GB", "TB", "PB"]
+    let label
+    for (label of labels) {
+        bytes /= 1000
+        if (bytes < 1000) {
+            break;
+        }
+    }
+    return bytes.toFixed(2) + label;
 }
 
 export function secondsToReadable(seconds: number): string {

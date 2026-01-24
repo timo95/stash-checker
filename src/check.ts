@@ -15,7 +15,7 @@ import {request} from "./request";
 import {onAddition} from "./observer";
 import {customDisplayRules} from "./settings/display";
 import {booleanOptions, getEnumOptionMethod, OptionKey} from "./settings/providers";
-import {hasKanji, nakedDomain} from "./util/stringUtils";
+import {nakedDomain} from "./util/stringUtils";
 
 const supportedDataFields = new Map<Target, DataField[]>([
     [Target.Scene, [DataField.Id, DataField.Title, DataField.Organized, DataField.Studio, DataField.Code, DataField.Date, DataField.Tags, DataField.Files]],
@@ -217,9 +217,8 @@ async function checkElement(
 
 function ignorePerformerName(name: string): boolean {
     // Do not use single performer names
-    let nameCount = name?.split(/\s+/)?.length
-    let kanji = name ? hasKanji(name) : false
-    return nameCount === 1 && !kanji
+    let nameCount = name.split(/\s+/).length
+    return nameCount === 1 && !name.hasKanji()
 }
 
 function getCustomRules(target: Target): CustomDisplayRule[] {

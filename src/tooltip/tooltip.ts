@@ -9,12 +9,11 @@ import {
     Target,
     Type
 } from "../dataTypes";
-import {firstTextChild, secondsToReadable, typeToString} from "../utils";
+import {bytesToReadable, secondsToReadable, typeToString} from "../utils";
 import {StashQuery, StashQueryClass} from "./stashQuery";
-import {symbolMouseoverListener, symbolMouseoutListener} from "./tooltipElement";
+import {symbolMouseoutListener, symbolMouseoverListener} from "./tooltipElement";
 import {booleanOptions, OptionKey, stringOptions} from "../settings/providers";
 import {createSpan} from "../util/htmlHelper";
-import {bytesToReadable} from "../util/stringUtils";
 
 /**
  * find existing symbol span recursively, undefined if none available
@@ -25,13 +24,13 @@ function getExistingSymbol(node: Node): HTMLSpanElement | undefined {
             return node as HTMLSpanElement;
         } else {
             return Array.from(node.childNodes)  // child nodes
-                .filter(n => n.nodeType === Node.ELEMENT_NODE)
+                .filter(n => n.isElement())
                 .map(getExistingSymbol)
                 .find(n => n);  // first truthy
         }
     } else {
         return Array.from(node.parentElement?.childNodes ?? [])  // sibling nodes
-            .filter(n => n.nodeType === Node.ELEMENT_NODE)
+            .filter(n => n.isElement())
             .map(getExistingSymbol)
             .find(n => n);  // first truthy
     }
@@ -174,7 +173,7 @@ export function prefixSymbol(
         // insert new symbol before first text because css selectors cannot select text nodes directly
         // it works with cases were non text elements (images) are inside the selected element
         symbol = stashSymbol();
-        let text = firstTextChild(node);
+        let text = node.firstTextChildDfs();
         if (text) {
             // If node contains text, insert symbol before the text
             text?.parentNode?.insertBefore(symbol, text);

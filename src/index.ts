@@ -1,4 +1,6 @@
 import "./style/main_important.scss";
+import "./util/booleanUtils";
+import "./util/nodeUtils";
 import "./util/stringUtils";
 import {initEndpointSettings} from "./settings/endpoints";
 import {initSettingsWindow} from "./settings/settings";

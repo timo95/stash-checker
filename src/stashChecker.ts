@@ -1,8 +1,8 @@
 import {check} from "./check";
 import {CheckOptions, Target} from "./dataTypes";
-import {allText, firstText} from "./utils";
+import {firstText} from "./utils";
 import {isSiteBlocked} from "./settings/menu";
-import {capitalized, hasKana, hasKanji} from "./util/stringUtils";
+import {capitalized} from "./util/stringUtils";
 
 export async function runStashChecker() {
     // Stop, if site block is configured
@@ -14,7 +14,7 @@ export async function runStashChecker() {
     console.info("Running Stash Checker")
     let currentSite = () => window.location.href
     let closestUrl = (e: Element) => e.closest("a")?.href
-    let directChildTextNode = (e: Element | null | undefined) => Array.from(e?.childNodes ?? []).find(n => n.nodeType === Node.TEXT_NODE)
+    let directChildTextNode = (e: Element | null | undefined) => Array.from(e?.childNodes ?? []).find(n => n.isText())
 
     switch (window.location.host) {
         case "www.iwara.tv": {
@@ -124,10 +124,10 @@ export async function runStashChecker() {
             break;
         }
         case "warashi-asian-pornstars.fr": {
-            let nameSelector = (e: Element) => allText(e)
+            let nameSelector = (e: Element) => e.allTextRecursive()
                 .flatMap(s => s.split(" "))
                 .map(s => s.trim())
-                .filter(s => s && !hasKanji(s) && !hasKana(s))
+                .filter(s => !s.isEmpty() && !s.hasKanji() && !s.hasKana())
                 .map(s => capitalized(s))
                 .join(" ");
 

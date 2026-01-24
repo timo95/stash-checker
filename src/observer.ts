@@ -13,7 +13,7 @@ export function onAddition(selector: string, callback: (e: Element) => void) {
     let observer = new MutationObserver((mutations) => {
         let addedElements = mutations
             .flatMap(m => Array.from(m.addedNodes))
-            .filter(n => n.nodeType === Node.ELEMENT_NODE)
+            .filter(n => n.isElement())
             .map(n => n as Element)
         addedElements
             .filter(e => e.matches(selector))
