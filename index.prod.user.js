@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Stash Checker
 // @description Add checkmarks on porn websites to scenes/performers that are present in your own Stash instance.
-// @version 1.2.0
+// @version 1.2.1
 // @author timo95
 // @match *://adultanime.dbsearch.net/*
 // @match *://coomer.st/*
@@ -2065,27 +2065,32 @@
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
         try {
           var _style_main_important_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(397);
-          var _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(378);
-          var _settings_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(59);
-          var _settings_menu__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(513);
-          var _settings_general__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(44);
-          var _stashChecker__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(782);
-          var _settings_statistics__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(821);
-          var _settings_display__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(6);
-          var _style_theme__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(483);
-          var _tooltip_tooltipElement__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(42);
-          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_settings__WEBPACK_IMPORTED_MODULE_2__, _settings_menu__WEBPACK_IMPORTED_MODULE_3__, _settings_general__WEBPACK_IMPORTED_MODULE_4__, _stashChecker__WEBPACK_IMPORTED_MODULE_5__, _settings_statistics__WEBPACK_IMPORTED_MODULE_6__, _settings_display__WEBPACK_IMPORTED_MODULE_7__, _style_theme__WEBPACK_IMPORTED_MODULE_8__ ]);
-          [_settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _settings_settings__WEBPACK_IMPORTED_MODULE_2__, _settings_menu__WEBPACK_IMPORTED_MODULE_3__, _settings_general__WEBPACK_IMPORTED_MODULE_4__, _stashChecker__WEBPACK_IMPORTED_MODULE_5__, _settings_statistics__WEBPACK_IMPORTED_MODULE_6__, _settings_display__WEBPACK_IMPORTED_MODULE_7__, _style_theme__WEBPACK_IMPORTED_MODULE_8__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
+          var _util_booleanUtils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(484);
+          var _util_booleanUtils__WEBPACK_IMPORTED_MODULE_1___default = __webpack_require__.n(_util_booleanUtils__WEBPACK_IMPORTED_MODULE_1__);
+          var _util_nodeUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(244);
+          var _util_nodeUtils__WEBPACK_IMPORTED_MODULE_2___default = __webpack_require__.n(_util_nodeUtils__WEBPACK_IMPORTED_MODULE_2__);
+          var _util_stringUtils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(583);
+          var _settings_endpoints__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(378);
+          var _settings_settings__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(59);
+          var _settings_menu__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(513);
+          var _settings_general__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(44);
+          var _stashChecker__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(782);
+          var _settings_statistics__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(821);
+          var _settings_display__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(6);
+          var _style_theme__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(483);
+          var _tooltip_tooltipElement__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(42);
+          var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings_endpoints__WEBPACK_IMPORTED_MODULE_4__, _settings_settings__WEBPACK_IMPORTED_MODULE_5__, _settings_menu__WEBPACK_IMPORTED_MODULE_6__, _settings_general__WEBPACK_IMPORTED_MODULE_7__, _stashChecker__WEBPACK_IMPORTED_MODULE_8__, _settings_statistics__WEBPACK_IMPORTED_MODULE_9__, _settings_display__WEBPACK_IMPORTED_MODULE_10__, _style_theme__WEBPACK_IMPORTED_MODULE_11__ ]);
+          [_settings_endpoints__WEBPACK_IMPORTED_MODULE_4__, _settings_settings__WEBPACK_IMPORTED_MODULE_5__, _settings_menu__WEBPACK_IMPORTED_MODULE_6__, _settings_general__WEBPACK_IMPORTED_MODULE_7__, _stashChecker__WEBPACK_IMPORTED_MODULE_8__, _settings_statistics__WEBPACK_IMPORTED_MODULE_9__, _settings_display__WEBPACK_IMPORTED_MODULE_10__, _style_theme__WEBPACK_IMPORTED_MODULE_11__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           (async function() {
-            await (0, _tooltip_tooltipElement__WEBPACK_IMPORTED_MODULE_9__.AA)();
-            (0, _settings_settings__WEBPACK_IMPORTED_MODULE_2__.yD)();
-            (0, _settings_statistics__WEBPACK_IMPORTED_MODULE_6__.S)();
-            (0, _settings_general__WEBPACK_IMPORTED_MODULE_4__.W)();
-            (0, _settings_display__WEBPACK_IMPORTED_MODULE_7__.s)();
-            (0, _style_theme__WEBPACK_IMPORTED_MODULE_8__.Y)();
-            await (0, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__.P)();
-            await (0, _settings_menu__WEBPACK_IMPORTED_MODULE_3__.Q)();
-            await (0, _stashChecker__WEBPACK_IMPORTED_MODULE_5__.C)();
+            await (0, _tooltip_tooltipElement__WEBPACK_IMPORTED_MODULE_12__.AA)();
+            (0, _settings_settings__WEBPACK_IMPORTED_MODULE_5__.yD)();
+            (0, _settings_statistics__WEBPACK_IMPORTED_MODULE_9__.S)();
+            (0, _settings_general__WEBPACK_IMPORTED_MODULE_7__.W)();
+            (0, _settings_display__WEBPACK_IMPORTED_MODULE_10__.s)();
+            (0, _style_theme__WEBPACK_IMPORTED_MODULE_11__.Y)();
+            await (0, _settings_endpoints__WEBPACK_IMPORTED_MODULE_4__.P)();
+            await (0, _settings_menu__WEBPACK_IMPORTED_MODULE_6__.Q)();
+            await (0, _stashChecker__WEBPACK_IMPORTED_MODULE_8__.C)();
           })();
           __webpack_async_result__();
         } catch (e) {
@@ -2127,39 +2132,16 @@
     185(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         $R: () => bytesToReadable,
-        Si: () => nakedDomain,
-        Yz: () => firstTextChild,
-        _t: () => hasKanji,
         bM: () => entryLink,
         e6: () => moveIndex,
-        gS: () => hasKana,
         iy: () => friendlyHttpStatus,
-        l2: () => capitalized,
         ou: () => firstText,
         xG: () => typeToString,
-        xr: () => secondsToReadable,
-        zW: () => allText
+        xr: () => secondsToReadable
       });
       var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
-      function firstTextChild(node) {
-        if (!node) return node;
-        if (node.nodeType === Node.TEXT_NODE && node.textContent?.match(/^[\s<>]*$/) === null) return node; else return Array.from(node.childNodes).filter((n => ![ "svg" ].includes(n.nodeName.toLowerCase()))).filter((n => asElement(n)?.getAttribute("data-type") !== "stash-symbol")).filter((n => isElement(n) ? !isHidden(n) : true)).map(firstTextChild).find((n => n));
-      }
-      function isElement(childNode) {
-        return childNode.nodeType === Node.ELEMENT_NODE;
-      }
-      function asElement(childNode) {
-        if (isElement(childNode)) return childNode; else return null;
-      }
-      function isHidden(element) {
-        return window.getComputedStyle(element).display === "none";
-      }
       function firstText(node) {
-        return firstTextChild(node)?.textContent?.trim();
-      }
-      function allText(node) {
-        let words = node ? Array.from(node.childNodes).flatMap((n => n.nodeType == Node.TEXT_NODE ? [ n.textContent ] : allText(n))).filter((s => s)) : [];
-        return words;
+        return node?.firstTextChildDfs()?.textContent?.trim();
       }
       function entryLink(stashUrl, target, id) {
         let path;
@@ -2167,14 +2149,8 @@
         let url = `${stashUrl}/${path}/${id}`;
         return `<a target="_blank" href="${url}">${url}</a>`;
       }
-      function secondsToReadable(seconds) {
-        let h = Math.floor(seconds / 3600);
-        let m = Math.floor(seconds / 60) % 60;
-        let s = Math.floor(seconds) % 60;
-        return [ h, m, s ].map((v => v.toString().padStart(2, "0"))).filter(((v, i) => v !== "00" || i > 0)).join(":");
-      }
       function bytesToReadable(bytes) {
-        let labels = [ "KB", "MB", "GB", "TB", "PB" ];
+        const labels = [ "KB", "MB", "GB", "TB", "PB" ];
         let label;
         for (label of labels) {
           bytes /= 1e3;
@@ -2182,21 +2158,11 @@
         }
         return bytes.toFixed(2) + label;
       }
-      function hasKanji(text) {
-        return /[\u4e00-\u9faf\u3400-\u4dbf]/.test(text);
-      }
-      function hasKana(text) {
-        return /[\u3041-\u3096\u30a0-\u30ff\uff5f-\uff9f]/.test(text);
-      }
-      function capitalized(word) {
-        return word[0].toUpperCase() + word.slice(1).toLowerCase();
-      }
-      function titleCase(text) {
-        return text.split(" ").map((n => capitalized(n))).join(" ");
-      }
-      function nakedDomain(url) {
-        const regex = /^(https?:\/\/)?(www\.)?/i;
-        return url.replace(regex, "");
+      function secondsToReadable(seconds) {
+        let h = Math.floor(seconds / 3600);
+        let m = Math.floor(seconds / 60) % 60;
+        let s = Math.floor(seconds) % 60;
+        return [ h, m, s ].map((v => v.toString().padStart(2, "0"))).filter(((v, i) => v !== "00" || i > 0)).join(":");
       }
       function interleave(array, between) {
         return array.flatMap((element => [ element, between.cloneNode(true) ])).slice(0, -1);
@@ -2271,7 +2237,7 @@
           var __webpack_async_dependencies_result__ = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           _settings_providers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_async_dependencies_result__[0];
           function getExistingSymbol(node) {
-            if (node instanceof Element) if (node.getAttribute("data-type") === "stash-symbol") return node; else return Array.from(node.childNodes).filter((n => n.nodeType === Node.ELEMENT_NODE)).map(getExistingSymbol).find((n => n)); else return Array.from(node.parentElement?.childNodes ?? []).filter((n => n.nodeType === Node.ELEMENT_NODE)).map(getExistingSymbol).find((n => n));
+            if (node instanceof Element) if (node.getAttribute("data-type") === "stash-symbol") return node; else return Array.from(node.childNodes).filter((n => n.isElement())).map(getExistingSymbol).find((n => n)); else return Array.from(node.parentElement?.childNodes ?? []).filter((n => n.isElement())).map(getExistingSymbol).find((n => n));
           }
           function clearSymbols() {
             document.querySelectorAll(":not(.stashCheckerPreview).stashCheckerSymbol").forEach((symbol => symbol.remove()));
@@ -2346,7 +2312,7 @@
               symbol.setAttribute("data-count", (parseInt(symbol.getAttribute("data-count")) + 1).toString());
             } else {
               symbol = stashSymbol();
-              let text = (0, _utils__WEBPACK_IMPORTED_MODULE_1__.Yz)(node);
+              let text = node.firstTextChildDfs();
               if (text) text?.parentNode?.insertBefore(symbol, text); else return;
             }
             symbol.setAttribute("data-endpoints", JSON.stringify(endpoints));
@@ -2382,6 +2348,26 @@
           __webpack_async_result__(e);
         }
       }));
+    },
+    244() {
+      function asElement(node) {
+        if (node.isElement()) return node; else return null;
+      }
+      Node.prototype.firstTextChildDfs = function() {
+        if (this.isText() && this.textContent?.match(/^[\s<>]*$/) === null) return this; else return Array.from(this.childNodes).filter((n => ![ "svg" ].includes(n.nodeName.toLowerCase()))).filter((n => asElement(n)?.getAttribute("data-type") !== "stash-symbol")).filter((n => !asElement(n)?.isHidden())).map((n => n.firstTextChildDfs())).find((n => n));
+      };
+      Node.prototype.allTextRecursive = function() {
+        return Array.from(this.childNodes).flatMap((n => n.isText() ? [ n.textContent ] : n.allTextRecursive())).filter((s => s));
+      };
+      Node.prototype.isElement = function() {
+        return this.nodeType === Node.ELEMENT_NODE;
+      };
+      Node.prototype.isText = function() {
+        return this.nodeType === Node.TEXT_NODE;
+      };
+      Element.prototype.isHidden = function() {
+        return window.getComputedStyle(this).display === "none";
+      };
     },
     246(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
@@ -4909,6 +4895,7 @@
           var _observer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(648);
           var _settings_display__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
           var _settings_providers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(710);
+          var _util_stringUtils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(583);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _request__WEBPACK_IMPORTED_MODULE_4__, _settings_display__WEBPACK_IMPORTED_MODULE_6__, _settings_providers__WEBPACK_IMPORTED_MODULE_7__ ]);
           [_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__, _settings_endpoints__WEBPACK_IMPORTED_MODULE_1__, _request__WEBPACK_IMPORTED_MODULE_4__, _settings_display__WEBPACK_IMPORTED_MODULE_6__, _settings_providers__WEBPACK_IMPORTED_MODULE_7__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           const supportedDataFields = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Scene, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Title, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Organized, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Code, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Performer, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Disambiguation, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Favorite, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.AliasList, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Birthdate, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.HeightCm, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Gallery, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Title, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Tags, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Files ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Group, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Aliases, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Date, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Director, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.SceneCount ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Studio, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Aliases ] ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.We.Tag, [ _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Id, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Name, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.J7.Aliases ] ] ]);
@@ -4999,7 +4986,7 @@
             if (urlSelector) {
               let url = urlSelector(element);
               if (url) {
-                url = (0, _utils__WEBPACK_IMPORTED_MODULE_2__.Si)(url);
+                url = (0, _util_stringUtils__WEBPACK_IMPORTED_MODULE_8__.Si)(url);
                 void 0;
                 await queryStash(url, ((...args) => (0, _tooltip_tooltip__WEBPACK_IMPORTED_MODULE_0__.l)(displayElement, ...args, display)), target, _dataTypes__WEBPACK_IMPORTED_MODULE_3__.ZU.Url, customFilter, stashIdEndpoint);
               } else console.info(`No URL for ${target} found.`);
@@ -5043,9 +5030,8 @@
             }
           }
           function ignorePerformerName(name) {
-            let nameCount = name?.split(/\s+/)?.length;
-            let kanji = name ? (0, _utils__WEBPACK_IMPORTED_MODULE_2__._t)(name) : false;
-            return nameCount === 1 && !kanji;
+            let nameCount = name.split(/\s+/).length;
+            return nameCount === 1 && !name.hasKanji();
           }
           function getCustomRules(target) {
             let targetRules = _settings_display__WEBPACK_IMPORTED_MODULE_6__.p.filter((rule => rule.target === target));
@@ -5120,6 +5106,11 @@
           __webpack_async_result__(e);
         }
       }));
+    },
+    484() {
+      Boolean.prototype.not = function() {
+        return !this;
+      };
     },
     494(module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.a(module, (async (__webpack_handle_async_dependencies__, __webpack_async_result__) => {
@@ -5321,6 +5312,39 @@
       }
       module.exports = insertStyleElement;
     },
+    583(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+      __webpack_require__.d(__webpack_exports__, {
+        Si: () => nakedDomain,
+        l2: () => capitalized
+      });
+      function capitalized(word) {
+        return word[0].toUpperCase() + word.slice(1).toLowerCase();
+      }
+      function titleCase(text) {
+        return text.split(" ").map((n => capitalized(n))).join(" ");
+      }
+      function nakedDomain(url) {
+        const regex = /^(https?:\/\/)?(www\.)?/i;
+        return url.replace(regex, "");
+      }
+      String.prototype.substringAfter = function(separator) {
+        const index = this.indexOf(separator);
+        if (index === -1) return this; else return this.substring(index + separator.length);
+      };
+      String.prototype.substringBefore = function(separator) {
+        const index = this.indexOf(separator);
+        if (index === -1) return this; else return this.substring(0, index);
+      };
+      String.prototype.isEmpty = function() {
+        return this === "";
+      };
+      String.prototype.hasKana = function() {
+        return /[\u3041-\u3096\u30a0-\u30ff\uff5f-\uff9f]/.test(this);
+      };
+      String.prototype.hasKanji = function() {
+        return /[\u4e00-\u9faf\u3400-\u4dbf]/.test(this);
+      };
+    },
     591(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
       __webpack_require__.d(__webpack_exports__, {
         OO: () => checkBox,
@@ -5460,7 +5484,7 @@
       function onAddition(selector, callback) {
         let exclude = ".stashChecker, .stashCheckerSymbol";
         let observer = new MutationObserver((mutations => {
-          let addedElements = mutations.flatMap((m => Array.from(m.addedNodes))).filter((n => n.nodeType === Node.ELEMENT_NODE)).map((n => n));
+          let addedElements = mutations.flatMap((m => Array.from(m.addedNodes))).filter((n => n.isElement())).map((n => n));
           addedElements.filter((e => e.matches(selector))).concat(addedElements.flatMap((e => Array.from(e.querySelectorAll(selector))))).filter((e => !e.matches(exclude) && !e.parentElement?.matches(exclude))).forEach(callback);
         }));
         let body = document.querySelector("body");
@@ -5595,6 +5619,7 @@
           var _dataTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(389);
           var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(185);
           var _settings_menu__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(513);
+          var _util_stringUtils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(583);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _check__WEBPACK_IMPORTED_MODULE_0__, _settings_menu__WEBPACK_IMPORTED_MODULE_3__ ]);
           [_check__WEBPACK_IMPORTED_MODULE_0__, _settings_menu__WEBPACK_IMPORTED_MODULE_3__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           async function runStashChecker() {
@@ -5605,7 +5630,7 @@
             console.info("Running Stash Checker");
             let currentSite = () => window.location.href;
             let closestUrl = e => e.closest("a")?.href;
-            let directChildTextNode = e => Array.from(e?.childNodes ?? []).find((n => n.nodeType === Node.TEXT_NODE));
+            let directChildTextNode = e => Array.from(e?.childNodes ?? []).find((n => n.isText()));
             switch (window.location.host) {
              case "www.iwara.tv":
               {
@@ -5715,7 +5740,7 @@
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".x-itemBox", {
                 observe: true,
                 displaySelector: e => e.querySelector(".x-itemBox-title"),
-                urlSelector: e => e.querySelector("a")?.href?.split("&")?.[0],
+                urlSelector: e => e.querySelector("a")?.href?.substringBefore("&"),
                 titleSelector: e => e.querySelector("a")?.title
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "#avidolDetails", {
@@ -5732,18 +5757,17 @@
                 urlSelector: currentSite
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/model/']");
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "table#movices td > strong", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "table#movices > tbody > tr", {
                 urlSelector: null,
-                codeSelector: e => e.textContent?.trim(),
-                titleSelector: null
+                codeSelector: e => e.querySelector("td:nth-child(1) > strong")?.textContent?.trim(),
+                titleSelector: e => e.querySelector("td:nth-child(2)")?.textContent?.trim()
               });
               break;
 
              case "warashi-asian-pornstars.fr":
               {
-                let nameSelector = e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.zW)(e).flatMap((s => s.split(" "))).map((s => s.trim())).filter((s => s && !(0, 
-                _utils__WEBPACK_IMPORTED_MODULE_2__._t)(s) && !(0, _utils__WEBPACK_IMPORTED_MODULE_2__.gS)(s))).map((s => (0, 
-                _utils__WEBPACK_IMPORTED_MODULE_2__.l2)(s))).join(" ");
+                let nameSelector = e => e.allTextRecursive().flatMap((s => s.split(" "))).map((s => s.trim())).filter((s => !s.isEmpty() && !s.hasKanji() && !s.hasKana())).map((s => (0, 
+                _util_stringUtils__WEBPACK_IMPORTED_MODULE_4__.l2)(s))).join(" ");
                 (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "#pornostar-profil [itemprop='name']", {
                   urlSelector: currentSite,
                   nameSelector
@@ -5850,27 +5874,31 @@
 
              case "www.javlibrary.com":
               {
-                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div#video_title", {
-                  urlSelector: _ => currentSite().replace("videoreviews.php", "").replace(/&.*$/, ""),
-                  codeSelector: _ => document.querySelector("div#video_id td.text")?.textContent?.trim(),
-                  titleSelector: _ => document.querySelector("div#video_id td.text")?.textContent?.trim()
-                });
                 let searchParams = new URLSearchParams(window.location.search);
-                if (searchParams.has("list")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".video a[href^='./?v=jav'], .title a[href^='./?v=jav']", {
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div#video_title", {
+                  urlSelector: _ => currentSite().replace(/videoreviews\.php.*$/, searchParams.get("v") + ".html"),
+                  codeSelector: _ => document.querySelector("div#video_id td.text")?.textContent?.trim(),
+                  titleSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.substringAfter(" ")
+                });
+                if (searchParams.has("list")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".video a[href^='./jav'], .title a[href^='./jav']", {
                   observe: true,
-                  urlSelector: e => closestUrl(e)?.replace(/&.*$/, ""),
-                  codeSelector: e => e.getAttribute("title")?.split(" ", 1)?.[0],
-                  titleSelector: e => e.getAttribute("title")?.replace(/^\S*\s/, "")
-                }); else (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".video a[href^='./?v=jav']", {
+                  urlSelector: e => closestUrl(e)?.substringBefore("&"),
+                  codeSelector: e => e.getAttribute("title")?.substringBefore(" "),
+                  titleSelector: e => e.getAttribute("title")?.substringAfter(" ")
+                }); else (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".video a[href^='./jav']", {
                   observe: true,
-                  urlSelector: e => closestUrl(e)?.replace(/&.*$/, ""),
+                  urlSelector: e => closestUrl(e)?.substringBefore("&"),
                   codeSelector: e => e.querySelector("div.id")?.textContent?.trim(),
                   titleSelector: e => e.querySelector("div.title")?.textContent?.trim() ?? (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)
                 });
                 (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, ".comment strong > a[href^='videoreviews.php?v=jav']", {
-                  urlSelector: e => closestUrl(e)?.replace("videoreviews.php", "").replace(/&.*$/, ""),
-                  codeSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.split(" ")?.[0],
-                  titleSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.replace(/^\S*\s/, "")
+                  urlSelector: e => {
+                    let url = closestUrl(e);
+                    let page = new URLSearchParams(url?.substringAfter("?")).get("v") + ".html";
+                    return url?.replace(/videoreviews\.php.*$/, page);
+                  },
+                  codeSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.substringBefore(" "),
+                  titleSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.substringAfter(" ")
                 });
                 break;
               }
@@ -5909,10 +5937,10 @@
 
              case "www.minnano-av.com":
               if (/actress\d{1,6}/.test(window.location.pathname)) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1", {
-                urlSelector: _ => currentSite().split("?")[0]
+                urlSelector: _ => currentSite().substringBefore("?")
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='actress']:not([href*='list']):not([href*='.php']):not([href*='http'])", {
-                urlSelector: e => closestUrl(e)?.split("?")?.[0]
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
               });
               break;
 
@@ -5922,7 +5950,7 @@
                 if (/articles\//.test(window.location.pathname)) {
                   (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "main h2.title-font", {
                     observe: true,
-                    codeSelector: _ => `${prefix}${window.location.pathname.split("articles/")[1]}`,
+                    codeSelector: _ => `${prefix}${window.location.pathname.substringAfter("articles/")}`,
                     urlSelector: _ => currentSite()
                   });
                   (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "main h2.title-font ~ div a[href*='writers/']", {
@@ -5934,7 +5962,7 @@
                 }
                 (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href*='articles/'][title]", {
                   observe: true,
-                  codeSelector: e => `${prefix}${e.getAttribute("href")?.split("articles/")?.[1]}`
+                  codeSelector: e => `${prefix}${e.getAttribute("href")?.substringAfter("articles/")}`
                 });
                 (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "a[href*='writers/'][title]", {
                   observe: true
@@ -5951,7 +5979,7 @@
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div:not(.bg-base-100) > a[href*='/works/']:not([href*='/works/date']):not([href*='/edit'])", {
                 observe: true,
-                codeSelector: e => e.getAttribute("href")?.split(":")?.[1] || e.getAttribute("href")?.split("works/")?.[1]
+                codeSelector: e => e.getAttribute("href")?.substringAfter(":") || e.getAttribute("href")?.substringAfter("works/")
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "a[href*='/makers/']:not([href*='page='])", {
                 observe: true
@@ -5967,7 +5995,7 @@
               });
               if (/works\//.test(window.location.pathname)) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1:first-child", {
                 observe: true,
-                codeSelector: _ => currentSite().split("works/")[1]?.split(":")?.[1] || currentSite().split("works/")[1]
+                codeSelector: _ => currentSite().substringAfter("works/")?.substringAfter(":") || currentSite().substringAfter("works/")
               });
               if (/makers\/|labels\//.test(window.location.pathname)) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "h1:first-child", {
                 observe: true
@@ -6065,7 +6093,7 @@
                 nameSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.replace("porn", "")?.replace("videos", "")?.trim()
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1", {
-                nameSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.replace("Free Amateur Porn - Hobby.porn", "").split("porn videos")?.[0].trim()
+                nameSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.replace("Free Amateur Porn - Hobby.porn", "").substringBefore("porn videos")?.trim()
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "#tab_info > div.model-info > div > b");
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1[itemprop='name']", {
@@ -6084,7 +6112,7 @@
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "span.pornStarName.performerCardName, div.userCardNameBlock, span.usernameBadgesWrapper");
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "div.modelVideosTitle, div.subHeaderOverrite > h2", {
                 urlSelector: currentSite,
-                nameSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.split("'s")?.[0].trim()
+                nameSelector: e => (0, _utils__WEBPACK_IMPORTED_MODULE_2__.ou)(e)?.substringBefore("'s")?.trim()
               });
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "[class*='pcVideoListItem'] a[href*='/channels/']");
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "[id='channelsProfile'] h1", {
@@ -6108,11 +6136,11 @@
                   urlSelector: currentSite
                 });
                 (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, `a[data-testid*='studio-link']${hrefStudio}, a[data-testid*='clip-page-clipCategory']${hrefStudio}`, {
-                  urlSelector: e => closestUrl(e)?.split("/Cat")?.[0]
+                  urlSelector: e => closestUrl(e)?.substringBefore("/Cat")
                 });
                 (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, `a[data-testid*='clip-category-link']${hrefStudio}, a[data-testid*='clip-studio']${hrefStudio}, a[data-testid*='studioAnchor']${hrefStudio}, div[data-testid*='categoryTopStores'] a${hrefStudio}`, {
                   observe: true,
-                  urlSelector: e => closestUrl(e)?.split("/Cat")?.[0]
+                  urlSelector: e => closestUrl(e)?.substringBefore("/Cat")
                 });
                 if (window.location.pathname.startsWith("/clips/page/studios")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, `a${hrefStudio}`, {
                   observe: true
