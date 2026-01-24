@@ -116,10 +116,10 @@ export async function runStashChecker() {
         case "xslist.org": {
             check(Target.Performer, "span[itemprop='name']", {urlSelector: currentSite});
             check(Target.Performer, "a[href*='/model/']");
-            check(Target.Scene, "table#movices td > strong", {
+            check(Target.Scene, "table#movices > tbody > tr", {
                 urlSelector: null,
-                codeSelector: e => e.textContent?.trim(),
-                titleSelector: null,
+                codeSelector: e => e.querySelector("td:nth-child(1) > strong")?.textContent?.trim(),
+                titleSelector: e => e.querySelector("td:nth-child(2)")?.textContent?.trim(),
             });
             break;
         }

@@ -3,7 +3,8 @@
 
 ## [1.2.1]
 
-- Fix Javlibrary and use actual title instead of code as title [#76]
+- Fix Javlibrary query and use actual title instead of code as title [#76]
+- Add titles to xslist scene query
 
 ## [1.2.0]
 
