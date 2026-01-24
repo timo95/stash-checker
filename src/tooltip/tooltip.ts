@@ -9,11 +9,12 @@ import {
     Target,
     Type
 } from "../dataTypes";
-import {bytesToReadable, firstTextChild, secondsToReadable, typeToString} from "../utils";
+import {firstTextChild, secondsToReadable, typeToString} from "../utils";
 import {StashQuery, StashQueryClass} from "./stashQuery";
 import {symbolMouseoverListener, symbolMouseoutListener} from "./tooltipElement";
 import {booleanOptions, OptionKey, stringOptions} from "../settings/providers";
 import {createSpan} from "../util/htmlHelper";
+import {bytesToReadable} from "../util/stringUtils";
 
 /**
  * find existing symbol span recursively, undefined if none available

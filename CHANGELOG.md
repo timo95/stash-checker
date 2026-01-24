@@ -1,6 +1,10 @@
 
 ## [WIP]
 
+## [1.2.1]
+
+- Fix Javlibrary and use actual title instead of code as title [#76]
+
 ## [1.2.0]
 
 - Add support for websites: avbase.net, duga.jp, fc2ppvdb.com

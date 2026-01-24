@@ -1,4 +1,5 @@
 import "./style/main_important.scss";
+import "./util/stringUtils";
 import {initEndpointSettings} from "./settings/endpoints";
 import {initSettingsWindow} from "./settings/settings";
 import {initMenu} from "./settings/menu";

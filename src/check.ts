@@ -1,6 +1,6 @@
 import {prefixSymbol} from "./tooltip/tooltip";
 import {stashEndpoints} from "./settings/endpoints";
-import {firstText, hasKanji, nakedDomain} from "./utils";
+import {firstText} from "./utils";
 import {
     CheckOptions,
     CustomDisplayRule,
@@ -15,6 +15,7 @@ import {request} from "./request";
 import {onAddition} from "./observer";
 import {customDisplayRules} from "./settings/display";
 import {booleanOptions, getEnumOptionMethod, OptionKey} from "./settings/providers";
+import {hasKanji, nakedDomain} from "./util/stringUtils";
 
 const supportedDataFields = new Map<Target, DataField[]>([
     [Target.Scene, [DataField.Id, DataField.Title, DataField.Organized, DataField.Studio, DataField.Code, DataField.Date, DataField.Tags, DataField.Files]],

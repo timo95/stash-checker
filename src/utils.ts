@@ -68,39 +68,6 @@ export function secondsToReadable(seconds: number): string {
         .join(":")
 }
 
-export function bytesToReadable(bytes: number): string {
-    let labels = ["KB", "MB", "GB", "TB", "PB"]
-    let label
-    for (label of labels) {
-        bytes /= 1000
-        if (bytes < 1000) {
-            break;
-        }
-    }
-    return bytes.toFixed(2) + label;
-}
-
-export function hasKanji(text: string): boolean {
-    return /[\u4e00-\u9faf\u3400-\u4dbf]/.test(text)
-}
-
-export function hasKana(text: string): boolean {
-    return /[\u3041-\u3096\u30a0-\u30ff\uff5f-\uff9f]/.test(text)
-}
-
-export function capitalized(word: string): string {
-    return word[0].toUpperCase() + word.slice(1).toLowerCase()
-}
-
-export function titleCase(text: string): string {
-    return text.split(" ").map(n => capitalized(n)).join(" ");
-}
-
-export function nakedDomain(url: string): string {
-    const regex = /^(https?:\/\/)?(www\.)?/i;
-    return url.replace(regex, '');
-}
-
 export function interleave<T extends Node>(array: T[], between: T): T[] {
     return array.flatMap(element => [element, between.cloneNode(true) as T]).slice(0, -1)
 }
