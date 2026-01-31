@@ -2,6 +2,7 @@
 ## [WIP]
 
 - Setting for date formatting for release date and birthdate
+- Add career length to performers tooltip
 
 ## [1.2.1]
 

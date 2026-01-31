@@ -46,6 +46,7 @@ const propertyStrings: Map<string, (datum: any, queries: StashQuery[], target: T
     [DataField.AliasList, (aliasList: any) => aliasList.length === 0 ? "" : `<br>Aliases: ${aliasList.join(", <wbr>")}`],
     [DataField.Birthdate, (date: string) => `<br>Birthdate: ${formatDate(date)}`],
     [DataField.BitRate, (bit_rate: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(bit_rate / 1000000).toFixed(2)}Mbit/s`],
+    [DataField.CareerLength, (length: string) => `<br>Career Length: ${length}`],
     [DataField.Code, (code: string) => `<br>Code: ${code}`],
     [DataField.Date, (date: string) => `<br>Date: ${formatDate(date)}`],
     [DataField.Director, (director: string) => `<br>Director: ${director}`],

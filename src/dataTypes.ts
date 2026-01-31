@@ -65,6 +65,7 @@ export enum DataField {
     AliasList = "alias_list",
     Birthdate = "birthdate",
     BitRate = "bit_rate",
+    CareerLength = "career_length",
     Code = "code",
     Date = "date",
     Director = "director",
