@@ -1,5 +1,5 @@
 import {
-    DataField,
+    DataField, DateFormat,
     DisplayOptions,
     readable,
     StashEndpoint,
@@ -44,10 +44,10 @@ export function clearSymbols() {
 const propertyStrings: Map<string, (datum: any, queries: StashQuery[], target: Target, numQueries: number) => string> = new Map([
     [DataField.Aliases, (aliases: any) => aliases.length === 0 ? "" : `<br>Aliases: ${aliases.join(", <wbr>")}`],
     [DataField.AliasList, (aliasList: any) => aliasList.length === 0 ? "" : `<br>Aliases: ${aliasList.join(", <wbr>")}`],
-    [DataField.Birthdate, (birthdate: string) => `<br>Birthdate: ${birthdate}`],
+    [DataField.Birthdate, (date: string) => `<br>Birthdate: ${formatDate(date)}`],
     [DataField.BitRate, (bit_rate: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Bitrate: ${(bit_rate / 1000000).toFixed(2)}Mbit/s`],
     [DataField.Code, (code: string) => `<br>Code: ${code}`],
-    [DataField.Date, (date: string) => `<br>Date: ${date}`],
+    [DataField.Date, (date: string) => `<br>Date: ${formatDate(date)}`],
     [DataField.Director, (director: string) => `<br>Director: ${director}`],
     [DataField.Disambiguation, (disambiguation: string) => ` <span style="color: grey">(${disambiguation})</span>`],
     [DataField.Duration, (duration: any) => `&nbsp;&nbsp;&nbsp;&nbsp;Duration: ${secondsToReadable(duration)}`],
@@ -67,6 +67,18 @@ const propertyStrings: Map<string, (datum: any, queries: StashQuery[], target: T
     [DataField.VideoCodec, (video_codec: any) => `<br>Codec: ${video_codec}`],
     [DataField.Width, (width: any) => ` (${width}`],
 ]);
+
+function formatDate(isoDate: string): string {
+    const dateFormat = stringOptions.get(OptionKey.dateFormat)
+    switch (dateFormat) {
+        case DateFormat.Local:
+            return `<time datetime="${isoDate}">${new Date(isoDate).toLocaleDateString()}</time>`;
+        case DateFormat.Iso:
+            return `<time datetime="${isoDate}">${isoDate}</time>`;
+        default:
+            throw Error(`Unknown date format ${dateFormat}`);
+    }
+}
 
 function formatFileData(file: StashFile, queries: StashQuery[], target: Target, numQueries: number): string {
     let text = Object.entries(file)

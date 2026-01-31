@@ -1,5 +1,5 @@
 import {getValue, setValue, StorageKey} from "./storage";
-import {Method, Theme} from "../dataTypes";
+import {DateFormat, Method, Theme} from "../dataTypes";
 import {DefaultableMap} from "../util/defaultableMap";
 
 export enum OptionKey {
@@ -13,6 +13,7 @@ export enum OptionKey {
     warningMark = "warningMark",
     theme = "theme",
     queryMethod = "queryMethod",
+    dateFormat = "dateFormat",
 }
 
 const defaultBooleanOptions = new Map([
@@ -28,6 +29,7 @@ const defaultStringOptions = new Map([
     [OptionKey.warningMark, "!"],
     [OptionKey.theme, Theme.Device],
     [OptionKey.queryMethod, Method.Get],
+    [OptionKey.dateFormat, DateFormat.Local],
 ]);
 
 const defaultNumberOptions = new Map([

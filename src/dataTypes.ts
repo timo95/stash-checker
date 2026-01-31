@@ -138,6 +138,14 @@ export enum Theme {
 }
 
 /**
+ * Date display formats
+ */
+export enum DateFormat {
+    Local = "local",
+    Iso = "iso"
+}
+
+/**
  * A function to select a [Type] query parameter from a given element.
  */
 export type Selector = (e: Element) => null | undefined | string;

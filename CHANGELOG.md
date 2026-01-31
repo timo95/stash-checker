@@ -1,6 +1,8 @@
 
 ## [WIP]
 
+- Setting for date formatting for release date and birthdate
+
 ## [1.2.1]
 
 - Fix Javlibrary query and use actual title instead of code as title [#76]

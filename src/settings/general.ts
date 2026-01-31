@@ -1,5 +1,5 @@
 import {buttonDanger, getSettingsSection, newSettingsSection} from "./settings";
-import {Method, Theme} from "../dataTypes";
+import {DateFormat, Method, Theme} from "../dataTypes";
 import {charBox, checkBox, numberBox, selectMenu} from "./elements";
 import {booleanOptions, numberOptions, OptionKey, stringOptions} from "./providers";
 import {createDiv} from "../util/htmlHelper";
@@ -26,6 +26,7 @@ function populateGeneralSection(generalSection: HTMLElement) {
         checkBox(OptionKey.showTags, "Show tags", booleanOptions),
         checkBox(OptionKey.showFiles, "Show files", booleanOptions),
         selectMenu(OptionKey.theme, "Theme", [Theme.Light, Theme.Dark, Theme.Device], stringOptions),
+        selectMenu(OptionKey.dateFormat, "Date Format", [DateFormat.Local, DateFormat.Iso], stringOptions),
     );
     generalSection.appendChild(tooltipSettings);
 
