@@ -521,8 +521,18 @@ export async function runStashChecker() {
         case "www.alsscan.com":
         case "www.rylskyart.com":
         case "www.eternaldesire.com": {
-            check(Target.Scene, "a[href*='/movie']", {observe: true});
-            check(Target.Performer, "a[href*='/model/']:not([href*='/movie'])", {observe: true});
+            check(Target.Scene, "a[href*='/movie']:not(.tab)", {observe: true});
+            check(Target.Gallery, "a[href*='/gallery/']:not(.page-button)", {observe: true});
+            check(Target.Performer, "a[href*='/model/']:not([href*='/movie']):not([href*='/gallery/']):not(.page-button):not(.tab)", {observe: true});
+            break;
+        }
+        case "www.hegre.com": {
+            check(Target.Scene, "a.playable:not(.artwork)[href*='/films/']", {
+                observe: true,
+                displaySelector: (e: Element) => Array.from(e.querySelector('h4')?.childNodes ?? []).find(n => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()) as Element | undefined
+            });
+            check(Target.Gallery, "a[href*='/photos/']", {observe: true});
+            check(Target.Performer, "a[href*='/models/']:not(.filter):not([href*='#'])", {observe: true});
             break;
         }
         case "www.pornteengirl.com": {
