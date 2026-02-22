@@ -16,8 +16,10 @@
 // @match *://javdb.com/*
 // @match *://javstash.org/*
 // @match *://kemono.cr/*
+// @match *://members.playboyplus.com/*
 // @match *://onlyfans.com/*
 // @match *://oreno3d.com/*
+// @match *://playboyplus.com/*
 // @match *://pmvhaven.com/*
 // @match *://pmvstash.org/*
 // @match *://r18.dev/*
@@ -40,6 +42,7 @@
 // @match *://www.javlibrary.com/*
 // @match *://www.manyvids.com/*
 // @match *://www.minnano-av.com/*
+// @match *://www.playboyplus.com/*
 // @match *://www.pornhub.com/*
 // @match *://www.pornteengirl.com/*
 // @match *://www.thenude.com/*

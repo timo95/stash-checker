@@ -16,8 +16,10 @@
 // @match *://javdb.com/*
 // @match *://javstash.org/*
 // @match *://kemono.cr/*
+// @match *://members.playboyplus.com/*
 // @match *://onlyfans.com/*
 // @match *://oreno3d.com/*
+// @match *://playboyplus.com/*
 // @match *://pmvhaven.com/*
 // @match *://pmvstash.org/*
 // @match *://r18.dev/*
@@ -40,6 +42,7 @@
 // @match *://www.javlibrary.com/*
 // @match *://www.manyvids.com/*
 // @match *://www.minnano-av.com/*
+// @match *://www.playboyplus.com/*
 // @match *://www.pornhub.com/*
 // @match *://www.pornteengirl.com/*
 // @match *://www.thenude.com/*
@@ -6307,7 +6310,7 @@
                 observe: true,
                 urlSelector: _ => currentSite().substringBefore("?")
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a.playable:not(.artwork)[href*='/films/']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a.playable:not(.artwork):is([href*='/films/'],[href*='/massage/'],[href*='/sexed/'])", {
                 observe: true,
                 urlSelector: e => e.closest("a")?.href?.substringBefore("?"),
                 titleSelector: e => directChildTextNode(e.querySelector("h4"))?.textContent?.trim(),
@@ -6320,6 +6323,18 @@
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Gallery, "a[href*='/photos/']:not([href*='#'])", {
                 observe: true,
                 urlSelector: e => e.closest("a")?.href?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a.open-in-content-overlay:not(.playable):is([href*='/films/'],[href*='/massage/'])", {
+                observe: true,
+                urlSelector: e => e.closest("a")?.href?.substringBefore("?"),
+                titleSelector: e => e.querySelector(".details strong")?.textContent?.trim(),
+                displaySelector: e => e.querySelector(".details strong")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href*='/sexed/']:not(.playable)", {
+                observe: true,
+                urlSelector: e => e.closest("a")?.href?.substringBefore("?"),
+                titleSelector: e => (e.querySelector(".details strong") ?? e.closest(".item")?.querySelector("h5"))?.textContent?.trim(),
+                displaySelector: e => e.querySelector(".details strong") ?? e.closest(".item")?.querySelector("h5")
               });
               break;
 
@@ -6419,6 +6434,43 @@
                 });
                 break;
               }
+
+             case "playboyplus.com":
+             case "members.playboyplus.com":
+             case "www.playboyplus.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href*='/en/update/']:has(.Icon-Video)", {
+                observe: true,
+                urlSelector: e => e.closest("a")?.href?.substringBefore("?"),
+                titleSelector: e => e.querySelector(".Card-Info-Title")?.textContent?.trim(),
+                displaySelector: e => e.querySelector(".Card-Info-Title")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Gallery, "a[href*='/en/update/']:has(.Icon-Picture)", {
+                observe: true,
+                urlSelector: e => e.closest("a")?.href?.substringBefore("?"),
+                titleSelector: e => e.querySelector(".Card-Info-Title")?.textContent?.trim(),
+                displaySelector: e => e.querySelector(".Card-Info-Title")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/en/model/view/']", {
+                observe: true,
+                urlSelector: e => e.closest("a")?.href?.substringBefore("?"),
+                nameSelector: e => e.querySelector(".ActorThumb-Card-Name-Text")?.textContent?.trim(),
+                displaySelector: e => e.querySelector(".ActorThumb-Card-Name-Text")
+              });
+              if (window.location.pathname.startsWith("/en/model/view/")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "h1.Title", {
+                observe: true,
+                urlSelector: _ => currentSite().substringBefore("?")
+              });
+              if (window.location.pathname.startsWith("/en/update/")) {
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1.TitleBlock-Title", {
+                  observe: true,
+                  urlSelector: _ => currentSite().substringBefore("?")
+                });
+                (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Gallery, "h1.TitleBlock-Title", {
+                  observe: true,
+                  urlSelector: _ => currentSite().substringBefore("?")
+                });
+              }
+              break;
 
              default:
               console.warn("No configuration for website found.");
