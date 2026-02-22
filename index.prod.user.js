@@ -33,6 +33,7 @@
 // @match *://www.clips4sale.com/*
 // @match *://www.data18.com/*
 // @match *://www.freeones.com/*
+// @match *://www.hegre.com/*
 // @match *://www.iafd.com/*
 // @match *://www.indexxx.com/*
 // @match *://www.iwara.tv/*
@@ -6261,10 +6262,26 @@
              case "www.alsscan.com":
              case "www.rylskyart.com":
              case "www.eternaldesire.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href*='/movie']", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href*='/movie']:not(.tab)", {
                 observe: true
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/model/']:not([href*='/movie'])", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Gallery, "a[href*='/gallery/']:not(.page-button)", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/model/']:not([href*='/movie']):not([href*='/gallery/']):not(.page-button):not(.tab)", {
+                observe: true
+              });
+              break;
+
+             case "www.hegre.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a.playable:not(.artwork)[href*='/films/']", {
+                observe: true,
+                displaySelector: e => Array.from(e.querySelector("h4")?.childNodes ?? []).find((n => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()))
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Gallery, "a[href*='/photos/']", {
+                observe: true
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/models/']:not(.filter):not([href*='#'])", {
                 observe: true
               });
               break;

@@ -33,6 +33,7 @@
 // @match *://www.clips4sale.com/*
 // @match *://www.data18.com/*
 // @match *://www.freeones.com/*
+// @match *://www.hegre.com/*
 // @match *://www.iafd.com/*
 // @match *://www.indexxx.com/*
 // @match *://www.iwara.tv/*
