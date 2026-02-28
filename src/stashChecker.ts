@@ -710,8 +710,8 @@ export async function runStashChecker() {
 			check(Target.Performer, "a[href*='/en/model/view/']", {
 				observe: true,
 				urlSelector: e => e.closest("a")?.href?.substringBefore('?'),
-				nameSelector: e => e.querySelector('.ActorThumb-Card-Name-Text')?.textContent?.trim(),
-				displaySelector: e => e.querySelector('.ActorThumb-Card-Name-Text')
+				   nameSelector: e => e.querySelector('.ActorThumb-Card-Name-Text')?.textContent?.trim() ?? e.getAttribute('title') ?? e.textContent?.trim(),
+                displaySelector: e => e.querySelector('.ActorThumb-Card-Name-Text') ?? e
 			});
 			if (window.location.pathname.startsWith('/en/model/view/')) {
 				check(Target.Performer, "h1.Title", {
