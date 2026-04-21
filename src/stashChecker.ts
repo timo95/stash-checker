@@ -288,25 +288,47 @@ export async function runStashChecker() {
             });
             break;
         }
-        case "www.manyvids.com": {
-            check(Target.Studio, "[class^='ProfileAboutMeUI_stageName_']", {
-                observe: true,
-                urlSelector: currentSite,
-            });
-            check(Target.Studio, "[class^='VideoProfileCard_actions_'] a[href^='/Profile/'], [class^='CardCreatorHeaderUI_creatorInfo_'] a[href^='/Profile/']", {
-                observe: true,
-                urlSelector: e => closestUrl(e)?.replace(/Store\/Videos$/, ""),
-            });
-            check(Target.Scene, "h1[class^='VideoMetaInfo_title_']", {
-                observe: true,
-                urlSelector: currentSite,
-                codeSelector: _ => window.location.pathname.split("/")[2]
-            });
-            check(Target.Scene, "[class^='VideoCardUI_videoTitle_'] a[href^='/Video/']", {
-                observe: true,
-                codeSelector: e => e.getAttribute("href")?.split("/")?.[2]
-            });
-            break;
+        case "www.manyvids.com":
+
+  // Studio: creator name (more stable than hashed class)
+  (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(
+    _dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio,
+    "h1",
+    {
+      observe: true,
+      urlSelector: currentSite
+    }
+  );
+
+  // Studio: profile links (keep but simplify slightly)
+  (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(
+    _dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio,
+    "a[href^='/Profile/']",
+    {
+      observe: true,
+      urlSelector: e =>
+        closestUrl(e)?.replace(/Store\/Videos$/, "")
+    }
+  );
+
+  // Scene: video title from cards + links
+  (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(
+    _dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene,
+    "a[href^='/Video/']",
+    {
+      observe: true,
+
+      // video ID extraction
+      codeSelector: e =>
+        e.getAttribute("href")?.split("/")?.[2],
+
+      // title extraction (important fix)
+      urlSelector: e =>
+        e.getAttribute("href")
+    }
+  );
+
+  break;
         }
         case "www.minnano-av.com": {
             if (/actress\d{1,6}/.test(window.location.pathname)) {
