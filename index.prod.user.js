@@ -17,11 +17,13 @@
 // @match *://javstash.org/*
 // @match *://kemono.cr/*
 // @match *://members.playboyplus.com/*
+// @match *://members.puffynetwork.com/*
 // @match *://onlyfans.com/*
 // @match *://oreno3d.com/*
 // @match *://playboyplus.com/*
 // @match *://pmvhaven.com/*
 // @match *://pmvstash.org/*
+// @match *://puffynetwork.com/*
 // @match *://r18.dev/*
 // @match *://shemalestardb.com/*
 // @match *://stashdb.org/*
@@ -45,6 +47,7 @@
 // @match *://www.playboyplus.com/*
 // @match *://www.pornhub.com/*
 // @match *://www.pornteengirl.com/*
+// @match *://www.puffynetwork.com/*
 // @match *://www.thenude.com/*
 // @match *://xcity.jp/*
 // @match *://xslist.org/*
@@ -6335,6 +6338,28 @@
                 urlSelector: e => e.closest("a")?.href?.substringBefore("?"),
                 titleSelector: e => (e.querySelector(".details strong") ?? e.closest(".item")?.querySelector("h5"))?.textContent?.trim(),
                 displaySelector: e => e.querySelector(".details strong") ?? e.closest(".item")?.querySelector("h5")
+              });
+              break;
+
+             case "puffynetwork.com":
+             case "www.puffynetwork.com":
+             case "members.puffynetwork.com":
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h2.title span", {
+                observe: true,
+                urlSelector: _ => currentSite().substringBefore("#")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "figure a[href*='/girls/']", {
+                observe: true,
+                nameSelector: e => e.getAttribute("title"),
+                displaySelector: e => e.closest("figure")?.querySelector("figcaption > strong")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a.image-wrapper[href^='/videos/']", {
+                observe: true,
+                titleSelector: e => directChildTextNode(e.closest("li")?.querySelector("strong.col-xs-7"))?.textContent?.trim(),
+                displaySelector: e => directChildTextNode(e.closest("li")?.querySelector("strong.col-xs-7"))
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "strong.col-xs-7 a[href*='/girls/']", {
+                observe: true
               });
               break;
 

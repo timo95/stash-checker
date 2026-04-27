@@ -17,11 +17,13 @@
 // @match *://javstash.org/*
 // @match *://kemono.cr/*
 // @match *://members.playboyplus.com/*
+// @match *://members.puffynetwork.com/*
 // @match *://onlyfans.com/*
 // @match *://oreno3d.com/*
 // @match *://playboyplus.com/*
 // @match *://pmvhaven.com/*
 // @match *://pmvstash.org/*
+// @match *://puffynetwork.com/*
 // @match *://r18.dev/*
 // @match *://shemalestardb.com/*
 // @match *://stashdb.org/*
@@ -45,6 +47,7 @@
 // @match *://www.playboyplus.com/*
 // @match *://www.pornhub.com/*
 // @match *://www.pornteengirl.com/*
+// @match *://www.puffynetwork.com/*
 // @match *://www.thenude.com/*
 // @match *://xcity.jp/*
 // @match *://xslist.org/*
