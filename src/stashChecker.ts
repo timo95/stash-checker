@@ -603,6 +603,32 @@ export async function runStashChecker() {
 			});
             break;
         }
+        case "puffynetwork.com":
+        case "www.puffynetwork.com":
+        case "members.puffynetwork.com": {
+            // Detail page — scene title heading; strip fragment so #set on gallery view doesn't break matching
+            check(Target.Scene, "h2.title span", {
+                observe: true,
+                urlSelector: _ => currentSite().substringBefore('#')
+            });
+            // Figure cards — performer, name from <a title="...">
+            check(Target.Performer, "figure a[href*='/girls/']", {
+                observe: true,
+                nameSelector: e => e.getAttribute("title"),
+                displaySelector: e => e.closest("figure")?.querySelector("figcaption > strong")
+            });
+            // Scene listing cards — image-wrapper link, title from sibling text node
+            check(Target.Scene, "a.image-wrapper[href^='/videos/']", {
+                observe: true,
+                titleSelector: e => directChildTextNode(e.closest("li")?.querySelector("strong.col-xs-7"))?.textContent?.trim(),
+                displaySelector: e => directChildTextNode(e.closest("li")?.querySelector("strong.col-xs-7"))
+            });
+            // Scene listing cards — in-card performer link
+            check(Target.Performer, "strong.col-xs-7 a[href*='/girls/']", {
+                observe: true
+            });
+            break;
+        }
         case "www.pornteengirl.com": {
             check(Target.Performer, "a[href*='/model/']", {
                 nameSelector: e => firstText(e)?.replace(/\([^()]*\)$/, "")?.trimEnd()
