@@ -11,5 +11,6 @@
     "allowSyntheticDefaultImports": true,
     "lib": ["ES2024", "dom"],
     "sourceMap": true,
+    "resolveJsonModule": true
   }
 }

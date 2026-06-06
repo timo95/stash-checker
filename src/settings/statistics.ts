@@ -1,6 +1,7 @@
 import {readablePlural, StashSymbol, Target} from "../dataTypes";
 import {getSettingsSection, newSettingsSection} from "./settings";
 import {createSpan} from "../util/htmlHelper";
+import packageJson from "../../package.json"
 
 export function initStatistics() {
     newSettingsSection("statistics", "Statistics");
@@ -8,13 +9,14 @@ export function initStatistics() {
 
 export function updateStatistics() {
     let statisticsSection = getSettingsSection("statistics")!;
+    let versionString = `Version: ${packageJson.version}`;
     let targets = [Target.Scene, Target.Group, Target.Gallery, Target.Performer, Target.Studio, Target.Tag]
-    let string = targets.flatMap(target => {
+    let targetStrings = targets.flatMap(target => {
         let s = statistics(target)
         return s ? [s] : []
-    }).join("<br>")
+    })
     let span = createSpan();
-    span.innerHTML = string
+    span.innerHTML = [versionString].concat(targetStrings).join("<br>")
     statisticsSection.replaceChildren(span);
 }
 
