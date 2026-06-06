@@ -5,7 +5,7 @@
     "noImplicitAny": true,
     "strict": true,
     "moduleResolution": "Node",
-    "module": "ESNext",
+    "module": "ES2022",
     "target": "ES2024",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
