@@ -1,6 +1,9 @@
 
 ## [WIP]
 
+- Add Puffynetwork [#82]
+- Add PlayboyPlus [#79],[#80]
+- Improve Hegre [#79]
 - Fix Manyvids [#81]
 
 ## [1.2.2]
