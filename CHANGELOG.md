@@ -1,6 +1,8 @@
 
 ## [WIP]
 
+## [1.2.3]
+
 - Add version string to settings
 - Add Puffynetwork [#82]
 - Add PlayboyPlus [#79],[#80]
