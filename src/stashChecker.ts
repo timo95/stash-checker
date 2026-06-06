@@ -18,8 +18,6 @@ export async function runStashChecker() {
 
     switch (window.location.host) {
         case "www.iwara.tv": {
-            // TODO translate to graphql filter
-            //(d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
             // Video code in the URL
             let codeRegex = /(?<=video\/)([a-zA-Z0-9]+)(?=\/|$)/
             // Cut URL after code off
@@ -42,13 +40,11 @@ export async function runStashChecker() {
             break;
         }
         case "oreno3d.com": {
-            //(d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
             check(Target.Scene, "h1.video-h1", {urlSelector: currentSite, titleSelector: null});
             check(Target.Scene, "a h2.box-h2", {titleSelector: null});
             break;
         }
         case "erommdtube.com": {
-            //(d: any) => d.files.some((f: any) => f.path.endsWith("_Source.mp4")) ? "green" : "blue"
             check(Target.Scene, "h1.show__h1", {urlSelector: currentSite, titleSelector: null});
             check(Target.Scene, "h2.main__list-title", {titleSelector: null});
             break;
