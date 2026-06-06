@@ -71,7 +71,7 @@ export default {
                 mangle: false,
                 compress: {
                     defaults: false,
-                    ecma: "2020",
+                    ecma: "2025",
                     drop_console: ["debug"],
                 },
                 format: {
