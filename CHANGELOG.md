@@ -1,6 +1,8 @@
 
 ## [WIP]
 
+- Fix Manyvids [#81]
+
 ## [1.2.2]
 
 - Setting for date formatting for release date and birthdate

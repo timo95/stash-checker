@@ -285,22 +285,18 @@ export async function runStashChecker() {
             break;
         }
         case "www.manyvids.com": {
-            check(Target.Studio, "[class^='ProfileAboutMeUI_stageName_']", {
+            check(Target.Studio, "h1", {
                 observe: true,
                 urlSelector: currentSite,
             });
-            check(Target.Studio, "[class^='VideoProfileCard_actions_'] a[href^='/Profile/'], [class^='CardCreatorHeaderUI_creatorInfo_'] a[href^='/Profile/']", {
+            check(Target.Studio, "a[href^='/Profile/']", {
                 observe: true,
                 urlSelector: e => closestUrl(e)?.replace(/Store\/Videos$/, ""),
             });
-            check(Target.Scene, "h1[class^='VideoMetaInfo_title_']", {
+            check(Target.Scene, "a[href^='/Video/']", {
                 observe: true,
-                urlSelector: currentSite,
-                codeSelector: _ => window.location.pathname.split("/")[2]
-            });
-            check(Target.Scene, "[class^='VideoCardUI_videoTitle_'] a[href^='/Video/']", {
-                observe: true,
-                codeSelector: e => e.getAttribute("href")?.split("/")?.[2]
+                codeSelector: e => e.getAttribute("href")?.split("/")?.[2],
+                urlSelector: e => e.getAttribute("href")
             });
             break;
         }
