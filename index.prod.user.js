@@ -3639,6 +3639,7 @@
           var _dataTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(389);
           var _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(59);
           var _util_htmlHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(128);
+          var _package_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(330);
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _settings__WEBPACK_IMPORTED_MODULE_1__ ]);
           var __webpack_async_dependencies_result__ = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__;
           _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_async_dependencies_result__[0];
@@ -3647,13 +3648,14 @@
           }
           function updateStatistics() {
             let statisticsSection = (0, _settings__WEBPACK_IMPORTED_MODULE_1__.zH)("statistics");
+            let versionString = `Version: ${_package_json__WEBPACK_IMPORTED_MODULE_3__.rE}`;
             let targets = [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.We.Scene, _dataTypes__WEBPACK_IMPORTED_MODULE_0__.We.Group, _dataTypes__WEBPACK_IMPORTED_MODULE_0__.We.Gallery, _dataTypes__WEBPACK_IMPORTED_MODULE_0__.We.Performer, _dataTypes__WEBPACK_IMPORTED_MODULE_0__.We.Studio, _dataTypes__WEBPACK_IMPORTED_MODULE_0__.We.Tag ];
-            let string = targets.flatMap((target => {
+            let targetStrings = targets.flatMap((target => {
               let s = statistics(target);
               return s ? [ s ] : [];
-            })).join("<br>");
+            }));
             let span = (0, _util_htmlHelper__WEBPACK_IMPORTED_MODULE_2__.VI)();
-            span.innerHTML = string;
+            span.innerHTML = [ versionString ].concat(targetStrings).join("<br>");
             statisticsSection.replaceChildren(span);
           }
           function statistics(target) {
@@ -6611,6 +6613,11 @@
       }
       let friendlyHttpStatus = new Map([ [ 200, "OK" ], [ 201, "Created" ], [ 202, "Accepted" ], [ 203, "Non-Authoritative Information" ], [ 204, "No Content" ], [ 205, "Reset Content" ], [ 206, "Partial Content" ], [ 300, "Multiple Choices" ], [ 301, "Moved Permanently" ], [ 302, "Found" ], [ 303, "See Other" ], [ 304, "Not Modified" ], [ 305, "Use Proxy" ], [ 306, "Unused" ], [ 307, "Temporary Redirect" ], [ 400, "Bad Request" ], [ 401, "Unauthorized" ], [ 402, "Payment Required" ], [ 403, "Forbidden" ], [ 404, "Not Found" ], [ 405, "Method Not Allowed" ], [ 406, "Not Acceptable" ], [ 407, "Proxy Authentication Required" ], [ 408, "Request Timeout" ], [ 409, "Conflict" ], [ 410, "Gone" ], [ 411, "Length Required" ], [ 412, "Precondition Required" ], [ 413, "Request Entry Too Large" ], [ 414, "Request-URI Too Long" ], [ 415, "Unsupported Media Type" ], [ 416, "Requested Range Not Satisfiable" ], [ 417, "Expectation Failed" ], [ 418, "I'm a teapot" ], [ 429, "Too Many Requests" ], [ 500, "Internal Server Error" ], [ 501, "Not Implemented" ], [ 502, "Bad Gateway" ], [ 503, "Service Unavailable" ], [ 504, "Gateway Timeout" ], [ 505, "HTTP Version Not Supported" ] ]);
       const typeToString = new Map([ [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Url, "URL" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Code, "Code" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.StashId, "StashId" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Name, "Name" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Aliases, "Aliases" ], [ _dataTypes__WEBPACK_IMPORTED_MODULE_0__.ZU.Title, "Title" ] ]);
+    },
+    330(module) {
+      module.exports = {
+        rE: "1.2.2"
+      };
     }
   };
   var __webpack_module_cache__ = {};
