@@ -39,6 +39,7 @@
 // @match *://www.freeones.com/*
 // @match *://www.hegre.com/*
 // @match *://www.iafd.com/*
+// @match *://www.imdb.com/*
 // @match *://www.indexxx.com/*
 // @match *://www.iwara.tv/*
 // @match *://www.javlibrary.com/*
@@ -3907,6 +3908,76 @@
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[href*='/person.rme/id=']");
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href*='/title.rme/id=']");
               (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "a[href*='/studio.rme/studio=']");
+              break;
+
+             case "www.imdb.com":
+              if (window.location.pathname.startsWith("/title/")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "[data-testid='hero__pageTitle'] > span[data-testid='hero__primary-text']", {
+                urlSelector: _ => currentSite().substringBefore("?")
+              }); else if (window.location.pathname.startsWith("/name/")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "[data-testid='hero__pageTitle'] > span[data-testid='hero__primary-text']", {
+                urlSelector: _ => currentSite().substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a.ipc-slate-card__title[data-testid='title']", {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a > span[data-testid='title']", {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "li[data-testid='name-credits-list-item'] a[href^='/name/']", {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a[data-testid='title-cast-item__actor'][href^='/name/']", {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "li[data-testid='title-pc-principal-credit'] > div a[href^='/name/']", {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "div[data-testid='name-born-today-card']", {
+                observe: true,
+                displaySelector: e => e.querySelector("div[data-testid='born-today-name']"),
+                nameSelector: e => e.querySelector("div[data-testid='born-today-name']")?.textContent?.trim(),
+                urlSelector: e => e.querySelector("a")?.href?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "div[data-testid='popular-celebrity-card']", {
+                observe: true,
+                displaySelector: e => e.querySelector("div[data-testid='popular-celebrity-name-text']"),
+                nameSelector: e => e.querySelector("div[data-testid='popular-celebrity-name-text']")?.textContent?.trim(),
+                urlSelector: e => e.querySelector("a")?.href?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div[data-testid='shoveler-items-container'] > div > a[href^='/title/']", {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "div[data-testid='shoveler-items-container'] > div > a[href^='/name/']", {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div[data-testid='feature-row-top-box-office'] a[href^='/title/']", {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "div.ipc-slate-card__content > div > a[href^='/title/']", {
+                observe: true,
+                displaySelector: e => e.querySelector("div.ipc-slate-card__title-text"),
+                nameSelector: e => e.querySelector("div.ipc-slate-card__title-text")?.textContent?.trim(),
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a.ipc-metadata-list-summary-item__t[href^='/title/']", {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Performer, "a.ipc-metadata-list-item__list-content-item--link[href^='/name/']", {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
+              });
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a.ipc-primary-image-list-card__title[href^='/title/']", {
+                observe: true,
+                urlSelector: e => closestUrl(e)?.substringBefore("?")
+              });
               break;
 
              case "javdb.com":

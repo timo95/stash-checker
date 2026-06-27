@@ -39,6 +39,7 @@
 // @match *://www.freeones.com/*
 // @match *://www.hegre.com/*
 // @match *://www.iafd.com/*
+// @match *://www.imdb.com/*
 // @match *://www.indexxx.com/*
 // @match *://www.iwara.tv/*
 // @match *://www.javlibrary.com/*
