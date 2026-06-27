@@ -1,6 +1,8 @@
 
 ## [WIP]
 
+- Add IMDB
+
 ## [1.2.3]
 
 - Add version string to settings

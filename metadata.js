@@ -84,6 +84,7 @@ export default {
 		"*://www.freeones.com/*",
         "*://www.hegre.com/*",
         "*://www.iafd.com/*",
+        "*://www.imdb.com/*",
         "*://www.indexxx.com/*",
         "*://www.iwara.tv/*",
         "*://www.javlibrary.com/*",
