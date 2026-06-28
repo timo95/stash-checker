@@ -8,7 +8,7 @@ runs:
       with:
         node-version: "lts/*"
         cache: "npm"
-
+        cache-dependency-path: userscript/package-lock.json
     - name: Install dependencies
       working-directory: userscript
       shell: bash
