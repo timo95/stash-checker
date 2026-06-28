@@ -1,5 +1,5 @@
-name: "Build"
-description: "Builds the app"
+name: "Build userscript"
+description: "Builds the userscript"
 runs:
   using: composite
   steps:
@@ -8,9 +8,13 @@ runs:
       with:
         node-version: "lts/*"
         cache: "npm"
+
     - name: Install dependencies
+      working-directory: userscript
       shell: bash
       run: npm ci
+
     - name: Build
+      working-directory: userscript
       shell: bash
       run: npm run build

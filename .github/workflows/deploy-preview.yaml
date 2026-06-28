@@ -4,19 +4,20 @@ on:
   push:
     branches:
       - master
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/build
+      - uses: ./.github/actions/build-userscript
 
       - name: Deploy Preview
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: userscript/dist
           publish_branch: preview-dist
           commit_message: deploy ${{ github.ref }}
           enable_jekyll: true
