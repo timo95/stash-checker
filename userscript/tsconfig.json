@@ -1,16 +1,22 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "esModuleInterop": true,
     "noImplicitAny": true,
     "strict": true,
-    "moduleResolution": "Node",
-    "module": "ES2022",
-    "target": "ES2024",
+    "moduleResolution": "bundler",
+    "module": "es2022",
+    "target": "es2024",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "lib": ["ES2024", "dom"],
     "sourceMap": true,
-    "resolveJsonModule": true
-  }
+    "noUncheckedSideEffectImports": false,
+    "libReplacement": true,
+    "resolveJsonModule": true,
+    "types": ["greasemonkey"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
