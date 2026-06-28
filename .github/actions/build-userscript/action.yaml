@@ -4,7 +4,6 @@ runs:
   using: composite
   steps:
     - name: Setup node
-      working-directory: userscript
       uses: actions/setup-node@v3
       with:
         node-version: "lts/*"
