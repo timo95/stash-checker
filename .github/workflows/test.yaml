@@ -17,4 +17,4 @@ jobs:
       - name: Test userscript
         working-directory: userscript
         shell: bash
-        run: npm run build
+        run: npm run test
