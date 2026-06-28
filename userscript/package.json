@@ -10,7 +10,8 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "dev": "cross-env NODE_ENV=development webpack serve --config webpack.config.js",
-    "updates": "npx npm-check-updates"
+    "updates": "npx npm-check-updates",
+    "test": ""
   },
   "repository": {
     "type": "git",

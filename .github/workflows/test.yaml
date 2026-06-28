@@ -1,4 +1,4 @@
-name: ci
+name: test
 
 on:
   push:
@@ -13,3 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/build-userscript
+
+      - name: Test userscript
+        working-directory: userscript
+        shell: bash
+        run: npm run build
