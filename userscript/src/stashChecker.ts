@@ -731,18 +731,18 @@ export async function runStashChecker() {
             break;
         }
         case "pmvhaven.com": {
-            check(Target.Scene, "h1.pl-2", {
+            check(Target.Scene, "h1.font-bold", {
                 observe: true,
                 displaySelector: e => window.location.pathname.startsWith("/video/") ? e : null,
                 urlSelector: currentSite
             });
-            check(Target.Scene, "a[href^='/video/'] .v-card-text", {observe: true});
-            check(Target.Studio, ".v-card-title", {
+            check(Target.Scene, "a[href^='/video/'] h3, a[href^='/video/'] h4", {observe: true});
+            check(Target.Studio, "h1.font-bold", {
                 observe: true,
-                displaySelector: e => window.location.pathname.startsWith("/creator/") ? e : null,
+                displaySelector: e => (window.location.pathname.startsWith("/creator/") || window.location.pathname.startsWith("/users/")) ? e : null,
                 urlSelector: currentSite
             });
-            check(Target.Studio, "a[href^='/creator/'] .v-chip__content", {observe: true});
+            check(Target.Studio, "a[href^='/creator/'] h3, a[href^='/users/'] h3, [class*='group/uploader'] span", {observe: true});
             break;
         }
         case "fansdb.cc":
