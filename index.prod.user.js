@@ -4539,20 +4539,20 @@
               break;
 
              case "pmvhaven.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1.pl-2", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1.font-bold", {
                 observe: true,
                 displaySelector: e => window.location.pathname.startsWith("/video/") ? e : null,
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href^='/video/'] .v-card-text", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "a[href^='/video/'] h3, a[href^='/video/'] h4", {
                 observe: true
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, ".v-card-title", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "h1.font-bold", {
                 observe: true,
-                displaySelector: e => window.location.pathname.startsWith("/creator/") ? e : null,
+                displaySelector: e => window.location.pathname.startsWith("/creator/") || window.location.pathname.startsWith("/users/") ? e : null,
                 urlSelector: currentSite
               });
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "a[href^='/creator/'] .v-chip__content", {
+              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "a[href^='/creator/'] h3, a[href^='/users/'] h3, [class*='group/uploader'] span", {
                 observe: true
               });
               break;
