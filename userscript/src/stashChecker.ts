@@ -375,10 +375,19 @@ export async function runStashChecker() {
             break;
         }
         case "www.manyvids.com": {
-            check(Target.Studio, "h1", {
-                observe: true,
-                urlSelector: currentSite,
-            });
+            if (window.location.pathname.startsWith("/Video/")) {
+                // The h1 on a video page is the video title
+                check(Target.Scene, "h1", {
+                    observe: true,
+                    urlSelector: currentSite,
+                    codeSelector: () => window.location.pathname.split("/")[2],
+                });
+            } else {
+                check(Target.Studio, "h1", {
+                    observe: true,
+                    urlSelector: currentSite,
+                });
+            }
             check(Target.Studio, "a[href^='/Profile/']", {
                 observe: true,
                 urlSelector: e => closestUrl(e)?.replace(/Store\/Videos$/, ""),
