@@ -4102,7 +4102,11 @@
               break;
 
              case "www.manyvids.com":
-              (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "h1", {
+              if (window.location.pathname.startsWith("/Video/")) (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Scene, "h1", {
+                observe: true,
+                urlSelector: currentSite,
+                codeSelector: () => window.location.pathname.split("/")[2]
+              }); else (0, _check__WEBPACK_IMPORTED_MODULE_0__.z)(_dataTypes__WEBPACK_IMPORTED_MODULE_1__.We.Studio, "h1", {
                 observe: true,
                 urlSelector: currentSite
               });
